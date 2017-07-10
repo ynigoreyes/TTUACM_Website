@@ -4,17 +4,47 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="css/acm.css">
 </head>
 <div class="container-fluid">
-    <div class="row" id="NavBar">
-        <a><img src="imgs/acm.png"></a>
-        <ul class="menu">
-            <li><a href="/calendar.html">Calendar</a></li>
-            <li><a href="/team.html">Team</a></li>
-            <li><a href="/contact.html">Contact</a></li>
-            <li><a href="/join.html">Join</a></li>
-        </ul>
+
+    <!-- Navbar -->
+    <div class="row">
+        <div class="menu">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="team.html">Team</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="join.html">Join</a></li>
+            </ul>
+        </div>
     </div>
+
+    <!-- Gallery -->
+    <div class="row">
+        <div id="galleryCarousel" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#galleryCarousel" data-slide-to="0" class="active"></li>
+                <li data-target="#galleryCarousel" data-slide-to="1"></li>
+                <li data-target="#galleryCarousel" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="item active">
+                    <img src="imgs/team.jpg" style="width:100%">
+                </div>
+                <div class="item">
+                    <img src="imgs/hackwestx.jpg" style="width:100%">
+                </div>
+                <div class="item">
+                    <img src="imgs/code.jpg" style="width:100%">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </div>
 </html>

@@ -1,6 +1,25 @@
-.menu {
+.menu ul {
+    list-style-type: none;
     margin: 0;
-    display: inline;
+    padding: 0;
+    overflow: hidden;
+    background-color: #b71c1c
+}
+
+.menu li {
+    float: left;
+}
+
+.menu li a {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.menu li a:hover {
+    background-color: #f05545
 }
 
 div {
