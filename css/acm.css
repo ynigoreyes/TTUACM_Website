@@ -1,3 +1,11 @@
+div {
+    color: white;
+}
+
+h2 {
+    text-align: center;
+}
+
 .menu ul {
     list-style-type: none;
     margin: 0;
@@ -20,8 +28,3 @@
 
 .menu li a:hover {
     background-color: #f05545
-}
-
-div {
-    text-align: center;
-}
