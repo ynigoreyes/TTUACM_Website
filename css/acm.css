@@ -6,6 +6,11 @@ h2 {
     text-align: center;
 }
 
+iframe {
+    display: block;
+    margin: auto;
+}
+
 .menu ul {
     list-style-type: none;
     margin: 0;
