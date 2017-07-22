@@ -7,15 +7,16 @@ h1 {
 }
 
 .contentSection {
-    padding-top: 1%;
-    padding-bottom: 1%;
+    padding-top: 2%;
+    padding-bottom: 2%;
 }
 
 .news {
     border-style: solid;
-    overflow-y: scroll hidden;
-    padding-top: 2%;
-    padding-bottom: 2%
+    overflow-y: auto;
+    height: 50%;
+    padding-top: inherit;
+    padding-bottom: inherit;
 }
 
 .menu ul {
