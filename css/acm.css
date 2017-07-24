@@ -6,6 +6,26 @@ h1 {
     text-align: center;
 }
 
+img {
+    max-width: 100%;
+}
+
+#navbar {
+    background-color: #b71c1c;
+}
+
+#gallery {
+    background-color: #b71c1c;
+}
+
+#news {
+    background-color: #f05545;
+}
+
+#footer {
+    background-color: #b71c1c;
+}
+
 .contentSection {
     padding-top: 2%;
     padding-bottom: 2%;
@@ -17,6 +37,29 @@ h1 {
     height: 50%;
     padding-top: inherit;
     padding-bottom: inherit;
+}
+
+.logo {
+    width: 25%;
+    padding-top: 4%;
+    padding-bottom: 4%;
+}
+
+.footer ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #b71c1c
+}
+
+.footer li {
+    float: left;
+}
+
+.footer li a {
+    display: inline-block;
+    align-items: center;
 }
 
 .menu ul {
