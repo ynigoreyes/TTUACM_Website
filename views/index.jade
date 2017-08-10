@@ -1,0 +1,31 @@
+extends layout
+
+block content
+    
+    // Gallery
+    div.row#gallery
+        div.carousel.slide#galleryCarousel(data-ride='carousel')
+            ol.carousel-indicators
+                li.active(data-target='#galleryCarousel', data-slide-to='0')
+                li(data-target='#galleryCarousel', data-slide-to='1')
+                li(data-target='#galleryCarousel', data-slide-to='2')
+            div.carousel-inner
+                div.item.active
+                    img(src='/images/team.jpg', style='width:100%')
+                div.item
+                    img(src='/images/hackwestx.jpg', style='width:100%')
+                div.item
+                    img(src='/images/code.jpg', style='width:100%')
+                    
+    // News
+    div.row#news
+        div.col-sm-12.contentSection
+            div.col-sm-4.col-sm-offset-1.news
+                h1 #{newsitem1}
+            div.col-sm-4.col-sm-offset-2.news
+                h1 #{newsitem2}
+        div.col-sm-12.contentSection
+            div.col-sm-4.col-sm-offset-1.news
+                h1 #{newsitem3}
+            div.col-sm-4.col-sm-offset-2.news
+                h1 #{newsitem4}
