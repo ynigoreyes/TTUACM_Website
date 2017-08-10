@@ -1,0 +1,46 @@
+doctype html
+html
+    head
+        title= title
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        link(rel='stylesheet', type='text/css', href='/stylesheets/bootstrap.min.css')
+        script(src='/javascripts/jquery.min.js')
+        script(src='/javascripts/bootstrap.min.js')
+        link(rel='stylesheet', href='/stylesheets/acm.css')
+    body
+        div.container-fluid
+        
+            // Navbar
+            div#navbar.row
+                div.menu
+                    ul
+                        li
+                            a(href='/') Home
+                        li
+                            a(href='/calendar') Calendar
+                        li
+                            a(href='/team') Team
+                        li
+                            a(href='/contact') Contact
+                        li
+                            a(href='/join') Join
+            
+            block content
+            
+            // Footer
+            div.row#footer
+                div.col-sm-offset-4.footer
+                    ul
+                        li
+                            a(href='https://www.facebook.com/groups/acmttu/')
+                                img.logo(src='/images/facebook_logo.png')
+                        li
+                            a(href='https://twitter.com/acmttu')
+                                img.logo(src='/images/twitter_logo.png')
+                        li
+                            a(href='https://github.com/orgs/TTUSDC')
+                                img.logo(src='/images/github_logo.png')
+                        li
+                            a(href='https://www.facebook.com/SDCTTU/')
+                                img.logo(src='/images/sdc_logo.png')
