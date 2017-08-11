@@ -7,8 +7,8 @@ router.get('/', function(req, res, next) {
 });
 
 /* GET calendar page. */
-router.get('calendar', function(req, res, next) {
-  res.render('calendar', { title: 'TTU ACM' });
+router.get('/events', function(req, res, next) {
+  res.render('events', { title: 'TTU ACM' });
 });
 
 /* GET team page. */

@@ -18,14 +18,15 @@ block content
                     img(src='/images/code.jpg', style='width:100%')
                     
     // News
-    div.row#news
-        div.col-sm-12.contentSection
-            div.col-sm-4.col-sm-offset-1.news
-                h1 #{newsitem1}
-            div.col-sm-4.col-sm-offset-2.news
-                h1 #{newsitem2}
-        div.col-sm-12.contentSection
-            div.col-sm-4.col-sm-offset-1.news
-                h1 #{newsitem3}
-            div.col-sm-4.col-sm-offset-2.news
-                h1 #{newsitem4}
+    div.row.contentSection#news
+        div.col-sm-10.col-sm-offset-1.news
+            h1 #{newsitem1}
+    div.row.contentSection#news
+        div.col-sm-10.col-sm-offset-1.news
+            h1 #{newsitem2}
+    div.row.contentSection#news
+        div.col-sm-10.col-sm-offset-1.news
+            h1 #{newsitem3}
+    div.row.contentSection#news
+        div.col-sm-10.col-sm-offset-1.news
+            h1 #{newsitem4}
