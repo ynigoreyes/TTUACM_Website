@@ -127,17 +127,9 @@ router.get('/events', function(req, res, next) {
       }
       var events = response.items;
       if (events.length == 0) {
-        res.render('events', { title: 'TTU ACM', calendarEvents: 'No upcoming events' });
+        res.render('events', { title: 'TTU ACM', isEvents: false});
       } else {
-        console.log('Upcoming events:');
-        for (var i = 0; i < events.length; i++) {
-          var event = events[i];
-          var start = event.start.dateTime || event.start.date;
-          console.log('%s - %s', start, event.summary);
-        }
-
-        // TODO: Convert events to JSON  
-        res.render('events', { title: 'TTU ACM', calendarEvent: events });
+        res.render('events', { title: 'TTU ACM', isEvents: true, calendarEvent: events });
       }
     });
   }
