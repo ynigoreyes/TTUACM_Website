@@ -26,6 +26,10 @@ img {
     background-color: #b71c1c;
 }
 
+#events {
+    background-color: #b71c1c;
+}
+
 .contentSection {
     padding-top: 2%;
     padding-bottom: 2%;
@@ -37,6 +41,14 @@ img {
     height: 50%;
     padding-top: 2%;
     padding-bottom: 2%;
+}
+
+.event {
+    border-style: solid;
+    height: 50%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    margin-top: 1%;
 }
 
 .logo {

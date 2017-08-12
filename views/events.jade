@@ -3,4 +3,16 @@ extends layout
 block content
     
     // Events
-    div.contentSection
+    div.row.contentSection#events
+        if !isEvents
+            h1 No Upcoming Events
+        else
+            each event, i in calendarEvent
+                div.row.col-sm-10.col-sm-offset-1.event
+                    h1 #{calendarEvent[i].summary}
+                    div.col-sm-4
+                        h3 #{calendarEvent[i].start.date} #{calendarEvent[i].start.dateTime}
+                    div.col-sm-4
+                        p(style='text-align: center') #{calendarEvent[i].description}
+                    div.col-sm-4
+                        h4(style='text-align: right') #{calendarEvent[i].location}
