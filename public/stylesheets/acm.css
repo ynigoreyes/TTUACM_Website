@@ -35,8 +35,8 @@ img {
     border-style: solid;
     overflow-y: auto;
     height: 50%;
-    padding-top: inherit;
-    padding-bottom: inherit;
+    padding-top: 2%;
+    padding-bottom: 2%;
 }
 
 .logo {
