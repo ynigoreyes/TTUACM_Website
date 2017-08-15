@@ -10,37 +10,33 @@ html
         link(rel='stylesheet', href='/stylesheets/acm.css')
     body
         div.container-fluid
-        
+            
             // Navbar
-            div#navbar.row
-                div.menu
-                    ul
-                        li
-                            a(href='/') Home
-                        li
-                            a(href='/events') Events
-                        li
-                            a(href='/team') Team
-                        li
-                            a(href='/contact') Contact
-                        li
-                            a(href='/join') Join
+            div#navbar.row.menu
+                div.col-xs-1.col-sm-2.col-sm-offset-0
+                    a(href='/') Home
+                div.col-xs-1.col-sm-offset-0.col-xs-offset-1.col-sm-2
+                    a(href='/events') Events
+                div.col-xs-1.col-sm-offset-0.col-xs-offset-1.col-sm-2
+                    a(href='/team') Team
+                div.col-xs-1.col-sm-offset-0.col-xs-offset-1.col-sm-2
+                    a(href='/contact') Contact
+                div.col-xs-1.col-sm-offset-0.col-xs-offset-2.col-sm-2
+                    a(href='/join') Join
             
             block content
             
             // Footer
             div.row#footer
-                div.col-sm-offset-4.footer
-                    ul
-                        li
-                            a(href='https://www.facebook.com/groups/acmttu/')
-                                img.logo(src='/images/facebook_logo.png')
-                        li
-                            a(href='https://twitter.com/acmttu')
-                                img.logo(src='/images/twitter_logo.png')
-                        li
-                            a(href='https://github.com/orgs/TTUSDC')
-                                img.logo(src='/images/github_logo.png')
-                        li
-                            a(href='https://www.facebook.com/SDCTTU/')
-                                img.logo(src='/images/sdc_logo.png')
+                    div.col-xs-offset-2.col-xs-2.col-sm-offset-1.col-sm-1.logo
+                        a(href='https://www.facebook.com/groups/acmttu/')
+                            img.img-responsive(src='/images/facebook_logo.svg')
+                    div.col-xs-2.col-sm-offset-2.col-sm-1.logo
+                        a(href='https://twitter.com/acmttu')
+                            img.img-responsive(src='/images/twitter_logo.svg')
+                    div.col-xs-2.col-sm-offset-2.col-sm-1.logo
+                        a(href='https://github.com/orgs/TTUSDC')
+                            img.img-responsive(src='/images/github_logo.svg')
+                    div.col-xs-2.col-sm-offset-2.col-sm-1.logo
+                        a(href='https://www.facebook.com/SDCTTU/')
+                            img.img-responsive(src='/images/sdc_logo.png')
