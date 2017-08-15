@@ -65,3 +65,30 @@ h1 {
 
 .menu a:hover {
     color: #f05545
+}
+
+.info h3 {
+    text-align: left;
+}
+
+.info p {
+    text-align: center;
+}
+
+.info h4 {
+    text-align: right;
+}
+
+@media only screen and (max-width: 540px) {
+    .info h3 {
+        text-align: center;
+    }
+
+    .info p {
+        text-align: center;
+    }
+
+    .info h4 {
+        text-align: center;
+    }
+}
