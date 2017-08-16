@@ -19,7 +19,6 @@ router.get('/events', function(req, res, next) {
   var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
       process.env.USERPROFILE) + '/.credentials/';
   var TOKEN_PATH = TOKEN_DIR + 'calendar-nodejs-quickstart.json';
-  var isWork = 'It Worked!'
 
   // Load client secrets from a local file.
   fs.readFile('client_secret.json', function processClientSecrets(err, content) {
@@ -137,7 +136,14 @@ router.get('/events', function(req, res, next) {
 
 /* GET team page. */
 router.get('/team', function(req, res, next) {
-  res.render('team', { title: 'TTU ACM' });
+  var fs = require('fs');
+  fs.readFile('team.json', (err, data) => {
+      if (err) {
+          console.log('File Error: ' + err);
+      }
+  var team = JSON.parse(data);
+  res.render('team', { title: 'TTU ACM', teamMembers: team });
+  });
 });
 
 /* GET contact page. */
@@ -146,13 +152,9 @@ router.get('/contact', function(req, res, next) {
 });
 
 //TODO: Login functionality
-/* GET users listing. */
-router.get('/users', function(req, res, next) {
-  res.send('respond with a resource');
-});
-
-router.get('/users/detail', function(req, res, next) {
-    res.send('detail');
+/* GET join page. */
+router.get('/join', function(req, res, next) {
+    res.render('join', {title: 'TTU ACM'})
 });
 
 module.exports = router;
