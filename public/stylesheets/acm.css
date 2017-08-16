@@ -26,6 +26,10 @@ h1 {
     background-color: #f05545;
 }
 
+#team {
+    background-color: #f05545;
+}
+
 .contentSection {
     padding-top: 2%;
     padding-bottom: 2%;
@@ -77,6 +81,18 @@ h1 {
 
 .info h4 {
     text-align: right;
+}
+
+.team {
+    padding: 1%;
+}
+
+.team h4 {
+    text-align: center;
+}
+
+.team h5 {
+    text-align: center;
 }
 
 @media only screen and (max-width: 540px) {
