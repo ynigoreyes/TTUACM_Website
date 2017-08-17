@@ -5,11 +5,12 @@ html
         meta(charset='utf-8')
         meta(name='viewport', content='width=device-width, initial-scale=1')
         link(rel='stylesheet', type='text/css', href='/stylesheets/bootstrap.min.css')
+        link(rel='stylesheet', type='text/css', href='/stylesheets/classic-10_7.css')
         script(src='/javascripts/jquery.min.js')
         script(src='/javascripts/bootstrap.min.js')
         link(rel='stylesheet', href='/stylesheets/acm.css')
     body
-        div.container-fluid
+        div.container-fluid#page
             
             // Navbar
             div#navbar.row.menu
@@ -30,14 +31,14 @@ html
             div.row#footer
                 div.col-sm-offset-2.col-sm-8
                     div.col-xs-offset-2.col-xs-2.col-sm-offset-1.col-sm-1.logo
-                        a(href='https://www.facebook.com/groups/acmttu/')
+                        a(href='https://www.facebook.com/groups/acmttu/', target='_blank')
                             img.img-responsive(src='/images/facebook_logo.svg')
                     div.col-xs-2.col-sm-offset-2.col-sm-1.logo
-                        a(href='https://twitter.com/acmttu')
+                        a(href='https://twitter.com/acmttu', target='_blank')
                             img.img-responsive(src='/images/twitter_logo.svg')
                     div.col-xs-2.col-sm-offset-2.col-sm-1.logo
-                        a(href='https://github.com/orgs/TTUSDC')
+                        a(href='https://github.com/orgs/TTUSDC', target='_blank')
                             img.img-responsive(src='/images/github_logo.svg')
                     div.col-xs-2.col-sm-offset-2.col-sm-1.logo
-                        a(href='https://www.facebook.com/SDCTTU/')
-                            img.img-responsive(src='/images/sdc_logo.png')
+                        a(href='https://www.instagram.com/texastechacm', target='_blank')
+                            img.img-responsive(src='/images/instagram_logo.svg')
