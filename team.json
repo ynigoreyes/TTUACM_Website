@@ -3,7 +3,7 @@
         {"firstName": "Cameron", "lastName": "Carlton", "position": "President of ACM and Founder of HackWesTX", "headshot": ""},
         {"firstName": "Joshua", "lastName": "Johnson", "position": "Vice-President of ACM and Director of HackWesTX", "headshot": ""},
         {"firstName": "Austin", "lastName": "Goodman", "position": "Co-founder of HackWesTX", "headshot": ""},
-        {"firstName": "Nils", "lastName": "Griswold-Steiner", "position": "SDC Coordinator", "headshot": ""},
+        {"firstName": "Nils", "lastName": "Griswold-Steiner", "position": "Software Development Coordinator", "headshot": ""},
         {"firstName": "Joyelle", "lastName": "Woodson", "position": "Social Coordinator of ACM", "headshot": ""},
         {"firstName": "Zachery", "lastName": "Hansen", "position": "Treasurer of ACM", "headshot": ""}
 ]
