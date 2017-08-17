@@ -5,21 +5,12 @@ div {
 h1 {
     text-align: center;
 }
-
-#navbar {
-    background-color: #b71c1c;
-}
-
-#gallery {
+#page {
     background-color: #b71c1c;
 }
 
 #news {
     background-color: #f05545;
-}
-
-#footer {
-    background-color: #b71c1c;
 }
 
 #events {
@@ -28,6 +19,10 @@ h1 {
 
 #team {
     background-color: #f05545;
+}
+
+#mc_embed_signup{
+    clear:left;
 }
 
 .contentSection {
