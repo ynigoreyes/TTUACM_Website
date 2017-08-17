@@ -1,0 +1,29 @@
+extends layout
+
+block content
+    
+    //Join
+    div.col-sm-10.col-sm-offset-1.join
+        div.col-sm-8#mc_embed_signup
+            form.validate#mc-embedded-subscribe-form(action='//acmttu.us16.list-manage.com/subscribe/post?u=e5339e8b520b90ac68663cbd4&amp;id=e60278da6a', method='post', name='mc-embedded-subscribe-form', target='_blank')
+            div#mc_embed_signup_scroll
+                div.mc-field-group
+                    label(for='mce-EMAIL') Email Address
+                    input.email#mce-EMAIL(type='email', name='EMAIL')
+                div.mc-field-group
+                    label(for='mce-FNAME') First Name
+                    input#mce-FNAME(type='text', name='FNAME')
+                div.mc-field-group
+                    label(for='mce-LNAME') Last Name
+                    input#mce-LNAME(type='text', name='FNAME')
+                div.clear#mce-responses
+                    div.response#mce-error-response(style='display:none')
+                    div.response#mce-success-response(style='display:none')
+                div(style='position: absolute; left: -5000px;' aria-hidden='true')
+                    input(type='text', name='b_e5339e8b520b90ac68663cbd4_e60278da6a', tabindex='-1', value='')
+                div.clear
+                    input.button#mc-embedded-subscribe(type='submit', value='Subscribe', name='subscribe')
+        div.col-sm-4
+            h3 Join our mailing list to receive updates about workshops, ACM events, and all other ACM related content!
+        
+        
