@@ -5,8 +5,16 @@ div {
 h1 {
     text-align: center;
 }
-#page {
-    background-color: #b71c1c;
+
+body {
+        background-color: #b71c1c;
+}
+
+textarea {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	width: 100%;
 }
 
 #news {
@@ -21,8 +29,58 @@ h1 {
     background-color: #f05545;
 }
 
-#mc_embed_signup{
+#mc_embed_signup {
     clear:left;
+}
+
+/* navbar */
+.navbar-default {
+    background-color: #b71c1c;
+}
+/* Title */
+.navbar-default .navbar-brand {
+    color: white;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+    color: white;
+}
+/* Link */
+.navbar-default .navbar-nav > li > a {
+    color: white;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+    color: white;
+    background-color: #f05545;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+    color: #f05545;
+    background-color: white;
+}
+/* Mobile version */
+.navbar-default .navbar-toggle {
+    border: 0px;
+    border-color: white;
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+    border: 0px;
+    background-color: #b71c1c;
+}
+.navbar-default .navbar-toggle .icon-bar {
+    background-color: white;
+}
+@media (max-width: 767px) {
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+        color: white;
+    }
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+          color: #f05545;
+    }
 }
 
 .contentSection {
@@ -49,21 +107,6 @@ h1 {
 .logo {
     padding-top: 4%;
     padding-bottom: 4%;
-}
-
-.menu {
-    padding: 1%;
-}
-
-.menu a {
-    display: inline-block;
-    color: white;
-    text-align: center;
-    text-decoration: none;
-}
-
-.menu a:hover {
-    color: #f05545
 }
 
 .info h3 {
@@ -101,5 +144,9 @@ h1 {
 
     .info h4 {
         text-align: center;
+    }
+
+    textarea {
+        cols: 20;
     }
 }
