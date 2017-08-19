@@ -1,0 +1,17 @@
+extends layout
+
+block content
+    
+    // Contact
+    div.row.contentSection#contact
+        div.col-sm-10.col-sm-offset-1
+            div.col-sm-8#mc_embed_signup
+                form(action='https://formspree.io/acmtexastech@gmail.com', method='POST')
+                    div.col-sm-8.mc-field-group
+                        input(type='text', name='name', placeholder='First Name')
+                    div.col-sm-8.mc-field-group
+                        input(type='text', name='email', placeholder='Email')
+                    div.col-sm-8.mc-field-group
+                        textarea(name='message', placeholder='Your Message', rows='4')
+                    div.col-sm-2.clear
+                        input.button#mc-embedded-subscribe(type='submit', value='Send', name='subscribe')
