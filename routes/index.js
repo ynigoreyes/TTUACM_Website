@@ -152,7 +152,6 @@ router.get('/contact', function(req, res, next) {
   res.render('contact', { title: 'TTU ACM' });
 });
 
-//TODO: Login functionality
 /* GET join page. */
 router.get('/join', function(req, res, next) {
     res.render('join', {title: 'TTU ACM'})
