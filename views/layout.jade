@@ -13,22 +13,31 @@ html
         div.container-fluid#page
             
             // Navbar
-            div#navbar.row.menu
-                div.col-xs-1.col-sm-1.col-sm-offset-0
-                    a(href='/') Home
-                div.col-xs-1.col-sm-offset-0.col-xs-offset-1.col-sm-1
-                    a(href='/events') Events
-                div.col-xs-1.col-sm-offset-0.col-xs-offset-1.col-sm-1
-                    a(href='/team') Team
-                div.col-xs-1.col-sm-offset-0.col-xs-offset-1.col-sm-1
-                    a(href='/contact') Contact
-                div.col-xs-1.col-sm-offset-0.col-xs-offset-2.col-sm-1
-                    a(href='/join') Join
+            nav.navbar-default
+                div.container-fluid
+                    div.navbar-header
+                        button.navbar-toggle(type='button', data-toggle='collapse', data-target='#navbarTTU')
+                            span.icon-bar
+                            span.icon-bar
+                            span.icon-bar
+                        div.navbar-brand Texas Tech ACM
+                    div.collapse.navbar-collapse#navbarTTU
+                        ul.nav.navbar-nav
+                            li
+                                a(href='/') Home
+                            li
+                                a(href='/events') Events
+                            li
+                                a(href='/team') Team
+                            li
+                                a(href='/contact' ) Contact
+                            li
+                                a(href='/join') Join
             
             block content
             
             // Footer
-            div.row#footer
+            div.row
                 div.col-sm-offset-2.col-sm-8
                     div.col-xs-offset-2.col-xs-2.col-sm-offset-1.col-sm-1.logo
                         a(href='https://www.facebook.com/groups/acmttu/', target='_blank')
