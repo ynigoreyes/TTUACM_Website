@@ -1,34 +1,34 @@
 div {
     color: white;
 }
-
 h1 {
     text-align: center;
 }
-
 body {
-        background-color: #b71c1c;
+    background-color: #b71c1c;
 }
-
 textarea {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	width: 100%;
 }
+a {
+    color: white;
+}
+a:hover {
+    color: white;
+}
 
 #news {
     background-color: #f05545;
 }
-
 #events {
     background-color: #f05545;
 }
-
 #team {
     background-color: #f05545;
 }
-
 #mc_embed_signup {
     clear:left;
 }
@@ -87,7 +87,6 @@ textarea {
     padding-top: 2%;
     padding-bottom: 2%;
 }
-
 .news {
     border-style: solid;
     overflow-y: auto;
@@ -95,7 +94,6 @@ textarea {
     padding-top: 2%;
     padding-bottom: 2%;
 }
-
 .event {
     border-style: solid;
     height: 50%;
@@ -103,36 +101,28 @@ textarea {
     padding-bottom: 1%;
     margin-top: 1%;
 }
-
 .logo {
     padding-top: 4%;
     padding-bottom: 4%;
 }
-
 .info h3 {
     text-align: left;
 }
-
 .info p {
     text-align: center;
 }
-
 .info h4 {
     text-align: right;
 }
-
 .team {
     padding: 1%;
 }
-
 .team h4 {
     text-align: center;
 }
-
 .team h5 {
     text-align: center;
 }
-
 @media only screen and (max-width: 540px) {
     .info h3 {
         text-align: center;
