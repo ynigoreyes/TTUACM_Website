@@ -4,14 +4,17 @@ block content
     
     // Contact
     div.row.contentSection#contact
-        div.col-sm-10.col-sm-offset-1
-            div.col-sm-8#mc_embed_signup
+        div.col-sm-10.col-sm-offset-1.col-xs-12
+            div.col-sm-8.col-xs-12#mc_embed_signup
                 form(action='https://formspree.io/acmtexastech@gmail.com', method='POST')
-                    div.col-sm-8.mc-field-group
+                    div.col-sm-8.col-xs-12.mc-field-group
                         input(type='text', name='name', placeholder='First Name')
-                    div.col-sm-8.mc-field-group
+                    div.col-sm-8.col-xs-12.mc-field-group
                         input(type='text', name='email', placeholder='Email')
-                    div.col-sm-8.mc-field-group
+                    div.col-sm-8.col-xs-12.mc-field-group
                         textarea(name='message', placeholder='Your Message', rows='4')
-                    div.col-sm-2.clear
+                    div.col-sm-2.col-xs-12.clear
                         input.button#mc-embedded-subscribe(type='submit', value='Send', name='subscribe')
+            div.col-sm-4.col-xs-12
+                h3: a(href='mailto:acmtexastech@gmail.com') acmtexastech@gmail.com
+                h3 2500 Broadway, Lubbock Texas
