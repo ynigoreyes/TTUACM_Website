@@ -1,9 +1,12 @@
 var express = require('express');
 var router = express.Router();
+var articleProvider = new ArticleProvider();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'TTU ACM' });
+  articleProvider.findAll(function(error, docs) {
+      res.render('index', { title: 'Association of Computing Machinery at Texas Tech University', articles: docs});
+  })
 });
 
 /* GET events page. */
@@ -127,9 +130,9 @@ router.get('/events', function(req, res, next) {
       }
       var events = response.items;
       if (events.length == 0) {
-        res.render('events', { title: 'TTU ACM', isEvents: false});
+        res.render('events', { title: 'Association of Computing Machinery at Texas Tech University', isEvents: false});
       } else {
-        res.render('events', { title: 'TTU ACM', isEvents: true, calendarEvent: events });
+        res.render('events', { title: 'Association of Computing Machinery at Texas Tech University', isEvents: true, calendarEvent: events });
       }
     });
   }
@@ -143,18 +146,23 @@ router.get('/team', function(req, res, next) {
           console.log('File Error: ' + err);
       }
   var team = JSON.parse(data);
-  res.render('team', { title: 'TTU ACM', teamMembers: team });
+  res.render('team', { title: 'Association of Computing Machinery at Texas Tech University', teamMembers: team });
   });
 });
 
 /* GET contact page. */
 router.get('/contact', function(req, res, next) {
-  res.render('contact', { title: 'TTU ACM' });
+  res.render('contact', { title: 'Association of Computing Machinery at Texas Tech University' });
 });
 
 /* GET join page. */
 router.get('/join', function(req, res, next) {
-    res.render('join', {title: 'TTU ACM'})
+    res.render('join', {title: 'Association of Computing Machinery at Texas Tech University'})
+});
+
+/* GET Login page */
+router.get('/login', function(req, res, next){
+    res.render('login', {title: 'Association of Computing Machinery at Texas Tech University'})
 });
 
 module.exports = router;
