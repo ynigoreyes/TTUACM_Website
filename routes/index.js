@@ -1,11 +1,11 @@
 var express = require('express');
 var router = express.Router();
-var articleProvider = new ArticleProvider();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  var articleProvider = new ArticleProvider();
   articleProvider.findAll(function(error, docs) {
-      res.render('index', { title: 'Association of Computing Machinery at Texas Tech University', articles: docs});
+    res.render('index', { title: 'Association of Computing Machinery at Texas Tech University', articles: docs});
   })
 });
 
