@@ -7,16 +7,16 @@ AWS.config.update({
     endpoint: 'http://localhost:8000'
 });
 
-var dynamodb = new AWS.DynamoDB();
+var db = new AWS.DynamoDB();
 
 var params = {
     TableName: 'Articles',
     KeySchema: [
-        { AttributeName: 'ArticleID', KeyType: 'HASH' },
+        { AttributeName: 'ArticleDate', KeyType: 'HASH' },
         { AttributeName: 'ArticleName', KeyType: 'RANGE' }
     ],
     AttributeDefinitions: [
-        { AttributeName: 'ArticleID', AttributeType: 'N' },
+        { AttributeName: 'ArticleDate', AttributeType: 'N' },
         { AttributeName: 'ArticleName', AttributeType: 'S' }
     ],
     ProvisionedThroughput: {
@@ -25,7 +25,7 @@ var params = {
     }
 };
 
-dynamodb.createTable(params, function(err, data) {
+db.createTable(params, function(err, data) {
     if (err) {
         console.error('Unable to create table. Error JSON:', JSON.stringify(err, null, 2));
     } else {
