@@ -17,7 +17,7 @@ allArticles.forEach(function(article) {
     var params = {
         TableName: "Articles",
         Item: {
-            "ArticleID": article.ArticleID,
+            "ArticleDate": article.ArticleDate,
             "ArticleName": article.ArticleName,
             "body": article.body
         }
