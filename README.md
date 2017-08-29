@@ -6,7 +6,7 @@ Setting up the environment:
   
   2)  Clone repo
   
-  3)  To start the website in a browser cd into the directory and type "npm start" without quotes then type in your browser "localhost:8000" without quotes
+  3)  To start the website in a browser cd into the directory and type "npm start" without quotes then type in your browser "localhost" without quotes
   
 Contributing:
   
@@ -20,6 +20,8 @@ Contributing:
   
   To add a new page to the server use /routes/index.js
   
-  If port 8000 doesn't work for you, you may change the port in /bin/www (line 15)
+  Database logic and models can be found in /business_logic
+  
+  If port 80 doesn't work for you, you may change the port in /bin/www (line 15)
     
-      var port = normalizePort(process.env.PORT || '8000');
+      var port = normalizePort(process.env.PORT || '80');
