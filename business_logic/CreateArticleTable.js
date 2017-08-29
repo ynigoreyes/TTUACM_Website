@@ -10,14 +10,14 @@ AWS.config.update({
 var dynamodb = new AWS.DynamoDB();
 
 var params = {
-    TableName: 'Users',
+    TableName: 'Articles',
     KeySchema: [
-        { AttributeName: 'email', KeyType: 'HASH' },
-        { AttributeName: 'password', KeyType: 'RANGE' }
+        { AttributeName: 'ArticleID', KeyType: 'HASH' },
+        { AttributeName: 'ArticleName', KeyType: 'RANGE' }
     ],
     AttributeDefinitions: [
-        { AttributeName: 'email', AttributeType: 'S' },
-        { AttributeName: 'password', AttributeType: 'S' }
+        { AttributeName: 'ArticleID', AttributeType: 'N' },
+        { AttributeName: 'ArticleName', AttributeType: 'S' }
     ],
     ProvisionedThroughput: {
         ReadCapacityUnits: 10,
