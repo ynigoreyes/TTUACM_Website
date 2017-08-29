@@ -5,6 +5,13 @@ var articleCounter = 1;
 ArticleProvider = function () {};
 ArticleProvider.prototype.dummyData = [];
 
+//TODO: Make next 5 lines grab the 4 latest articles
+ArticleProvider.prototype.findLatest = function (callback) {
+    for (var i = 0; i < 4; i++) {
+
+    }
+};
+
 ArticleProvider.prototype.findAll = function (callback) {
     callback(null, this.dummyData)
 };
@@ -20,6 +27,7 @@ ArticleProvider.prototype.findById = function (id, callback) {
     callback(null, result);
 };
 
+//TODO: Make this function call the function in NewArticleItem.js
 ArticleProvider.prototype.save = function (articles, callback) {
     var article = null;
 
