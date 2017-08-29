@@ -1,3 +1,5 @@
+var AWS = require('aws-sdk');
+
 var articleCounter = 1;
 
 ArticleProvider = function () {};
@@ -34,12 +36,5 @@ ArticleProvider.prototype.save = function (articles, callback) {
     }
     callback(null, article);
 };
-
-// Dummy Data
-new ArticleProvider().save([
-    {title: 'Post one', body: 'Body one', author:'Dave'},
-    {title: 'Post two', body: 'Body two'},
-    {title: 'Post three', body: 'Body three'}
-], function (error, articles){});
 
 exports.ArticleProvider = ArticleProvider;
