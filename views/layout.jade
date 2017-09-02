@@ -31,8 +31,14 @@ html
                                 a(href='/team') Team
                             li
                                 a(href='/contact' ) Contact
-                            li
-                                a(href='/join') Join
+                            if isLoggedIn
+                                li
+                                    a(href='/logout') Logout
+                            else
+                                li
+                                    a(href='/signup') Signup
+                                li
+                                    a(href='/login') Login
             
             block content
             
