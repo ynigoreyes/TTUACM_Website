@@ -1,6 +1,25 @@
 extends layout
 
 block content
+    - var convertDate = function(date) {
+    -     return date.substr(5) + '-' + date.substr(0, 4);
+    - };
+    - var convertDate = function(dateTime) {
+    -     return dateTime.substr(5, 5) + '-' + dateTime.substr(0, 4);
+    - };
+    - var convertTime = function(dateTime) {
+    -     var hours = dateTime.substr(11, 2);
+    -     var mins = dateTime.substr(14, 2);
+    -     var time = function(hours, mins) {
+    -         var ampm = "am";
+    -         if (hours > 12) {
+    -             ampm = "pm";
+    -             hours = hours - 12;
+    -         }
+    -         return hours + ":" + mins + ampm; 
+    -     };
+    -     return time(hours, mins);
+    - };
     
     // Events
     div.row.contentSection#events
@@ -10,10 +29,16 @@ block content
             each event, i in calendarEvent
                 div.row.col-xs-10.col-xs-offset-1.event
                     h1 #{calendarEvent[i].summary}
-                    div.col-xs-12.col-sm-4.info
-                        - var convertDate = calendarEvent[i].start.date.substr(5) + '-' + calendarEvent[i].start.date.substr(0, 4);    
-                        h3 #{convertDate}
-                    div.col-xs-12.col-sm-4.info
+                    div.col-xs-12.col-sm-3.info
+                        if calendarEvent[i].start.dateTime
+                            h3 #{convertDate(calendarEvent[i].start.dateTime)}
+                            if calendarEvent[i].end.dateTime
+                                h4 #{convertTime(calendarEvent[i].start.dateTime)} - #{convertTime(calendarEvent[i].end.dateTime)}
+                            else
+                                h4 #{convertTime(calendarEvent[i].start.dateTime)}
+                        else
+                            h3 #{convertDate(calendarEvent[i].start.date)}
+                    div.col-xs-12.col-sm-6.info
                         p #{calendarEvent[i].description}
-                    div.col-xs-12.col-sm-4.info
+                    div.col-xs-12.col-sm-3.location
                         h4 #{calendarEvent[i].location}
