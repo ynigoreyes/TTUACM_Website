@@ -16,13 +16,3 @@ block content
                     img(src='/images/hackwestx.jpg', style='width:100%')
                 div.item
                     img(src='/images/code.jpg', style='width:100%')
-                    
-    // News
-    each article in articles
-        div.row.contentSection#news
-            div.col-xs-10.col-xs-offset-1.news
-                h1= article.title
-                div.col-xs-12.col-sm-12.info
-                    h3(style='text-align: center')= article.created_at
-                div.col-xs-12.col-sm-12.info
-                    =article.body
