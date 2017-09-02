@@ -112,6 +112,9 @@ a:hover {
     text-align: center;
 }
 .info h4 {
+    text-align: left;
+}
+.location h4 {
     text-align: right;
 }
 .team {
