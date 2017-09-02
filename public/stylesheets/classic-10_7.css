@@ -23,7 +23,7 @@
 * html #mc_embed_signup .size1of2 {margin-right:2%; /* Fix for IE6 double margins. */}
 #mc_embed_signup .mc-field-group label {display:block; margin-bottom:3px;}
 #mc_embed_signup .mc-field-group input {display:block; width:100%; padding:8px 0; text-indent:2%;}
-#mc_embed_signup .mc-field-group select {display:inline-block; width:99%; padding:5px 0; margin-bottom:2px;}
+#mc_embed_signup .mc-field-group select {border: 1px solid white; background-color: #f05545; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; display:inline-block; width:99%; padding:5px 0; margin-bottom:2px;}
 
 #mc_embed_signup .datefield, #mc_embed_signup .phonefield-us{padding:5px 0;}
 #mc_embed_signup .datefield input, #mc_embed_signup .phonefield-us input{display:inline; width:60px; margin:0 2px; letter-spacing:1px; text-align:center; padding:5px 0 2px 0;}
