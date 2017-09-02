@@ -12,9 +12,9 @@ block content
     -     var mins = dateTime.substr(14, 2);
     -     var time = function(hours, mins) {
     -         var ampm = "am";
-    -         if (hours > 12) {
+    -         if (hours >= 12) {
     -             ampm = "pm";
-    -             hours = hours - 12;
+    -             if (hours !== 12) hours = hours - 12;
     -         }
     -         return hours + ":" + mins + ampm; 
     -     };
