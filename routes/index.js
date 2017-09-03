@@ -2,7 +2,7 @@ module.exports = function(app, passport) {
 
     /* GET home page. */
     app.get('/', function(req, res, next) {
-      res.render('index', { title: 'Association of Computing Machinery at Texas Tech University', isLoggedIn: req.isAuthenticated()});
+      res.render('index', { title: 'Association for Computing Machinery at Texas Tech University', isLoggedIn: req.isAuthenticated()});
     });
 
     /* GET events page. */
@@ -126,9 +126,9 @@ module.exports = function(app, passport) {
           }
           var events = response.items;
           if (events.length == 0) {
-            res.render('events', { title: 'Association of Computing Machinery at Texas Tech University', isEvents: false, isLoggedIn: req.isAuthenticated()});
+            res.render('events', { title: 'Association for Computing Machinery at Texas Tech University', isEvents: false, isLoggedIn: req.isAuthenticated()});
           } else {
-            res.render('events', { title: 'Association of Computing Machinery at Texas Tech University', isEvents: true, calendarEvent: events, isLoggedIn: req.isAuthenticated()});
+            res.render('events', { title: 'Association for Computing Machinery at Texas Tech University', isEvents: true, calendarEvent: events, isLoggedIn: req.isAuthenticated()});
           }
         });
       }
@@ -142,18 +142,18 @@ module.exports = function(app, passport) {
               console.log('File Error: ' + err);
           }
       var team = JSON.parse(data);
-      res.render('team', { title: 'Association of Computing Machinery at Texas Tech University', teamMembers: team, isLoggedIn: req.isAuthenticated()});
+      res.render('team', { title: 'Association for Computing Machinery at Texas Tech University', teamMembers: team, isLoggedIn: req.isAuthenticated()});
       });
     });
 
     /* GET contact page. */
     app.get('/contact', function(req, res, next) {
-      res.render('contact', { title: 'Association of Computing Machinery at Texas Tech University', isLoggedIn: req.isAuthenticated()});
+      res.render('contact', { title: 'Association for Computing Machinery at Texas Tech University', isLoggedIn: req.isAuthenticated()});
     });
 
     /* GET login page */
     app.get('/login', function(req, res, next) {
-        res.render('login', {title: 'Association of Computing Machinery at Texas Tech University', message: req.flash('loginMessage'), isLoggedIn: req.isAuthenticated() });
+        res.render('login', {title: 'Association for Computing Machinery at Texas Tech University', message: req.flash('loginMessage'), isLoggedIn: req.isAuthenticated() });
     });
 
     /* POST login page */
@@ -171,7 +171,7 @@ module.exports = function(app, passport) {
 
     /* GET signup page */
     app.get('/signup', function(req, res, next) {
-        res.render('signup', {title: 'Association of Computing Machinery at Texas Tech University', message: req.flash('signupMessage'), isLoggedIn: req.isAuthenticated()});
+        res.render('signup', {title: 'Association for Computing Machinery at Texas Tech University', message: req.flash('signupMessage'), isLoggedIn: req.isAuthenticated()});
     });
 
     /* POST signup page */
