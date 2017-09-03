@@ -37,6 +37,8 @@ module.exports = function(passport) {
                 if (err) return done(err);
                 if (user) {
                     return done(null, false, req.flash('signupMessage', 'That email is already in use.'));
+                } else if (password !== req.body.password) {
+                    return done(null, false, req.flash('signupMessage', 'Password and confirm password must match.'))
                 } else {
                     var newUser = new User();
                     newUser.local.firstName = req.body.firstName;
