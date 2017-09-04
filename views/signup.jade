@@ -18,11 +18,12 @@ block content
                     input(type='password', name='confirmPassword', placeholder='Confirm Password')
                 div.col-sm-8.mc-field-group
                     select(name='classification')
-                        option(value='freshman') Freshman
-                        option(value='sophomore') Sophomore
-                        option(value='junior') Junior
-                        option(value='senior') Senior
-                        option(value='graduate') Graduate
+                        option(value='Freshman') Freshman
+                        option(value='Sophomore') Sophomore
+                        option(value='Junior') Junior
+                        option(value='Senior') Senior
+                        option(value='Graduate') Graduate
                         option(value='Doctorate') Doctorate
                 div.col-sm-8.clear
                     input.button#mc-embedded-subscribe(type='submit', value='Signup', name='signup')
+                    p= message
