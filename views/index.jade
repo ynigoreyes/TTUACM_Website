@@ -7,12 +7,20 @@ block content
         div.carousel.slide#galleryCarousel(data-ride='carousel')
             ol.carousel-indicators
                 li.active(data-target='#galleryCarousel', data-slide-to='0')
-                li(data-target='#galleryCarousel', data-slide-to='1')
-                li(data-target='#galleryCarousel', data-slide-to='2')
+                //- li(data-target='#galleryCarousel', data-slide-to='1')
+                //- li(data-target='#galleryCarousel', data-slide-to='2')
             div.carousel-inner
                 div.item.active
                     img(src='/images/team.jpg', style='width:100%')
-                div.item
-                    img(src='/images/hackwestx.jpg', style='width:100%')
-                div.item
-                    img(src='/images/code.jpg', style='width:100%')
+                    div.carousel-caption
+                        h4 HackWesTX 2017 Team
+                //- div.item
+                //-     img(src='/images/hackwestx.jpg', style='width:100%')
+                //- div.item
+                //-     img(src='/images/code.jpg', style='width:100%')
+            a.left.carousel-control(href='#galleryCarousel', data-slide='prev')
+                span.glyphicon.glyphicon-chevron-left
+                span.sr-only Previous
+            a.right.carousel-control(href='#galleryCarousel', data-slide='next')
+                span.glyphicon.glyphicon-chevron-right
+                span.sr-only Next
