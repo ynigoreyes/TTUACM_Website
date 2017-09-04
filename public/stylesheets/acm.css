@@ -14,12 +14,15 @@ textarea {
 	width: 100%;
 }
 a {
-    color: white;
+    color: #D3D3D3;
 }
 a:hover {
     color: white;
 }
 
+#alt-color {
+    background-color: #f05545;
+}
 #news {
     background-color: #f05545;
 }
