@@ -151,6 +151,11 @@ module.exports = function(app, passport) {
       res.render('contact', { title: 'Association for Computing Machinery at Texas Tech University', isLoggedIn: req.isAuthenticated()});
     });
 
+    /* GET profile page */
+    app.get('/profile', membersOnly, function(req, res, next) {
+        res.render('profile', { title: 'Association for Computing Machinery at Texas Tech University', isLoggedIn: req.isAuthenticated(), user: req.user});
+    });
+
     /* GET login page */
     app.get('/login', function(req, res, next) {
         res.render('login', {title: 'Association for Computing Machinery at Texas Tech University', message: req.flash('loginMessage'), isLoggedIn: req.isAuthenticated() });
@@ -162,6 +167,68 @@ module.exports = function(app, passport) {
         failureRedirect: '/login',
         failureFlash: true
     }));
+
+    /* GET forgot page */
+    app.get('/forgot', function(req, res, next) {
+        res.render('forgot', {title: 'Association for Computing Machinery at Texas Tech University', message: req.flash('forgotMessage')});
+    });
+
+    /* POST forgot page */
+    app.post('/forgot', function(req, res, next) {
+        var crypto = require('crypto');
+        var nodemailer = require('nodemailer');
+        var async = require('async');
+        var User = require('../models/user');
+        async.waterfall([
+
+            function(done) {
+                crypto.randomBytes(20, function(err, buf) {
+                    var token = buf.toString('hex');
+                    done(err, token);
+                });
+            },
+
+            function(token, done) {
+                User.findOne({'local.email': req.body.email}, function(err, user) {
+                    if (!user) {
+                        req.flash('forgotMessage', 'No account with that email was found.');
+                        return res.redirect('/forgot');
+                    }
+                    user.local.resetPasswordToken = token;
+                    user.local.resetPasswordExpires = Date.now() + 10800000 // 3 Hours
+                    user.save(function(err) {
+                        done(err, token, user);
+                    });
+                });
+            },
+
+            function(token, user, done) {
+                var smtpTransport = nodemailer.createTransport({
+                    service: 'Gmail',
+                    auth: {
+                        user: 'acmtexastech@gmail.com',
+                        pass: '***REMOVED***'
+                    }
+                });
+                var mailOptions = {
+                    to: user.local.email,
+                    from: 'acmtexastech@gmail.com',
+                    subject: 'TTU ACM Password Reset',
+                    text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+                        'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+                        'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+                        'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+                };
+                smtpTransport.sendMail(mailOptions, function(err) {
+                    req.flash('forgotMessage', 'An email has been sent to ' + user.local.email + ' with a reset link.')
+                    done(err, 'done');
+                });
+            }
+        ], function(err) {
+            if (err) return next(err);
+            res.redirect('/forgot');
+        });
+    });
 
     /* GET logout page*/
     app.get('/logout', function(req, res, next) {
@@ -181,4 +248,72 @@ module.exports = function(app, passport) {
         failureFlash: true
     }));
 
+    /* GET reset page */
+    app.get('/reset/:token', function(req, res) {
+        var User = require('../models/user');
+        User.findOne({'local.resetPasswordToken': req.params.token, 'local.resetPasswordExpires': {$gt: Date.now()}}, function(err, user) {
+            if (!user) {
+                req.flash('forgotMessage', 'Password reset token is invalid or has expired.');
+                return res.redirect('/forgot');
+            }
+            res.render('reset', {user: req.user, message: req.flash('resetMessage')});
+        });
+    });
+
+    /* POST reset page */
+    app.post('/reset/:token', function(req, res, next) {
+        var nodemailer = require('nodemailer');
+        var async = require('async');
+        var User = require('../models/user');
+        async.waterfall([
+            function(done) {
+                User.findOne({'local.resetPasswordToken': req.params.token, 'local.resetPasswordExpires': {$gt: Date.now()}}, function(err, user) {
+                    if (!user) req.flash('resetMessage', 'Password reset link is invalid or expired.');
+                    else if (req.body.password !== req.body.confirmPassword) {
+                        req.flash('forgotMessage', 'Password and confirm password must match.');
+                        return res.redirect('/forgot');
+                    } else {
+                        user.local.password = req.body.password;
+                        user.local.resetPasswordToken = undefined;
+                        user.local.resetPasswordExpires = undefined;
+
+                        user.save(function(err) {
+                            req.logIn(user, function(err) {
+                                done(err, user);
+                            });
+                        });
+                    }
+                });
+            },
+            function(user, done) {
+                var smtpTransport = nodemailer.createTransport({
+                    service: 'Gmail',
+                    auth: {
+                        user: 'acmtexastech@gmail.com',
+                        pass: '***REMOVED***'
+                    }
+                });
+                var mailOptions = {
+                    to: user.local.email,
+                    from: 'acmtexastech@gmail.com',
+                    subject: 'Your password has been changed',
+                    text: 'Hello,\n\n' +
+                        'This is a confirmation that the password for your account has been changed.\n'
+                };
+                smtpTransport.sendMail(mailOptions, function(err) {
+                    req.flash('resetMessage', 'Your password has been changed.');
+                    done(err);
+                })
+            }
+        ], function(err) {
+            res.redirect('/');
+        });
+    });
+
 };
+
+// Place this function in the parameters of pages that only members should have access to
+function membersOnly(req, res, next) {
+    if (req.isAuthenticated()) return next();
+    res.redirect('/');
+}
