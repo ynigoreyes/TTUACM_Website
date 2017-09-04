@@ -1,5 +1,8 @@
 var LocalStrategy = require('passport-local').Strategy;
 var User = require('../models/user');
+var nodemailer = require('nodemailer');
+var crypto = require('crypto');
+var async = require('async');
 
 module.exports = function(passport) {
 
@@ -37,7 +40,7 @@ module.exports = function(passport) {
                 if (err) return done(err);
                 if (user) {
                     return done(null, false, req.flash('signupMessage', 'That email is already in use.'));
-                } else if (password !== req.body.password) {
+                } else if (password !== req.body.confirmPassword) {
                     return done(null, false, req.flash('signupMessage', 'Password and confirm password must match.'))
                 } else {
                     var newUser = new User();
