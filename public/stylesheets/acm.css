@@ -86,6 +86,10 @@ a:hover {
     }
 }
 
+.carousel-caption {
+    top: 0;
+    bottom: auto;
+}
 .contentSection {
     padding-top: 2%;
     padding-bottom: 2%;
@@ -141,6 +145,7 @@ a:hover {
     .info h4 {
         text-align: center;
     }
+
 
     textarea {
         cols: 20;
