@@ -24,7 +24,8 @@ module.exports = function(passport) {
     function(req, email, password, done) {
         User.findOne({'local.email': email}, function(err, user) {
             if (err) return done(err);
-            if (!user || !user.validPassword(password)) return done(null, false, req.flash('loginMessage', 'Invalid credentials.'));
+            if (!user) return done(null, false, req.flash('loginMessage', 'Invalid Username.'));
+            if (!user.validPassword(password)) return done(null, false, req.flash('loginMessage', 'Invalid Password.'));
             return done(null, user);
         });
     }));
@@ -47,7 +48,7 @@ module.exports = function(passport) {
                     newUser.local.firstName = req.body.firstName;
                     newUser.local.lastName = req.body.lastName;
                     newUser.local.email = email;
-                    newUser.local.password = newUser.generateHash(password);
+                    newUser.local.password = password;
                     newUser.local.classification = req.body.classification;
                     newUser.save(function(err) {
                         if (err)
