@@ -50,7 +50,19 @@ module.exports = function(app, passport) {
           if (err) {
             getNewToken(oauth2Client, callback);
           } else {
-            oauth2Client.credentials = JSON.parse(token);
+              var creds = JSON.parse(token);
+              oauth2Client.credentials = creds;
+              var isTokenExpired = function (creds) {
+                  if ((creds.expiry_date <= new Date().getTime()) || !creds.expiry_date) {
+                      console.log("Token Expired or does not exist.");
+                      return true;
+                  }
+                  else return false;
+              }
+              if (isTokenExpired) oauth2Client.refreshAccessToken(function(err) {
+                  if (err) console.log(err);
+                  else isTokenExpired = false;
+              });
             callback(oauth2Client);
           }
         });
