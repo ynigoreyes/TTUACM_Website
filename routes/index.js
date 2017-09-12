@@ -158,6 +158,7 @@ module.exports = function(app, passport) {
 
     /* GET login page */
     app.get('/login', function(req, res, next) {
+        req.logout();
         res.render('login', {title: 'Association for Computing Machinery at Texas Tech University', message: req.flash('loginMessage'), isLoggedIn: req.isAuthenticated() });
     });
 
@@ -206,17 +207,18 @@ module.exports = function(app, passport) {
                 var smtpTransport = nodemailer.createTransport({
                     service: 'Gmail',
                     auth: {
+                        //TODO: Use OAuth2
                         user: 'acmtexastech@gmail.com',
                         pass: 'w1nnersallofus'
                     }
                 });
                 var mailOptions = {
                     to: user.local.email,
-                    from: 'acmtexastech@gmail.com',
+                    from: 'Texas Tech ACM',
                     subject: 'TTU ACM Password Reset',
                     text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
                         'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-                        'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+                        req.protocol + '://' + req.headers.host + '/reset/' + token + '\n\n' +
                         'If you did not request this, please ignore this email and your password will remain unchanged.\n'
                 };
                 smtpTransport.sendMail(mailOptions, function(err) {
@@ -243,10 +245,30 @@ module.exports = function(app, passport) {
 
     /* POST signup page */
     app.post('/signup', passport.authenticate('local-signup', {
-        successRedirect: '/',
+        successRedirect: '/login',
         failureRedirect: '/signup',
         failureFlash: true
     }));
+
+    /* GET confirm page */
+    app.get('/confirm/:token', function(req, res) {
+        var User = require('../models/user');
+        User.findOne({'local.confirmEmailToken': req.params.token}, function(err, user) {
+            if (!user) {
+                req.flash('loginMessage', 'Confirm account token is invalid or has expired.');
+                return res.redirect('/login');
+            }
+            user.verify(req.params.token, function(err) {
+                if (err) {
+                    console.log('Error saving to database.');
+                    req.flash('loginMessage', 'Error saving to database.')
+                    return res.redirect('/login');
+                }
+                req.flash('loginMessage', 'Account verified! Please login.')
+                return res.redirect('/login');
+            });
+        });
+    });
 
     /* GET reset page */
     app.get('/reset/:token', function(req, res) {
