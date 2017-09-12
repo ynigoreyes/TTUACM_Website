@@ -26,7 +26,7 @@ module.exports = function(passport) {
             if (err) return done(err);
             if (!user) return done(null, false, req.flash('loginMessage', 'Invalid Username.'));
             if (!user.validPassword(password)) return done(null, false, req.flash('loginMessage', 'Invalid Password.'));
-            if (user.verified === false) return done(null, false, req.flash('loginMessage', 'Please confirm your email.'));
+            if (!user.local.verified) return done(null, false, req.flash('loginMessage', 'Please confirm your email.'));
             return done(null, user);
         });
     }));
