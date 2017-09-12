@@ -13,8 +13,11 @@ var userSchema = mongoose.Schema({
         firstName           : String,
         lastName            : String,
         classification      : String,
+        confirmEmailToken   : String,
         resetPasswordToken  : String,
-        resetPasswordExpires: Date
+        resetPasswordExpires: Date,
+        hasPaidDues         : Boolean,
+        verified            : Boolean
     }
 });
 
@@ -47,6 +50,15 @@ userSchema.methods.generateHash = function(password) {
 // Separate the salt and sand
 userSchema.methods.validPassword = function(password) {
     return bcrypt.compareSync(password, this.local.password);
+};
+
+// Verify email address using token
+userSchema.methods.verify = function(token, done) {
+    this.local.confirmEmailToken = undefined;
+    this.local.verified = true;
+    this.save(function(err) {
+        done(err);
+    });
 };
 
 module.exports = mongoose.model('User', userSchema);
