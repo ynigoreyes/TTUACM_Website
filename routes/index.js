@@ -267,7 +267,6 @@ module.exports = function(app, passport) {
         var User = require('../models/user');
         User.findOne({'local.confirmEmailToken': req.params.token}, function(err, user) {
             if (!user) {
-                req.flash('loginMessage', 'Confirm account token is invalid or has expired.');
                 return res.redirect('/login');
             }
             user.verify(req.params.token, function(err) {
