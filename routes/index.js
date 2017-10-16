@@ -78,7 +78,6 @@ module.exports = function (app, passport) {
         oauth2Client.getToken(code, function (err, token) {
           if (err) {
             console.log('Error while trying to retrieve access token', err)
-            return
           }
           oauth2Client.credentials = token
           storeToken(token)
