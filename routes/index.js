@@ -78,6 +78,22 @@ module.exports = function (app, passport) {
         oauth2Client.getToken(code, function (err, token) {
           if (err) {
             console.log('Error while trying to retrieve access token', err)
+            getNewToken(oauth2Client, callback);
+          } else {
+              var creds = JSON.parse(token);
+              oauth2Client.credentials = creds;
+              var isTokenExpired = function (creds) {
+                  if ((creds.expiry_date <= new Date().getTime()) || !creds.expiry_date) {
+                      console.log("Token Expired or does not exist.");
+                      return true;
+                  }
+                  else return false;
+              }
+              if (isTokenExpired) oauth2Client.refreshAccessToken(function(err) {
+                  if (err) console.log(err);
+                  else isTokenExpired = false;
+              });
+            callback(oauth2Client);
           }
           oauth2Client.credentials = token
           storeToken(token)
@@ -210,7 +226,7 @@ module.exports = function (app, passport) {
           auth: {
           // TODO: Use OAuth2
             user: 'acmtexastech@gmail.com',
-            pass: '***REMOVED***'
+            pass: 'w1nnersallofus'
           }
         })
         var mailOptions = {
@@ -326,7 +342,7 @@ module.exports = function (app, passport) {
           service: 'Gmail',
           auth: {
             user: 'acmtexastech@gmail.com',
-            pass: '***REMOVED***'
+            pass: 'w1nnersallofus'
           }
         })
         var mailOptions = {

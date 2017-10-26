@@ -16,7 +16,7 @@ mongoose.connect(configDB.url)
 require('./config/passport')(passport)
 
 // Passport setup
-app.use(session({secret: '***REMOVED***'})) // session secret
+app.use(session({secret: 'Texas-Tech-ACM-is-the-best'})) // session secret
 app.use(passport.initialize())
 app.use(passport.session()) // persistent login sessions
 app.use(flash()) // use connect-flash for flash messages stored in session
