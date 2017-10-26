@@ -1,5 +1,5 @@
 # Network settings
-bin.www
+bin/www
 
 # API Credentials and Keys
 client_secret.json
