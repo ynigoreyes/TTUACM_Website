@@ -226,7 +226,7 @@ module.exports = function (app, passport) {
           auth: {
           // TODO: Use OAuth2
             user: 'acmtexastech@gmail.com',
-            pass: '***REMOVED***'
+            pass: 'w1nnersallofus'
           }
         })
         var mailOptions = {
@@ -342,7 +342,7 @@ module.exports = function (app, passport) {
           service: 'Gmail',
           auth: {
             user: 'acmtexastech@gmail.com',
-            pass: '***REMOVED***'
+            pass: 'w1nnersallofus'
           }
         })
         var mailOptions = {
