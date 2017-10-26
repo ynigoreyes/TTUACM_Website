@@ -57,7 +57,7 @@ module.exports = function (passport) {
                   auth: {
                     // TODO: Use OAuth2
                     user: 'acmtexastech@gmail.com',
-                    pass: '***REMOVED***'
+                    pass: 'w1nnersallofus'
                   }
                 })
                 var mailOptions = {
