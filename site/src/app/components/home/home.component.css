@@ -1,0 +1,19 @@
+div#news {
+  text-align: center;
+  margin: auto;
+  background-color: #f05545;
+  color: white;
+}
+
+div#text-div {
+  width: 60%;
+  margin: auto;
+}
+
+h1#mission-caption {
+  margin: auto;
+}
+
+p#mission-statement {
+  font-size: 15px;
+}
