@@ -112,3 +112,6 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Public Ignore to reduce file size on Github
+public
