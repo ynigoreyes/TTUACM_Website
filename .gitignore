@@ -3,6 +3,7 @@ bin/www
 
 # API Credentials and Keys
 client_secret.json
+client_secret
 
 # Logs
 logs
