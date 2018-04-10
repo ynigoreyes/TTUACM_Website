@@ -32,11 +32,11 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 // uncomment after placing your favicon in /public
 app.use(logger('dev'));
 app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // Routes
 // require('./routes/index')(app, passport);
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/users', users);
 app.use('/events', events);
 
