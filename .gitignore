@@ -66,6 +66,7 @@ typings/
 
 # Mongo Credentials
 mongo.txt
+database.js
 
 # FrontEnd Ignores
 
