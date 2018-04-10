@@ -1,0 +1,61 @@
+<!-- <div class="row contentSection">
+  <div class="col-sm-6 col-sm-offset-3 col-xs-12" id="mc_embed_signup">
+    <form>
+      <div class="col-sm-8 mc-field-group">
+        <input type="text" name="firstName" placeholder="First Name">
+      </div>
+      <div class="col-sm-8 mc-field-group">
+        <input type="text" name="lastName" placeholder="Last Name">
+      </div>
+      <div class="col-sm-8 mc-field-group">
+        <input type="text" name="email" placeholder="Email">
+      </div>
+      <div class="col-sm-8 mc-field-group">
+        <input type="text" name="password" placeholder="Password">
+      </div>
+      <div class="col-sm-8 mc-field-group">
+        <input type="password" name="confirmPassword" placeholder="Confirm Password">
+      </div>
+      <div class="col-sm-8 mc-field-group">
+        <select [(value)]="classification" name="classification">
+          <option *ngFor="let class of classification" value="{{class}}" placeholder="Classification">{{class}}</option>
+        </select>
+      </div>
+      <div class="col-sm-8 clear">
+        <input type="submit" class="button" value="Signup" name="signup" id="mc-embedded-subscribe">
+        <p id="errorMessage"></p>
+      </div>
+    </form>
+  </div>
+</div> -->
+
+<div class="container">
+  <div class="col-xs-12 col-sm-12 login-box">
+    <div class="login-header">
+      <img src="../../../assets/acm_logo.svg" />
+      <h3>TTU ACM</h3>
+    </div>
+    <div id="error-message" class="alert alert-danger"></div>
+    <form onsubmit="return false;" method="post">
+      <div class="form-group">
+        <label for="name">Email</label>
+        <input type="email" class="form-control" id="email" placeholder="Enter your email">
+      </div>
+      <div class="form-group">
+        <label for="name">Password</label>
+        <input type="password" class="form-control" id="password" placeholder="Enter your password">
+      </div>
+      <button type="submit" id="btn-login" class="btn btn-primary btn-block">
+        Log In
+      </button>
+      <button type="button" id="btn-signup" class="btn btn-default btn-block">
+        Sign Up
+      </button>
+      <hr>
+      <button type="button" id="btn-google" class="btn btn-default btn-danger btn-block">
+        Log In with Google
+      </button>
+    </form>
+  </div>
+</div>
+

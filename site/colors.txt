@@ -1,0 +1,2 @@
+dark red      #b71c1c
+lighter red   #f05545

@@ -1,0 +1,22 @@
+div.content-section {
+  background-color: #f05545;
+  text-align: center;
+  margin: auto;
+}
+
+div.team-members {
+  text-align: center;
+}
+
+section.team {
+  display: inline-block;
+  width: 400px;
+  padding: 25px;
+  color: white;
+}
+
+h4.name {
+  font-size: bold 15px;
+  text-decoration: underline;
+}
+
