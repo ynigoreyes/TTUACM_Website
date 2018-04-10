@@ -1,0 +1,10 @@
+[
+        {"firstName": "Dr.", "lastName": " Watson", "position": "Faculty Advisor of ACM", "headshot": ""},
+        {"firstName": "Cameron", "lastName": "Carlton", "position": "President of ACM and Founder of HackWesTX", "headshot": ""},
+        {"firstName": "Joshua", "lastName": "Johnson", "position": "VP of ACM and Head of Marketing for HackWesTX", "headshot": ""},
+        {"firstName": "Austin", "lastName": "Goodman", "position": "Co-founder of HackWesTX", "headshot": ""},
+        {"firstName": "Nils", "lastName": "Griswold-Steiner", "position": "Software Development Coordinator", "headshot": ""},
+        {"firstName": "Joyelle", "lastName": "Woodson", "position": "Social Coordinator of ACM", "headshot": ""},
+        {"firstName": "Lauren", "lastName": "Finley", "position": "Historian of ACM", "headshot": ""},
+        {"firstName": "Zachery", "lastName": "Hansen", "position": "Treasurer of ACM", "headshot": ""}
+]

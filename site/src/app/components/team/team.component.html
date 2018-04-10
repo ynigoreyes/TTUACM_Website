@@ -1,0 +1,8 @@
+<div class="row content-section">
+  <div class="col-12 team-members">
+    <section *ngFor="let member of team" class="team">
+      <h4 class="name">{{member.firstName}} {{member.lastName}}</h4>
+      <small class="position">{{member.position}}</small>
+    </section>
+  </div>
+</div>
