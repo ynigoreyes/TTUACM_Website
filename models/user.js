@@ -4,7 +4,7 @@
 */
 
 var mongoose = require('mongoose')
-var bcrypt = require('bcrypt-nodejs')
+var bcrypt = require('bcryptjs')
 
 var userSchema = mongoose.Schema({
   local: {
@@ -60,4 +60,4 @@ userSchema.methods.verify = function (token, done) {
   })
 }
 
-module.exports = mongoose.model('User', userSchema)
+module.exports = mongoose.model('User', userSchema);

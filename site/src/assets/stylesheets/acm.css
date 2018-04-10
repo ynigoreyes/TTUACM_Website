@@ -1,0 +1,153 @@
+div {
+    color: white;
+}
+h1 {
+    text-align: center;
+}
+body {
+    background-color: #b71c1c;
+}
+textarea {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	width: 100%;
+}
+a {
+    color: #D3D3D3;
+}
+a:hover {
+    color: white;
+}
+
+#alt-color {
+    background-color: #f05545;
+}
+#news {
+    background-color: #f05545;
+}
+#events {
+    background-color: #f05545;
+}
+#team {
+    background-color: #f05545;
+}
+#mc_embed_signup {
+    clear:left;
+}
+
+/* navbar */
+.navbar-default {
+    background-color: #b71c1c;
+}
+/* Title */
+.navbar-default .navbar-brand {
+    color: white;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+    color: white;
+}
+/* Link */
+.navbar-default .navbar-nav > li > a {
+    color: white;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+    color: white;
+    background-color: #f05545;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+    color: #f05545;
+    background-color: white;
+}
+/* Mobile version */
+.navbar-default .navbar-toggle {
+    border: 0px;
+    border-color: white;
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+    border: 0px;
+    background-color: #b71c1c;
+}
+.navbar-default .navbar-toggle .icon-bar {
+    background-color: white;
+}
+@media (max-width: 767px) {
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+        color: white;
+    }
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+          color: #f05545;
+    }
+}
+
+.carousel-caption {
+    top: 0;
+    bottom: auto;
+}
+.contentSection {
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+.news {
+    border-style: solid;
+    overflow-y: auto;
+    height: 50%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+.event {
+    border-style: solid;
+    height: 50%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    margin-top: 1%;
+}
+.logo {
+    padding-top: 4%;
+    padding-bottom: 4%;
+}
+.info h3 {
+    text-align: left;
+}
+.info p {
+    text-align: center;
+}
+.info h4 {
+    text-align: left;
+}
+.location h4 {
+    text-align: right;
+}
+.team {
+    padding: 1%;
+}
+.team h4 {
+    text-align: center;
+}
+.team h5 {
+    text-align: center;
+}
+@media only screen and (max-width: 540px) {
+    .info h3 {
+        text-align: center;
+    }
+
+    .info p {
+        text-align: center;
+    }
+
+    .info h4 {
+        text-align: center;
+    }
+
+
+    textarea {
+        cols: 20;
+    }
+}
