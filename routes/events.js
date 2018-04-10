@@ -10,3 +10,4 @@ const EventsController = require('../controllers/event_c');
 router.get('/', EventsController.googleAuthenticate);
 
 module.exports = router;
+
