@@ -1,0 +1,24 @@
+
+#footer-div {
+  background-color: #b71c1c;
+  text-align: center;
+}
+
+#icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  width: 60%;
+  height: 200px;
+}
+
+h5#copyright {
+  color: rgba(41, 40, 40, 0.609);
+}
+img {
+  position: relative;
+  width:  100px;
+  height: 100px;
+  padding: 15px;
+}
