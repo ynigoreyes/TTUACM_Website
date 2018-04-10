@@ -1,0 +1,44 @@
+<nav class="navbar navbar-expand-lg navbar-default navbar-dark">
+
+  <a class="navbar-brand" [routerLink]="['/']">Texas Tech ACM</a>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTTU">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarTTU">
+    <ul class="navbar-nav">
+      <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
+        <a class="nav-link" [routerLink]="['/']">Home</a>
+      </li>
+      <div class="dropdown-divider"></div>
+      <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
+        <a class="nav-link" [routerLink]="['/events']">Events</a>
+      </li>
+      <div class="dropdown-divider"></div>
+      <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
+        <a class="nav-link" [routerLink]="['/team']">Team</a>
+      </li>
+      <div class="dropdown-divider"></div>
+      <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
+        <a class="nav-link" [routerLink]="['/contact']">Contact</a>
+      </li>
+      <div class="dropdown-divider"></div>
+      <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
+        <a class="nav-link" [routerLink]="['/profile']">Profile</a>
+      </li>
+      <div class="dropdown-divider"></div>
+      <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
+        <a class="nav-link" [routerLink]="['/signup']">Sign Up</a>
+      </li>
+      <div class="dropdown-divider"></div>
+      <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
+        <a class="nav-link" [routerLink]="['/login']">Login</a>
+      </li>
+      <div class="dropdown-divider"></div>
+      <li class="nav-item">
+        <a class="nav-link" href="#">LogOut</a>
+      </li>
+    </ul>
+  </div>
+</nav>
