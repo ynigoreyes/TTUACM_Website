@@ -66,10 +66,8 @@ typings/
 
 # Mongo Credentials
 mongo.txt
-<<<<<<< HEAD
 database.js
-=======
->>>>>>> ac51326f44e71d1807be70fed37f53834bce3e8b
+
 
 # FrontEnd Ignores
 
