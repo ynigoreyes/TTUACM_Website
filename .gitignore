@@ -2,8 +2,8 @@
 bin/www
 
 # API Credentials and Keys
+secrets.js
 client_secret.json
-client_secret
 
 # Logs
 logs

@@ -3,7 +3,6 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const async = require('async');
 const User = require('../models/user');
-const config = require('../config/database');
 
 exports.authenticate = passport.authenticate('local-login', {
   successRedirect: '/',
