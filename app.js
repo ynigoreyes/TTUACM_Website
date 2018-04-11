@@ -8,10 +8,7 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const mongoose = require('mongoose');
 
-const usersRoute = require('./routes/users');
-const eventsRoute = require('./routes/events');
-
-const configDB = require('./config/database.js');
+const secrets = require('./config/secrets');
 
 // Express Routing and App setup
 const app = express();
@@ -19,14 +16,14 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Now using MongoClient
-mongoose.connect(configDB.url, {
+mongoose.connect(secrets.db, {
   useMongoClient: true,
   socketTimeoutMS: 0,
   keepAlive: true,
   reconnectTries: 30
 });
 mongoose.connection.on('connected', () => {
-  console.log('Connected to database at ' + configDB.url);
+  console.log('Database Connection Successful');
 });
 mongoose.connection.on('error', (err) => {
   console.log('Error Connecting to database ' + err);
@@ -37,22 +34,15 @@ require('./config/passport')(passport);
 
 // Passport setup
 app.use(session({
-  secret: "Texas-Tech-ACM-is-the-best",
+  secret: secrets.session_secret.toString,
   // Figure out what this means: Updated to get rid of deprecation
   resave: false,
   saveUninitialized: true
 }));
 
-const users = require('./routes/users');
-const events = require('./routes/events');
-
-
-mongoose.connect(configDB.url);
 require('./config/passport')(passport);
 
-// Passport setup
-app.use(session({secret: process.env.TTU_ACM_SECRET}));
-
+// Figure out why we have two sessions going on...
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
@@ -63,6 +53,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Routes
+const usersRoute = require('./routes/users');
+const eventsRoute = require('./routes/events');
 app.use('/users', usersRoute);
 app.use('/events', eventsRoute);
 
@@ -87,6 +79,7 @@ app.use( (err, req, res, next) => {
   // TODO: Make an error page to render that is not in .jade
   res.status(err.status || 500);
   // res.render('error');
+
   // Do something like this instead
   // res.redirect('/error');
   res.status(404).send('<h1>Not Found</h1>');
