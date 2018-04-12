@@ -12,7 +12,7 @@ export class ContactService {
     const headers = new Headers();
 
     headers.append('Content-Type', 'application/json');
-    const post = this.http.post('http://localhost:80/users', message, { headers: headers })
+    const post = this.http.post('http://localhost:80/users/contact-us', message, { headers: headers })
     .map(res => res.json());
 
     return post;

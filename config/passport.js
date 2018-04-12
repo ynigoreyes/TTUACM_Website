@@ -1,8 +1,10 @@
-var LocalStrategy = require('passport-local').Strategy;
-var User = require('../models/user');
-var crypto = require('crypto');
-var nodemailer = require('nodemailer');
-var async = require('async');
+const LocalStrategy = require('passport-local').Strategy;
+const User = require('../models/user');
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
+const async = require('async');
+const secret = require('./secrets');
+
 
 module.exports = function (passport) {
   passport.serializeUser(function (user, done) {
@@ -56,8 +58,8 @@ module.exports = function (passport) {
                   service: 'Gmail',
                   auth: {
                     // TODO: Use OAuth2
-                    user: 'acmtexastech@gmail.com',
-                    pass: 'w1nnersallofus'
+                    user: secret.emailUsername,
+                    pass: secret.emailPassword
                   }
                 })
                 var mailOptions = {
