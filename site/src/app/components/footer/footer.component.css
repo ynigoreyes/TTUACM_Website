@@ -10,7 +10,7 @@
   justify-content: center;
   margin: auto;
   width: 60%;
-  height: 200px;
+  height: 150px;
 }
 
 h5#copyright {
@@ -21,4 +21,15 @@ img {
   width:  100px;
   height: 100px;
   padding: 15px;
+}
+
+button#contact-button {
+  background-color: #1B2F33;
+  color: #D1CCDC;
+  padding: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  margin-bottom: 0px;
+  width: 30px;
 }

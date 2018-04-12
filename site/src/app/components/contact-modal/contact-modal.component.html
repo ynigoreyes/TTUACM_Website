@@ -1,0 +1,18 @@
+<div>
+  <h2>Have A Question?</h2>
+  <hr>
+    <mat-form-field class="example-full-width">
+      <input [(ngModel)]="question.name" name="name"  matInput placeholder="Name">
+    </mat-form-field>
+    <br>
+    <mat-form-field class="example-full-width">
+      <input [(ngModel)]="question.email" name="email" matInput placeholder="Email">
+    </mat-form-field>
+    <br>
+    <mat-form-field class="example-full-width">
+      <input [(ngModel)]="question.message" name="message" matInput placeholder="Question">
+    </mat-form-field>
+    <br>
+  <button mat-raised-button (click)="onCloseConfirm()" >Confirm</button>
+  <button mat-raised-button (click)="onCloseCancel()" >Cancel</button>
+</div>

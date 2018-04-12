@@ -117,3 +117,4 @@ Thumbs.db
 
 # Public Ignore to reduce file size on Github
 public
+!public/README.md
