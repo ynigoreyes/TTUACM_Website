@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "test-ttuacmwebsite",
+  "private_key_id": "85a5b5dc8c7e60c7aa628dc6f9f377ca17036817",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDQj2y4Gowoig3S\nBNqTt2Z5Bb4SO7XKe7nb1UEK+tSoZDjMi2FmHFTkQDtl9yoNKzTKitq4ZFjJU1T3\nFFK2FwlIyu9HVeuxK61/jVM1Wwp6rBswJgnAtnSSeEl3WWK8Y49gjxhml6caTsrs\nwVX/kA60IwxFWUea0SGsqr22FZZ3EYEsIOsyfJyVIN/Bp0VNZdqq6XtJMfZ7gScd\nKn7r6QWFBxhvAQV1YFPFxziuxmI8l9YlPWKXGHcKf1/chgQ1+OHIqFQq9gfDgz5x\ns1Naurix/tUTehZNlbSoS3Mpn8Yisfify9X7W6Pzv1h6ManBTwLAeKVUzjQcSI8T\nxgeXPOeDAgMBAAECggEADHX/9+wAzcyZ0Mo2HmH0fxdHE6Mk/x5vV2F2y7zQMejI\nX/2VPzBC04m8QsuxY9deBcVQFiOguRP/3UIF7cKTQm8lkWyNHX56P5xmXqdm3ozO\nlGI2w6CNzHvgCn/OX2p6FDnYf7YLPON89Qeu0gsoZb47qx+6III4Ry8YZfsE4hjk\n9hm6G+XpizBCwp+gZ733FiKrbnt+8s6Ynkbv05vT79X5SUpVRWMHjkECVa/BacCT\nnhEbyEKiyI1ljjKsv9PFFT4BXFBfH/9702VXVlQjuQOsBWrGhfhnW49/rsxLzdAz\nkp1XzZ3BZZWgNOJaCbKNMiJJOWiqjVPLKwNkP5Ay+QKBgQD4an7/GZbj/3trwvD4\nrK2U0rulaICy1+rXNM607xncITBbDK0btTVbnbOy5ldzfPEsLrt6Pij6oGUGHUbh\nQ73sU+Lkh+XmibUvRFAcOLHfS4qFRJZ6GaNED3bllIRdYrs87X463RFUlRyqqCjB\nSp60pwce8ookcfrGGa8xklEeFwKBgQDW7W9DGMl4cRc8lVy6orNWSptwHgAVF3IW\nJKqg6oEK28U7cCtXfuaLMiEgW3w4Po0ZPQv/I+4LeM0hs2BUlET3szOrERzDQL0j\nRzN8G2Dd8eFyoJInD7tvZpXiAphwTgfb3+vFxP2OES6wiHKWIJGP+lBKDz4SG0FP\nGjgCZG5xdQKBgQDpwhz7JDNPHQwg3XIwLx2wW5TkE7B3mqKMHE8fB5gIAtsj8ou6\n9QveyEle4U4NiNbRQrB8WZ3qKaCm3knilAJWLqHldtQp2g+7CMdxpxAKFWWl/mKz\nRwjRdNPnOZhM4CldLgaIkZpLQ32UQWUIbpVlXX9f6c+AeBkI7QZk2VCnxQKBgENn\nORJ4zo5IITptuSQK7GUuhqrVrb7vmGbbXuuSP5/xJlyqo90Pvit/MCZeqolVDJkS\nrRV55iiQ3Pwprhc4XJy2BYkrl7KgNfC/XqUYTPut5L83Hj7Dz0tzh6PWnonx3sMU\n6XMfgUkxmEvirtToJ95YaR+gwh2ZkJTHKzOM3ZoVAoGBAJwJu22euxpiR1RerFhw\nzM4Q89RnGoWmvZ56zeiCi2y8CfuUqMXASfcGG0x3jk889kyF0bRgKroxF8E+kMCC\noUxzl0+h2zoteH+KD5sHaa76bzGaAbh2dwkD44eO8RHIOmZjMtgaqwCxX2XR0nMu\nAmWu85AYnLJ81frIQ+nDS2pa\n-----END PRIVATE KEY-----\n",
+  "client_email": "ynigoreyes@test-ttuacmwebsite.iam.gserviceaccount.com",
+  "client_id": "102593644601695517914",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/ynigoreyes%40test-ttuacmwebsite.iam.gserviceaccount.com"
+}
