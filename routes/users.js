@@ -4,6 +4,10 @@ const mongoose = require('mongoose');
 
 // Controller
 const UserController = require('../controllers/user_c');
+router.post('/', (req, res, next) => {
+  console.log(req.body);
+  res.status(200).json({success: true});
+});
 
 router.post('/login', UserController.authenticate);
 

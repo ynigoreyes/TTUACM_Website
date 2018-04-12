@@ -1,14 +1,23 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule, Routes } from '@angular/router';
+import {
+  MatButtonModule,
+  MatInputModule,
+  MatSelectModule,
+  MatFormFieldModule,
+} from '@angular/material';
+import {
+  MatDialogModule, MatDialog, MAT_DIALOG_DATA
+} from '@angular/material/dialog';
 
 
 import { AppComponent } from './app.component';
 import { TeamComponent } from './components/team/team.component';
 import { SignupComponent } from './components/signup/signup.component';
-import { ContactComponent } from './components/contact/contact.component';
 import { EventsComponent } from './components/events/events.component';
 import { ForgotComponent } from './components/forgot/forgot.component';
 import { HomeComponent } from './components/home/home.component';
@@ -18,14 +27,16 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { ResetComponent } from './components/reset/reset.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { CarouselComponent } from './components/carousel/carousel.component';
+import { ContactModalComponent } from './components/contact-modal/contact-modal.component';
 
 import { FlashMessagesModule, FlashMessagesService } from 'angular2-flash-messages';
-import { CarouselComponent } from './components/carousel/carousel.component';
+import { ContactService } from './services/contact.service';
+
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'team', component: TeamComponent },
   { path: 'signup', component: SignupComponent },
-  { path: 'contact', component: ContactComponent },
   { path: 'events', component: EventsComponent },
   { path: 'forgot', component: ForgotComponent },
   { path: 'error', component: ErrorComponent },
@@ -39,7 +50,6 @@ const appRoutes: Routes = [
     AppComponent,
     TeamComponent,
     SignupComponent,
-    ContactComponent,
     EventsComponent,
     ForgotComponent,
     HomeComponent,
@@ -49,17 +59,28 @@ const appRoutes: Routes = [
     ResetComponent,
     FooterComponent,
     NavbarComponent,
-    CarouselComponent
+    CarouselComponent,
+    ContactModalComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
+    MatDialogModule,
     FormsModule,
     HttpModule,
     RouterModule.forRoot(appRoutes),
     FlashMessagesModule,
+    MatInputModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatFormFieldModule
+  ],
+  entryComponents: [
+    ContactModalComponent
   ],
   providers: [
-    FlashMessagesService
+    FlashMessagesService,
+    ContactService
   ],
   bootstrap: [AppComponent]
 })

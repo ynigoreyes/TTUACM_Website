@@ -1,7 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "outDir": "../api/public",
+    "outDir": "../public",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",

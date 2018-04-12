@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const cors = require('cors');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
@@ -34,13 +35,11 @@ require('./config/passport')(passport);
 
 // Passport setup
 app.use(session({
-  secret: secrets.session_secret.toString,
+  secret: "NotTheDevelopmentSecret",
   // Figure out what this means: Updated to get rid of deprecation
   resave: false,
   saveUninitialized: true
 }));
-
-require('./config/passport')(passport);
 
 // Figure out why we have two sessions going on...
 app.use(passport.initialize());
@@ -51,6 +50,9 @@ app.use(logger('dev'));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// CORS
+app.use(cors());
 
 // Routes
 const usersRoute = require('./routes/users');
