@@ -12,6 +12,7 @@
     "cookie-parser": "~1.4.3",
     "cors": "^2.8.4",
     "debug": "~2.6.3",
+    "email-existence": "^0.1.6",
     "express": "~4.15.2",
     "express-session": "~1.15.5",
     "google-auth-library": "^0.10.0",
