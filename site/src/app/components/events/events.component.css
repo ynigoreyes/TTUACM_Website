@@ -1,0 +1,24 @@
+mat-card.eachEvent {
+  margin: 30px auto 30px auto;
+}
+
+em#event-id {
+  float: right;
+}
+
+button.right-button {
+  float: right
+}
+
+button.left-button {
+  float: left
+}
+
+div.nav-button-container {
+  width: 100%;
+}
+
+span.google-header {
+  color: white;
+  font-size: 30px;
+}
