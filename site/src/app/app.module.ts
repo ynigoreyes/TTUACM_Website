@@ -4,15 +4,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule, Routes } from '@angular/router';
-import {
-  MatButtonModule,
-  MatInputModule,
-  MatSelectModule,
-  MatFormFieldModule,
-} from '@angular/material';
-import {
-  MatDialogModule, MatDialog, MAT_DIALOG_DATA
-} from '@angular/material/dialog';
+import { MatDialogModule, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MaterialModule } from './material.module';
+
 
 
 import { AppComponent } from './app.component';
@@ -32,6 +26,7 @@ import { ContactModalComponent } from './components/contact-modal/contact-modal.
 
 import { FlashMessagesModule, FlashMessagesService } from 'angular2-flash-messages';
 import { ContactService } from './services/contact.service';
+import { AuthService } from './services/auth.service';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -70,17 +65,15 @@ const appRoutes: Routes = [
     HttpModule,
     RouterModule.forRoot(appRoutes),
     FlashMessagesModule,
-    MatInputModule,
-    MatButtonModule,
-    MatSelectModule,
-    MatFormFieldModule
+    MaterialModule
   ],
   entryComponents: [
     ContactModalComponent
   ],
   providers: [
     FlashMessagesService,
-    ContactService
+    ContactService,
+    AuthService
   ],
   bootstrap: [AppComponent]
 })

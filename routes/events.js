@@ -8,5 +8,8 @@ const EventsController = require('../controllers/event_c');
 
 router.get('/', EventsController.googleAuthenticate);
 
+// Fake API to Test Templating
+router.get('/get-events', EventsController.getEvents);
+
 module.exports = router;
 

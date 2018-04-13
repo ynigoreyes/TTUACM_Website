@@ -1,3 +1,33 @@
-<p>
-  events works!
-</p>
+<div class="container event-div">
+  <div class="text-center nav-button-container">
+    <button (click)=getPrevEvents() mat-raised-button class="nav-buttons left-button">
+      <
+    </button>
+    <span class="google-header" >Google Caledar</span>
+    <button (click)=getNextEvents() mat-raised-button class="nav-buttons right-button">
+      >
+    </button>
+  </div>
+  <mat-card *ngFor="let event of displayedEvents" class="text-center eachEvent">
+    <div>
+      <small>
+        <em id="event-id">{{event.id}}</em>
+      </small>
+    </div>
+    <br>
+    <mat-card-title>{{event.title}}</mat-card-title>
+    <hr>
+    <mat-card-content>{{event.body}}</mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" class="card-buttons">
+        Attending
+      </button>
+      <button mat-raised-button class="card-buttons">
+        Maybe
+      </button>
+      <button mat-raised-button color="warn" class="card-buttons">
+        Not Attending
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
