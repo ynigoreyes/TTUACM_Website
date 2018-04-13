@@ -1,3 +1,5 @@
+const https = require('https');
+
 const fs = require('fs');
 const readline = require('readline');
 const google = require('googleapis');
@@ -110,6 +112,7 @@ function listEvents(auth) {
   *     client.
   */
 function getNewToken(oauth2Client, callback) {
+
   const authUrl = oauth2Client.generateAuthUrl({
     access_type: 'offline',
     scope: SCOPES
@@ -147,3 +150,17 @@ function getNewToken(oauth2Client, callback) {
     });
   });
 }
+
+
+// This is a fake API for design purposes only
+module.exports.getEvents = (req, res, next) => {
+  fs.readFile('./fake-data.json', (err, content) => {
+    if (err) {
+      res.status(404).json({error: err});
+    } else {
+      newData = JSON.parse(content);
+      res.status(200).json({ data: newData });
+    }
+
+  });
+};
