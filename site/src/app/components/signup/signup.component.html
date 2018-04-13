@@ -4,7 +4,7 @@
       <img src="../../../assets/acm_logo.svg" />
       <h3>TTU ACM</h3>
     </div>
-    <div id="error-message" class="alert alert-danger"></div>
+    <div id="signup-error-message" class="alert alert-danger"></div>
     <form>
 
       <div class="form-group">
@@ -40,26 +40,49 @@
       <div class="form-group">
         <input
         [(ngModel)]="password"
-        name="password" type="password" class="form-control" id="password" placeholder="Enter your password">
+        name="password"
+        type="password"
+        class="form-control"
+        id="password"
+        placeholder="Enter your password">
       </div>
+
       <div class="form-group">
         <input
         [(ngModel)]="confirmPassword"
-        name="confirmPassword" type="password" class="form-control" id="confirmPassword" placeholder="Confirm your Password">
+        name="confirmPassword"
+        type="password"
+        class="form-control"
+        id="confirmPassword"
+        placeholder="Confirm your Password">
       </div>
+
       <div class="form-group">
-        <select (value)="classification"
-        name="classification" class="form-control" id="classification-select">
-          <option *ngFor="let class of classification" value={{class}} class="classification-options">{{class}}</option>
+        <select
+        (value)="classification"
+        name="classification"
+        class="form-control"
+        id="classification-select">
+
+        <option *ngFor="let class of classification" value={{class}} class="classification-options">{{class}}</option>
+
         </select>
       </div>
-      <button (click)="attemptRegister()" type="button" id="btn-signup" class="btn btn-default btn-block">
+
+      <button
+      (click)="attemptRegister()"
+      type="button"
+      id="btn-signup"
+      class="btn btn-default btn-block">
         Sign Up
       </button>
+
       <hr>
+
       <button type="button" id="btn-google" class="btn btn-default btn-danger btn-block">
         Sign Up with Google
       </button>
+
     </form>
   </div>
 </div>
