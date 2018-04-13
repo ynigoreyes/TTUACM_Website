@@ -1,28 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css']
 })
-export class SignupComponent implements OnInit {
+/**
+ * Controller for the Sign Up page.
+ */
+export class SignupComponent {
+
+  firstName: String;
+  lastName: String;
+  email: String;
+  password: String;
+  confirmPassword: String;
   classification: String[] = [
     'Freshman', 'Sophomore', 'Junior', 'Senior',
     'Graduate', 'Doctorate'
   ];
 
-  user = {
-    'firstName': String,
-    'lastName': String,
-    'email': String,
-    'password': String,
-    'classification': 'Freshman'
-  };
-  confirmPassword: String;
-
   constructor() { }
 
-  ngOnInit() {
+  attemptRegister() {
+    const newUser = {
+      firstName: this.firstName,
+      lastName: this.lastName,
+      email: this.email,
+      password: this.password
+    };
+    console.log(this.firstName);
   }
-
 }
