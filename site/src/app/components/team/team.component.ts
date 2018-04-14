@@ -1,18 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import * as Team from '../../../assets/team.json';
+import { Component } from '@angular/core';
+import { Http } from '@angular/http';
 
 @Component({
   selector: 'app-team',
   templateUrl: './team.component.html',
   styleUrls: ['./team.component.css']
 })
-export class TeamComponent implements OnInit {
+export class TeamComponent {
 
-  team = Team;
-  constructor() {
-  }
+  team: any;
 
-  ngOnInit() {
+  constructor(private http: Http) {
+    this.http.get('http://localhost:80/users/get-team').subscribe((results) => {
+    this.team = results.json().data;
+  });
   }
 
 }

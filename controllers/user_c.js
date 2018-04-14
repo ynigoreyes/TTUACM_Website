@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const async = require('async');
 const User = require('../models/user');
+const fs = require('fs');
 
 exports.authenticate = passport.authenticate('local-login', {
   successRedirect: '/',
@@ -173,4 +174,15 @@ exports.resetToken = (req, res) => {
     // What are the modules being passed to this render method?
     res.render('reset', { user: req.user, message: req.flash('resetMessage') });
   })
+};
+
+module.exports.getTeam = (req, res, next) => {
+  fs.readFile('./team.json', (err, content) => {
+    if (err) {
+      res.status(404).json({error: err});
+    } else {
+      newData = JSON.parse(content);
+      res.status(200).json({data: newData});
+    }
+  });
 };

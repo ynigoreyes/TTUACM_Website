@@ -21,13 +21,18 @@ export class EventsComponent {
 
     this.minNumberEvent = 0;
     this.maxNumberEvent = 10;
-    this.events = results.json();
-    this.lengthOfEvents = this.events.data.length;
+    // A Cache for all the events
+    this.events = results.json().data;
+    this.lengthOfEvents = this.events.length;
 
-    this.displayedEvents = this.events.data.slice(this.minNumberEvent, this.maxNumberEvent);
+    // Current Events Displayed
+    this.displayedEvents = this.events.slice(this.minNumberEvent, this.maxNumberEvent);
     });
   }
 
+  /**
+   * Gets the next 10 events in the calendar
+   */
   getNextEvents() {
     if (this.maxNumberEvent < this.lengthOfEvents) {
       this.minNumberEvent += this.changeAmount;
@@ -37,9 +42,12 @@ export class EventsComponent {
       this.maxNumberEvent = 10;
     }
 
-    this.displayedEvents = this.events.data.slice(this.minNumberEvent, this.maxNumberEvent);
+    this.displayedEvents = this.events.slice(this.minNumberEvent, this.maxNumberEvent);
   }
 
+  /**
+   * Gets the prev 10 events in the calendar
+   */
   getPrevEvents() {
     if (this.minNumberEvent >= this.changeAmount) {
       this.minNumberEvent -= this.changeAmount;
@@ -48,7 +56,7 @@ export class EventsComponent {
       this.minNumberEvent = this.lengthOfEvents - this.changeAmount;
       this.maxNumberEvent = this.lengthOfEvents;
     }
-    this.displayedEvents = this.events.data.slice(this.minNumberEvent, this.maxNumberEvent);
+    this.displayedEvents = this.events.slice(this.minNumberEvent, this.maxNumberEvent);
   }
 
 }
