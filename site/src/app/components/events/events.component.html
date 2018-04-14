@@ -1,12 +1,11 @@
 <div class="container event-div">
   <div class="text-center nav-button-container">
     <button (click)=getPrevEvents() mat-raised-button class="nav-buttons left-button">
-      <
-    </button>
-    <span class="google-header" >Google Caledar</span>
-    <button (click)=getNextEvents() mat-raised-button class="nav-buttons right-button">
-      >
-    </button>
+      < </button>
+        <span class="google-header">Google Caledar</span>
+        <button (click)=getNextEvents() mat-raised-button class="nav-buttons right-button">
+          >
+        </button>
   </div>
   <mat-card *ngFor="let event of displayedEvents" class="text-center eachEvent">
     <div>
@@ -30,4 +29,12 @@
       </button>
     </mat-card-actions>
   </mat-card>
+  <div class="text-center nav-button-container">
+    <button (click)=getPrevEvents() mat-raised-button class="nav-buttons left-button">
+      < </button>
+        <span class="google-header">Google Caledar</span>
+        <button (click)=getNextEvents() mat-raised-button class="nav-buttons right-button">
+          >
+        </button>
+  </div>
 </div>

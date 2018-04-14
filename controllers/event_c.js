@@ -159,7 +159,7 @@ module.exports.getEvents = (req, res, next) => {
       res.status(404).json({error: err});
     } else {
       newData = JSON.parse(content);
-      res.status(200).json({ data: newData });
+      res.status(200).json({data: newData });
     }
 
   });

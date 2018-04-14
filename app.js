@@ -62,6 +62,14 @@ app.use('/users', usersRoute);
 app.use('/events', eventsRoute);
 
 
+// During production, this should redirect everyone that puts in a weird url to
+// the index page. Uncomment when deploying for production
+
+// app.use('*', (req, res, next) => {
+//   res.redirect('./public/index.html');
+// });
+
+
 // Catch 404 and forward to error handler
 app.use( (req, res, next) => {
   const err = new Error('Not Found');
@@ -70,6 +78,7 @@ app.use( (req, res, next) => {
 });
 
 // Error Handler
+
 app.use( (err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
