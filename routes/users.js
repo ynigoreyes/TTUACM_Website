@@ -32,6 +32,8 @@ router.post('/contact-us', (req, res, next) => {
   });
 });
 
+router.get('/get-team', UserController.getTeam);
+
 router.post('/login', UserController.authenticate);
 
 /* POST forgot page */
