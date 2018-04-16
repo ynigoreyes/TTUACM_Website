@@ -4,6 +4,20 @@ const nodemailer = require('nodemailer');
 const async = require('async');
 const User = require('../models/user');
 const fs = require('fs');
+const secret = require('../config/secrets');
+
+/**
+ * Transporter for nodemailer
+ * We are using a test email and password.
+ * I took this out so that we could dry up some of the code
+ */
+const smtpTransport = nodemailer.createTransport({
+  service: 'Gmail',
+  auth: {
+    user: secret.testEmailUsername,
+    pass: secret.testEmailPassword
+  }
+});
 
 exports.authenticate = passport.authenticate('local-login', {
   successRedirect: '/',
@@ -39,14 +53,6 @@ exports.forgotLogin = (req, res, next) => {
     },
 
     function (token, user, done) {
-      var smtpTransport = nodemailer.createTransport({
-        service: 'Gmail',
-        auth: {
-          // TODO: Use OAuth2
-          user: 'acmtexastech@gmail.com',
-          pass: 'w1nnersallofus'
-        }
-      });
       var mailOptions = {
         to: user.local.email,
         from: 'Texas Tech ACM',
@@ -67,6 +73,10 @@ exports.forgotLogin = (req, res, next) => {
   });
 };
 
+/**
+ * This logs the user out using Passport.js (req.logout) which clears the
+ * login session. This will also redirect the use to the home page
+ */
 exports.logout = (req, res, next) => {
   req.logout();
   res.redirect('/');
@@ -107,13 +117,6 @@ exports.reset = (req, res, next) => {
       })
     },
     function (user, done) {
-      var smtpTransport = nodemailer.createTransport({
-        service: 'Gmail',
-        auth: {
-          user: 'acmtexastech@gmail.com',
-          pass: 'w1nnersallofus'
-        }
-      })
       var mailOptions = {
         to: user.local.email,
         from: 'acmtexastech@gmail.com',
@@ -136,7 +139,6 @@ exports.reset = (req, res, next) => {
   })
 };
 
-// Fix the routes
 exports.confirmToken = (req, res) => {
   User.findOne({ 'local.confirmEmailToken': req.params.token }, function (err, user) {
     if (!user) {
@@ -145,8 +147,6 @@ exports.confirmToken = (req, res) => {
       req.flash('loginMessage', 'Error');
       return res.redirect('/users/login');
     }
-    // How are we able to call verify on user?
-    // What kind of object is user?
     user.verify(req.params.token, function (err) {
       if (err) {
         console.log('Error saving to database.');
@@ -176,7 +176,10 @@ exports.resetToken = (req, res) => {
   })
 };
 
-module.exports.getTeam = (req, res, next) => {
+/**
+ * This fetches the team from the team.json file
+ */
+exports.getTeam = (req, res, next) => {
   fs.readFile('./team.json', (err, content) => {
     if (err) {
       res.status(404).json({error: err});
@@ -186,3 +189,39 @@ module.exports.getTeam = (req, res, next) => {
     }
   });
 };
+
+/**
+ * This will allow us to edit the team.json file directly when the user
+ * has the right credentials
+ *
+ * We will implement this later
+ */
+exports.editTeam = '';
+
+/**
+ * This is a test for the registration.
+ * I'm not sure how the signup method up top really works so I will test my
+ * http req on this route
+ */
+exports.register = (req, res, next) => {
+  console.log('Registration route hit');
+};
+
+exports.contactUs = (req, res, next) => {
+
+  const mailOptions = {
+    from: `Texas Tech Contact Us <${secret.testEmailUsername}>`,
+    to: secret.testEmailUsername,
+    subject: "ACM Question",
+    html: '<h1>' + 'Sender: ' + req.body.name + ' Message: ' + req.body.message + '</h1>'
+  };
+
+  smtpTransport.sendMail(mailOptions, (err, info) => {
+    if (err) {
+      res.status(500).json({ success: false });
+    } else {
+      res.status(200).json({ success: true });
+    }
+    console.log(err, info);
+  });
+}

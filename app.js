@@ -16,8 +16,12 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Now using MongoClient
-mongoose.connect(secrets.db, {
+/**
+ * Now using MongoClient
+ * Connected to a local replica of Mongo so that we can store data
+ * and see how it looks like without connecting to our actual database
+ */
+mongoose.connect(secrets.local_db, {
   useMongoClient: true,
   socketTimeoutMS: 0,
   keepAlive: true,
@@ -52,7 +56,14 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// CORS
+/**
+ * CORS
+ *
+ * Handles all of the requests from different ports/origins.
+ * Development port for Angular is on port 4200 and will throw errors if
+ * I change port to 80. CORS is so that I can hit the API from the
+ * development port without errors
+ */
 app.use(cors());
 
 // Routes
@@ -62,8 +73,10 @@ app.use('/users', usersRoute);
 app.use('/events', eventsRoute);
 
 
-// During production, this should redirect everyone that puts in a weird url to
-// the index page. Uncomment when deploying for production
+/**
+ * During production, this should redirect everyone that puts
+ * in a weird url to the index page. Uncomment when deploying for production
+ */
 
 // app.use('*', (req, res, next) => {
 //   res.redirect('./public/index.html');
