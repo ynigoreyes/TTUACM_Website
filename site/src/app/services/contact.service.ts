@@ -17,5 +17,4 @@ export class ContactService {
 
     return post;
   }
-
 }
