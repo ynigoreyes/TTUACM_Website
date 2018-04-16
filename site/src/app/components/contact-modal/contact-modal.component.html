@@ -1,18 +1,20 @@
 <div>
   <h2>Have A Question?</h2>
   <hr>
-    <mat-form-field class="example-full-width">
-      <input [(ngModel)]="question.name" name="name"  matInput placeholder="Name">
+  <form [formGroup]="ContactUsForm">
+    <mat-form-field class="form-group example-full-width">
+      <input formControlName="name" matInput placeholder="Name">
     </mat-form-field>
     <br>
-    <mat-form-field class="example-full-width">
-      <input [(ngModel)]="question.email" name="email" matInput placeholder="Email">
+    <mat-form-field class="form-group example-full-width">
+      <input formControlName="email" matInput placeholder="Email">
     </mat-form-field>
     <br>
-    <mat-form-field class="example-full-width">
-      <input [(ngModel)]="question.message" name="message" matInput placeholder="Question">
+    <mat-form-field class="form-group example-full-width">
+      <input formControlName="message" matInput placeholder="Question">
     </mat-form-field>
     <br>
-  <button mat-raised-button (click)="onCloseConfirm()" >Confirm</button>
+  <button [disabled]="!ContactUsForm.valid" mat-raised-button (click)="onCloseConfirm(ContactUsForm.value)">Submit</button>
   <button mat-raised-button (click)="onCloseCancel()" >Cancel</button>
+  </form>
 </div>
