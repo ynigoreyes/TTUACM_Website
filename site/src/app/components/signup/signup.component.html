@@ -1,89 +1,37 @@
 <div class="container-fluid signup-div">
   <div class="col-xs-12 col-sm-12 login-box">
-    <div class="login-header">
-      <img src="../../../assets/acm_logo.svg" />
-      <h3>TTU ACM</h3>
-    </div>
-    <div id="signup-error-message" class="alert alert-danger"></div>
-    <form>
-
-      <div class="form-group">
-        <input
-        [(ngModel)]="firstName"
-        name="firstName"
-        type="text"
-        class="form-control"
-        id="firstName"
-        placeholder="Name">
+    <form [formGroup]='SignUpForm' (ngSubmit)='attemptRegister(SignUpForm.value)'>
+      <div class="login-header">
+        <img src="../../../assets/acm_logo.svg" />
+        <h3>TTU ACM</h3>
       </div>
-
       <div class="form-group">
-        <input
-        [(ngModel)]="lastName"
-        name="lastName"
-        type="text"
-        class="form-control"
-        id="lastName"
-        placeholder="Last name">
+        <input type="text" class="form-control" formControlName="firstName" placeholder="First Name">
       </div>
-
       <div class="form-group">
-        <input
-        [(ngModel)]="email"
-        name="email"
-        type="email"
-        class="form-control"
-        id="email"
-        placeholder="Email">
+        <input type="text" class="form-control" formControlName="lastName" placeholder="Last Name">
       </div>
-
       <div class="form-group">
-        <input
-        [(ngModel)]="password"
-        name="password"
-        type="password"
-        class="form-control"
-        id="password"
-        placeholder="Password">
+        <input type="text" class="form-control" formControlName="username" placeholder="Username">
       </div>
-
       <div class="form-group">
-        <input
-        [(ngModel)]="confirmPassword"
-        name="confirmPassword"
-        type="password"
-        class="form-control"
-        id="confirmPassword"
-        placeholder="Confirm your Password">
+        <input type="email" class="form-control" formControlName="email" placeholder="Email">
       </div>
-
       <div class="form-group">
-        <select
-        (value)="classification"
-        name="classification"
-        class="form-control"
-        id="classification-select">
-
-        <option *ngFor="let class of classification" value={{class}} class="classification-options">{{class}}</option>
-
+        <input type="password" class="form-control" formControlName="password" placeholder="Password">
+      </div>
+      <div class="form-group">
+        <input type="password" class="form-control" formControlName="confirmPassword" placeholder="Confirm Password">
+      </div>
+      <div class="form-group">
+        <select formControlName="classification" class="form-control">
+          <option *ngFor="let class of studentClassification" value={{class}}>{{class}}</option>
         </select>
       </div>
-
-      <button
-      (click)="attemptRegister()"
-      type="button"
-      id="btn-signup"
-      class="btn btn-default btn-block">
-        Sign Up
-      </button>
-
-      <hr>
-
+      <input type="submit" id="btn-signup" value="Submit Form" class="btn btn-default btn-block" [disabled]="!SignUpForm.valid">
       <button type="button" id="btn-google" class="btn btn-default btn-danger btn-block">
         Sign Up with Google
       </button>
-
     </form>
   </div>
 </div>
-

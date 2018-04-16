@@ -16,6 +16,7 @@ export class FooterComponent {
     private contactService: ContactService,
     private flashMessage: FlashMessagesService
   ) { }
+
   private name:     String = null;
   private email:    String = null;
   private message:  String = null;

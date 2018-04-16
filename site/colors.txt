@@ -3,3 +3,17 @@ lighter red   #f05545
 gray-3        #1B2F33
 gray-2        #424C55
 gray-1        #D1CCDC
+
+
+Material Color Scheme
+Primary:
+Red: c62828
+LightRed: ff5f52
+DarkRed: 8e0000
+Text: ffffff
+
+Secondary:
+Gray: 424242
+LightGray: 6d6d6d
+DarkGray: 1b1b1b
+Text: ffffff
