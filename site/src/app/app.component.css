@@ -1,4 +1,16 @@
 div#Big-Div {
-  background-color: #b71c1c;
+  background-color: #c62828;
+  color: #ffffff;
   width: 100%;
+}
+
+app-navbar {
+  position:fixed;
+  top:0;
+  width:100%;
+  z-index:100;
+}
+
+#everything-else {
+  padding-top: 55px;
 }

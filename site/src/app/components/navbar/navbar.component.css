@@ -1,5 +1,7 @@
 nav.navbar {
-  background-color: #b71c1c;
+  /* background-color: #c62828; */
+  background-color: black;
+  position: sticky;
 }
 
 a.nav-link {

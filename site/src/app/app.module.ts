@@ -25,6 +25,8 @@ import { ContactModalComponent } from './components/contact-modal/contact-modal.
 import { FlashMessagesModule, FlashMessagesService } from 'angular2-flash-messages';
 import { ContactService } from './services/contact.service';
 import { AuthService } from './services/auth.service';
+import { UserSidebarComponent } from './components/profile/user-sidebar/user-sidebar.component';
+import { FeedComponent } from './components/profile/feed/feed.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -53,7 +55,9 @@ const appRoutes: Routes = [
     FooterComponent,
     NavbarComponent,
     CarouselComponent,
-    ContactModalComponent
+    ContactModalComponent,
+    UserSidebarComponent,
+    FeedComponent
   ],
   imports: [
     BrowserModule,

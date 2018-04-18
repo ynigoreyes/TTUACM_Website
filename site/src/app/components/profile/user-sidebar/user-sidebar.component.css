@@ -1,0 +1,16 @@
+img#profile-pic {
+  width: 50%;
+  margin: 0 auto;
+  display: block;
+}
+
+h1, h3, p {
+  font-size: 1vw;
+}
+
+@media (max-width: 950px) {
+  h1, h3, p {
+  font-size: 4vw;
+  text-align: center;
+}
+}
