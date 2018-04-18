@@ -1,0 +1,7 @@
+input#comment-input {
+  width: 70%;
+}
+
+mat-card.feed-post {
+  margin:  10px 20px;
+}

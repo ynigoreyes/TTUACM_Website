@@ -1,10 +1,3 @@
-dark red      #b71c1c
-lighter red   #f05545
-gray-3        #1B2F33
-gray-2        #424C55
-gray-1        #D1CCDC
-
-
 Material Color Scheme
 Primary:
 Red: c62828

@@ -28,13 +28,14 @@ export class SignupComponent {
     email: new FormControl('email@gmail.com', Validators.required),
     password: new FormControl('password', Validators.required),
     confirmPassword: new FormControl('password', Validators.required),
-    classification: new FormControl('Freshman')
+    classification: new FormControl('Freshman'),
+    type: new FormControl('Student', Validators.required)
   }, {
     updateOn: 'blur',
     validators: [
       this.checkPasswords,
       this.checkPasswordLength,
-      // this.checkPasswordContent
+      this.checkPasswordContent
     ]
   });
 
@@ -83,14 +84,14 @@ export class SignupComponent {
   checkPasswordContent(post: FormGroup) {
     const email = post.get('email').value;
 
-    // Insert long ass email validation here
-    // Please help me find one... :(
-    const re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    // Found a regex that works :)
+    const re =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    // if (re.test(email.toLowerCase)) {
-    //   return null;
-    // } else {
-    //   return {invalidEmail: true};
-    // }
+    if (re.test(email.toLowerCase)) {
+      return null;
+    } else {
+      return {invalidEmail: true};
+    }
   }
 }
