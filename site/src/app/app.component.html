@@ -1,11 +1,12 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div id="Big-Div">
-  <app-navbar></app-navbar>
-</div>
-<div>
-  <flash-messages></flash-messages>
-  <router-outlet></router-outlet>
-  <div>
-    <app-footer></app-footer>
+  <app-navbar id="navbar"></app-navbar>
+  <div id="everything-else">
+    <flash-messages></flash-messages>
+    <!-- There is a red line when you squeeze the screen -->
+    <router-outlet></router-outlet>
+    <div>
+      <app-footer></app-footer>
+    </div>
   </div>
 </div>

@@ -1,3 +1,7 @@
+div.event-div {
+  padding: 10px;
+}
+
 mat-card.eachEvent {
   margin: 30px auto 30px auto;
 }
@@ -15,10 +19,11 @@ button.left-button {
 }
 
 div.nav-button-container {
+  color: black;
   width: 100%;
 }
 
 span.google-header {
   color: white;
-  font-size: 30px;
+  font-size: 4vw;
 }
