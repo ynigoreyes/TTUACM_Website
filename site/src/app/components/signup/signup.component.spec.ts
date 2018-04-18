@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { SignupComponent } from './signup.component';
 
-describe('SignupComponent', () => {
+describe('Checking Password Length', () => {
   let component: SignupComponent;
   let fixture: ComponentFixture<SignupComponent>;
 
@@ -19,7 +19,7 @@ describe('SignupComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should validate the password length', () => {
+    expect(component.checkPasswordLength(component.SignUpForm['password']).passLength).toBeTruthy();
   });
 });
