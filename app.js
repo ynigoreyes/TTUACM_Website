@@ -31,7 +31,7 @@ mongoose.connection.on('connected', () => {
   console.log('Database Connection Successful');
 });
 mongoose.connection.on('error', (err) => {
-  console.log('Error Connecting to database ' + err);
+  console.log('Error Connecting to database... \n' + err);
 });
 require('./config/passport')(passport);
 

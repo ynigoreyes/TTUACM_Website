@@ -7,18 +7,16 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const userSchema = mongoose.Schema({
-  local: {
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    firstName: String,
-    lastName: String,
-    classification: String,
-    confirmEmailToken: String,
-    resetPasswordToken: String,
-    resetPasswordExpires: Date,
-    hasPaidDues: Boolean,
-    verified: Boolean
-  }
+  email: { type: String, required: true },
+  password: { type: String, required: true },
+  firstName: String,
+  lastName: String,
+  classification: String,
+  confirmEmailToken: String,
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
+  hasPaidDues: Boolean,
+  verified: Boolean
 });
 
 // This function is saltier than the Salty Spitoon
