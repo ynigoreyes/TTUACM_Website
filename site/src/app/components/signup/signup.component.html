@@ -1,34 +1,36 @@
-<div class="container-fluid signup-div">
-  <div class="col-xs-12 col-sm-12 login-box">
-    <form [formGroup]='SignUpForm' (ngSubmit)='attemptRegister(SignUpForm.value)'>
+<div id="signup-background">
+  <div class="container-fluid signup-div">
+    <mat-card id="signup-card" class="signup-container">
       <div class="login-header">
         <img src="../../../assets/acm_logo.svg" />
         <h3>TTU ACM</h3>
       </div>
-      <div class="form-group">
-        <input (blur)="status(SignUpForm.value)" type="text" class="form-control" formControlName="firstName" placeholder="First Name">
-      </div>
-      <div class="form-group">
-        <input type="text" class="form-control" formControlName="lastName" placeholder="Last Name">
-      </div>
-      <div class="form-group">
-        <input type="email" class="form-control" formControlName="email" placeholder="Email">
-      </div>
-      <div class="form-group">
-        <input type="password" class="form-control" formControlName="password" placeholder="Password">
-      </div>
-      <div class="form-group">
-        <input type="password" class="form-control" formControlName="confirmPassword" placeholder="Confirm Password">
-      </div>
-      <div class="form-group">
-        <select formControlName="classification" class="form-control">
-          <option *ngFor="let class of studentClassification" value={{class}}>{{class}}</option>
-        </select>
-      </div>
-      <input type="submit" id="btn-signup" value="Submit Form" class="btn btn-default btn-block" [disabled]="!SignUpForm.valid">
-      <button type="button" id="btn-google" class="btn btn-default btn-danger btn-block">
-        Sign Up with Google
-      </button>
-    </form>
+
+      <form class="signup-container" [formGroup]="SignUpForm" (ngSubmit)="attemptRegister(SignUpForm.value)">
+        <mat-form-field>
+          <input formControlName="firstName" matInput placeholder="First Name">
+        </mat-form-field>
+        <mat-form-field>
+          <input formControlName="lastName" matInput placeholder="Last Name">
+        </mat-form-field>
+        <mat-form-field>
+          <input formControlName="email" matInput placeholder="Email">
+        </mat-form-field>
+        <mat-form-field>
+          <input type="password" formControlName="password" matInput placeholder="Password">
+        </mat-form-field>
+        <mat-form-field>
+          <input type="password" formControlName="confirmPassword" matInput placeholder="Confirm Password">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-select formControlName="classification">
+            <mat-option *ngFor="let class of studentClassification" value={{class}}>{{class}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button class="submit-buttons" mat-raised-button type="submit" id="btn-signup" [disabled]="!SignUpForm.valid">Submit Form</button>
+      </form>
+    </mat-card>
+
   </div>
 </div>
