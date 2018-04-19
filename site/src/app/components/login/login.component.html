@@ -1,4 +1,4 @@
-<div class="container-fluid login-div">
+<!-- <div class="container-fluid login-div">
   <div class="col-xs-12 col-sm-12 login-box">
     <div class="login-header">
       <img src="../../../assets/acm_logo.svg" />
@@ -20,5 +20,29 @@
         Login with Google
       </button>
     </form>
+  </div>
+</div> -->
+
+<div id="login-background">
+  <div class="container-fluid login-div">
+    <mat-card id="login-card" class="login-container">
+      <div class="login-header">
+        <img src="../../../assets/acm_logo.svg" />
+        <h3>TTU ACM</h3>
+      </div>
+
+      <form class="login-container" [formGroup]="LoginForm" (ngSubmit)="attemptLogin(LoginForm.value)">
+        <mat-form-field>
+          <input formControlName="email" matInput placeholder="Email">
+        </mat-form-field>
+        <mat-form-field>
+          <input type="password" formControlName="password" matInput placeholder="Password">
+        </mat-form-field>
+        <button class="submit-buttons" mat-raised-button type="submit" id="btn-login" [disabled]="!LoginForm.valid">Submit Form</button>
+
+        <a [routerLink]="['/forgot']">Forgot Password?</a>
+      </form>
+    </mat-card>
+
   </div>
 </div>

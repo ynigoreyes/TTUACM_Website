@@ -33,7 +33,8 @@ mongoose.connection.on('connected', () => {
 mongoose.connection.on('error', (err) => {
   console.log('Error Connecting to database... \n' + err);
 });
-require('./config/passport')(passport);
+// This references the original file
+// require('./config/passport')(passport);
 
 
 
@@ -48,6 +49,8 @@ app.use(session({
 // Figure out why we have two sessions going on...
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
+require('./config/new-passport')(passport);
+
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 // What does logger and cookie parser do?

@@ -1,60 +1,100 @@
-/*
-* NOTE:@param SALT_FACTOR is different in some functions so that salted/hashed
-*     passwords can not be cross referenced in case of a database failure.
-*/
-
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
 
 const userSchema = mongoose.Schema({
-  email: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  firstName: String,
-  lastName: String,
-  classification: String,
-  confirmEmailToken: String,
-  resetPasswordToken: String,
-  resetPasswordExpires: Date,
-  hasPaidDues: Boolean,
-  verified: Boolean
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  classification: { type: String, required: true },
+  confirmEmailToken: { type: String, default: '' },
+  resetPasswordToken: { type: String, default: '' },
+  resetPasswordExpires: { type: Date, default: null },
+  hasPaidDues: { type: String, default: false },
+  verified: { type: String, default: false }
 });
 
-// This function is saltier than the Salty Spitoon
-userSchema.pre('save', function (next) {
-  const user = this;
-  const SALT_FACTOR = 5;
+// Moved the Hashing to the controller
+const User = module.exports = mongoose.model('User', userSchema);
 
-  if (!user.isModified('local.password')) return next();
+// Bellow are query methods for the User Model
+// We passback the password in the callback so that we can check
+// to see if it matches in the controller
+// The reason for this is becuase we may not allways need to hash
+// a password when looking for a user
 
-  // Make some salt
-  bcrypt.genSalt(SALT_FACTOR, (err, salt) => {
-    if (err) return next(err);
-    // Sprinkle the salt
-    bcrypt.hash(user.local.password, salt, null, (err, hash) => {
-      if (err) return next();
-      user.local.password = hash;
-      next();
-    });
+/**
+ * This will find the user by the ID
+ * @param {string} id The Mongo Id we are going to find
+ * @param {boolean, object} callback (err, user)
+ */
+module.exports.getUserById = (id, callback) => {
+  User.findById(id, (err, user) => {
+    if (err) {
+      console.log(err);
+      callback(err, false);
+    } else {
+      foundUser = {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        password: user.password,
+        classification: user.classification
+      }
+      callback(null, foundUser);
+    }
   });
-});
-
-// Make some more salt, but throw some sand in this batch
-userSchema.methods.generateHash = (password) => {
-  return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 
-// Separate the salt and sand
-userSchema.methods.validPassword = (password) => {
-  return bcrypt.compareSync(password, this.local.password);
+/**
+ * This will find the user by the email
+ * @param {string} email The email we are going to find
+ * @param {callback} callback (err, user)
+ */
+module.exports.getUserByEmail = (email, callback) => {
+  User.findOne({email: email}, (err, user) => {
+    if (err) {
+      console.log(err);
+      callback(err, null);
+    } else if (user === null) {
+      callback(null, null);
+    } else {
+      foundUser = {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        password: user.password,
+        classification: user.classification
+      };
+      callback(null, foundUser);
+    }
+  });
 };
+
+/**
+ * Gives a list of all the users in the database as an object
+ * @param {boolean, object} callback (err, user)
+ */
+module.exports.findAllUsers = (callback) => {
+  User.find((err, users) => {
+    if (err) {
+      res.status(500).json({success: false, user: null});
+    } else {
+      data = users.map(users => {
+        return {
+          firstName: users.firstName,
+          lastName: users.lastName,
+          classification: users.classification
+        };
+      });
+
+      res.status(200).json({success: true, user: users});
+    }
+  });
+}
 
 // Verify email address using token
-userSchema.methods.verify = function (token, done) {
+User.verify = function (token, done) {
   this.local.confirmEmailToken = undefined;
   this.local.verified = true;
   this.save(function (err) {
     done(err);
   });
 };
-
-module.exports = mongoose.model('User', userSchema);
