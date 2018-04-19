@@ -12,6 +12,8 @@ router.get('/get-team', UserController.getTeam);
 
 router.post('/login', UserController.authenticate);
 
+router.post('/profile/:id', UserController.getProfile);
+
 /* POST forgot page */
 router.post('/forgot', UserController.forgotLogin);
 

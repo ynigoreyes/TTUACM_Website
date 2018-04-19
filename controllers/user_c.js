@@ -22,7 +22,7 @@ const smtpTransport = nodemailer.createTransport({
 exports.authenticate = passport.authenticate('local-login', {
   successRedirect: '/',
   failureRedirect: '/login',
-  failureFlash: true
+  failureFlash: 'Invalid username or password.'
 });
 
 exports.forgotLogin = (req, res, next) => {
@@ -82,10 +82,11 @@ exports.logout = (req, res, next) => {
   res.redirect('/');
 };
 
+// How does this work? What information do I need to pass??
 exports.signup = passport.authenticate('local-signup', {
   successRedirect: '/login',
   failureRedirect: '/signup',
-  failureFlash: true
+  failureFlash: 'Error Signing Up'
 });
 
 exports.reset = (req, res, next) => {
@@ -202,9 +203,59 @@ exports.editTeam = '';
  * This is a test for the registration.
  * I'm not sure how the signup method up top really works so I will test my
  * http req on this route
+ *
+ * This is how the object will look...
+ * {
+ * cleanFirstName: 'Miggy',
+ * cleanLastName: 'Reyes',
+ * cleanUsername: 'miggylol',
+ * cleanEmail: 'email@gmail.com',
+ * classification: 'Freshman',
+ * password: 'password'
+ * }
+ *
+ * This can be accessed using req.body.
+ *
  */
 exports.register = (req, res, next) => {
   console.log('Registration route hit');
+
+  // Creates an object from the req.body
+  const data = {
+    email: req.body.cleanEmail,
+    password: req.body.password,
+    firstName: req.body.cleanFirstName,
+    lastName: req.body.cleanLastName,
+    classification: req.body.classification
+  };
+
+  const newUser = new User(data);
+  console.log('data: ', data);
+
+  newUser.save((err, user) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json({success: false});
+    } else {
+      // Send back only the user's username and names
+      res.json({success: true});
+    }
+  });
+};
+
+/**
+ * Gets the user's profile based on the ID in their
+ * local storage
+ */
+exports.getProfile = (req, res, next) => {
+  User.findById(req.params.id, (err, user) => {
+    if (err) {
+      res.status(404).json(err);
+    } else {
+      // We need to find out how to only pass back certain attributes
+      res.status(200).json(user);
+    }
+  });
 };
 
 exports.contactUs = (req, res, next) => {
