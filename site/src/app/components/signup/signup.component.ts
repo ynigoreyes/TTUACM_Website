@@ -51,14 +51,13 @@ export class SignupComponent {
     const postUser = {
       cleanFirstName: post['firstName'].trim(),
       cleanLastName: post['lastName'].trim(),
-      cleanUsername: post['username'].trim(),
       cleanEmail: post['email'].trim(),
       classification: post['classification'],
       password: post['password']
     };
 
     this.authService.registerUser(postUser).subscribe(data => {
-      console.log('data: ', data.success);
+
       if (data.success === false) {
         alert('Error Creating User. Please Reload page...');
       } else {
@@ -98,6 +97,7 @@ export class SignupComponent {
     }
   }
 
+  // Used for Debugging
   status(post: FormGroup) {
     console.log(post);
   }

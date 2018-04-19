@@ -10,14 +10,13 @@ router.post('/contact-us', UserController.contactUs);
 
 router.get('/get-team', UserController.getTeam);
 
-router.post('/login', UserController.authenticate);
+// router.post('/login', UserController.authenticate);
 
 router.post('/profile/:id', UserController.getProfile);
 
 /* POST forgot page */
 router.post('/forgot', UserController.forgotLogin);
 
-/* GET logout page */
 router.get('/logout', UserController.logout);
 
 /* POST signup page */
@@ -32,8 +31,13 @@ router.get('/reset/:token', UserController.resetToken);
 /* POST reset page */
 router.post('/reset/:token', UserController.reset);
 
-/* POST testing Registion */
+// Test Routes
+
+/* POST Registion */
 router.post('/register', UserController.register);
+
+/* TEST Post Login */
+router.post('/login', UserController.login);
 
 /* Middleware for route guarding */
 function membersOnly(req, res, next) {
