@@ -22,20 +22,20 @@ export class SignupComponent {
   // During production, remove initial value
   // This is for debugging purposes only
   SignUpForm = new FormGroup({
-    firstName: new FormControl('Miggy', Validators.required),
-    lastName: new FormControl('Reyes', Validators.required),
-    username: new FormControl('miggylol', Validators.required),
-    email: new FormControl('email@gmail.com', Validators.required),
-    password: new FormControl('password', Validators.required),
-    confirmPassword: new FormControl('password', Validators.required),
+    firstName: new FormControl('Miggy'),
+    lastName: new FormControl('Reyes'),
+    email: new FormControl('email@gmail.com'),
+    password: new FormControl('password'),
+    confirmPassword: new FormControl('password'),
     classification: new FormControl('Freshman'),
-    type: new FormControl('Student', Validators.required)
+    type: new FormControl('Student')
   }, {
     updateOn: 'blur',
     validators: [
+      Validators.required,
       this.checkPasswords,
       this.checkPasswordLength,
-      this.checkPasswordContent
+      // this.checkPasswordContent
     ]
   });
 
@@ -58,7 +58,8 @@ export class SignupComponent {
     };
 
     this.authService.registerUser(postUser).subscribe(data => {
-      if (!data.success) {
+      console.log('data: ', data.success);
+      if (data.success === false) {
         alert('Error Creating User. Please Reload page...');
       } else {
         alert('Successfully Created User');
@@ -83,15 +84,21 @@ export class SignupComponent {
 
   checkPasswordContent(post: FormGroup) {
     const email = post.get('email').value;
+    console.log(email);
 
-    // Found a regex that works :)
+    // REGEX only works on browser console.... IDK What to do really
     const re =
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     if (re.test(email.toLowerCase)) {
       return null;
     } else {
+      console.log('Failed REGEX');
       return {invalidEmail: true};
     }
+  }
+
+  status(post: FormGroup) {
+    console.log(post);
   }
 }

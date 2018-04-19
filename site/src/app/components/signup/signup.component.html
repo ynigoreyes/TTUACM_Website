@@ -6,13 +6,10 @@
         <h3>TTU ACM</h3>
       </div>
       <div class="form-group">
-        <input type="text" class="form-control" formControlName="firstName" placeholder="First Name">
+        <input (blur)="status(SignUpForm.value)" type="text" class="form-control" formControlName="firstName" placeholder="First Name">
       </div>
       <div class="form-group">
         <input type="text" class="form-control" formControlName="lastName" placeholder="Last Name">
-      </div>
-      <div class="form-group">
-        <input type="text" class="form-control" formControlName="username" placeholder="Username">
       </div>
       <div class="form-group">
         <input type="email" class="form-control" formControlName="email" placeholder="Email">
