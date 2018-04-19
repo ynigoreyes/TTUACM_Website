@@ -36,8 +36,10 @@ const appRoutes: Routes = [
   { path: 'forgot', component: ForgotComponent },
   { path: 'error', component: ErrorComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'profile', component: ProfileComponent },
-  { path: 'reset', component: ResetComponent }
+  { path: 'dashboard', component: ProfileComponent },
+  { path: 'reset', component: ResetComponent },
+  // Fallback Route
+  { path: '**', redirectTo: '/'}
 ];
 
 @NgModule({
