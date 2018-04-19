@@ -11,7 +11,7 @@ export class AuthService {
   signUpRoute: string = 'http://localhost:80/users/register';
   // signUpRoute: string = 'http://localhost:80/users/signup';
   loginRoute: string = 'http://localhost:80/users/login';
-  getProfileRoute: string = 'http//localhost:880/users/profile';
+  getProfileRoute: string = 'http//localhost:80/users/profile';
 
   constructor(private http: Http) { }
 
@@ -32,7 +32,7 @@ export class AuthService {
    */
   authenticateUser(existingUser) {
     const headers = new Headers();
-    headers.append('Content-type', 'applicaiton/json');
+    headers.append('Content-type', 'application/json');
 
     const post = this.http.post(this.loginRoute, existingUser, {headers: headers})
       .map(res => res.json());

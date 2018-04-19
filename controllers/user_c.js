@@ -1,10 +1,16 @@
+const User = require('../models/user');
+
 const passport = require('passport');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const async = require('async');
-const User = require('../models/user');
+const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const secret = require('../config/secrets');
+
+// Bcrypt options
+const bcrypt = require('bcryptjs');
+const saltRounds = 10;
 
 /**
  * Transporter for nodemailer
@@ -25,6 +31,37 @@ exports.authenticate = passport.authenticate('local-login', {
   failureFlash: 'Invalid username or password.'
 });
 
+// Test Login Route
+exports.login = (req, res, next) => {
+  const email = req.body.email;
+  const inputPassword = req.body.password;
+
+  User.getUserByEmail(email, (err, foundUser) => {
+    if (err) {
+      console.log(err);
+      res.status(404).json({ success: false, user: false });
+    } else {
+      console.log(foundUser);
+
+      bcrypt.compare(inputPassword, foundUser.password, (err, response) => {
+        console.log('Checkking passwords');
+        if (err) throw err;
+
+        if (response) {
+          const token = jwt.sign(foundUser, secret.session_secret, {
+            expiresIn: 604800 // 1 week
+          });
+
+          foundUser.token = `JWT ${token}`;
+
+          res.status(200).json({ success: true, user: foundUser });
+        } else {
+          res.status(404).json({success: false, user: null});
+        }
+      });
+    }
+  });
+};
 exports.forgotLogin = (req, res, next) => {
   async.waterfall([
 
@@ -216,31 +253,51 @@ exports.editTeam = '';
  *
  * This can be accessed using req.body.
  *
+ * This can also be used when the user does not want to use an auth service
  */
 exports.register = (req, res, next) => {
   console.log('Registration route hit');
 
-  // Creates an object from the req.body
-  const data = {
-    email: req.body.cleanEmail,
-    password: req.body.password,
-    firstName: req.body.cleanFirstName,
-    lastName: req.body.cleanLastName,
-    classification: req.body.classification
-  };
-
-  const newUser = new User(data);
-  console.log('data: ', data);
-
-  newUser.save((err, user) => {
+  // Generates the salt used for hashing
+  bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
     if (err) {
       console.log(err);
       res.status(500).json({success: false});
     } else {
-      // Send back only the user's username and names
-      res.json({success: true});
+      // Passed the hashed password into the saveUser function
+      // so that the we can save the user with a hashed password
+      saveUser(hash);
     }
   });
+
+  /**
+   * This saves the user with the hashed password
+   * @param {string} hash The hashed password
+   */
+  function saveUser(hash) {
+    // The data we are going to save into the database
+    const data = {
+      email: req.body.cleanEmail,
+      password: hash,
+      firstName: req.body.cleanFirstName,
+      lastName: req.body.cleanLastName,
+      classification: req.body.classification
+    };
+
+    // New User Object from the mongoose User Schema
+    const newUser = new User(data);
+
+    // Saves the new user
+    newUser.save((err, createdUser) => {
+      if (err) {
+        console.log(err);
+        res.status(500).json({success: false});
+      } else {
+        // Send back only the user's username and names
+        res.status(200).json({success: true});
+      }
+    });
+  }
 };
 
 /**
@@ -275,4 +332,4 @@ exports.contactUs = (req, res, next) => {
     }
     console.log(err, info);
   });
-}
+};
