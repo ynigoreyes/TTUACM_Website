@@ -7,11 +7,12 @@ import 'rxjs/add/operator/map';
 export class AuthService {
   authToken: any;
   user: any;
+  userProfile: any;
 
   signUpRoute: string = 'http://localhost:80/users/register';
   // signUpRoute: string = 'http://localhost:80/users/signup';
   loginRoute: string = 'http://localhost:80/users/login';
-  getProfileRoute: string = 'http//localhost:80/users/profile';
+  getProfileRoute: string = 'http://localhost:80/users/profile';
 
   constructor(private http: Http) { }
 
@@ -37,6 +38,8 @@ export class AuthService {
     const post = this.http.post(this.loginRoute, existingUser, {headers: headers})
       .map(res => res.json());
 
+    console.log(post);
+
     return post;
   }
 
@@ -47,7 +50,6 @@ export class AuthService {
    */
   storeUserData(token, user) {
     localStorage.setItem('id_token', token);
-    localStorage.setItem('user', JSON.stringify(user));
 
     this.authToken = token;
     this.user = user;
@@ -61,6 +63,11 @@ export class AuthService {
     this.authToken = token;
   }
 
+  getToken() {
+    this.loadToken();
+    return this.authToken;
+  }
+
   /**
    * Checks the local storage for an token and checks if it is a valid token
    * @returns {boolean} false if the token is valid, true if the token is not
@@ -69,16 +76,13 @@ export class AuthService {
     return tokenNotExpired('id_token');
   }
 
-  getProfile(id) {
-    const headers = new Headers();
-    const token = localStorage.getItem('id_token').split(' ')[1];
-
-    headers.append('Content-type', 'application/json');
-    headers.append('Authorization', token);
-
-    const post = this.http.get(`${this.getProfileRoute}/${id}`, {headers: headers})
-      .map(res => res.json());
-
-    return post;
+  /**
+   * Clears the local storage so that the JWT is no longer available until
+   * they log in again
+   */
+  logOut() {
+    this.authToken = null;
+    this.user = null;
+    localStorage.clear();
   }
 }
