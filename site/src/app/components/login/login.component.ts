@@ -26,11 +26,13 @@ export class LoginComponent {
   });
 
   attemptLogin(post: FormGroup) {
+    // TODO: Add a waiting gif
     const postUser = {
       email: post['email'].trim(),
       password: post['password'].trim()
     };
     this.authService.authenticateUser(postUser).subscribe(data => {
+      console.log(data);
       if (data.user === null) {
         // TODO: Do something to protect the user from just trying all
         // different types of passwords
@@ -40,7 +42,7 @@ export class LoginComponent {
         this.snackBar.open(`Welcome ${data.user.firstName}!`, 'Close', { duration: 2000 });
 
         // Stores the user's information into the local storage
-        this.authService.storeUserData(data.user.token, data.user);
+        this.authService.storeUserData(data.token, data.user);
 
         this.router.navigate(['/dashboard']);
       }
