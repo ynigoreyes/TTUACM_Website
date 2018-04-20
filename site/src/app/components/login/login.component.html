@@ -1,28 +1,3 @@
-<!-- <div class="container-fluid login-div">
-  <div class="col-xs-12 col-sm-12 login-box">
-    <div class="login-header">
-      <img src="../../../assets/acm_logo.svg" />
-      <h3>TTU ACM</h3>
-    </div>
-    <div id="error-message" class="alert alert-danger"></div>
-    <form onsubmit="return false;" method="post">
-      <div class="form-group">
-        <input type="email" class="form-control" id="email" placeholder="Enter your email">
-      </div>
-      <div class="form-group">
-        <input type="password" class="form-control" id="password" placeholder="Enter your password">
-      </div>
-      <button type="button" id="btn-login" class="btn btn-default btn-block">
-        Login
-      </button>
-      <hr>
-      <button type="button" id="btn-google" class="btn btn-default btn-danger btn-block">
-        Login with Google
-      </button>
-    </form>
-  </div>
-</div> -->
-
 <div id="login-background">
   <div class="container-fluid login-div">
     <mat-card id="login-card" class="login-container">
@@ -41,6 +16,7 @@
         <button class="submit-buttons" mat-raised-button type="submit" id="btn-login" [disabled]="!LoginForm.valid">Submit Form</button>
 
         <a [routerLink]="['/forgot']">Forgot Password?</a>
+        <a [routerLink]="['/signup']">Create new Account</a>
       </form>
     </mat-card>
 

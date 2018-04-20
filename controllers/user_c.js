@@ -39,29 +39,35 @@ exports.login = (req, res, next) => {
   User.getUserByEmail(email, (err, foundUser) => {
     if (err) {
       console.log(err);
-      res.status(404).json({ success: false, user: false });
-    } else {
-      console.log(foundUser);
+      res.status(404).json({ success: false, user: null });
+    } else if (foundUser !== null) {
 
+      // If there is a user with that email, check their password
       bcrypt.compare(inputPassword, foundUser.password, (err, response) => {
-        console.log('Checkking passwords');
         if (err) throw err;
-
         if (response) {
-          const token = jwt.sign(foundUser, secret.session_secret, {
+          // We don't want to pass back the password at all
+
+          const token = jwt.sign({data: foundUser}, secret.session_secret, {
             expiresIn: 604800 // 1 week
           });
 
-          foundUser.token = `JWT ${token}`;
-
-          res.status(200).json({ success: true, user: foundUser });
+          res.json({
+            success: true,
+            user: foundUser,
+            token: `JWT ${token}`
+          });
         } else {
-          res.status(404).json({success: false, user: null});
+          res.json({ success: false, user: null });
         }
       });
+    } else {
+      // If the was no user found with that user name
+      res.json({ success: false, user: null });
     }
   });
 };
+
 exports.forgotLogin = (req, res, next) => {
   async.waterfall([
 
@@ -272,15 +278,25 @@ exports.register = (req, res, next) => {
 
   /**
    * This saves the user with the hashed password
+   *
+   * The data we are going to save into the database
+   * The rest of the model has defualt values
+   *
+   * The data saved is the user's:
+   *  * email
+   *  * hashed password
+   *  * first and last name
+   *  * their classification
+   *
    * @param {string} hash The hashed password
    */
   function saveUser(hash) {
-    // The data we are going to save into the database
+    //
     const data = {
-      email: req.body.cleanEmail,
+      email: req.body.email,
       password: hash,
-      firstName: req.body.cleanFirstName,
-      lastName: req.body.cleanLastName,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
       classification: req.body.classification
     };
 
@@ -305,14 +321,7 @@ exports.register = (req, res, next) => {
  * local storage
  */
 exports.getProfile = (req, res, next) => {
-  User.findById(req.params.id, (err, user) => {
-    if (err) {
-      res.status(404).json(err);
-    } else {
-      // We need to find out how to only pass back certain attributes
-      res.status(200).json(user);
-    }
-  });
+  res.json({user: req.user});
 };
 
 exports.contactUs = (req, res, next) => {
