@@ -3,6 +3,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
 const secret = require('../config/secrets');
+const passport = require('passport');
 
 // Controller
 const UserController = require('../controllers/user_c');
@@ -12,7 +13,7 @@ router.get('/get-team', UserController.getTeam);
 
 // router.post('/login', UserController.authenticate);
 
-router.post('/profile/:id', UserController.getProfile);
+router.get('/profile', passport.authenticate('jwt', { session: false }), UserController.getProfile);
 
 /* POST forgot page */
 router.post('/forgot', UserController.forgotLogin);
