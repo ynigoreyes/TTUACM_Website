@@ -36,16 +36,6 @@ mongoose.connection.on('error', (err) => {
 // This references the original file
 // require('./config/passport')(passport);
 
-
-
-// Passport setup
-app.use(session({
-  secret: "NotTheDevelopmentSecret",
-  // Figure out what this means: Updated to get rid of deprecation
-  resave: false,
-  saveUninitialized: true
-}));
-
 // Figure out why we have two sessions going on...
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions

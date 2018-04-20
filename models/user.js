@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+const secret = require('../config/secrets');
+const passport = require('passport');
 
 const userSchema = mongoose.Schema({
   email: { type: String, required: true, unique: true },
@@ -33,13 +36,7 @@ module.exports.getUserById = (id, callback) => {
       console.log(err);
       callback(err, false);
     } else {
-      foundUser = {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        password: user.password,
-        classification: user.classification
-      }
-      callback(null, foundUser);
+      callback(null, user);
     }
   });
 };
@@ -57,13 +54,7 @@ module.exports.getUserByEmail = (email, callback) => {
     } else if (user === null) {
       callback(null, null);
     } else {
-      foundUser = {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        password: user.password,
-        classification: user.classification
-      };
-      callback(null, foundUser);
+      callback(null, user);
     }
   });
 };
@@ -88,7 +79,7 @@ module.exports.findAllUsers = (callback) => {
       res.status(200).json({success: true, user: users});
     }
   });
-}
+};
 
 // Verify email address using token
 User.verify = function (token, done) {

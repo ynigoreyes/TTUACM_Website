@@ -27,8 +27,7 @@ export class SignupComponent {
     email: new FormControl('email@gmail.com'),
     password: new FormControl('password'),
     confirmPassword: new FormControl('password'),
-    classification: new FormControl('Freshman'),
-    type: new FormControl('Student')
+    classification: new FormControl('Freshman')
   }, {
     updateOn: 'blur',
     validators: [
@@ -49,9 +48,9 @@ export class SignupComponent {
   attemptRegister(post: FormGroup) {
 
     const postUser = {
-      cleanFirstName: post['firstName'].trim(),
-      cleanLastName: post['lastName'].trim(),
-      cleanEmail: post['email'].trim(),
+      firstName: post['firstName'].trim(),
+      lastName: post['lastName'].trim(),
+      email: post['email'].trim(),
       classification: post['classification'],
       password: post['password']
     };
