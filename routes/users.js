@@ -14,7 +14,6 @@ router.get('/get-team', UserController.getTeam);
 // router.post('/login', UserController.authenticate);
 
 router.get('/profile', passport.authenticate('jwt', { session: false }), UserController.getProfile);
-
 /* POST forgot page */
 router.post('/forgot', UserController.forgotLogin);
 
@@ -45,7 +44,6 @@ function membersOnly(req, res, next) {
   if (req.isAuthenticated()) return next();
   res.redirect('/');
 }
-
 
 module.exports = router;
 
