@@ -61,13 +61,20 @@ export class AuthService {
     this.authToken = token;
   }
 
+  /**
+   * Checks the local storage for an token and checks if it is a valid token
+   * @returns {boolean} false if the token is valid, true if the token is not
+   */
   loggedIn() {
     return tokenNotExpired('id_token');
   }
 
   getProfile(id) {
     const headers = new Headers();
+    const token = localStorage.getItem('id_token').split(' ')[1];
+
     headers.append('Content-type', 'application/json');
+    headers.append('Authorization', token);
 
     const post = this.http.get(`${this.getProfileRoute}/${id}`, {headers: headers})
       .map(res => res.json());
