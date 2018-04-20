@@ -291,7 +291,6 @@ exports.register = (req, res, next) => {
    * @param {string} hash The hashed password
    */
   function saveUser(hash) {
-    //
     const data = {
       email: req.body.email,
       password: hash,

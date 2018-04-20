@@ -1,8 +1,10 @@
-<img id="profile-pic" src="http://placehold.it/150/d3277" alt="NotFound">
-<header>
-  <h1>{{firstName}}</h1>
-</header>
-<section>
-  <p>{{bio}}</p>
-  <p>Drawer of people they are following</p>
-</section>
+<div *ngIf="!loading">
+  <img id="profile-pic" src="http://placehold.it/150/d3277" alt="NotFound">
+  <header>
+    <h1>{{profile.user.firstName}} {{profile.user.lastName}}</h1>
+  </header>
+  <section>
+    <p>{{bio}}</p>
+    <p>Drawer of people they are following</p>
+  </section>
+</div>

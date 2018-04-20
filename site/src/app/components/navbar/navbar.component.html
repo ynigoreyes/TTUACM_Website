@@ -1,3 +1,5 @@
+<!-- TODO: Fix the ngIf's. There are too many calls to our service. -->
+
 <nav class="navbar navbar-expand-lg navbar-default navbar-dark">
 
   <a class="navbar-brand" [routerLink]="['/']">Texas Tech ACM</a>
@@ -12,28 +14,28 @@
         <a class="nav-link" [routerLink]="['/']">Home</a>
       </li>
       <div class="dropdown-divider"></div>
-      <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
+      <li *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
         <a class="nav-link" [routerLink]="['/events']">Events</a>
       </li>
-      <div class="dropdown-divider"></div>
+      <div *ngIf="!authService.loggedIn()" class="dropdown-divider"></div>
       <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
         <a class="nav-link" [routerLink]="['/team']">Team</a>
       </li>
       <div class="dropdown-divider"></div>
-      <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
+      <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
         <a class="nav-link" [routerLink]="['/dashboard']">Dashboard</a>
       </li>
-      <div class="dropdown-divider"></div>
+      <div *ngIf="authService.loggedIn()" class="dropdown-divider"></div>
       <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
         <a class="nav-link" [routerLink]="['/signup']">Sign Up</a>
       </li>
       <div class="dropdown-divider"></div>
-      <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
+      <li *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
         <a class="nav-link" [routerLink]="['/login']">Login</a>
       </li>
-      <div class="dropdown-divider"></div>
-      <li class="nav-item">
-        <a class="nav-link" href="#">LogOut</a>
+      <div *ngIf="!authService.loggedIn()" class="dropdown-divider"></div>
+      <li *ngIf="authService.loggedIn()" class="nav-item">
+        <a class="nav-link" [routerLink]="['/']" (click)="logout()">LogOut</a>
       </li>
     </ul>
   </div>

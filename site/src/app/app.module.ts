@@ -27,6 +27,7 @@ import { ContactService } from './services/contact.service';
 import { AuthService } from './services/auth.service';
 import { UserSidebarComponent } from './components/profile/user-sidebar/user-sidebar.component';
 import { FeedComponent } from './components/profile/feed/feed.component';
+import { AuthGuard } from './guards/auth.guard';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -36,7 +37,7 @@ const appRoutes: Routes = [
   { path: 'forgot', component: ForgotComponent },
   { path: 'error', component: ErrorComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'dashboard', component: ProfileComponent },
+  { path: 'dashboard', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'reset', component: ResetComponent },
   // Fallback Route
   { path: '**', redirectTo: '/'}
@@ -78,7 +79,8 @@ const appRoutes: Routes = [
   providers: [
     FlashMessagesService,
     ContactService,
-    AuthService
+    AuthService,
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })
