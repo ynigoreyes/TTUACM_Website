@@ -12,6 +12,7 @@ const secret = require('../config/secrets');
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 
+
 /**
  * Transporter for nodemailer
  * We are using a test email and password.
@@ -323,6 +324,17 @@ exports.getProfile = (req, res, next) => {
   res.json({user: req.user});
 };
 
+/**
+ * This will update the user's profile picture
+ * TODO: Make this a path request?
+ * TODO: Figure out how to send a picture back to the front end for them to use
+ */
+exports.updateProfilePicture = (req, res, next) => {
+  console.log(req.file);
+  console.log('Hit Update');
+  res.json({success: true});
+};
+
 exports.contactUs = (req, res, next) => {
 
   const mailOptions = {
@@ -340,4 +352,7 @@ exports.contactUs = (req, res, next) => {
     }
     console.log(err, info);
   });
+};
+
+exports.updateProfileBio = (req, res, next) => {
 };
