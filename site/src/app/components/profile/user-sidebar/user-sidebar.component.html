@@ -1,10 +1,13 @@
+<mat-spinner *ngIf="loading"></mat-spinner>
 <div *ngIf="!loading">
   <img id="profile-pic" src="http://placehold.it/150/d3277" alt="NotFound">
+  <button mat-button (click)="openUpdateModal()">Update Profile Picture</button>
   <header>
-    <h1>{{profile.user.firstName}} {{profile.user.lastName}}</h1>
+    <h1>{{profile.firstName}} {{profile.lastName}}</h1>
   </header>
   <section>
-    <p>{{bio}}</p>
-    <p>Drawer of people they are following</p>
+    <p>{{profile.bio}}</p>
+    <button mat-button>Update Bio</button>
+    <!-- <p>Drawer of people they are following</p> -->
   </section>
 </div>
