@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { MatDialogModule, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MaterialModule } from './material.module';
@@ -28,6 +28,7 @@ import { AuthService } from './services/auth.service';
 import { UserSidebarComponent } from './components/profile/user-sidebar/user-sidebar.component';
 import { FeedComponent } from './components/profile/feed/feed.component';
 import { AuthGuard } from './guards/auth.guard';
+import { ProfileUploadModalComponent } from './components/profile/user-sidebar/profile-upload-modal/profile-upload-modal.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -60,7 +61,8 @@ const appRoutes: Routes = [
     CarouselComponent,
     ContactModalComponent,
     UserSidebarComponent,
-    FeedComponent
+    FeedComponent,
+    ProfileUploadModalComponent
   ],
   imports: [
     BrowserModule,
@@ -68,16 +70,18 @@ const appRoutes: Routes = [
     MatDialogModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpModule,
+    HttpClientModule,
     RouterModule.forRoot(appRoutes),
     FlashMessagesModule,
     MaterialModule
   ],
   entryComponents: [
-    ContactModalComponent
+    ContactModalComponent,
+    ProfileUploadModalComponent
   ],
   providers: [
     FlashMessagesService,
+    HttpClientModule,
     ContactService,
     AuthService,
     AuthGuard

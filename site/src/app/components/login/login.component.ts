@@ -32,17 +32,17 @@ export class LoginComponent {
       password: post['password'].trim()
     };
     this.authService.authenticateUser(postUser).subscribe(data => {
-      console.log(data);
-      if (data.user === null) {
+
+      if (data['user'] === null) {
         // TODO: Do something to protect the user from just trying all
         // different types of passwords
         this.snackBar.open('Incorrect Username or Password', 'Close', { duration: 3000 });
       } else {
         // If the user is found, we want to save their token and data into local storage
-        this.snackBar.open(`Welcome ${data.user.firstName}!`, 'Close', { duration: 2000 });
+        this.snackBar.open(`Welcome ${data['user'].firstName}!`, 'Close', { duration: 2000 });
 
         // Stores the user's information into the local storage
-        this.authService.storeUserData(data.token, data.user);
+        this.authService.storeUserData(data['token'], data['user']);
 
         this.router.navigate(['/dashboard']);
       }

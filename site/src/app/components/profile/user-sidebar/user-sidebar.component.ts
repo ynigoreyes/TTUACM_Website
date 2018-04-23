@@ -1,40 +1,39 @@
 import { Component } from '@angular/core';
-import { Http, Headers } from '@angular/http';
 import { AuthService } from '../../../services/auth.service';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ProfileUploadModalComponent } from './profile-upload-modal/profile-upload-modal.component';
 
 @Component({
   selector: 'app-user-sidebar',
   templateUrl: './user-sidebar.component.html',
   styleUrls: ['./user-sidebar.component.css']
 })
-export class UserSidebarComponent{
-  profile: object;
-  headers: Headers;
-  loading: boolean = true;
+export class UserSidebarComponent {
 
-  /**
-   * Loads the user's profile before loading the rest of the HTML
-   * One it is finished, the loading variable is set to false and the rest
-   * of the HTML is loaded
-   *
-   * TODO: Move this to the auth.service.ts file so it look pretty. This is a
-   * pretty hacky way of doing it.
-   */
   constructor(
-    private authService: AuthService,
-    private http: Http) {
+    public dialog: MatDialog,
+    private authService: AuthService
+  ) {
+    this.authService.getProfile().subscribe(data => {
+      this.profile = data['user'];
+      this.loading = false;
+    });
+  }
 
-      this.headers = new Headers;
+  private profile: object;
+  private image: string = null;
+  private loading: boolean = true;
 
-      this.headers.append('Content-type', 'application/json');
-      this.headers.append('Authorization', this.authService.getToken());
+  openUpdateModal(): void {
+    const dialogRef = this.dialog.open(ProfileUploadModalComponent, {
+      width: '900px'
+    });
 
-      this.http.get('http://localhost:80/users/profile', { headers: this.headers })
-        .subscribe(data => {
-          this.profile = data.json();
-          this.loading = false;
-        });
-
-    }
+    dialogRef.afterClosed().subscribe(result => {
+      this.authService.updateProfilePic(result).subscribe(data => {
+        console.log(`We got data back: ${data}`);
+      });
+    });
+  }
 
 }

@@ -17,9 +17,9 @@ export class FooterComponent {
     private flashMessage: FlashMessagesService
   ) { }
 
-  private name:     String = null;
-  private email:    String = null;
-  private message:  String = null;
+  private name:     string = null;
+  private email:    string = null;
+  private message:  string = null;
 
   openDialog(): void {
     const dialogRef = this.dialog.open(ContactModalComponent, {
@@ -41,7 +41,7 @@ export class FooterComponent {
           message: result.message
         };
         this.contactService.sendEmail(message).subscribe(data => {
-          if (data.success) {
+          if (data['success']) {
             alert('Success Sending Message');
           } else {
             alert('Error Sending Message');

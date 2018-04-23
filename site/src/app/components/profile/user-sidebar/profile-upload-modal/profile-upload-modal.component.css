@@ -1,0 +1,15 @@
+mat-form-field.profile-modal-group {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+div#top-update-profile-div {
+  width: 100%;
+}
+
+mat-card#profile-preview {
+  background-color: grey;
+  height: 250px;
+  margin: 20px;
+}
