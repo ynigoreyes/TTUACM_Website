@@ -1,4 +1,5 @@
-<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+<mat-spinner *ngIf="loading"></mat-spinner>
+<div *ngIf="!loading" id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
   <ol class="carousel-indicators">
     <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
     <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
@@ -8,31 +9,31 @@
   </ol>
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="../../../assets/images/team.jpg" alt="Team" style="width:100%">
+      <img src="{{image1}}" alt="Team" style="width:100%">
       <div class="carousel-caption d-none d-md-block">
         <h4>HackWesTX 2017 Team</h4>
       </div>
     </div>
     <div class="carousel-item">
-      <img src="../../../assets/images/Android_Development_Workshop.jpg" alt="Android" style="width:100%">
+      <img src="{{image2}}" alt="Android" style="width:100%">
       <div class="carousel-caption d-none d-md-block">
         <h4>Android Development Workshop</h4>
       </div>
     </div>
     <div class="carousel-item">
-      <img class="d-block w-100" src="../../../assets/images/Pi_Workshop.jpg" alt="Pi WorkShop" style="width:100%">
+      <img class="d-block w-100" src="{{image3}}" alt="Pi WorkShop" style="width:100%">
       <div class="carousel-caption d-none d-md-block">
         <h4>Raspberry Pi Cloud Workshop</h4>
       </div>
     </div>
     <div class="carousel-item">
-      <img class="d-block w-100" src="../../../assets/images/Local_Hack_Day.jpg" alt="Local Hack" style="width:100%">
+      <img class="d-block w-100" src="{{image4}}" alt="Local Hack" style="width:100%">
       <div class="carousel-caption d-none d-md-block">
         <h4>Local Hack Day 2016</h4>
       </div>
     </div>
     <div class="carousel-item">
-      <img class="d-block w-100" src="../../../assets/images/Apples_to_Oranges.jpg" alt="Apples To Oranges" style="width:100%">
+      <img class="d-block w-100" src="{{image5}}" alt="Apples To Oranges" style="width:100%">
       <div class="carousel-caption d-none d-md-block">
         <h4>Apples to Oranges</h4>
       </div>

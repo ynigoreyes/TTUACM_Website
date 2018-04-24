@@ -10,11 +10,11 @@ export class AuthService {
   private user: object;
   private userProfile: object;
 
-  private signUpRoute: string = 'http://localhost:80/users/register';
-  private loginRoute: string = 'http://localhost:80/users/login';
-  private getProfileRoute: string = 'http://localhost:80/users/profile';
-  private updateProfilePicRoute: string = 'http://localhost:80/users/update-profile-pic';
-  private updateProfileBioRoute: string = 'http://localhost:80/users/update-profile-bio';
+  private signUpEP: string = 'http://localhost:80/users/register';
+  private loginEP: string = 'http://localhost:80/users/login';
+  private getProfileEP: string = 'http://localhost:80/users/profile';
+  private updateProfilePicEP: string = 'http://localhost:80/users/update-profile-pic';
+  private updateProfileBioEP: string = 'http://localhost:80/users/update-profile-bio';
 
   constructor(private http: HttpClient) { }
 
@@ -23,7 +23,7 @@ export class AuthService {
     headers.append('Content-type', 'application/json');
 
     // Add the map part
-    const post = this.http.post(this.signUpRoute, newUser, {headers: headers});
+    const post = this.http.post(this.signUpEP, newUser, {headers: headers});
 
     return post;
   }
@@ -36,7 +36,7 @@ export class AuthService {
     const headers = new HttpHeaders();
     headers.append('Content-type', 'application/json');
 
-    const post = this.http.post(this.loginRoute, existingUser, {headers: headers});
+    const post = this.http.post(this.loginEP, existingUser, {headers: headers});
 
     return post;
   }
@@ -86,7 +86,7 @@ export class AuthService {
 
   public getProfile() {
 
-    return this.http.get(this.getProfileRoute, {
+    return this.http.get(this.getProfileEP, {
       headers: new HttpHeaders().append('Authorization', this.getToken())
     });
 
@@ -96,7 +96,7 @@ export class AuthService {
     const fd: FormData = new FormData();
     fd.append('image', image);
 
-    return this.http.post(this.updateProfilePicRoute, fd,
+    return this.http.post(this.updateProfilePicEP, fd,
       {headers: new HttpHeaders().append('Authorization', this.getToken())});
   }
 }
