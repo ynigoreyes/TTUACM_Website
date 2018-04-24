@@ -1,6 +1,6 @@
 <mat-spinner *ngIf="loading"></mat-spinner>
 <div *ngIf="!loading">
-  <img id="profile-pic" src="http://placehold.it/150/d3277" alt="NotFound">
+  <img id="profile-pic" src="{{image}}" alt="Cannot Find Default Picture">
   <button mat-button (click)="openUpdateModal()">Update Profile Picture</button>
   <header>
     <h1>{{profile.firstName}} {{profile.lastName}}</h1>

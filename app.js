@@ -8,8 +8,6 @@ const passport = require('passport');
 const flash = require('connect-flash');
 const session = require('express-session');
 const mongoose = require('mongoose');
-const storageConfigs = require('./config/storage');
-const multer = require('multer');
 
 const secrets = require('./config/secrets');
 
@@ -18,9 +16,6 @@ const app = express();
 
 // Where the views will be
 app.use(express.static(path.join(__dirname, 'public')));
-
-// Storage Static Folder
-app.use(express.static(path.join(__dirname, 'user_assets/profile_picture')));
 
 /**
  * Now using MongoClient

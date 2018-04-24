@@ -9,6 +9,7 @@ import { UserSidebarComponent } from '../user-sidebar.component';
   styleUrls: ['./profile-upload-modal.component.css']
 })
 export class ProfileUploadModalComponent {
+  private defaultImage = '../../../../../assets/images/default.svg';
   private selectedFile: File = null;
 
   constructor(

@@ -29,6 +29,7 @@ import { UserSidebarComponent } from './components/profile/user-sidebar/user-sid
 import { FeedComponent } from './components/profile/feed/feed.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ProfileUploadModalComponent } from './components/profile/user-sidebar/profile-upload-modal/profile-upload-modal.component';
+import { EventsService } from './services/events.service';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -84,7 +85,8 @@ const appRoutes: Routes = [
     HttpClientModule,
     ContactService,
     AuthService,
-    AuthGuard
+    AuthGuard,
+    EventsService
   ],
   bootstrap: [AppComponent]
 })
