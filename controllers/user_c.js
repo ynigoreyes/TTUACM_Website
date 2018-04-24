@@ -328,11 +328,20 @@ exports.getProfile = (req, res, next) => {
  * This will update the user's profile picture
  * TODO: Make this a path request?
  * TODO: Figure out how to send a picture back to the front end for them to use
+ * TODO: Save and send back the photo location
  */
 exports.updateProfilePicture = (req, res, next) => {
-  console.log(req.file);
-  console.log('Hit Update');
-  res.json({success: true});
+
+  User.findByIdAndUpdate(req.user._id, {profilePic: req.file.filename}, (err, user) => {
+    if (err) throw err;
+    console.log(user);
+    data = {
+      success: true,
+      file: req.file,
+      updatedUser: user
+    };
+    res.json(data);
+  });
 };
 
 exports.contactUs = (req, res, next) => {

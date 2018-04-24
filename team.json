@@ -6,15 +6,15 @@
     "headshot": ""
   },
   {
-    "firstName": "Cameron",
-    "lastName": "Carlton",
-    "position": "President of ACM and Founder of HackWesTX",
+    "firstName": "Joshua",
+    "lastName": "Johnson",
+    "position": "President of ACM and Head of Marketing for HackWesTX",
     "headshot": ""
   },
   {
-    "firstName": "Joshua",
-    "lastName": "Johnson",
-    "position": "Vice-President of ACM and Head of Marketing for HackWesTX",
+    "firstName": "Miggy",
+    "lastName": "Reyes",
+    "position": "Vice-President and Software Development Lead",
     "headshot": ""
   },
   {
@@ -24,26 +24,14 @@
     "headshot": ""
   },
   {
-    "firstName": "Nils",
-    "lastName": "Griswold-Steiner",
-    "position": "Software Development Coordinator",
-    "headshot": ""
-  },
-  {
-    "firstName": "Joyelle",
-    "lastName": "Woodson",
+    "firstName": "Nikki",
+    "lastName": "Green",
     "position": "Social Coordinator of ACM",
     "headshot": ""
   },
   {
-    "firstName": "Lauren",
-    "lastName": "Finley",
-    "position": "Historian of ACM",
-    "headshot": ""
-  },
-  {
-    "firstName": "Zachery",
-    "lastName": "Hansen",
+    "firstName": "Simon",
+    "lastName": "Woldemichael",
     "position": "Treasurer of ACM",
     "headshot": ""
   }
