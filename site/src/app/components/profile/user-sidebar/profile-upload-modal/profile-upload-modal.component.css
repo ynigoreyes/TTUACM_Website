@@ -1,3 +1,8 @@
+div#top-update-profile-div {
+  width: 100%;
+  text-align: center;
+}
+
 mat-form-field.profile-modal-group {
   position: absolute;
   top: 0px;
@@ -8,8 +13,23 @@ div#top-update-profile-div {
   width: 100%;
 }
 
-mat-card#profile-preview {
+/* mat-card#profile-preview {
   background-color: grey;
-  height: 250px;
+  width: 50%;
   margin: 20px;
+} */
+
+img#image-preview:after {
+  display: block;
+  padding-bottom: 100%;
+  content: "";
+}
+
+img#image-preview {
+  width: 50%;
+  height: auto;
+  margin:  30px auto;
+  padding: 10px;
+  background-color: #424242;
+  border: 10px solid black;
 }

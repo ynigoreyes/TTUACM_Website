@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/map';
+import { EventsService } from '../../services/events.service';
+
 
 @Component({
   selector: 'app-events',
@@ -8,21 +8,21 @@ import 'rxjs/add/operator/map';
   styleUrls: ['./events.component.css']
 })
 export class EventsComponent {
-  events: any;
-  displayedEvents: any;
+  private events: any;
+  private displayedEvents: any;
 
-  lengthOfEvents: number;
-  minNumberEvent: number;
-  maxNumberEvent: number;
-  changeAmount = 10;
+  private lengthOfEvents: number;
+  private minNumberEvent: number;
+  private maxNumberEvent: number;
+  private changeAmount = 10;
 
-  constructor(private http: Http) {
-    this.http.get('http://localhost:80/events/get-events').subscribe((results) => {
+  constructor(private eventService: EventsService) {
+    this.eventService.getEvents().subscribe((results) => {
 
     this.minNumberEvent = 0;
     this.maxNumberEvent = 10;
     // A Cache for all the events
-    this.events = results.json().data;
+    this.events = results['data'];
     this.lengthOfEvents = this.events.length;
 
     // Current Events Displayed
@@ -33,7 +33,7 @@ export class EventsComponent {
   /**
    * Gets the next 10 events in the calendar
    */
-  getNextEvents() {
+  private getNextEvents() {
     if (this.maxNumberEvent < this.lengthOfEvents) {
       this.minNumberEvent += this.changeAmount;
       this.maxNumberEvent += this.changeAmount;
@@ -48,7 +48,7 @@ export class EventsComponent {
   /**
    * Gets the prev 10 events in the calendar
    */
-  getPrevEvents() {
+  private getPrevEvents() {
     if (this.minNumberEvent >= this.changeAmount) {
       this.minNumberEvent -= this.changeAmount;
       this.maxNumberEvent -= this.changeAmount;

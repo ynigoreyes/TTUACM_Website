@@ -16,12 +16,17 @@ export class UserSidebarComponent {
   ) {
     this.authService.getProfile().subscribe(data => {
       this.profile = data['user'];
+      // If the user has a Profile Pic, set that profile picture instead of the
+      // default one
+      if (this.profile['profilePic'] !== '') {
+        this.image = 'https://s3-us-west-1.amazonaws.com/ttuacm-test/Iloveprogramming.jpg';
+      }
       this.loading = false;
     });
   }
 
   private profile: object;
-  private image: string = null;
+  private image: string = '../../../../assets/images/default.svg';
   private loading: boolean = true;
 
   openUpdateModal(): void {
@@ -32,6 +37,7 @@ export class UserSidebarComponent {
     dialogRef.afterClosed().subscribe(result => {
       this.authService.updateProfilePic(result).subscribe(data => {
         console.log(`We got data back: ${data}`);
+        // TODO: We need to set the src to target the picture within s3 Bucket
       });
     });
   }

@@ -4,14 +4,6 @@ const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
 const secret = require('../config/secrets');
 const passport = require('passport');
-const multer = require('multer');
-const multerConfig = require('../config/storage');
-
-// Multer options
-const profilePictureUploads = multer({
-  storage: multerConfig.profilePictureStorage
-  // fileFilter: multerConfig.jpegFileFilter
-});
 
 // Middleware for route guarding
 const membersOnlyRoute = passport.authenticate('jwt', { session: false });
@@ -32,7 +24,7 @@ router.get('/get-team', UserController.getTeam);
 
 router.get('/profile', membersOnlyRoute, UserController.getProfile);
 
-router.post('/update-profile-pic', membersOnlyRoute, profilePictureUploads.single('image'), UserController.updateProfilePicture);
+router.post('/update-profile-pic', membersOnlyRoute, UserController.updateProfilePicture);
 
 router.post('/update-profile-bio', membersOnlyRoute, UserController.updateProfileBio);
 
