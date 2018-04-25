@@ -7,6 +7,14 @@ const async = require('async');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const secret = require('../config/secrets');
+const formidable = require('formidable');
+const path = require('path');
+const config = require('../config/secrets');
+
+// AWS S3
+const AWS = require('aws-sdk');
+const S3 = new AWS.S3();
+const bucketName = config.TestBucketName;
 
 // Bcrypt options
 const bcrypt = require('bcryptjs');
@@ -325,23 +333,107 @@ exports.getProfile = (req, res, next) => {
 };
 
 /**
- * This will update the user's profile picture
+ * This will update the user's profile picture and send back the signedURL for
+ * the S3 object for displaying in teh DOM
+ *
  * TODO: Make this a path request?
  * TODO: Figure out how to send a picture back to the front end for them to use
  * TODO: Save and send back the photo location
+ *
  */
 exports.updateProfilePicture = (req, res, next) => {
+  const form = new formidable.IncomingForm();
+  form.parse(req, (err, feilds, files) => {
+    if (err) {
+      res.json({success: false, url: null});
+    }
 
-  User.findByIdAndUpdate(req.user._id, {profilePic: req.file.filename}, (err, user) => {
-    if (err) throw err;
-    console.log(user);
-    data = {
-      success: true,
-      file: req.file,
-      updatedUser: user
+    // File Naming Convention
+    const fileName = `${Date.now()}-${files.image.name}`;
+
+    // Parameters for putObject
+    const putObjectParams = {
+      Bucket: bucketName,
+      Key: fileName,
+      Body: path.normalize(files.image.path),
+      ContentType: 'image/jpeg'
     };
-    res.json(data);
+
+    // Parameters for getSignedUrl
+    const getSignedUrlParams = {
+      Bucket: bucketName,
+      Key: fileName
+    };
+
+    // Passing the above params to the child functions
+    saveObject(putObjectParams, getSignedUrlParams, (err, data) => {
+      if (err) {
+        res.status(404).json({success: false, url: null});
+      } else {
+        res.status(200).json({success: true, url: data});
+      }
+    });
   });
+
+  /**
+   * Saves the Object into the S3 Bucket, currently Miggy's test S3 Bucket
+   *
+   * The callback for putObject actually is not of actually any use to us...
+   * so we ignore it and just continue with the program
+   *
+   * @param {object} putObjectParams:
+   * The parameters for putObject
+   * Bucket: The bucket name
+   * Key: The file name
+   * Body: The path to the file in temporary system storage
+   * Content-Type: How we want to save the file
+   *
+   * @param {object} getSignedUrlParams:
+   * Passed to next function
+   *
+   * @param {function} callback:
+   * Brings error back to updateProfilePicture if one ever occurs
+   */
+  function saveObject(putObjectParams, getSignedUrlParams, callback) {
+    console.log('nut');
+    S3.putObject(putObjectParams, (err, data) => {
+      if (err) {
+        callback(err, null);
+      } else {
+        generateURL(getSignedUrlParams, callback);
+      }
+    });
+  }
+
+  /**
+   * Associates the picture with the account based in the Mongoose ID
+   * and sends the signed URL to the front end
+   *
+   * We don't need to check the error if that user exists because you cannot
+   * run this function without having an account
+   *
+   * @param {object} getSignedUrlParams:
+   * The parameters for putObject
+   * Bucket: The bucket name
+   * Key: The file name
+   *
+   * @param {function} callback:
+   * Brings back the SignedURL or an error
+   *
+   * End of callbacks :)
+   */
+  function generateURL(getSignedUrlParams, callback) {
+    console.log('nut');
+    User.findByIdAndUpdate(req.user._id, {profilePic: getSignedUrlParams.Key}, (err, user) => {
+      if (err) {
+        callback(err, null);
+      } else {
+        S3.getSignedUrl('getObject', getSignedUrlParams, (err, url) => {
+          callback(null, url);
+        });
+      }
+    });
+  }
 };
 
 exports.contactUs = (req, res, next) => {

@@ -19,8 +19,12 @@ export class UserSidebarComponent {
       // If the user has a Profile Pic, set that profile picture instead of the
       // default one
       if (this.profile['profilePic'] !== '') {
-        this.image = 'https://s3-us-west-1.amazonaws.com/ttuacm-test/Iloveprogramming.jpg';
+        console.log('Pic ', this.profile['profilePic']);
+        // TODO: Get this link to serve the Image!! Getting the 403 code
+        // When I upload an image manually, I get an image, If i do it throught
+        // the putObject method, it breaks
       }
+      this.image = `https://s3.amazonaws.com/ttuacmweb-test/1524602871022-hackerRank.jpg`;
       this.loading = false;
     });
   }

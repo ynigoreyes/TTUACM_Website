@@ -5,7 +5,6 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const passport = require('passport');
-const flash = require('connect-flash');
 const session = require('express-session');
 const mongoose = require('mongoose');
 
@@ -41,8 +40,6 @@ mongoose.connection.on('error', (err) => {
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 require('./config/new-passport')(passport);
-
-app.use(flash()); // use connect-flash for flash messages stored in session
 
 // What does logger and cookie parser do?
 app.use(logger('dev'));
