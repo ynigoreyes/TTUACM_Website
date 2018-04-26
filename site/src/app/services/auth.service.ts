@@ -10,11 +10,11 @@ export class AuthService {
   private user: object;
   private userProfile: object;
 
-  private signUpEP: string = 'http://localhost:80/users/register';
-  private loginEP: string = 'http://localhost:80/users/login';
-  private getProfileEP: string = 'http://localhost:80/users/profile';
-  private updateProfilePicEP: string = 'http://localhost:80/users/update-profile-pic';
-  private updateProfileBioEP: string = 'http://localhost:80/users/update-profile-bio';
+  private signUpEP: string =            'http://localhost:80/users/register';
+  private loginEP: string =             'http://localhost:80/users/login';
+  private getProfileEP: string =        'http://localhost:80/users/profile';
+  private updateProfilePicEP: string =  'http://localhost:80/users/update-profile-pic';
+  private updateProfileBioEP: string =  'http://localhost:80/users/update-profile-bio';
 
   constructor(private http: HttpClient) { }
 
@@ -32,7 +32,7 @@ export class AuthService {
    * This will attempt to login the user
    * @param existingUser A valid login attempt
    */
-  public authenticateUser(existingUser) {
+  public authenticateUser(existingUser): Observable<object> {
     const headers = new HttpHeaders();
     headers.append('Content-type', 'application/json');
 
@@ -84,15 +84,20 @@ export class AuthService {
     localStorage.clear();
   }
 
-  public getProfile() {
+  public getProfile(): Observable<object> {
 
-    return this.http.get(this.getProfileEP, {
+    const headers = {
       headers: new HttpHeaders().append('Authorization', this.getToken())
-    });
+    };
+
+    const post = this.http.get(this.getProfileEP, headers);
+
+    return post;
 
   }
 
   public updateProfilePic(image): Observable<object> {
+    // This does not work...
     const fd: FormData = new FormData();
     fd.append('image', image);
 
