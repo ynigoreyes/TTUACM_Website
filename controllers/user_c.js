@@ -79,7 +79,7 @@ exports.login = (req, res) => {
   });
 };
 
-// We need to fix this lol
+// I will fix this lol
 exports.forgotLogin = (req, res, next) => {
   async.waterfall([
 
@@ -138,7 +138,7 @@ exports.logout = (req, res) => {
 };
 
 // We should fix this too. Can we go over what this is supposed to do?
-exports.reset = (req, res, next) => {
+exports.reset = (req, res) => {
   async.waterfall([
     function (done) {
       User.findOne({ 'local.resetPasswordToken': req.params.token, 'local.resetPasswordExpires': { $gt: Date.now() } }, (err, user) => {
@@ -338,23 +338,33 @@ exports.getProfile = (req, res) => {
 exports.updateProfilePicture = (req, res) => {
   const form = new formidable.IncomingForm();
 
-  // File Naming Convention {"dateCode-originalFileName.originalFileExt}
-  const fileName = `${Date.now()}-${files.image.name}`;
-
-  form.parse(req, (err, feilds, files) => {
-    if (err) {
-      res.json({ success: false, url: null });
-    } else {
-      saveObject(files, (err, data) => {
-        if (err) {
-          res.status(404).json({ success: false, url: null });
-        } else {
-          res.status(200).json({ success: true, url: data });
-        }
-      });
+  async.waterfall(
+    [
+      parseFile,
+      saveObject,
+      generateURL
+    ],
+    (err, url) => {
+      if (err) {
+        console.log(err);
+        res.status(404).json({ success: false, signedURL: null });
+      } else if (url === null) {
+        console.log('User Not Found');
+        res.status(404).json({ success: false, signedURL: null });
+      } else {
+        res.status(200).json({ success: true, signedURL: url });
+      }
     }
-  });
+  );
 
+  function parseFile(done) {
+    form.parse(req, (err, _, files) => {
+      // File Naming Convention {"dateCode-originalFileName.originalFileExt}
+      const fileName = `${Date.now()}-${files.image.name}`;
+      const filePath = path.normalize(files.image.path);
+      done(err, fileName, filePath);
+    });
+  }
   /**
    * Saves the Object into the S3 Bucket, currently Miggy's test S3 Bucket
    *
@@ -365,30 +375,19 @@ exports.updateProfilePicture = (req, res) => {
    * Body: The path to the file in temporary system storage
    * Content-Type: How we want to save the file
    *
-   * @param {object} files:
-   * The file object created by formidable
-   *
-   * @param {function} callback:
-   * Brings error back to updateProfilePicture if one ever occurs
    */
-  function saveObject(files, callback) {
+  function saveObject(fileName, filePath, done) {
     // Parameters for putObject
     const putObjectParams = {
       Bucket: bucketName,
       Key: fileName,
-      Body: path.normalize(files.image.path),
+      Body: filePath,
       ContentType: 'image/jpeg',
     };
-
     S3.putObject(putObjectParams, (err) => {
-      if (err) {
-        callback(err, null);
-      } else {
-        generateURL(getSignedUrlParams, callback);
-      }
+      done(err, fileName);
     });
   }
-
   /**
    * Associates the picture with the account based in the Mongoose ID
    * and sends the signed URL to the front end
@@ -406,19 +405,20 @@ exports.updateProfilePicture = (req, res) => {
    *
    * End of callbacks :)
    */
-  function generateURL(callback) {
+  function generateURL(fileName, done) {
     // Parameters for getSignedUrl
     const getSignedUrlParams = {
       Bucket: bucketName,
       Key: fileName,
     };
-
-    User.findByIdAndUpdate(req.user._id, { profilePic: getSignedUrlParams.Key }, (err) => {
+    User.findByIdAndUpdate(req.user._id, { profilePic: getSignedUrlParams.Key }, (err, user) => {
       if (err) {
-        callback(err, null);
+        done(err, null);
+      } else if (!user) {
+        done(null, null);
       } else {
         S3.getSignedUrl('getObject', getSignedUrlParams, (err, url) => {
-          callback(null, url);
+          done(err, url);
         });
       }
     });
@@ -443,5 +443,7 @@ exports.contactUs = (req, res) => {
   });
 };
 
-exports.updateProfileBio = (req, res, next) => {
+exports.updateProfileBio = (req, res) => {
+  console.log('req: ', req);
+  console.log('res: ', res);
 };
