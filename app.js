@@ -60,6 +60,7 @@ app.use(cors());
 // Routes
 const usersRoute = require('./routes/users');
 const eventsRoute = require('./routes/events');
+
 app.use('/users', usersRoute);
 app.use('/events', eventsRoute);
 
@@ -75,7 +76,7 @@ app.use('/events', eventsRoute);
 
 
 // Catch 404 and forward to error handler
-app.use( (req, res, next) => {
+app.use((req, res, next) => {
   const err = new Error('Not Found');
   err.status = 404;
   next(err);
@@ -83,7 +84,7 @@ app.use( (req, res, next) => {
 
 // Error Handler
 
-app.use( (err, req, res, next) => {
+app.use((err, req, res) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
 
