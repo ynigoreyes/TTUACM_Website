@@ -1,40 +1,27 @@
 const express = require('express');
-const router = express.Router();
-const mongoose = require('mongoose');
-const nodemailer = require('nodemailer');
-const secret = require('../config/secrets');
 const passport = require('passport');
-
-// Middleware for route guarding
-const membersOnlyRoute = passport.authenticate('jwt', { session: false });
 
 // Controller
 const UserCrtl = require('../controllers/user_c');
 
+const router = express.Router();
 
-router.post('/contact-us', UserCrtl.contactUs);
+// Middleware for route guarding
+const membersOnlyRoute = passport.authenticate('jwt', { session: false });
 
-router.get('/get-team', UserCrtl.getTeam);
+// Routes pertaining to the user's account
 
-/**
- * Original authentication route used.
- * Might be needed for 0Auth2
- */
-// router.post('/login', UserCrtl.authenticate);
+/* POST Registion */
+router.post('/register', UserCrtl.register);
 
-router.get('/profile', membersOnlyRoute, UserCrtl.getProfile);
+/* POST Login */
+router.post('/login', UserCrtl.login);
 
-router.post('/update-profile-pic', membersOnlyRoute, UserCrtl.updateProfilePicture);
-
-router.post('/update-profile-bio', membersOnlyRoute, UserCrtl.updateProfileBio);
+/* GET Log Out */
+router.get('/logout', UserCrtl.logout);
 
 /* POST forgot page */
 router.post('/forgot', UserCrtl.forgotLogin);
-
-router.get('/logout', UserCrtl.logout);
-
-/* POST signup page */
-router.post('/signup', UserCrtl.signup);
 
 /* GET confirm page */
 router.get('/confirm/:token', UserCrtl.confirmToken);
@@ -45,20 +32,29 @@ router.get('/reset/:token', UserCrtl.resetToken);
 /* POST reset page */
 router.post('/reset/:token', UserCrtl.reset);
 
-// Test Routes
+/* GET User profile */
+router.get('/profile', membersOnlyRoute, UserCrtl.getProfile);
 
-/* POST Registion */
-router.post('/register', UserCrtl.register);
+/* POST Update User Profile Picture */
+router.post('/update-profile-pic', membersOnlyRoute, UserCrtl.updateProfilePicture);
 
-/* TEST Post Login */
-router.post('/login', UserCrtl.login);
+/* POST Update User Bio */
+router.post('/update-profile-bio', membersOnlyRoute, UserCrtl.updateProfileBio);
 
-/* Middleware for route guarding */
-function membersOnly(req, res, next) {
-  if (req.isAuthenticated()) return next();
-  res.redirect('/');
-}
+// The Other routes
 
+/* POST Contact Us */
+router.post('/contact-us', UserCrtl.contactUs);
+
+/* GET The current Team */
+router.get('/get-team', UserCrtl.getTeam);
+
+
+/**
+ * Original authentication route used.
+ * Might be needed for 0Auth2
+ */
+// router.post('/login', UserCrtl.authenticate);
 
 module.exports = router;
 
