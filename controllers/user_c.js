@@ -13,11 +13,13 @@ const config = require('../config/secrets');
 
 // AWS S3
 const AWS = require('aws-sdk');
+
 const S3 = new AWS.S3();
 const bucketName = config.TestBucketName;
 
 // Bcrypt options
 const bcrypt = require('bcryptjs');
+
 const saltRounds = 10;
 
 
@@ -30,18 +32,19 @@ const smtpTransport = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
     user: secret.testEmailUsername,
-    pass: secret.testEmailPassword
-  }
+    pass: secret.testEmailPassword,
+  },
 });
 
+// TODO: Fix this/ replace this for client side rendering
 exports.authenticate = passport.authenticate('local-login', {
   successRedirect: '/',
   failureRedirect: '/login',
-  failureFlash: 'Invalid username or password.'
+  failureFlash: 'Invalid username or password.',
 });
 
-// Test Login Route
-exports.login = (req, res, next) => {
+// Test Login Route for exports.authenticate
+exports.login = (req, res) => {
   const email = req.body.email;
   const inputPassword = req.body.password;
 
@@ -50,21 +53,20 @@ exports.login = (req, res, next) => {
       console.log(err);
       res.status(404).json({ success: false, user: null });
     } else if (foundUser !== null) {
-
       // If there is a user with that email, check their password
       bcrypt.compare(inputPassword, foundUser.password, (err, response) => {
         if (err) throw err;
         if (response) {
           // We don't want to pass back the password at all
 
-          const token = jwt.sign({data: foundUser}, secret.session_secret, {
-            expiresIn: 604800 // 1 week
+          const token = jwt.sign({ data: foundUser }, secret.session_secret, {
+            expiresIn: 604800, // 1 week
           });
 
           res.json({
             success: true,
             user: foundUser,
-            token: `JWT ${token}`
+            token: `JWT ${token}`,
           });
         } else {
           res.json({ success: false, user: null });
@@ -77,18 +79,19 @@ exports.login = (req, res, next) => {
   });
 };
 
+// We need to fix this lol
 exports.forgotLogin = (req, res, next) => {
   async.waterfall([
 
     function (done) {
-      crypto.randomBytes(20, function (err, buf) {
-        var token = buf.toString('hex');
+      crypto.randomBytes(20, (err, buf) => {
+        let token = buf.toString('hex');
         done(err, token);
       });
     },
 
     function (token, done) {
-      User.findOne({ 'local.email': req.body.email }, function (err, user) {
+      User.findOne({ 'local.email': req.body.email }, (err, user) => {
         if (!user) {
           req.flash('forgotMessage', 'No account with that email was found.');
           return res.redirect('/forgot');
@@ -98,28 +101,28 @@ exports.forgotLogin = (req, res, next) => {
         }
         user.local.resetPasswordToken = token;
         user.local.resetPasswordExpires = Date.now() + 10800000; // 3 Hours
-        user.save(function (err) {
+        user.save((err) => {
           done(err, token, user);
         });
       });
     },
 
     function (token, user, done) {
-      var mailOptions = {
+      const mailOptions = {
         to: user.local.email,
         from: 'Texas Tech ACM',
         subject: 'TTU ACM Password Reset',
-        text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
-          'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-          req.protocol + '://' + req.headers.host + '/reset/' + token + '\n\n' +
-          'If you did not request this, please ignore this email and your password will remain unchanged.\n'
-      }
-      smtpTransport.sendMail(mailOptions, function (err) {
-        req.flash('forgotMessage', 'An email has been sent to ' + user.local.email + ' with a reset link.');
+        text: `${'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+          'Please click on the following link, or paste this into your browser to complete the process:\n\n'}${
+          req.protocol}://${req.headers.host}/reset/${token}\n\n` +
+          'If you did not request this, please ignore this email and your password will remain unchanged.\n',
+      };
+      smtpTransport.sendMail(mailOptions, (err) => {
+        req.flash('forgotMessage', `An email has been sent to ${  user.local.email  } with a reset link.`);
         done(err, 'done');
       });
-    }
-  ], function (err) {
+    },
+  ], (err) => {
     if (err) return next(err);
     res.redirect('/forgot');
   });
@@ -129,7 +132,7 @@ exports.forgotLogin = (req, res, next) => {
  * This logs the user out using Passport.js (req.logout) which clears the
  * login session. This will also redirect the use to the home page
  */
-exports.logout = (req, res, next) => {
+exports.logout = (req, res) => {
   req.logout();
   res.redirect('/');
 };
@@ -138,25 +141,26 @@ exports.logout = (req, res, next) => {
 exports.signup = passport.authenticate('local-signup', {
   successRedirect: '/login',
   failureRedirect: '/signup',
-  failureFlash: 'Error Signing Up'
+  failureFlash: 'Error Signing Up',
 });
 
+// We should fix this too. Can we go over what this is supposed to do?
 exports.reset = (req, res, next) => {
   async.waterfall([
     function (done) {
-      User.findOne({ 'local.resetPasswordToken': req.params.token, 'local.resetPasswordExpires': { $gt: Date.now() } }, function (err, user) {
-        if (!user) req.flash('resetMessage', 'Password reset link is invalid or expired.')
+      User.findOne({ 'local.resetPasswordToken': req.params.token, 'local.resetPasswordExpires': { $gt: Date.now() } }, (err, user) => {
+        if (!user) req.flash('resetMessage', 'Password reset link is invalid or expired.');
         else if (req.body.password !== req.body.confirmPassword) {
-          req.flash('forgotMessage', 'Password and confirm password must match.')
-          return res.redirect('/forgot')
+          req.flash('forgotMessage', 'Password and confirm password must match.');
+          return res.redirect('/forgot');
         } else if (err) {
-          req.flash('forgotMessage', 'Password and confrim password must match.')
-          return res.redirect('/forgot')
+          req.flash('forgotMessage', 'Password and confrim password must match.');
+          return res.redirect('/forgot');
         } else {
-          user.local.password = req.body.password
-          user.local.resetPasswordToken = undefined
-          user.local.resetPasswordExpires = undefined
-          user.save(function (err) {
+          user.local.password = req.body.password;
+          user.local.resetPasswordToken = undefined;
+          user.local.resetPasswordExpires = undefined;
+          user.save((err) => {
             if (err) {
               req.flash('loginMessage', 'Error saving to database')
               return res.redirect('/login')
@@ -165,42 +169,42 @@ exports.reset = (req, res, next) => {
               done(err, user)
             }
             )
-          })
+          });
         }
-      })
+      });
     },
     function (user, done) {
-      var mailOptions = {
+      const mailOptions = {
         to: user.local.email,
         from: 'acmtexastech@gmail.com',
         subject: 'Your password has been changed',
         text: 'Hello,\n\n' +
-          'This is a confirmation that the password for your account has been changed.\n'
-      }
-      smtpTransport.sendMail(mailOptions, function (err) {
-        req.flash('resetMessage', 'Your password has been changed.')
-        done(err)
-      })
-    }
+          'This is a confirmation that the password for your account has been changed.\n',
+      };
+      smtpTransport.sendMail(mailOptions, (err) => {
+        req.flash('resetMessage', 'Your password has been changed.');
+        done(err);
+      });
+    },
     // TODO: Write error handling
-  ], function (err) {
-    res.redirect('/')
+  ], (err) => {
+    res.redirect('/');
     if (err) {
-      req.flash('loginMessage', 'Error sending confirmation email')
-      res.redirect('/login')
+      req.flash('loginMessage', 'Error sending confirmation email');
+      res.redirect('/login');
     }
-  })
+  });
 };
 
 exports.confirmToken = (req, res) => {
-  User.findOne({ 'local.confirmEmailToken': req.params.token }, function (err, user) {
+  User.findOne({ 'local.confirmEmailToken': req.params.token }, (err, user) => {
     if (!user) {
       return res.redirect('/users/login');
     } else if (err) {
       req.flash('loginMessage', 'Error');
       return res.redirect('/users/login');
     }
-    user.verify(req.params.token, function (err) {
+    user.verify(req.params.token, (err) => {
       if (err) {
         console.log('Error saving to database.');
         req.flash('loginMessage', 'Error saving to database.');
@@ -208,12 +212,12 @@ exports.confirmToken = (req, res) => {
       }
       req.flash('loginMessage', 'Account verified! Please login.');
       return res.redirect('/users/login');
-    })
-  })
+    });
+  });
 };
 
 exports.resetToken = (req, res) => {
-  User.findOne({ 'local.resetPasswordToken': req.params.token, 'local.resetPasswordExpires': { $gt: Date.now() } }, function (err, user) {
+  User.findOne({ 'local.resetPasswordToken': req.params.token, 'local.resetPasswordExpires': { $gt: Date.now() } }, (err, user) => {
     if (!user) {
       req.flash('forgotMessage', 'Password reset token is invalid or has expired.');
       return res.redirect('/forgot');
@@ -226,19 +230,19 @@ exports.resetToken = (req, res) => {
     // Figure out how this flash messaging module works
     // What are the modules being passed to this render method?
     res.render('reset', { user: req.user, message: req.flash('resetMessage') });
-  })
+  });
 };
 
 /**
  * This fetches the team from the team.json file
  */
-exports.getTeam = (req, res, next) => {
+exports.getTeam = (req, res) => {
   fs.readFile('./team.json', (err, content) => {
     if (err) {
-      res.status(404).json({error: err});
+      res.status(404).json({ error: err });
     } else {
-      newData = JSON.parse(content);
-      res.status(200).json({data: newData});
+      const newData = JSON.parse(content);
+      res.status(200).json({ data: newData });
     }
   });
 };
@@ -270,14 +274,12 @@ exports.editTeam = '';
  *
  * This can also be used when the user does not want to use an auth service
  */
-exports.register = (req, res, next) => {
-  console.log('Registration route hit');
-
+exports.register = (req, res) => {
   // Generates the salt used for hashing
   bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
     if (err) {
       console.log(err);
-      res.status(500).json({success: false});
+      res.status(500).json({ success: false });
     } else {
       // Passed the hashed password into the saveUser function
       // so that the we can save the user with a hashed password
@@ -305,20 +307,20 @@ exports.register = (req, res, next) => {
       password: hash,
       firstName: req.body.firstName,
       lastName: req.body.lastName,
-      classification: req.body.classification
+      classification: req.body.classification,
     };
 
     // New User Object from the mongoose User Schema
     const newUser = new User(data);
 
     // Saves the new user
-    newUser.save((err, createdUser) => {
+    newUser.save((err) => {
       if (err) {
         console.log(err);
-        res.status(500).json({success: false});
+        res.status(500).json({ success: false });
       } else {
         // Send back only the user's username and names
-        res.status(200).json({success: true});
+        res.status(200).json({ success: true });
       }
     });
   }
@@ -328,75 +330,64 @@ exports.register = (req, res, next) => {
  * Gets the user's profile based on the ID in their
  * local storage
  */
-exports.getProfile = (req, res, next) => {
-  res.json({user: req.user});
+exports.getProfile = (req, res) => {
+  res.json({ user: req.user });
 };
 
 /**
  * This will update the user's profile picture and send back the signedURL for
  * the S3 object for displaying in teh DOM
  *
- * TODO: Make this a path request?
  * TODO: Figure out how to send a picture back to the front end for them to use
  * TODO: Save and send back the photo location
  *
  */
-exports.updateProfilePicture = (req, res, next) => {
+exports.updateProfilePicture = (req, res) => {
   const form = new formidable.IncomingForm();
+
+  // File Naming Convention {"dateCode-originalFileName.originalFileExt}
+  const fileName = `${Date.now()}-${files.image.name}`;
+
   form.parse(req, (err, feilds, files) => {
     if (err) {
-      res.json({success: false, url: null});
+      res.json({ success: false, url: null });
+    } else {
+      saveObject(files, (err, data) => {
+        if (err) {
+          res.status(404).json({ success: false, url: null });
+        } else {
+          res.status(200).json({ success: true, url: data });
+        }
+      });
     }
-
-    // File Naming Convention
-    const fileName = `${Date.now()}-${files.image.name}`;
-
-    // Parameters for putObject
-    const putObjectParams = {
-      Bucket: bucketName,
-      Key: fileName,
-      Body: path.normalize(files.image.path),
-      ContentType: 'image/jpeg'
-    };
-
-    // Parameters for getSignedUrl
-    const getSignedUrlParams = {
-      Bucket: bucketName,
-      Key: fileName
-    };
-
-    // Passing the above params to the child functions
-    saveObject(putObjectParams, getSignedUrlParams, (err, data) => {
-      if (err) {
-        res.status(404).json({success: false, url: null});
-      } else {
-        res.status(200).json({success: true, url: data});
-      }
-    });
   });
 
   /**
    * Saves the Object into the S3 Bucket, currently Miggy's test S3 Bucket
    *
-   * The callback for putObject actually is not of actually any use to us...
-   * so we ignore it and just continue with the program
-   *
-   * @param {object} putObjectParams:
+   * putObjectParams:
    * The parameters for putObject
    * Bucket: The bucket name
    * Key: The file name
    * Body: The path to the file in temporary system storage
    * Content-Type: How we want to save the file
    *
-   * @param {object} getSignedUrlParams:
-   * Passed to next function
+   * @param {object} files:
+   * The file object created by formidable
    *
    * @param {function} callback:
    * Brings error back to updateProfilePicture if one ever occurs
    */
-  function saveObject(putObjectParams, getSignedUrlParams, callback) {
-    console.log('nut');
-    S3.putObject(putObjectParams, (err, data) => {
+  function saveObject(files, callback) {
+    // Parameters for putObject
+    const putObjectParams = {
+      Bucket: bucketName,
+      Key: fileName,
+      Body: path.normalize(files.image.path),
+      ContentType: 'image/jpeg',
+    };
+
+    S3.putObject(putObjectParams, (err) => {
       if (err) {
         callback(err, null);
       } else {
@@ -412,7 +403,7 @@ exports.updateProfilePicture = (req, res, next) => {
    * We don't need to check the error if that user exists because you cannot
    * run this function without having an account
    *
-   * @param {object} getSignedUrlParams:
+   * getSignedUrlParams:
    * The parameters for putObject
    * Bucket: The bucket name
    * Key: The file name
@@ -422,9 +413,14 @@ exports.updateProfilePicture = (req, res, next) => {
    *
    * End of callbacks :)
    */
-  function generateURL(getSignedUrlParams, callback) {
-    console.log('nut');
-    User.findByIdAndUpdate(req.user._id, {profilePic: getSignedUrlParams.Key}, (err, user) => {
+  function generateURL(callback) {
+    // Parameters for getSignedUrl
+    const getSignedUrlParams = {
+      Bucket: bucketName,
+      Key: fileName,
+    };
+
+    User.findByIdAndUpdate(req.user._id, { profilePic: getSignedUrlParams.Key }, (err) => {
       if (err) {
         callback(err, null);
       } else {
@@ -436,13 +432,12 @@ exports.updateProfilePicture = (req, res, next) => {
   }
 };
 
-exports.contactUs = (req, res, next) => {
-
+exports.contactUs = (req, res) => {
   const mailOptions = {
     from: `Texas Tech Contact Us <${secret.testEmailUsername}>`,
     to: secret.testEmailUsername,
-    subject: "ACM Question",
-    html: '<h1>' + 'Sender: ' + req.body.name + ' Message: ' + req.body.message + '</h1>'
+    subject: 'ACM Question',
+    html: `'<h1> Sender: ${req.body.name} Message: ${req.body.message}</h1>`,
   };
 
   smtpTransport.sendMail(mailOptions, (err, info) => {
