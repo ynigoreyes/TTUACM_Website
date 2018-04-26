@@ -22,7 +22,6 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { CarouselComponent } from './components/carousel/carousel.component';
 import { ContactModalComponent } from './components/contact-modal/contact-modal.component';
 
-import { FlashMessagesModule, FlashMessagesService } from 'angular2-flash-messages';
 import { ContactService } from './services/contact.service';
 import { AuthService } from './services/auth.service';
 import { UserSidebarComponent } from './components/profile/user-sidebar/user-sidebar.component';
@@ -73,7 +72,6 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
-    FlashMessagesModule,
     MaterialModule
   ],
   entryComponents: [
@@ -81,7 +79,6 @@ const appRoutes: Routes = [
     ProfileUploadModalComponent
   ],
   providers: [
-    FlashMessagesService,
     HttpClientModule,
     ContactService,
     AuthService,
