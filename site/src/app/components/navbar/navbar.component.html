@@ -16,10 +16,10 @@
         <a class="nav-link" [routerLink]="['/']">Home</a>
       </li>
       <div class="dropdown-divider"></div>
-      <li *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
+      <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
         <a class="nav-link" [routerLink]="['/events']">Events</a>
       </li>
-      <div *ngIf="!authService.loggedIn()" class="dropdown-divider"></div>
+      <div *ngIf="authService.loggedIn()" class="dropdown-divider"></div>
       <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
         <a class="nav-link" [routerLink]="['/team']">Team</a>
       </li>

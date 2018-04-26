@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ProfileUploadModalComponent } from './profile-upload-modal/profile-upload-modal.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-sidebar',
@@ -9,29 +10,28 @@ import { ProfileUploadModalComponent } from './profile-upload-modal/profile-uplo
   styleUrls: ['./user-sidebar.component.css']
 })
 export class UserSidebarComponent {
-
-  constructor(
-    public dialog: MatDialog,
-    private authService: AuthService
-  ) {
-    this.authService.getProfile().subscribe(data => {
-      this.profile = data['user'];
-      // If the user has a Profile Pic, set that profile picture instead of the
-      // default one
-      if (this.profile['profilePic'] !== '') {
-        console.log('Pic ', this.profile['profilePic']);
-        // TODO: Get this link to serve the Image!! Getting the 403 code
-        // When I upload an image manually, I get an image, If i do it throught
-        // the putObject method, it breaks
-      }
-      this.image = `https://s3.amazonaws.com/ttuacmweb-test/1524602871022-hackerRank.jpg`;
-      this.loading = false;
-    });
-  }
-
   private profile: object;
   private image: string = '../../../../assets/images/default.svg';
   private loading: boolean = true;
+
+  constructor(
+    public dialog: MatDialog,
+    private authService: AuthService,
+    private router: Router
+  ) {
+    if (this.authService.loggedIn()) {
+      this.authService.getProfile().subscribe(
+        data => this.profile = data['user'],
+        err => console.log('error'),
+        () => {
+          console.log(this.profile);
+          this.loading = false;
+        }
+      );
+    } else {
+      this.router.navigate(['/login']);
+    }
+  }
 
   openUpdateModal(): void {
     const dialogRef = this.dialog.open(ProfileUploadModalComponent, {

@@ -137,13 +137,6 @@ exports.logout = (req, res) => {
   res.redirect('/');
 };
 
-// How does this work? What information do I need to pass??
-exports.signup = passport.authenticate('local-signup', {
-  successRedirect: '/login',
-  failureRedirect: '/signup',
-  failureFlash: 'Error Signing Up',
-});
-
 // We should fix this too. Can we go over what this is supposed to do?
 exports.reset = (req, res, next) => {
   async.waterfall([
