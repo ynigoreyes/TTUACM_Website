@@ -7,6 +7,8 @@
       "prefer-destructuring": "off",
       "no-undef": "off",
       "no-underscore-dangle": "off",
-      "no-shadow": "off"
+      "no-shadow": "off",
+      "prefer-arrow-callback": "off",
+      "comma-dangle": "off"
     }
 }
