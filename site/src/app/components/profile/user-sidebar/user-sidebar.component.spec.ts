@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserSidebarComponent } from './user-sidebar.component';
+import { MatProgressSpinnerModule } from '@angular/material';
 
 describe('UserSidebarComponent', () => {
   let component: UserSidebarComponent;
@@ -8,7 +9,8 @@ describe('UserSidebarComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UserSidebarComponent ]
+      declarations: [ UserSidebarComponent ],
+      imports: [MatProgressSpinnerModule]
     })
     .compileComponents();
   }));
@@ -17,9 +19,5 @@ describe('UserSidebarComponent', () => {
     fixture = TestBed.createComponent(UserSidebarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
   });
 });
