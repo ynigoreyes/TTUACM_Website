@@ -27,7 +27,6 @@ import { AuthService } from './services/auth.service';
 import { UserSidebarComponent } from './components/profile/user-sidebar/user-sidebar.component';
 import { FeedComponent } from './components/profile/feed/feed.component';
 import { AuthGuard } from './guards/auth.guard';
-import { ProfileUploadModalComponent } from './components/profile/user-sidebar/profile-upload-modal/profile-upload-modal.component';
 import { EventsService } from './services/events.service';
 
 const appRoutes: Routes = [
@@ -61,8 +60,7 @@ const appRoutes: Routes = [
     CarouselComponent,
     ContactModalComponent,
     UserSidebarComponent,
-    FeedComponent,
-    ProfileUploadModalComponent
+    FeedComponent
   ],
   imports: [
     BrowserModule,
@@ -75,8 +73,7 @@ const appRoutes: Routes = [
     MaterialModule
   ],
   entryComponents: [
-    ContactModalComponent,
-    ProfileUploadModalComponent
+    ContactModalComponent
   ],
   providers: [
     HttpClientModule,

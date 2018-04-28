@@ -9,6 +9,7 @@
       "no-underscore-dangle": "off",
       "no-shadow": "off",
       "prefer-arrow-callback": "off",
-      "comma-dangle": "off"
+      "comma-dangle": "off",
+      "object-curly-spacing": "off"
     }
 }
