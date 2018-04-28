@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { ContactModalComponent } from '../contact-modal/contact-modal.component';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ContactService } from '../../services/contact.service';
-import { FlashMessagesService } from 'angular2-flash-messages';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-footer',
@@ -14,7 +14,7 @@ export class FooterComponent {
   constructor(
     public dialog: MatDialog,
     private contactService: ContactService,
-    private flashMessage: FlashMessagesService
+    private snackBar: MatSnackBar
   ) { }
 
   private name:     string = null;
@@ -42,9 +42,15 @@ export class FooterComponent {
         };
         this.contactService.sendEmail(message).subscribe(data => {
           if (data['success']) {
-            alert('Success Sending Message');
+            this.snackBar.open(
+              'Success!',
+              'Dismiss', { duration: 4000 }
+            );
           } else {
-            alert('Error Sending Message');
+            this.snackBar.open(
+              'Error sending message. Please try again...',
+              'Dismiss', { duration: 4000 }
+            );
           }
         });
       }

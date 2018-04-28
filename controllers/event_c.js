@@ -1,5 +1,3 @@
-const https = require('https');
-
 const fs = require('fs');
 const readline = require('readline');
 const google = require('googleapis');
@@ -153,14 +151,14 @@ function getNewToken(oauth2Client, callback) {
 
 
 // This is a fake API for design purposes only
-module.exports.getEvents = (req, res, next) => {
+module.exports.getEvents = (req, res) => {
   fs.readFile('./fake-data.json', (err, content) => {
     if (err) {
+      console.log(err);
       res.status(404).json({error: err});
     } else {
       newData = JSON.parse(content);
       res.status(200).json({data: newData });
     }
-
   });
 };

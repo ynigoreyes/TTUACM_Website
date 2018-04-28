@@ -426,6 +426,7 @@ exports.updateProfilePicture = (req, res) => {
 };
 
 exports.contactUs = (req, res) => {
+  console.log('nut');
   const mailOptions = {
     from: `Texas Tech Contact Us <${secret.testEmailUsername}>`,
     to: secret.testEmailUsername,
@@ -433,13 +434,14 @@ exports.contactUs = (req, res) => {
     html: `'<h1> Sender: ${req.body.name} Message: ${req.body.message}</h1>`,
   };
 
-  smtpTransport.sendMail(mailOptions, (err, info) => {
+  smtpTransport.sendMail(mailOptions, (err) => {
     if (err) {
+      console.log(err);
       res.status(500).json({ success: false });
     } else {
+      console.log(`Message Send to ${secret.testEmailUsername} at ${Date()}`);
       res.status(200).json({ success: true });
     }
-    console.log(err, info);
   });
 };
 
