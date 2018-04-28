@@ -1,6 +1,16 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+
 import { SignupComponent } from './signup.component';
+import { AuthService } from '../../services/auth.service';
+
+// import { MatFormFieldModule } from '@angular/material/form-field';
+import { MaterialModule } from '../../material.module';
+import { RouterModule } from '@angular/router';
+import { HttpClient, HttpHandler } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('Checking Password Length', () => {
   let component: SignupComponent;
@@ -8,7 +18,19 @@ describe('Checking Password Length', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SignupComponent ]
+      declarations: [ SignupComponent ],
+      imports: [
+        MaterialModule,
+        BrowserAnimationsModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterTestingModule
+      ],
+      providers: [
+        AuthService,
+        HttpClient,
+        HttpHandler
+      ]
     })
     .compileComponents();
   }));
