@@ -63,18 +63,26 @@ exports.login = (req, res) => {
             expiresIn: 604800, // 1 week
           });
 
-          res.json({
+          res.status(200).json({
             success: true,
             user: foundUser,
             token: `JWT ${token}`,
           });
         } else {
-          res.json({ success: false, user: null });
+          res.status(404).json({
+            success: false,
+            user: null,
+            msg: 'Invalid Login'
+          });
         }
       });
     } else {
       // If the was no user found with that user name
-      res.json({ success: false, user: null });
+      res.status(404).json({
+        success: false,
+        user: null,
+        msg: 'User Not Found'
+      });
     }
   });
 };

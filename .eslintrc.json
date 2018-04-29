@@ -10,6 +10,9 @@
       "no-shadow": "off",
       "prefer-arrow-callback": "off",
       "comma-dangle": "off",
-      "object-curly-spacing": "off"
+      "object-curly-spacing": "off",
+      "no-multi-assign": "off",
+      "function-paren-newline": "off",
+      "arrow-body-style": "off"
     }
 }

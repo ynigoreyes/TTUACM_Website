@@ -1,7 +1,4 @@
 const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
-const secret = require('../config/secrets');
-const passport = require('passport');
 
 const userSchema = mongoose.Schema({
   email: { type: String, required: true, unique: true },
@@ -14,8 +11,7 @@ const userSchema = mongoose.Schema({
   resetPasswordExpires: { type: Date, default: null },
   hasPaidDues: { type: String, default: false },
   verified: { type: String, default: false },
-  profilePic: {type: String, defualt: "defualt.svg"},
-  bio: {type: String, default: ""}
+  bio: {type: String, default: ''}
 });
 
 // Moved the Hashing to the controller
@@ -48,8 +44,8 @@ module.exports.getUserById = (id, callback) => {
  * @param {string} email The email we are going to find
  * @param {callback} callback (err, user)
  */
-module.exports.getUserByEmail = (email, callback) => {
-  User.findOne({email: email}, (err, user) => {
+module.exports.getUserByEmail = (userEmail, callback) => {
+  User.findOne({email: userEmail}, (err, user) => {
     if (err) {
       console.log(err);
       callback(err, null);
@@ -77,7 +73,6 @@ module.exports.findAllUsers = (callback) => {
           classification: users.classification
         };
       });
-
       res.status(200).json({success: true, user: users});
     }
   });
@@ -89,5 +84,14 @@ User.verify = function (token, done) {
   this.local.verified = true;
   this.save(function (err) {
     done(err);
+  });
+};
+
+module.exports.deleteUserByEmail = (userEmail) => {
+  User.deleteOne({email: userEmail}, (err) => {
+    if (err) {
+      console.log(err);
+    }
+    return err;
   });
 };
