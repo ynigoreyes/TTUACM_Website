@@ -57,4 +57,3 @@ router.get('/get-team', UserCrtl.getTeam);
 // router.post('/login', UserCrtl.authenticate);
 
 module.exports = router;
-
