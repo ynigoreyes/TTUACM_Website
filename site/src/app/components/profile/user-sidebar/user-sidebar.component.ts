@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-user-sidebar',
   templateUrl: './user-sidebar.component.html',
-  styleUrls: ['./user-sidebar.component.css']
+  styleUrls: ['./user-sidebar.component.scss']
 })
 export class UserSidebarComponent {
   private profile: object;
