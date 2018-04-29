@@ -6,7 +6,7 @@ import { FooterComponent } from '../footer/footer.component';
 @Component({
   selector: 'app-contact-modal',
   templateUrl: './contact-modal.component.html',
-  styleUrls: ['./contact-modal.component.css']
+  styleUrls: ['./contact-modal.component.scss']
 })
 /**
  * A Modal that allows user's to send ACM questions.
