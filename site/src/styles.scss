@@ -1,12 +1,24 @@
-@import '~@angular/material/prebuilt-themes/indigo-pink.css';
-
-html,body {
-  background-color: #c62828;
-  width: 100%;
-  height: 100%;
-  margin: 0px;
-  padding: 0px;
-  overflow-x: hidden;
-  color: #ffffff;
-  font-family: 'Ubuntu', sans-serif;
+// @import '~@angular/material/prebuilt-themes/indigo-pink.css';
+// TODO: GET RID OF BOOTSTRAP. IT IS TAKING WAY TOO LONG TO LOAD
+@import '~@angular/material/theming';
+// Custom Theme
+@include mat-core();
+$acm-primary: mat-palette($mat-red, 800, 500, 900);
+$acm-accent: mat-palette($mat-grey, 800, 500, 900);
+$acm-theme: mat-dark-theme($acm-primary, $acm-accent);
+@include angular-material-theme($acm-theme);
+// Custom Font Sizes
+$xl-text: 50px;
+$lg-text: 40px;
+$md-text: 30px;
+$sm-text: 20px;
+$xs-text: 10px;
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    overflow-x: hidden;
+    font-family: 'Ubuntu', sans-serif;
 }
