@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import {
+  MatSidenavModule,
   MatButtonModule,
   MatInputModule,
   MatSelectModule,
@@ -13,6 +14,7 @@ import {
 
 @NgModule({
   imports: [
+    MatSidenavModule,
     MatButtonModule,
     MatInputModule,
     MatSelectModule,
@@ -24,6 +26,7 @@ import {
     MatProgressSpinnerModule
   ],
   exports: [
+    MatSidenavModule,
     MatButtonModule,
     MatInputModule,
     MatSelectModule,

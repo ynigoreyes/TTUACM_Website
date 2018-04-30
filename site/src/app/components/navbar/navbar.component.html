@@ -1,44 +1,6 @@
-<!-- TODO: Fix the ngIf's. There are too many calls to our service. -->
-
-<nav class="navbar navbar-expand-lg navbar-default navbar-dark">
-
-  <a class="navbar-brand" [routerLink]="['/']">Texas Tech ACM</a>
-  <!-- When a user clicks a link, we want to close the nav bar -->
-  <!-- Use a material Menu later on -->
-
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTTU">
-    <span class="navbar-toggler-icon"></span>
+<div class="navbar">
+  <a [routerLink]="['/']">ACM: Texas Tech</a>
+  <button mat-button (click)="open()">
+    <mat-icon>menu</mat-icon>
   </button>
-
-  <div class="collapse navbar-collapse" id="navbarTTU">
-    <ul class="navbar-nav">
-      <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
-        <a class="nav-link" [routerLink]="['/']">Home</a>
-      </li>
-      <div class="dropdown-divider"></div>
-      <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
-        <a class="nav-link" [routerLink]="['/events']">Events</a>
-      </li>
-      <div *ngIf="authService.loggedIn()" class="dropdown-divider"></div>
-      <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
-        <a class="nav-link" [routerLink]="['/team']">Team</a>
-      </li>
-      <div class="dropdown-divider"></div>
-      <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
-        <a class="nav-link" [routerLink]="['/dashboard']">Dashboard</a>
-      </li>
-      <div *ngIf="authService.loggedIn()" class="dropdown-divider"></div>
-      <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
-        <a class="nav-link" [routerLink]="['/signup']">Sign Up</a>
-      </li>
-      <div class="dropdown-divider"></div>
-      <li *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
-        <a class="nav-link" [routerLink]="['/login']">Login</a>
-      </li>
-      <div *ngIf="!authService.loggedIn()" class="dropdown-divider"></div>
-      <li *ngIf="authService.loggedIn()" class="nav-item">
-        <a class="nav-link" [routerLink]="['/']" (click)="logout()">LogOut</a>
-      </li>
-    </ul>
-  </div>
-</nav>
+</div>
