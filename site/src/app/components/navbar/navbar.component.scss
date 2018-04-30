@@ -1,9 +1,23 @@
-nav.navbar {
-  /* background-color: #c62828; */
-  background-color: black;
-  position: sticky;
-}
-
-a.nav-link {
-  font-size: 20px;
+@import '~@angular/material/theming';
+@import '../../../styles.scss';
+.navbar {
+    background-color: mat-color($acm-accent, darker);
+    a {
+        color: white;
+        font-size: $md-text;
+        margin: 5px 20px;
+    }
+    a:hover {
+        color: white;
+        text-decoration: none;
+    }
+    button {
+        min-width: 1%;
+    }
+    mat-icon {
+        font-size: $md-text;
+        margin: auto;
+        height: 100%;
+        width: 100%;
+    }
 }
