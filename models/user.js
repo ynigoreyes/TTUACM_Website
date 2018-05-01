@@ -11,7 +11,7 @@ const userSchema = mongoose.Schema({
   resetPasswordExpires: { type: Date, default: null },
   hasPaidDues: { type: String, default: false },
   verified: { type: String, default: false },
-  bio: {type: String, default: ''}
+  bio: { type: String, default: '' }
 });
 
 // Moved the Hashing to the controller
@@ -45,7 +45,7 @@ module.exports.getUserById = (id, callback) => {
  * @param {callback} callback (err, user)
  */
 module.exports.getUserByEmail = (userEmail, callback) => {
-  User.findOne({email: userEmail}, (err, user) => {
+  User.findOne({ email: userEmail }, (err, user) => {
     if (err) {
       console.log(err);
       callback(err, null);
@@ -64,17 +64,18 @@ module.exports.getUserByEmail = (userEmail, callback) => {
 module.exports.findAllUsers = (callback) => {
   User.find((err, users) => {
     if (err) {
-      res.status(500).json({success: false, user: null});
+      callback(({ success: false, user: null }));
     } else {
-      data = users.map(users => {
+      data = users.map((users) => {
         return {
           firstName: users.firstName,
           lastName: users.lastName,
           classification: users.classification
         };
       });
-      res.status(200).json({success: true, user: users});
+      callback(({ success: true, user: users }));
     }
+    return null;
   });
 };
 
@@ -88,9 +89,10 @@ User.verify = function (token, done) {
 };
 
 module.exports.deleteUserByEmail = (userEmail) => {
-  User.deleteOne({email: userEmail}, (err) => {
+  User.deleteOne({ email: userEmail }, (err) => {
     if (err) {
       console.log(err);
+      console.log('Could Not find User. Aborting query...');
     }
     return err;
   });
