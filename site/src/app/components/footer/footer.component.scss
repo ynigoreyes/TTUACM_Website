@@ -1,6 +1,7 @@
-
+@import '~@angular/material/theming';
+@import '../../../styles.scss';
 #footer-div {
-  background-color: #c62828;
+  background-color: mat-color($acm-primary);
   text-align: center;
   color: #ffffff;
 }
@@ -17,14 +18,15 @@
 h5#copyright {
   color: rgba(41, 40, 40, 0.609);
 }
+
 img {
   position: relative;
-  width:  35px;
+  width: 35px;
   height: 35px;
 }
 
 button#contact-button {
-  background-color: #ff5f52;
+  background-color: mat-color($acm-primary, lighter);
   padding: 5px;
   margin-left: auto;
   margin-right: auto;
@@ -35,11 +37,11 @@ button#contact-button {
 
 @media (min-width: 950px) {
   img {
-  position: relative;
-  width:  100px;
-  height: 100px;
-  padding: 15px;
-}
+    position: relative;
+    width: 100px;
+    height: 100px;
+    padding: 15px;
+  }
 }
 
 @media (max-width: 950px) {
