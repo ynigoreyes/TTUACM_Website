@@ -1,93 +1,83 @@
-const request = require('request');
-const expect = require('chai').expect;
+/* eslint-disable */
+const chaiHttp = require('chai-http');
+const chai = require('chai');
+// TODO: Start using the
 
 const mongoose = require('mongoose');
 const User = require('../models/user');
 const config = require('../config/secrets');
+
+const expect = chai.expect;
+
+// Test Router Setup
+chai.use(chaiHttp);
 
 // Bcrypt options
 const bcrypt = require('bcryptjs');
 
 const saltRounds = 10;
 
-const loginURL = 'http://localhost:80/users/login';
-const logoutURL = 'http://localhost:80/users/logout';
-const profileURL = 'http://localhost:80/users/profile';
-const contactURL = 'http://localhost:80/users/contact-us';
-const teamURL = 'http://localhost:80/users/get-team';
-const registerURL = 'http://localhost:80/users/register';
+// Node Endpoints
+const localhost = 'http://localhost:80';
+const loginURL = '/users/login';
+const logoutURL = '/users/logout';
+const profileURL = '/users/profile';
+const contactURL = '/users/contact-us';
+const teamURL = '/users/get-team';
+const registerURL = '/users/register';
 
 const testUserData = { // eslint-disable-line
   email: 'testUserEmail@gmail.com',
   password: 'testUserPassword',
   firstName: 'testFirstName',
-  lastName: bcrypt.hashSync('testLastName', 10),
+  lastName: 'testLastName',
   classification: 'Scrub',
 };
 
 describe('User Suite', () => {
-  // Mock a user database
-  before('Creating a Test User', () => {
+  before('Creating a Test User', (done) => {
     mongoose.connect(config.local_db, {
       useMongoClient: true,
       socketTimeoutMS: 0,
       keepAlive: true,
       reconnectTries: 30
     });
-    User.remove({}); // Empty Database
 
-    return new Promise((resolve, reject) => {
-      User.create(testUserData)
-        .catch((err) => {
-          console.log(err);
-          reject(err);
-        })
-        .then((data) => {
-          resolve(data);
-        });
-    });
+    chai.request(localhost)
+      .post(registerURL)
+      .set('Content-Type', 'application/json')
+      .send(testUserData)
+      .end((err, res) => {
+        if (res.body.success === true) {
+          done();
+        }
+      });
   });
 
-  // Not able to delete the user....
   after('Deleting the Test User', (done) => {
-    User.deleteUserByEmail(testUserData.email, (err) => {
-      console.log(err);
-      done();
-    });
+    User.remove({}).then(done());
   });
 
   describe('Login Test', () => {
     it('Returns a successful status code', (done) => {
-      request.post(loginURL, (error, request) => {
-        expect(request.statusCode).to.be.lessThan(399);
-        done();
-      });
+      chai.request(localhost)
+        .post(loginURL)
+        .set('Content-Type', 'application/json')
+        .send({
+          email: testUserData.email,
+          password: testUserData.password
+        })
+        .end((err, res) => {
+          const objectError = 'Response is not an object';
+          const emailError = 'Email is not valid (null/undefined)'
+          // Checks for a required email
+          expect(res.body.user, objectError).to.be.an('object');
+          expect(res.body.user.email, emailError).to.not.be.null
+          expect(res.body.user.email, emailError).to.not.be.undefined
+          // Checks for absence of error
+          expect(err).to.be.null;
+          done();
+        });
     });
-
-    it('Should return a valid user Object', (done) => {
-      request({
-        method: 'POST',
-        uri: loginURL,
-        multipart: {
-          chunked: false,
-          data: [
-            {
-              'content-type': 'application/json',
-              body: JSON.stringify({
-                email: testUserData.email,
-                password: testUserData.password
-              })
-            }
-          ]
-        }
-      }, (error, response, body) => {
-        console.log('body: ', body);
-        userObj = JSON.parse(body);
-        expect(userObj.success, '').to.equal(true);
-        expect(userObj).to.be.an('object');
-        done();
-      });
-    });
-
   });
 });

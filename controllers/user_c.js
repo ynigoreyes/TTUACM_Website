@@ -48,6 +48,7 @@ exports.login = (req, res) => {
   const email = req.body.email;
   const inputPassword = req.body.password;
 
+  // In the test, we are not able to see the email passed
   User.getUserByEmail(email, (err, foundUser) => {
     if (err) {
       console.log(err);
@@ -55,7 +56,7 @@ exports.login = (req, res) => {
     } else if (foundUser !== null) {
       // If there is a user with that email, check their password
       bcrypt.compare(inputPassword, foundUser.password, (err, response) => {
-        if (err) throw err;
+        if (err) { console.log(err); }
         if (response) {
           // We don't want to pass back the password at all
 
@@ -126,7 +127,7 @@ exports.forgotLogin = (req, res, next) => {
           'If you did not request this, please ignore this email and your password will remain unchanged.\n',
       };
       smtpTransport.sendMail(mailOptions, (err) => {
-        req.flash('forgotMessage', `An email has been sent to ${  user.local.email  } with a reset link.`);
+        req.flash('forgotMessage', `An email has been sent to ${user.local.email} with a reset link.`);
         done(err, 'done');
       });
     },
@@ -197,6 +198,8 @@ exports.reset = (req, res) => {
   });
 };
 
+// TODO: This will not work anymore since the model has been changed
+// and we are not using flash messages anymore
 exports.confirmToken = (req, res) => {
   User.findOne({ 'local.confirmEmailToken': req.params.token }, (err, user) => {
     if (!user) {
@@ -434,7 +437,6 @@ exports.updateProfilePicture = (req, res) => {
 };
 
 exports.contactUs = (req, res) => {
-  console.log('nut');
   const mailOptions = {
     from: `Texas Tech Contact Us <${secret.testEmailUsername}>`,
     to: secret.testEmailUsername,
