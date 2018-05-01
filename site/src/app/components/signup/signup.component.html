@@ -6,7 +6,7 @@
         <h3>TTU ACM</h3>
       </div>
 
-      <form class="signup-container" [formGroup]="SignUpForm" (ngSubmit)="attemptRegister(SignUpForm.value)">
+      <form class="signup-container" [formGroup]="SignUpForm" (ngSubmit)="attempt(SignUpForm.value)">
         <mat-form-field>
           <input formControlName="firstName" matInput placeholder="First Name">
         </mat-form-field>
