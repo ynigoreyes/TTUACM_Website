@@ -1,34 +1,35 @@
+@import '~@angular/material/theming';
+@import '../../../styles.scss';
 div#signup-background {
-  background-color: #1b1b1b;
+  background-image: url('../../../assets/images/background-building-2.jpg');
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   width: auto;
 }
 
 .signup-div {
-  text-align:center;
+  text-align: center;
   width: 100%;
   padding: 15px;
-
 }
 
 .login-header {
   text-align: center;
-}
-
-.login-header img {
-  width: 150px;
-}
-
-#error-message {
-  display: none;
+  img {
+    width: 150px;
+  }
 }
 
 .signup-container {
   display: flex;
   flex-direction: column;
   margin: auto;
+  background-color: mat-color($acm-primary, darker);
 }
 
-.signup-container > * {
+.signup-container>* {
   width: 100%;
 }
 
@@ -36,14 +37,21 @@ div#signup-background {
   margin-bottom: 20px;
 }
 
-.signup-container form > * {
+.signup-container form>* {
   margin: 5px 0;
 }
 
-@media (min-width: 992px) {
-  .signup-div {
-  padding: 150px;
-  width: 80%
-  }
+#btn-signup {
+  background-color: mat-color($acm-accent);
+}
 
+mat-form-field {
+  color: white;
+}
+
+@media (min-width: 600px) {
+  .signup-div {
+    padding: 100px;
+    width: 80%;
+  }
 }

@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { ContactModalComponent } from '../contact-modal/contact-modal.component';
+import { ContactModalComponent } from './contact-modal/contact-modal.component';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ContactService } from '../../services/contact.service';
 import { MatSnackBar } from '@angular/material';
