@@ -15,8 +15,8 @@
         </mat-form-field>
         <button class="submit-buttons" mat-raised-button type="submit" id="btn-login" [disabled]="!LoginForm.valid">Submit Form</button>
 
-        <a [routerLink]="['/forgot']">Forgot Password?</a>
-        <a [routerLink]="['/signup']">Create new Account</a>
+        <a class="login-links" [routerLink]="['/forgot']">Forgot Password?</a>
+        <a class="login-links" [routerLink]="['/signup']">Create new Account</a>
       </form>
     </mat-card>
 

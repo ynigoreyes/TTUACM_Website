@@ -1,8 +1,10 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
-import { FooterComponent } from '../footer/footer.component';
+import { FooterComponent } from '../footer.component';
 
+
+// TODO: Make this modal into a page and put it in the side nav OR make it a static button in the corner
 @Component({
   selector: 'app-contact-modal',
   templateUrl: './contact-modal.component.html',

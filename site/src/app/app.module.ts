@@ -20,7 +20,7 @@ import { ResetComponent } from './components/reset/reset.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { CarouselComponent } from './components/carousel/carousel.component';
-import { ContactModalComponent } from './components/contact-modal/contact-modal.component';
+import { ContactModalComponent } from './components/footer/contact-modal/contact-modal.component';
 
 import { ContactService } from './services/contact.service';
 import { AuthService } from './services/auth.service';
