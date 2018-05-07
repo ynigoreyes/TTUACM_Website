@@ -12,14 +12,14 @@ Setting up the environment:
 
   4)  To test the server, type "npm test"
 
-  5)  To test the client, cs into site/ and type "ng test"
+  5)  To test the client, type "ng test" and navigate to localhost:4200
 
 Contributing:
 
   You can find all controllers and routes in their respective directories.
   <br>
   <br>
-  The frontend framework of choice is Angular which can be found in the /site directory
+  The frontend framework of choice is Angular which can be found in the /site-src directory
 
   If port 80 doesn't work for you, you may change the port in /bin/www (line 15)
 
