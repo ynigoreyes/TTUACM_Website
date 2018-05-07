@@ -1,21 +1,22 @@
 /* eslint-disable */
 const chaiHttp = require('chai-http');
 const chai = require('chai');
-// TODO: Start using the
+const path = require('path');
 
 const mongoose = require('mongoose');
 const User = require('../models/user');
-const config = require('../config/secrets');
+
+// Bcrypt options
+const bcrypt = require('bcryptjs');
+const saltRounds = 10;
+
+require('dotenv').config({ path: path.resolve('.env') });
 
 const expect = chai.expect;
 
 // Test Router Setup
 chai.use(chaiHttp);
 
-// Bcrypt options
-const bcrypt = require('bcryptjs');
-
-const saltRounds = 10;
 
 // Node Endpoints
 const localhost = 'http://localhost:80';
@@ -36,7 +37,7 @@ const testUserData = { // eslint-disable-line
 
 describe('User Suite', () => {
   before('Creating a Test User', (done) => {
-    mongoose.connect(config.local_db, {
+    mongoose.connect(process.env.dev_db, {
       useMongoClient: true,
       socketTimeoutMS: 0,
       keepAlive: true,
@@ -59,7 +60,7 @@ describe('User Suite', () => {
   });
 
   describe('Login Test', () => {
-    it('Returns a successful status code', (done) => {
+    it('Returns a successful status code and a valid Token', (done) => {
       chai.request(localhost)
         .post(loginURL)
         .set('Content-Type', 'application/json')
@@ -70,6 +71,13 @@ describe('User Suite', () => {
         .end((err, res) => {
           const objectError = 'Response is not an object';
           const emailError = 'Email is not valid (null/undefined)'
+          const tokenError = 'Token is empty'
+
+          // Checks for valid tokens and success status
+          expect(res.body.token, tokenError).to.not.be.null;
+          expect(res.body.token, tokenError).to.be.of.length.greaterThan(1);
+          expect(res.body.success).to.be.true;
+
           // Checks for a required email
           expect(res.body.user, objectError).to.be.an('object');
           expect(res.body.user.email, emailError).to.not.be.null
