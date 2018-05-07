@@ -1,21 +1,10 @@
 const User = require('../models/user');
 
-const passport = require('passport');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const async = require('async');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
-const secret = require('../config/secrets');
-const formidable = require('formidable');
-const path = require('path');
-const config = require('../config/secrets');
-
-// AWS S3
-const AWS = require('aws-sdk');
-
-const S3 = new AWS.S3();
-const bucketName = config.TestBucketName;
 
 // Bcrypt options
 const bcrypt = require('bcryptjs');
@@ -31,16 +20,9 @@ const saltRounds = 10;
 const smtpTransport = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
-    user: secret.testEmailUsername,
-    pass: secret.testEmailPassword,
+    user: process.env.dev_emailUsername,
+    pass: process.env.dev_emailPassword,
   },
-});
-
-// TODO: Fix this/ replace this for client side rendering
-exports.authenticate = passport.authenticate('local-login', {
-  successRedirect: '/',
-  failureRedirect: '/login',
-  failureFlash: 'Invalid username or password.',
 });
 
 // Test Login Route for exports.authenticate
@@ -60,7 +42,7 @@ exports.login = (req, res) => {
         if (response) {
           // We don't want to pass back the password at all
 
-          const token = jwt.sign({ data: foundUser }, secret.session_secret, {
+          const token = jwt.sign({ data: foundUser }, process.env.session_secret, {
             expiresIn: 604800, // 1 week
           });
 
@@ -135,15 +117,6 @@ exports.forgotLogin = (req, res, next) => {
     if (err) return next(err);
     res.redirect('/forgot');
   });
-};
-
-/**
- * This logs the user out using Passport.js (req.logout) which clears the
- * login session. This will also redirect the use to the home page
- */
-exports.logout = (req, res) => {
-  req.logout();
-  res.redirect('/');
 };
 
 // We should fix this too. Can we go over what this is supposed to do?
@@ -338,108 +311,10 @@ exports.getProfile = (req, res) => {
   res.json({ user: req.user });
 };
 
-/**
- * This will update the user's profile picture and send back the signedURL for
- * the S3 object for displaying in teh DOM
- *
- * TODO: Figure out how to send a picture back to the front end for them to use
- * TODO: Save and send back the photo location
- *
- */
-exports.updateProfilePicture = (req, res) => {
-  const form = new formidable.IncomingForm();
-
-  async.waterfall(
-    [
-      parseFile,
-      saveObject,
-      generateURL
-    ],
-    (err, url) => {
-      if (err) {
-        console.log(err);
-        res.status(404).json({ success: false, signedURL: null });
-      } else if (url === null) {
-        console.log('User Not Found');
-        res.status(404).json({ success: false, signedURL: null });
-      } else {
-        res.status(200).json({ success: true, signedURL: url });
-      }
-    }
-  );
-
-  function parseFile(done) {
-    form.parse(req, (err, _, files) => {
-      // File Naming Convention {"dateCode-originalFileName.originalFileExt}
-      const fileName = `${Date.now()}-${files.image.name}`;
-      const filePath = path.normalize(files.image.path);
-      done(err, fileName, filePath);
-    });
-  }
-  /**
-   * Saves the Object into the S3 Bucket, currently Miggy's test S3 Bucket
-   *
-   * putObjectParams:
-   * The parameters for putObject
-   * Bucket: The bucket name
-   * Key: The file name
-   * Body: The path to the file in temporary system storage
-   * Content-Type: How we want to save the file
-   *
-   */
-  function saveObject(fileName, filePath, done) {
-    // Parameters for putObject
-    const putObjectParams = {
-      Bucket: bucketName,
-      Key: fileName,
-      Body: filePath,
-      ContentType: 'image/jpeg',
-    };
-    S3.putObject(putObjectParams, (err) => {
-      done(err, fileName);
-    });
-  }
-  /**
-   * Associates the picture with the account based in the Mongoose ID
-   * and sends the signed URL to the front end
-   *
-   * We don't need to check the error if that user exists because you cannot
-   * run this function without having an account
-   *
-   * getSignedUrlParams:
-   * The parameters for putObject
-   * Bucket: The bucket name
-   * Key: The file name
-   *
-   * @param {function} callback:
-   * Brings back the SignedURL or an error
-   *
-   * End of callbacks :)
-   */
-  function generateURL(fileName, done) {
-    // Parameters for getSignedUrl
-    const getSignedUrlParams = {
-      Bucket: bucketName,
-      Key: fileName,
-    };
-    User.findByIdAndUpdate(req.user._id, { profilePic: getSignedUrlParams.Key }, (err, user) => {
-      if (err) {
-        done(err, null);
-      } else if (!user) {
-        done(null, null);
-      } else {
-        S3.getSignedUrl('getObject', getSignedUrlParams, (err, url) => {
-          done(err, url);
-        });
-      }
-    });
-  }
-};
-
 exports.contactUs = (req, res) => {
   const mailOptions = {
-    from: `Texas Tech Contact Us <${secret.testEmailUsername}>`,
-    to: secret.testEmailUsername,
+    from: `Texas Tech Contact Us <${process.env.dev_emailUsername}>`,
+    to: process.env.dev_emailUsername,
     subject: 'ACM Question',
     html: `'<h1> Sender: ${req.body.name} Message: ${req.body.message}</h1>`,
   };
@@ -449,13 +324,8 @@ exports.contactUs = (req, res) => {
       console.log(err);
       res.status(500).json({ success: false });
     } else {
-      console.log(`Message Send to ${secret.testEmailUsername} at ${Date()}`);
+      console.log(`Message Sent to ${secret.testEmailUsername} at ${Date()}`);
       res.status(200).json({ success: true });
     }
   });
-};
-
-exports.updateProfileBio = (req, res) => {
-  console.log('req: ', req);
-  console.log('res: ', res);
 };
