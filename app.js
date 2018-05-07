@@ -8,8 +8,8 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 // TODO: Idk how to get rid of the mongoose promise deprecation warning
 
-
-const secrets = require('./config/secrets');
+// dotenv file placed in root directory during development
+require('dotenv').config({ path: path.join(__dirname, '/.env') });
 
 // Express Routing and App setup
 const app = express();
@@ -22,7 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
  * Connected to a local replica of Mongo so that we can store data
  * and see how it looks like without connecting to our actual database
  */
-mongoose.connect(secrets.local_db, {
+mongoose.connect(process.env.dev_db, {
   useMongoClient: true,
   socketTimeoutMS: 0,
   keepAlive: true,
@@ -71,9 +71,9 @@ app.use('/events', eventsRoute);
  * in a weird url to the index page. Uncomment when deploying for production
  */
 
-// app.use('*', (req, res, next) => {
-//   res.redirect('./public/index.html');
-// });
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/index.html'));
+});
 
 
 // Catch 404 and forward to error handler

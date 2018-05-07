@@ -17,9 +17,6 @@ router.post('/register', UserCrtl.register);
 /* POST Login */
 router.post('/login', UserCrtl.login);
 
-/* GET Log Out */
-router.get('/logout', UserCrtl.logout);
-
 /* POST forgot page */
 router.post('/forgot', UserCrtl.forgotLogin);
 
@@ -35,12 +32,6 @@ router.post('/reset/:token', UserCrtl.reset);
 /* GET User profile */
 router.get('/profile', membersOnlyRoute, UserCrtl.getProfile);
 
-/* POST Update User Profile Picture */
-router.post('/update-profile-pic', membersOnlyRoute, UserCrtl.updateProfilePicture);
-
-/* POST Update User Bio */
-router.post('/update-profile-bio', membersOnlyRoute, UserCrtl.updateProfileBio);
-
 // The Other routes
 
 /* POST Contact Us */
@@ -48,12 +39,5 @@ router.post('/contact-us', UserCrtl.contactUs);
 
 /* GET The current Team */
 router.get('/get-team', UserCrtl.getTeam);
-
-
-/**
- * Original authentication route used.
- * Might be needed for 0Auth2
- */
-// router.post('/login', UserCrtl.authenticate);
 
 module.exports = router;
