@@ -21,6 +21,12 @@ body {
   padding: 0px;
   overflow-x: hidden;
   font-family: 'Ubuntu', sans-serif;
+  .mat-drawer-content {
+    position: relative;
+    z-index: 1;
+    display: inline !important;
+    overflow: auto;
+  }
 }
 
 @mixin angular-material-theme($acm-theme) {
