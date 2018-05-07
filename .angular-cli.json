@@ -1,11 +1,11 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "project": {
-    "name": "site"
+    "name": "TTUACM-Website"
   },
   "apps": [
     {
-      "root": "src",
+      "root": "src-site",
       "outDir": "../public",
       "assets": [
         "assets",
