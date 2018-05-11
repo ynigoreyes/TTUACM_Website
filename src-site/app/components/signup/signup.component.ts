@@ -56,7 +56,6 @@ export class SignupComponent {
     };
 
     this.authService.registerUser(postUser).subscribe(data => {
-
       if (data === false) {
         alert('Error Creating User. Please Reload page...');
       } else {
