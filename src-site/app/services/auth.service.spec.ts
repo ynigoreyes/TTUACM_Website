@@ -4,6 +4,14 @@ import { AuthService } from './auth.service';
 import { HttpClientModule } from '@angular/common/http';
 
 describe('AuthService', () => {
+  const TestUserObject: object = {
+    firstName: 'Miggy',
+    lastName: 'Reyes',
+    email: 'email@gmail.com',
+    confirmPassword: 'password',
+    classification: 'Freshman'
+  };
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule],
@@ -11,7 +19,7 @@ describe('AuthService', () => {
     });
   });
 
-  it('should be created', inject([AuthService], (service: AuthService) => {
-    expect(service).toBeTruthy();
+  it('Test Should be running...', inject([AuthService], (service: AuthService) => {
+    expect(true).toBeTruthy();
   }));
 });
