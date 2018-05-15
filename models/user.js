@@ -79,14 +79,15 @@ module.exports.findAllUsers = (callback) => {
   });
 };
 
-// Verify email address using token
-User.verify = function (token, done) {
-  this.local.confirmEmailToken = undefined;
-  this.local.verified = true;
-  this.save(function (err) {
-    done(err);
-  });
-};
+// Will keep this for reference
+// // Verify email address using token
+// User.verify = function (token, done) {
+//   this.local.confirmEmailToken = undefined;
+//   this.local.verified = true;
+//   this.save(function (err) {
+//     done(err);
+//   });
+// };
 
 module.exports.deleteUserByEmail = (userEmail) => {
   User.deleteOne({ email: userEmail }, (err) => {

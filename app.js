@@ -6,6 +6,8 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const mongoose = require('mongoose');
+
+mongoose.Promise = global.Promise;
 // TODO: Idk how to get rid of the mongoose promise deprecation warning
 
 // dotenv file placed in root directory during development
