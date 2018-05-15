@@ -16,7 +16,7 @@ div#login-background {
 }
 
 .login-container {
-  background-color: mat-color($acm-primary);
+  background-color: mat-color($acm-primary, darker);
   display: flex;
   flex-direction: column;
   margin: auto;

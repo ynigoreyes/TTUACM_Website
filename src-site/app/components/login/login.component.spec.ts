@@ -18,4 +18,8 @@ describe('LoginComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
+
+  it('Should Validate Emails', () => {
+    console.log('testing...');
+  });
 });

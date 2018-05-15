@@ -21,7 +21,7 @@ export class SignupComponent {
 
   // During production, remove initial value
   // This is for debugging purposes only
-  SignUpForm = new FormGroup({
+  private SignUpForm = new FormGroup({
     firstName: new FormControl('Miggy'),
     lastName: new FormControl('Reyes'),
     email: new FormControl('email@gmail.com'),
