@@ -18,25 +18,24 @@ export class LoginComponent {
   ) { }
 
   LoginForm = new FormGroup({
-    email: new FormControl('email@gmail.com'),
-    password: new FormControl('password')
-  }, {
-    updateOn: 'blur',
-    validators: Validators.required
+    email: new FormControl('', {
+      validators: [Validators.required]
+    }),
+    password: new FormControl('', {
+      validators: [Validators.required]
+    })
   });
 
-  attemptLogin(post: FormGroup) {
-    // TODO: Add a waiting gif
+  private attemptLogin(post: FormGroup) {
     const postUser = {
       email: post['email'].trim(),
       password: post['password'].trim()
     };
     this.authService.authenticateUser(postUser).subscribe(data => {
-
       if (data['user'] === null) {
         // TODO: Do something to protect the user from just trying all
         // different types of passwords
-        this.snackBar.open('Incorrect Username or Password', 'Close', { duration: 3000 });
+        this.snackBar.open(data['msg'], 'Close', { duration: 3000 });
       } else {
         // If the user is found, we want to save their token and data into local storage
         this.snackBar.open(`Welcome ${data['user'].firstName}!`, 'Close', { duration: 2000 });

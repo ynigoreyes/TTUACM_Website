@@ -26,15 +26,15 @@ const User = module.exports = mongoose.model('User', userSchema);
 /**
  * This will find the user by the ID
  * @param {string} id The Mongo Id we are going to find
- * @param {boolean, object} callback (err, user)
+ * @param {boolean, object} done (err, user)
  */
-module.exports.getUserById = (id, callback) => {
+module.exports.getUserById = (id, done) => {
   User.findById(id, (err, user) => {
     if (err) {
       console.log(err);
-      callback(err, false);
+      done(err, false);
     } else {
-      callback(null, user);
+      done(null, user);
     }
   });
 };
@@ -42,17 +42,17 @@ module.exports.getUserById = (id, callback) => {
 /**
  * This will find the user by the email
  * @param {string} email The email we are going to find
- * @param {callback} callback (err, user)
+ * @param {done} done (err, user)
  */
-module.exports.getUserByEmail = (userEmail, callback) => {
+module.exports.getUserByEmail = (userEmail, done) => {
   User.findOne({ email: userEmail }, (err, user) => {
     if (err) {
       console.log(err);
-      callback(err, null);
+      done(err, null);
     } else if (user === null) {
-      callback(null, null);
+      done(null, null);
     } else {
-      callback(null, user);
+      done(null, user);
     }
   });
 };

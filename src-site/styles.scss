@@ -7,6 +7,7 @@ $acm-primary: mat-palette($mat-grey, 800, 500, 900);
 $acm-accent: mat-palette($mat-red, 800, 500, 900);
 $acm-theme: mat-dark-theme($acm-primary, $acm-accent);
 @include angular-material-theme($acm-theme);
+
 // Custom Font Sizes
 $xl-text: 50px;
 $lg-text: 40px;
