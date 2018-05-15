@@ -5,6 +5,7 @@ const path = require('path');
 
 const mongoose = require('mongoose');
 const User = require('../models/user');
+mongoose.Promise = global.Promise;
 
 // Bcrypt options
 const bcrypt = require('bcryptjs');
@@ -43,16 +44,18 @@ describe('User Suite', () => {
       keepAlive: true,
       reconnectTries: 30
     });
-
-    chai.request(localhost)
-      .post(registerURL)
-      .set('Content-Type', 'application/json')
-      .send(testUserData)
-      .end((err, res) => {
-        if (res.body.success === true) {
-          done();
-        }
-      });
+    User.remove({})
+      .then(
+        chai.request(localhost)
+          .post(registerURL)
+          .set('Content-Type', 'application/json')
+          .send(testUserData)
+          .end((err, res) => {
+            if (res.body.success === true) {
+              done();
+            }
+          })
+      );
   });
 
   describe('Login Test', () => {
