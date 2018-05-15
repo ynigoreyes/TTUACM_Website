@@ -2,20 +2,25 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { tokenNotExpired } from 'angular2-jwt';
 import { Observable } from 'rxjs/Observable';
+// import { BehaviourSubject } from 'rxjs/BehaviourSubject';
 import 'rxjs/add/operator/map';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class AuthService {
   private authToken: string;
-  private user: object;
+  private user: object; // Change this to a behavior subject
   private userProfile: object;
 
   private signUpEP: string = 'http://localhost:80/users/register';
   private loginEP: string = 'http://localhost:80/users/login';
   private forgotEP: string = 'http://localhost:80/users/forgot';
   private getProfileEP: string = 'http://localhost:80/users/profile';
-
+  private confirmationEP: string = 'http://localhost:80/users/confirmation';
   constructor(private http: HttpClient) { }
+
+  private userEmail = new BehaviorSubject<string>(`No Email`);
+  public currentEmail = this.userEmail.asObservable();
 
   public registerUser(newUser) {
     const headers = new HttpHeaders();
@@ -25,6 +30,11 @@ export class AuthService {
     const post = this.http.post(this.signUpEP, newUser, { headers: headers });
 
     return post;
+  }
+
+  // Allows the email to be sent around
+  public setEmail(message: string): void {
+    this.userEmail.next(message);
   }
 
   /**
@@ -100,6 +110,15 @@ export class AuthService {
     headers.append(`Content-type`, `application/json`);
 
     const post = this.http.post(this.forgotEP, email, { headers: headers });
+
+    return post;
+  }
+
+  public sendConfirmation(email): Observable<object> {
+    const headers = new HttpHeaders;
+    headers.append(`Content-type`, `application/json`);
+
+    const post: Observable<object> = this.http.post(this.confirmationEP, email, {headers: headers});
 
     return post;
   }

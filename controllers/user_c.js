@@ -89,7 +89,7 @@ exports.forgotLogin = (req, res, next) => {
 
     // We save the token into the user document along with an expiration date
     function funcNamePlaceHolder2(token, done) {
-      User.findOne({ 'email': req.body.email }, (err, user) => {
+      User.findOne({ email: req.body.email }, (err, user) => {
         if (!user) {
           req.flash('forgotMessage', 'No account with that email was found.');
           return res.redirect('/forgot');
@@ -182,7 +182,7 @@ exports.reset = (req, res) => {
 // TODO: This will not work anymore since the model has been changed
 // and we are not using flash messages anymore
 exports.confirmToken = (req, res) => {
-  User.findOne({ 'local.confirmEmailToken': req.params.token }, (err, user) => {
+  User.findOne({ confirmEmailToken: req.params.token }, (err, user) => {
     if (!user) {
       return res.redirect('/users/login');
     } else if (err) {
@@ -290,32 +290,61 @@ exports.register = (req, res) => {
    * @param {string} hash The hashed password
    */
   function saveUser(hash) {
+    const token = generateHexToken();
     const data = {
       email: req.body.email,
       password: hash,
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       classification: req.body.classification,
+      confirmEmailToken: token
     };
 
     // New User Object from the mongoose User Schema
     const newUser = new User(data);
 
     // Saves the new user
-    newUser.save((err) => {
+    newUser.save((err, user) => {
       if (err) {
         // This email is not available
-        // console.log(err.message);
         res.status(200).json({
           success: false,
           emailAvailable: false
         });
       } else {
         // Send back only the user's username and names
+        sendConfirmationEmail(user);
         res.status(200).json({
           success: true,
           emailAvailable: true
         });
+      }
+    });
+  }
+
+  /**
+   * Sends a confirmation email to the user with a link/endpoint
+   * to verify their email
+   * @param {object} user The user object created
+   */
+  function sendConfirmationEmail(user) {
+    const mailOptions = {
+      to: user.email,
+      from: 'Texas Tech ACM',
+      subject: 'Welcome to ACM: TTU',
+      text:
+        `Please click on the following link, or paste this into your browser to verify your account:\n\n
+      ${req.protocol}://${req.headers.host}/confirmation/${user.token}\n\n
+      If you did not sign up for an account, please ignore this email.\n`,
+    };
+
+    smtpTransport.sendMail(mailOptions, (err) => {
+      if (err) {
+        // This error is usually a connection error
+        // Will not throw error is email is not found
+        console.log(err);
+      } else {
+        console.log(`Email send to ${user.email}`);
       }
     });
   }
@@ -347,3 +376,8 @@ exports.contactUs = (req, res) => {
     }
   });
 };
+
+function generateHexToken() {
+  const token = crypto.randomBytes(256);
+  return token.toString('hex');
+}
