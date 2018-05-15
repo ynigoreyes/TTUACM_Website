@@ -34,7 +34,11 @@ exports.login = (req, res) => {
   User.getUserByEmail(email, (err, foundUser) => {
     if (err) {
       console.log(err);
-      res.status(404).json({ success: false, user: null });
+      res.status(404).json({
+        success: false,
+        user: null,
+        msg: 'Unknown Error has occured, Please try again later'
+      });
     } else if (foundUser !== null) {
       // If there is a user with that email, check their password
       bcrypt.compare(inputPassword, foundUser.password, (err, response) => {
@@ -52,7 +56,7 @@ exports.login = (req, res) => {
             token: `JWT ${token}`,
           });
         } else {
-          res.status(404).json({
+          res.status(200).json({
             success: false,
             user: null,
             msg: 'Invalid Login'
@@ -61,7 +65,7 @@ exports.login = (req, res) => {
       });
     } else {
       // If the was no user found with that user name
-      res.status(404).json({
+      res.status(200).json({
         success: false,
         user: null,
         msg: 'User Not Found'
@@ -71,18 +75,21 @@ exports.login = (req, res) => {
 };
 
 // I will fix this lol
+// Work on this after finals
 exports.forgotLogin = (req, res, next) => {
   async.waterfall([
 
-    function (done) {
+    // This is where we create a temporary token
+    function funcNamePlaceHolder1(done) {
       crypto.randomBytes(20, (err, buf) => {
         let token = buf.toString('hex');
         done(err, token);
       });
     },
 
-    function (token, done) {
-      User.findOne({ 'local.email': req.body.email }, (err, user) => {
+    // We save the token into the user document along with an expiration date
+    function funcNamePlaceHolder2(token, done) {
+      User.findOne({ 'email': req.body.email }, (err, user) => {
         if (!user) {
           req.flash('forgotMessage', 'No account with that email was found.');
           return res.redirect('/forgot');
@@ -90,17 +97,18 @@ exports.forgotLogin = (req, res, next) => {
           req.flash('forgotMessage', 'Error');
           return res.redirect('/forgot');
         }
-        user.local.resetPasswordToken = token;
-        user.local.resetPasswordExpires = Date.now() + 10800000; // 3 Hours
+        user.resetPasswordToken = token;
+        user.resetPasswordExpires = Date.now() + 10800000; // 3 Hours
         user.save((err) => {
           done(err, token, user);
         });
       });
     },
 
-    function (token, user, done) {
+    // Sends the email to the user that requested a password reset
+    function funcNamePlaceHolder3(token, user, done) {
       const mailOptions = {
-        to: user.local.email,
+        to: user.email,
         from: 'Texas Tech ACM',
         subject: 'TTU ACM Password Reset',
         text: `${'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
@@ -109,7 +117,7 @@ exports.forgotLogin = (req, res, next) => {
           'If you did not request this, please ignore this email and your password will remain unchanged.\n',
       };
       smtpTransport.sendMail(mailOptions, (err) => {
-        req.flash('forgotMessage', `An email has been sent to ${user.local.email} with a reset link.`);
+        req.flash('forgotMessage', `An email has been sent to ${user.email} with a reset link.`);
         done(err, 'done');
       });
     },
@@ -122,8 +130,8 @@ exports.forgotLogin = (req, res, next) => {
 // We should fix this too. Can we go over what this is supposed to do?
 exports.reset = (req, res) => {
   async.waterfall([
-    function (done) {
-      User.findOne({ 'local.resetPasswordToken': req.params.token, 'local.resetPasswordExpires': { $gt: Date.now() } }, (err, user) => {
+    function funcNamePlaceHolder1(done) {
+      User.findOne({ 'resetPasswordToken': req.params.token, 'resetPasswordExpires': { $gt: Date.now() } }, (err, user) => {
         if (!user) req.flash('resetMessage', 'Password reset link is invalid or expired.');
         else if (req.body.password !== req.body.confirmPassword) {
           req.flash('forgotMessage', 'Password and confirm password must match.');
@@ -132,9 +140,9 @@ exports.reset = (req, res) => {
           req.flash('forgotMessage', 'Password and confrim password must match.');
           return res.redirect('/forgot');
         } else {
-          user.local.password = req.body.password;
-          user.local.resetPasswordToken = undefined;
-          user.local.resetPasswordExpires = undefined;
+          user.password = req.body.password;
+          user.resetPasswordToken = undefined;
+          user.resetPasswordExpires = undefined;
           user.save((err) => {
             if (err) {
               req.flash('loginMessage', 'Error saving to database')
@@ -148,9 +156,9 @@ exports.reset = (req, res) => {
         }
       });
     },
-    function (user, done) {
+    function funcNamePlaceHolder2(user, done) {
       const mailOptions = {
-        to: user.local.email,
+        to: user.email,
         from: 'acmtexastech@gmail.com',
         subject: 'Your password has been changed',
         text: 'Hello,\n\n' +
@@ -252,11 +260,14 @@ exports.editTeam = '';
  * This can also be used when the user does not want to use an auth service
  */
 exports.register = (req, res) => {
+  // If the email is available, continue with the proccess
   // Generates the salt used for hashing
   bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
     if (err) {
       console.log(err);
-      res.status(500).json({ success: false });
+      res.status(500).json({
+        success: false
+      });
     } else {
       // Passed the hashed password into the saveUser function
       // so that the we can save the user with a hashed password
@@ -293,11 +304,18 @@ exports.register = (req, res) => {
     // Saves the new user
     newUser.save((err) => {
       if (err) {
-        console.log(err);
-        res.status(500).json({ success: false });
+        // This email is not available
+        // console.log(err.message);
+        res.status(200).json({
+          success: false,
+          emailAvailable: false
+        });
       } else {
         // Send back only the user's username and names
-        res.status(200).json({ success: true });
+        res.status(200).json({
+          success: true,
+          emailAvailable: true
+        });
       }
     });
   }

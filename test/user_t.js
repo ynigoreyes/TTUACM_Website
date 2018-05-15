@@ -55,10 +55,6 @@ describe('User Suite', () => {
       });
   });
 
-  after('Deleting the Test User', (done) => {
-    User.remove({}).then(done());
-  });
-
   describe('Login Test', () => {
     it('Returns a successful status code and a valid Token', (done) => {
       chai.request(localhost)
@@ -87,5 +83,27 @@ describe('User Suite', () => {
           done();
         });
     });
+  });
+
+  describe('Email Duplication Test', () => {
+    it('Should not let the user register if the email is taken', (done) => {
+      const saveError = `Error in blocking the creation of another user.`;
+      chai.request(localhost)
+        .post(registerURL)
+        .set('Content-Type', 'application/json')
+        .send(testUserData)
+        .end((err, res) => {
+          expect(res.body.emailAvailable).to.be.false;
+          expect(res.body.success).to.be.false;
+          User.count({}, (err, count) => {
+            expect(count, saveError).to.equal(1);
+            done()
+          })
+        });
+    })
+  });
+
+  after('Deleting the Test User', (done) => {
+    User.remove({}).then(done());
   });
 });
