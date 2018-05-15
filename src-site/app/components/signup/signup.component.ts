@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-signup',
@@ -16,8 +17,9 @@ export class SignupComponent {
   studentClassification = ['Freshman', 'Sophomore', 'Junior', 'Senior', 'Graduate', 'PhD'];
   constructor(
     private router: Router,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService,
+    private snackBar: MatSnackBar
+  ) { }
 
   // During production, remove initial value
   // This is for debugging purposes only
@@ -29,14 +31,14 @@ export class SignupComponent {
     confirmPassword: new FormControl('password'),
     classification: new FormControl('Freshman')
   }, {
-    updateOn: 'blur',
-    validators: [
-      Validators.required,
-      this.checkPasswords,
-      this.checkPasswordLength,
-      // this.checkPasswordContent
-    ]
-  });
+      updateOn: 'blur',
+      validators: [
+        Validators.required,
+        this.checkPasswords,
+        this.checkPasswordLength,
+        // this.checkPasswordContent
+      ]
+    });
 
   /**
    * If this form is valid, send this form to the backend for storing in the database
@@ -57,9 +59,13 @@ export class SignupComponent {
 
     this.authService.registerUser(postUser).subscribe(data => {
       if (data === false) {
-        alert('Error Creating User. Please Reload page...');
+        this.snackBar.open(
+          `Error Creating User. Please Reload page...`,
+          `Close`, { duration: 3000 });
       } else {
-        alert('Successfully Created User');
+        this.snackBar.open(
+          `Successfully Created User`,
+          `Close`, { duration: 2000 });
         this.router.navigate(['/login']);
       }
     });
@@ -72,11 +78,11 @@ export class SignupComponent {
     const password: string = post.get('password').value;
     const confirmPassword: string = post.get('confirmPassword').value;
 
-    return password === confirmPassword ? null : {mismatch: true};
+    return password === confirmPassword ? null : { mismatch: true };
   }
 
   checkPasswordLength(post: FormGroup) {
-    return post.get('password').value.length >= 8 ? null : {passLength: true};
+    return post.get('password').value.length >= 8 ? null : { passLength: true };
   }
 
   checkPasswordContent(post: FormGroup) {
@@ -91,7 +97,7 @@ export class SignupComponent {
       return null;
     } else {
       console.log('Failed REGEX');
-      return {invalidEmail: true};
+      return { invalidEmail: true };
     }
   }
 
