@@ -23,7 +23,7 @@ export class SignupComponent {
 
   // During production, remove initial value
   // This is for debugging purposes only
-  private SignUpForm = new FormGroup({
+  public SignUpForm = new FormGroup({
     firstName: new FormControl('Miggy'),
     lastName: new FormControl('Reyes'),
     email: new FormControl('email@gmail.com'),
@@ -62,11 +62,16 @@ export class SignupComponent {
         this.snackBar.open(
           `Error Creating User. Please Reload page...`,
           `Close`, { duration: 3000 });
+      } else if (data[`emailAvailable`] === false) {
+        this.snackBar.open(
+          `Email has already been taken`,
+          `Close`, { duration: 2000 });
       } else {
         this.snackBar.open(
-          `Successfully Created User`,
+          `Please check your email for confirmation`,
           `Close`, { duration: 2000 });
-        this.router.navigate(['/login']);
+        this.authService.setEmail(postUser.email);
+        this.router.navigate(['/confirmation']);
       }
     });
   }

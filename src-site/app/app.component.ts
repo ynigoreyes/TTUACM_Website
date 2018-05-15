@@ -12,7 +12,7 @@ export class AppComponent {
   @ViewChild('sidenav') sidenav: MatSidenav;
   constructor(
     private router: Router,
-    private authService: AuthService
+    public authService: AuthService
   ) { }
 
   public open() {
