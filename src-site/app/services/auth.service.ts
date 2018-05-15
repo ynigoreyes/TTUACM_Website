@@ -10,11 +10,10 @@ export class AuthService {
   private user: object;
   private userProfile: object;
 
-  private signUpEP: string =            'http://localhost:80/users/register';
-  private loginEP: string =             'http://localhost:80/users/login';
-  private getProfileEP: string =        'http://localhost:80/users/profile';
-  private updateProfilePicEP: string =  'http://localhost:80/users/update-profile-pic';
-  private updateProfileBioEP: string =  'http://localhost:80/users/update-profile-bio';
+  private signUpEP: string = 'http://localhost:80/users/register';
+  private loginEP: string = 'http://localhost:80/users/login';
+  private forgotEP: string = 'http://localhost:80/users/forgot';
+  private getProfileEP: string = 'http://localhost:80/users/profile';
 
   constructor(private http: HttpClient) { }
 
@@ -23,7 +22,7 @@ export class AuthService {
     headers.append('Content-type', 'application/json');
 
     // Add the map part
-    const post = this.http.post(this.signUpEP, newUser, {headers: headers});
+    const post = this.http.post(this.signUpEP, newUser, { headers: headers });
 
     return post;
   }
@@ -36,9 +35,9 @@ export class AuthService {
     const headers = new HttpHeaders();
     headers.append('Content-type', 'application/json');
 
-    return this.http.post(this.loginEP, existingUser, {headers: headers});
+    const post = this.http.post(this.loginEP, existingUser, { headers: headers });
 
-    // return post;
+    return post;
   }
 
   /**
@@ -96,12 +95,12 @@ export class AuthService {
 
   }
 
-  public updateProfilePic(image): Observable<object> {
-    // This does not work...
-    const fd: FormData = new FormData();
-    fd.append('image', image);
+  public forgotUser(email): Observable<object> {
+    const headers = new HttpHeaders;
+    headers.append(`Content-type`, `application/json`);
 
-    return this.http.post(this.updateProfilePicEP, fd,
-      {headers: new HttpHeaders().append('Authorization', this.getToken())});
+    const post = this.http.post(this.forgotEP, email, { headers: headers });
+
+    return post;
   }
 }

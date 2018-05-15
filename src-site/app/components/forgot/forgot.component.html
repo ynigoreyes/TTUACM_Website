@@ -1,3 +1,18 @@
-<p>
-  forgot works!
-</p>
+<div id="forgot-background">
+  <div class="container-fluid forgot-div">
+    <mat-card id="forgot-card" class="forgot-container">
+      <div class="login-header">
+        <img src="../../../assets/acm_logo.svg" />
+        <h3>Forgot Your Password?</h3>
+      </div>
+
+      <form class="forgot-container" [formGroup]="forgotForm" (ngSubmit)="attemptForget(forgotForm.value)">
+        <mat-form-field>
+          <input formControlName="email" matInput placeholder="Email">
+        </mat-form-field>
+        <button class="submit-buttons" mat-raised-button type="submit" id="btn-forgot" [disabled]="!forgotForm.valid">Send Email</button>
+      </form>
+    </mat-card>
+
+  </div>
+</div>
