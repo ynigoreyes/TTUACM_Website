@@ -182,22 +182,19 @@ exports.reset = (req, res) => {
 // TODO: This will not work anymore since the model has been changed
 // and we are not using flash messages anymore
 exports.confirmToken = (req, res) => {
-  User.findOne({ confirmEmailToken: req.params.token }, (err, user) => {
-    if (!user) {
-      return res.redirect('/users/login');
-    } else if (err) {
-      req.flash('loginMessage', 'Error');
-      return res.redirect('/users/login');
+  const query = {
+    confirmEmailToken: req.params.token
+  };
+  const update = {
+    confirmEmailToken: '',
+    verified: true
+  };
+  User.findOneAndUpdate(query, update, (err, user) => {
+    if (err || user === null) {
+      res.redirect(`${req.protocol}://${req.headers.host}`);
+    } else {
+      res.redirect(`${req.protocol}://${req.headers.host}/login`);
     }
-    user.verify(req.params.token, (err) => {
-      if (err) {
-        console.log('Error saving to database.');
-        req.flash('loginMessage', 'Error saving to database.');
-        return res.redirect('/users/login');
-      }
-      req.flash('loginMessage', 'Account verified! Please login.');
-      return res.redirect('/users/login');
-    });
   });
 };
 
@@ -233,24 +230,16 @@ exports.getTeam = (req, res) => {
 };
 
 /**
- * This will allow us to edit the team.json file directly when the user
- * has the right credentials
- *
- * We will implement this later
- */
-exports.editTeam = '';
-
-/**
  * This is a test for the registration.
  * I'm not sure how the signup method up top really works so I will test my
  * http req on this route
  *
  * This is how the object will look...
  * {
- * cleanFirstName: 'Miggy',
- * cleanLastName: 'Reyes',
- * cleanUsername: 'miggylol',
- * cleanEmail: 'email@gmail.com',
+ * firstName: 'Miggy',
+ * lastName: 'Reyes',
+ * username: 'miggylol',
+ * email: 'email@gmail.com',
  * classification: 'Freshman',
  * password: 'password'
  * }
@@ -332,10 +321,7 @@ exports.register = (req, res) => {
       to: user.email,
       from: 'Texas Tech ACM',
       subject: 'Welcome to ACM: TTU',
-      text:
-        `Please click on the following link, or paste this into your browser to verify your account:\n\n
-      ${req.protocol}://${req.headers.host}/confirmation/${user.token}\n\n
-      If you did not sign up for an account, please ignore this email.\n`,
+      html: `<p>Please click on the following link, or paste this into your browser to verify your account:</p>\n\n<a>${req.protocol}://${req.headers.host}/users/confirm/${user.confirmEmailToken}</a>\n\n<p>If you did not sign up for an account, please ignore this email.</p>\n`,
     };
 
     smtpTransport.sendMail(mailOptions, (err) => {
@@ -363,7 +349,7 @@ exports.contactUs = (req, res) => {
     from: `Texas Tech Contact Us <${process.env.dev_emailUsername}>`,
     to: process.env.dev_emailUsername,
     subject: 'ACM Question',
-    html: `'<h1> Sender: ${req.body.name} Message: ${req.body.message}</h1>`,
+    html: `<h1> Sender: ${req.body.name} Message: ${req.body.message}</h1>`,
   };
 
   smtpTransport.sendMail(mailOptions, (err) => {
@@ -378,6 +364,6 @@ exports.contactUs = (req, res) => {
 };
 
 function generateHexToken() {
-  const token = crypto.randomBytes(256);
+  const token = crypto.randomBytes(20);
   return token.toString('hex');
 }

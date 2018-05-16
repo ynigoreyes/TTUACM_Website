@@ -113,5 +113,6 @@ testem.log
 Thumbs.db
 
 # Public Ignore to reduce file size on Github
+# Make sure to run ng build --prod
 public
 !public/README.md

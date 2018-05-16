@@ -17,11 +17,11 @@ export class CarouselComponent {
     this.image5 = '../../../assets/images/Apples_to_Oranges.jpg';
     this.loading = false;
   }
-  private image1: string;
-  private image2: string;
-  private image3: string;
-  private image4: string;
-  private image5: string;
-  private loading: boolean = true;
+  public image1: string;
+  public image2: string;
+  public image3: string;
+  public image4: string;
+  public image5: string;
+  public loading: boolean = true;
 
 }
