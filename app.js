@@ -36,13 +36,10 @@ mongoose.connection.on('connected', () => {
 mongoose.connection.on('error', (err) => {
   console.log(`Error Connecting to database... \n${err}`);
 });
-// This references the original file
-// require('./config/passport')(passport);
 
-// Figure out why we have two sessions going on...
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
-require('./config/new-passport')(passport);
+require('./config/passport')(passport);
 
 // What does logger and cookie parser do?
 app.use(logger('dev'));
@@ -96,13 +93,7 @@ app.use((err, req, res) => {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  // TODO: Make an error page to render that is not in .jade
-  res.status(err.status || 500);
-  // res.render('error');
-
-  // Do something like this instead
-  // res.redirect('/error');
-  res.status(404).send('<h1>Not Found</h1>');
+  res.redirect(`${req.protocol}://${req.headers.host}/error`);
 });
 
 module.exports = app;
