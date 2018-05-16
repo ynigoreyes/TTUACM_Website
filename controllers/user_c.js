@@ -179,8 +179,12 @@ exports.reset = (req, res) => {
   });
 };
 
-// TODO: This will not work anymore since the model has been changed
-// and we are not using flash messages anymore
+/**
+ * Endpoint hit when a user clicks on their confirmation link
+ *
+ * Compares the url token with the token saved in the database.
+ * If there is a match, the user is verified and redirected to log in
+ */
 exports.confirmToken = (req, res) => {
   const query = {
     confirmEmailToken: req.params.token
@@ -191,7 +195,7 @@ exports.confirmToken = (req, res) => {
   };
   User.findOneAndUpdate(query, update, (err, user) => {
     if (err || user === null) {
-      res.redirect(`${req.protocol}://${req.headers.host}`);
+      res.redirect(`${req.protocol}://${req.headers.host}/error`);
     } else {
       res.redirect(`${req.protocol}://${req.headers.host}/login`);
     }
