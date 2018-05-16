@@ -8,8 +8,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./user-sidebar.component.scss']
 })
 export class UserSidebarComponent {
-  private profile: object;
-  private loading: boolean = true;
+  public profile: object;
+  public loading: boolean = true;
 
   constructor(
     private authService: AuthService,
