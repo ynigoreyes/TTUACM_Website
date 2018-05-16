@@ -15,7 +15,7 @@ export class ForgotComponent {
     email: new FormControl('', {validators: Validators.required})
   });
 
-  private attemptForget(post: FormGroup) {
+  public attemptForget(post: FormGroup) {
     const currentEmail =  post['email'].trim();
 
   }

@@ -15,11 +15,11 @@ export class NavbarComponent {
     private router: Router
   ) { }
 
-  private close() {
+  public close() {
     this.appComp.close();
   }
 
-  private open() {
+  public open() {
     this.appComp.open();
   }
 

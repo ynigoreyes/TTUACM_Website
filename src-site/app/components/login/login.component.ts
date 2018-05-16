@@ -26,7 +26,7 @@ export class LoginComponent {
     })
   });
 
-  private attemptLogin(post: FormGroup) {
+  public attemptLogin(post: FormGroup) {
     const postUser = {
       email: post['email'].trim(),
       password: post['password'].trim()

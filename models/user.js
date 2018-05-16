@@ -79,12 +79,11 @@ module.exports.findAllUsers = (callback) => {
   });
 };
 
-// Will keep this for reference
-// // Verify email address using token
-// User.verify = function (token, done) {
-//   this.local.confirmEmailToken = undefined;
-//   this.local.verified = true;
-//   this.save(function (err) {
+// Verify email address using token
+// module.exports.verify = (user, token, done) => {
+//   user.confirmEmailToken = undefined;
+//   user.verified = true;
+//   this.save((err) => {
 //     done(err);
 //   });
 // };
