@@ -8,13 +8,13 @@ import { EventsService } from '../../services/events.service';
   styleUrls: ['./events.component.scss']
 })
 export class EventsComponent {
-  private events: any;
-  private displayedEvents: any;
+  public events: any;
+  public displayedEvents: any;
 
-  private lengthOfEvents: number;
-  private minNumberEvent: number;
-  private maxNumberEvent: number;
-  private changeAmount = 10;
+  public lengthOfEvents: number;
+  public minNumberEvent: number;
+  public maxNumberEvent: number;
+  public changeAmount = 10;
 
   constructor(private eventService: EventsService) {
     this.eventService.getEvents().subscribe((results) => {
@@ -33,7 +33,7 @@ export class EventsComponent {
   /**
    * Gets the next 10 events in the calendar
    */
-  private getNextEvents() {
+  public getNextEvents() {
     if (this.maxNumberEvent < this.lengthOfEvents) {
       this.minNumberEvent += this.changeAmount;
       this.maxNumberEvent += this.changeAmount;
@@ -48,7 +48,7 @@ export class EventsComponent {
   /**
    * Gets the prev 10 events in the calendar
    */
-  private getPrevEvents() {
+  public getPrevEvents() {
     if (this.minNumberEvent >= this.changeAmount) {
       this.minNumberEvent -= this.changeAmount;
       this.maxNumberEvent -= this.changeAmount;

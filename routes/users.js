@@ -40,4 +40,8 @@ router.post('/contact-us', UserCrtl.contactUs);
 /* GET The current Team */
 router.get('/get-team', UserCrtl.getTeam);
 
+router.get('/', (req, res) => {
+  res.json({msg: 'Hello'});
+});
+
 module.exports = router;
