@@ -8,7 +8,6 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
-// TODO: Idk how to get rid of the mongoose promise deprecation warning
 
 // dotenv file placed in root directory during development
 require('dotenv').config({ path: path.join(__dirname, '/.env') });
@@ -41,7 +40,6 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 require('./config/passport')(passport);
 
-// What does logger and cookie parser do?
 app.use(logger('dev'));
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -55,14 +53,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
  * I change port to 80. CORS is so that I can hit the API from the
  * development port without errors
  */
-app.use(cors());
+app.use(cors({origin: true}));
 
 // Routes
 const usersRoute = require('./routes/users');
 const eventsRoute = require('./routes/events');
+const authRoute = require('./routes/auth');
 
 app.use('/users', usersRoute);
 app.use('/events', eventsRoute);
+app.use('/auth', authRoute);
 
 
 /**

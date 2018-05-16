@@ -45,7 +45,6 @@ exports.login = (req, res) => {
         if (err) { console.log(err); }
         if (response) {
           // We don't want to pass back the password at all
-
           const token = jwt.sign({ data: foundUser }, process.env.session_secret, {
             expiresIn: 604800, // 1 week
           });
@@ -183,7 +182,7 @@ exports.reset = (req, res) => {
  * Endpoint hit when a user clicks on their confirmation link
  *
  * Compares the url token with the token saved in the database.
- * If there is a match, the user is verified and redirected to log in
+ * If thre is a match, the user is verified and redirected to log in
  */
 exports.confirmToken = (req, res) => {
   const query = {
