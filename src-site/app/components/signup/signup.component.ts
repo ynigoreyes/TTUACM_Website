@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { MatSnackBar } from '@angular/material';
+import { Oauth2Service } from '../../services/oauth2.service';
 
 @Component({
   selector: 'app-signup',
@@ -18,6 +19,7 @@ export class SignupComponent {
   constructor(
     private router: Router,
     private authService: AuthService,
+    private oauth2Service: Oauth2Service,
     private snackBar: MatSnackBar
   ) { }
 
@@ -106,8 +108,19 @@ export class SignupComponent {
     }
   }
 
-  // Used for Debugging
-  status(post: FormGroup) {
-    console.log(post);
+  public googleSignUp(): void {
+    console.log('Google Click');
+    // this.oauth2Service.googleAuth().subscribe(data => {
+    //   console.log(data);
+    // });
+
+  }
+
+  public gitHubSignUp(): void {
+    console.log('GitHub Click');
+  }
+
+  public facebookSignUp(): void {
+    console.log('Facebook Click');
   }
 }

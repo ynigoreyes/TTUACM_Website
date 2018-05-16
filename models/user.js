@@ -1,17 +1,19 @@
 const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
+  googleId: { type: String, defualt: '' },
+  facebookId: { type: String, defualt: '' },
+  githubId: { type: String, defualt: '' },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  password: { type: String, required: false },
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
-  classification: { type: String, required: true },
+  classification: { type: String, required: true, default: 'Other' },
   confirmEmailToken: { type: String, default: '' },
   resetPasswordToken: { type: String, default: '' },
   resetPasswordExpires: { type: Date, default: null },
   hasPaidDues: { type: String, default: false },
-  verified: { type: String, default: false },
-  bio: { type: String, default: '' }
+  verified: { type: String, default: false }
 });
 
 // Moved the Hashing to the controller

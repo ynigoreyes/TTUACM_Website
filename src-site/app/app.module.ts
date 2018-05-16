@@ -29,6 +29,7 @@ import { AuthService } from './services/auth.service';
 import { FeedComponent } from './components/profile/feed/feed.component';
 import { AuthGuard } from './guards/auth.guard';
 import { EventsService } from './services/events.service';
+import { Oauth2Service } from './services/oauth2.service';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -83,7 +84,8 @@ const appRoutes: Routes = [
     ContactService,
     AuthService,
     AuthGuard,
-    EventsService
+    EventsService,
+    Oauth2Service
   ],
   bootstrap: [AppComponent]
 })
