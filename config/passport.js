@@ -20,20 +20,16 @@ module.exports = (passport) => {
     });
   });
 
-  console.log(`Authentication configuration complete at ${Date().toString()}`);
-  const _clientID = process.env.prod_clientID;
-  const _clientSecret = process.env.prod_client_secret;
-
   // JWT Strategy
-  const opts = {};
-  opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme('jwt');
-  opts.secretOrKey = process.env.session_secret;
-  passport.use(new JwtStrategy(opts, (jwtPayload, done) => {
+  const jwtOpts = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('jwt'),
+    secretOrKey: process.env.session_secret
+  };
+  passport.use(new JwtStrategy(jwtOpts, (jwtPayload, done) => {
     User.getUserById(jwtPayload.data._id, (err, user) => {
       if (err) {
         return done(err, false);
       }
-
       if (user) {
         return done(null, user);
       }
@@ -42,17 +38,18 @@ module.exports = (passport) => {
   }));
 
   // Google Strategy
+  const googleClientSecret = process.env.google_client_secret;
+  const googleClientID = process.env.google_clientID;
   const googleOpts = {
     // Change this callback URL in production
     callbackURL: '/auth/google/redirect',
-    clientID: _clientID,
-    clientSecret: _clientSecret
+    clientID: googleClientID,
+    clientSecret: googleClientSecret
   };
   passport.use(new GoogleStrategy(googleOpts, (accessToken, refreshToken, profile, done) => {
     User.findOne({ googleId: profile.id }).then((currentUser) => {
       if (currentUser) {
         // user exists in database
-        console.log('User Exists');
         done(null, currentUser);
       } else {
         // User does not exist... Create a new one
