@@ -6,7 +6,11 @@ const UserCrtl = require('../controllers/user_c');
 
 const router = express.Router();
 
-// Middleware for route guarding
+/**
+ * Middleware for route guarding
+ * If errors occur, it is probably because front-end is not sending
+ * JWT along with their requests
+ */
 const membersOnlyRoute = passport.authenticate('jwt', { session: false });
 
 // Routes pertaining to the user's account
@@ -39,9 +43,5 @@ router.post('/contact-us', UserCrtl.contactUs);
 
 /* GET The current Team */
 router.get('/get-team', UserCrtl.getTeam);
-
-router.get('/', (req, res) => {
-  res.json({msg: 'Hello'});
-});
 
 module.exports = router;
