@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const querystring = require('querystring');
 
-exports.google = (req, res) => {
+exports.oauth2 = (req, res) => {
   const token = jwt.sign({ data: req.user }, process.env.session_secret, {
     expiresIn: 604800, // 1 week
   });
