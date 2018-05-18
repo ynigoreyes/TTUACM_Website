@@ -61,14 +61,13 @@ typings/
 # dotenv environment variables file
 .env
 
-# Mongo Credentials
+# Mongo Login
 mongo.txt
-database.js
-
 
 # FrontEnd Ignores
 
 # compiled output
+/public
 /dist
 /dist-server
 /tmp
@@ -111,8 +110,3 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-
-# Public Ignore to reduce file size on Github
-# Make sure to run ng build --prod
-public
-!public/README.md

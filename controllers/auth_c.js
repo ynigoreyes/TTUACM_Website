@@ -10,5 +10,6 @@ exports.oauth2 = (req, res) => {
     token: `JWT ${token}`
   });
 
+  // The port should change depending on the environment
   res.redirect(`http://localhost:4200/?${qs}`);
 };
