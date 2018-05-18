@@ -81,7 +81,7 @@
     "eslint-plugin-import": "^2.11.0"
   },
   "engines": {
-    "node": "8.9.4",
-    "npm": "5.8.0"
+    "node": "~8.9.4",
+    "npm": "~5.8.0"
   }
 }
