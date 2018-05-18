@@ -2,6 +2,7 @@
   "name": "ttuacm-website",
   "version": "1.0.0",
   "license": "MIT",
+  "description": "ACM TTU Website",
   "scripts": {
     "ng": "ng",
     "start": "node ./bin/www",
