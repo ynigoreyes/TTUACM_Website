@@ -20,7 +20,6 @@ export class UserSidebarComponent {
         data => this.profile = data['user'],
         err => console.log('error'),
         () => {
-          console.log(this.profile);
           this.loading = false;
         }
       );

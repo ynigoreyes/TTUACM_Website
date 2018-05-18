@@ -31,19 +31,7 @@
         <button class="submit-buttons" mat-raised-button type="submit" id="btn-signup" [disabled]="!SignUpForm.valid">Submit Form</button>
       </form>
       <p>You can also sign up with these accounts</p>
-      <div class='logo-container'>
-        <span class="logos">
-          <a href="http://localhost:80/auth/google">
-            <img src="../../../assets/images/google.svg" alt="Google Logo">
-          </a>
-        </span>
-        <span class="logos">
-          <img (click)="gitHubSignUp()" src="../../../assets/images/github-circle.svg" alt="GitHub Logo">
-        </span>
-        <span class="logos">
-          <img (click)="facebookSignUp()" src="../../../assets/images/facebook-box.svg" alt="Facebook Logo">
-        </span>
-      </div>
+      <app-auth-methods></app-auth-methods>
       <a [routerLink]="['/login']">Already Have an Account?</a>
     </mat-card>
 
