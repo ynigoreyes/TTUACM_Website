@@ -6,13 +6,19 @@ div.content-section {
 
 div.team-members {
   text-align: center;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 50px auto;
+  height: auto;
 }
 
-section.team {
-  display: inline-block;
-  width: 400px;
+.team {
+  flex: 0 0 300px;
+  // width: 100%;
   padding: 25px;
   color: white;
+  margin: 20px;
 }
 
 h4.name {
@@ -21,10 +27,7 @@ h4.name {
 }
 
 @media (min-width: 950px) {
-  div.team-members {
-  margin: 100px auto;
-}
-  section.team {
-  padding: 50px;
-}
+  .team {
+    padding: 50px;
+  }
 }
