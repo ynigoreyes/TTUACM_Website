@@ -15,6 +15,9 @@
         </mat-form-field>
         <button class="submit-buttons" mat-raised-button type="submit" id="btn-login" [disabled]="!LoginForm.valid">Submit Form</button>
 
+        <p>Login with your account</p>
+        <app-auth-methods></app-auth-methods>
+
         <a class="login-links" [routerLink]="['/forgot']">Forgot Password?</a>
         <a class="login-links" [routerLink]="['/signup']">Create new Account</a>
       </form>

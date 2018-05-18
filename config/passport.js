@@ -1,5 +1,6 @@
 const JwtStrategy = require('passport-jwt').Strategy;
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
+const GitHubStrategy = require('passport-github').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 
 const User = require('../models/user');
@@ -38,8 +39,8 @@ module.exports = (passport) => {
   }));
 
   // Google Strategy
-  const googleClientSecret = process.env.google_client_secret;
   const googleClientID = process.env.google_clientID;
+  const googleClientSecret = process.env.google_client_secret;
   const googleOpts = {
     // Change this callback URL in production
     callbackURL: '/auth/google/redirect',
@@ -68,4 +69,39 @@ module.exports = (passport) => {
       }
     });
   }));
+
+  // GitHub Strategy
+  const githubClientID = process.env.github_clientID;
+  const githubClientSecret = process.env.github_client_secret;
+  const githubOpts = {
+    callbackURL: '/auth/github/redirect',
+    clientID: githubClientID,
+    clientSecret: githubClientSecret
+  };
+  passport.use(new GitHubStrategy(githubOpts, (accessToken, refreshToken, profile, done) => {
+    console.log(profile);
+    User.findOne({ githubId: profile.id })
+      .then((currentUser) => {
+        if (currentUser) {
+          done(null, currentUser);
+        } else {
+          const data = {
+            githubId: profile.id,
+            email: profile.id,
+            firstName: profile.displayName.split(' ')[0],
+            lastName: profile.displayName.split(' ')[1],
+            verified: true
+          };
+          const newUser = new User(data);
+          newUser.save().then((user) => {
+            console.log(`Created new user: ${user}`);
+            done(null, user);
+          });
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  })
+  )
 };
