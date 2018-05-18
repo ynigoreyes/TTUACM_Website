@@ -50,13 +50,14 @@ module.exports = (passport) => {
   passport.use(new GoogleStrategy(googleOpts, (accessToken, refreshToken, profile, done) => {
     User.findOne({ googleId: profile.id }).then((currentUser) => {
       if (currentUser) {
-        // user exists in database
+        // User exists in database
+        console.log('User Exists');
         done(null, currentUser);
       } else {
         // User does not exist... Create a new one
         const data = {
           googleId: profile.id,
-          email: profile.id,
+          email: profile.email,
           firstName: profile.displayName.split(' ')[0],
           lastName: profile.displayName.split(' ')[1],
           verified: true
@@ -85,18 +86,24 @@ module.exports = (passport) => {
         if (currentUser) {
           done(null, currentUser);
         } else {
+          // Sometimes, the user has their email access set to private
+          // In that case, we save their id instead
+          const emailData = profile._json.email === null
+            ? profile.id
+            : profile._json.email;
           const data = {
             githubId: profile.id,
-            email: profile.id,
+            email: emailData,
             firstName: profile.displayName.split(' ')[0],
             lastName: profile.displayName.split(' ')[1],
             verified: true
           };
           const newUser = new User(data);
-          newUser.save().then((user) => {
-            console.log(`Created new user: ${user}`);
-            done(null, user);
-          });
+          newUser.save()
+            .then((user) => {
+              console.log(`Created new user: ${user}`);
+              done(null, user);
+            });
         }
       })
       .catch((err) => {
