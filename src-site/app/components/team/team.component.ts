@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import * as data from '../../../assets/team.json';
 
 @Component({
   selector: 'app-team',
@@ -10,10 +10,8 @@ export class TeamComponent {
 
   team: object;
 
-  constructor(private http: HttpClient) {
-    this.http.get('http://localhost:80/users/get-team').subscribe((results) => {
-      this.team = results['data'];
-  });
+  constructor() {
+    this.team = data;
   }
 
 }
