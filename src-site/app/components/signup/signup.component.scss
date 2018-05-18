@@ -48,17 +48,6 @@ div#signup-background {
 mat-form-field {
   color: white;
 }
-.logo-container {
-  display: flex;
-  margin-bottom: 40px;
-  .logos {
-    flex: 1;
-    img {
-      width: 35px;
-      cursor: pointer;
-    }
-  }
-}
 
 @media (min-width: 600px) {
   .signup-div {
