@@ -1,4 +1,8 @@
 <div class='logo-container'>
+  <!--
+    This hack only works since we are deploying the server and the
+    front end on the same server and serving angular through nodejs
+  -->
   <span class="logos">
     <a href="http://localhost:80/auth/google">
       <img src="../../../assets/images/google.svg" alt="Google Logo">
@@ -11,6 +15,8 @@
   </span>
   <!-- Cannot Use this route yet since we need SSL Certs -->
   <!-- <span class="logos">
-          <img (click)="facebookSignUp()" src="../../../assets/images/facebook-box.svg" alt="Facebook Logo">
-        </span> -->
+    <a href="http://localhost:80/auth/facebook">
+      <img src="../../../assets/images/facebook-box.svg" alt="Facebook Logo">
+    </a>
+  </span> -->
 </div>
