@@ -9,8 +9,7 @@
     "test": "sudo ./node_modules/.bin/mocha --reporter spec --timeout 120000000",
     "build": "ng build --prod",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "postinstall": "ng build --aot -target=production"
+    "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {

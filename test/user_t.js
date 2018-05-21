@@ -96,7 +96,8 @@ describe('User Suite', () => {
         .set('Content-Type', 'application/json')
         .send(testUserData)
         .end((err, res) => {
-          expect(res.body.emailAvailable).to.be.false;
+          console.log(err, res)
+          expect(res.body.emailAvailable, "Email is actually still available").to.be.false;
           expect(res.body.success).to.be.false;
           User.count({}, (err, count) => {
             expect(count, saveError).to.equal(1);
