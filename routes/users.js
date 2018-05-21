@@ -41,7 +41,4 @@ router.get('/profile', membersOnlyRoute, UserCrtl.getProfile);
 /* POST Contact Us */
 router.post('/contact-us', UserCrtl.contactUs);
 
-/* GET The current Team */
-router.get('/get-team', UserCrtl.getTeam);
-
 module.exports = router;

@@ -2,6 +2,10 @@
 client_secret.json
 credentials.json
 
+# Docker Stuff
+Dockerfile
+.dockerignore
+
 # Logs
 logs
 *.log
