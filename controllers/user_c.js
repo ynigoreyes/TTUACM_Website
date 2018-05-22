@@ -219,20 +219,6 @@ exports.resetToken = (req, res) => {
 };
 
 /**
- * This fetches the team from the team.json file
- */
-exports.getTeam = (req, res) => {
-  fs.readFile('./team.json', (err, content) => {
-    if (err) {
-      res.status(404).json({ error: err });
-    } else {
-      const newData = JSON.parse(content);
-      res.status(200).json({ data: newData });
-    }
-  });
-};
-
-/**
  * This is a test for the registration.
  * I'm not sure how the signup method up top really works so I will test my
  * http req on this route
@@ -349,10 +335,10 @@ exports.getProfile = (req, res) => {
 
 exports.contactUs = (req, res) => {
   const mailOptions = {
-    from: `Texas Tech Contact Us <${process.env.dev_emailUsername}>`,
+    from: `ACM: Texas Tech Contact Us <${process.env.dev_emailUsername}>`,
     to: process.env.dev_emailUsername,
     subject: 'ACM Question',
-    html: `<h1> Sender: ${req.body.name} Message: ${req.body.message}</h1>`,
+    html: `<h1> Sender: ${req.body.name}${'\n\n'}Topic: ${req.body.topic}${'\n\n'}Message: ${req.body.message}</h1>`,
   };
 
   smtpTransport.sendMail(mailOptions, (err) => {

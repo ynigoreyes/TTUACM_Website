@@ -35,6 +35,10 @@
         <li class="router-links" *ngIf="authService.loggedIn()">
           <mat-icon>sentiment_very_dissatisfied</mat-icon><a (click)="close()" [routerLink]="['/']" (click)="logout()">LogOut</a>
         </li>
+        <li class="router-links" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+          <mat-icon>contact_support</mat-icon>
+          <a (click)="close()" [routerLink]="['/contact-us']">Contact Us</a>
+        </li>
       </ul>
     </mat-sidenav>
 
