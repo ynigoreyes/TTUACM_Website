@@ -20,9 +20,7 @@ import { ResetComponent } from './components/reset/reset.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { CarouselComponent } from './components/carousel/carousel.component';
-import { ContactModalComponent } from './components/footer/contact-modal/contact-modal.component';
 import { ConfirmationComponent } from './components/confirmation/confirmation.component';
-import { UserSidebarComponent } from './components/profile/user-sidebar/user-sidebar.component';
 
 import { ContactService } from './services/contact.service';
 import { AuthService } from './services/auth.service';
@@ -31,6 +29,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { EventsService } from './services/events.service';
 import { Oauth2Service } from './services/oauth2.service';
 import { AuthMethodsComponent } from './components/_includes/auth-methods/auth-methods.component';
+import { ContactComponent } from './components/contact/contact.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -40,6 +39,7 @@ const appRoutes: Routes = [
   { path: 'forgot', component: ForgotComponent },
   { path: 'error', component: ErrorComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'contact-us', component: ContactComponent },
   { path: 'dashboard', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'confirmation', component: ConfirmationComponent},
   { path: 'reset', component: ResetComponent },
@@ -62,11 +62,10 @@ const appRoutes: Routes = [
     FooterComponent,
     NavbarComponent,
     CarouselComponent,
-    ContactModalComponent,
-    UserSidebarComponent,
     FeedComponent,
     ConfirmationComponent,
-    AuthMethodsComponent
+    AuthMethodsComponent,
+    ContactComponent
   ],
   imports: [
     BrowserModule,
@@ -77,9 +76,6 @@ const appRoutes: Routes = [
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
     MaterialModule
-  ],
-  entryComponents: [
-    ContactModalComponent
   ],
   providers: [
     HttpClientModule,

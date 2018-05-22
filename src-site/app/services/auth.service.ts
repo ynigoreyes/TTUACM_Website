@@ -10,14 +10,15 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 export class AuthService {
   private authToken: string;
   private user: object; // Change this to a behavior subject
-  private userProfile: object;
 
   private signUpEP: string = 'http://localhost:80/users/register';
   private loginEP: string = 'http://localhost:80/users/login';
   private forgotEP: string = 'http://localhost:80/users/forgot';
-  private getProfileEP: string = 'http://localhost:80/users/profile';
   private confirmationEP: string = 'http://localhost:80/users/confirmation';
   constructor(private http: HttpClient) { }
+
+  private userObs = new BehaviorSubject<object>({});
+  public currentUserObs = this.userObs.asObservable();
 
   private userEmail = new BehaviorSubject<string>(`No Email`);
   public currentEmail = this.userEmail.asObservable();
@@ -35,6 +36,10 @@ export class AuthService {
   // Allows the email to be sent around
   public setEmail(message: string): void {
     this.userEmail.next(message);
+  }
+
+  public setUser(user: object): void {
+    this.userObs.next(user);
   }
 
   /**
@@ -91,18 +96,6 @@ export class AuthService {
     this.authToken = null;
     this.user = null;
     localStorage.clear();
-  }
-
-  public getProfile(): Observable<object> {
-
-    const headers = {
-      headers: new HttpHeaders().append('Authorization', this.getToken())
-    };
-
-    const post = this.http.get(this.getProfileEP, headers);
-
-    return post;
-
   }
 
   public forgotUser(email): Observable<object> {

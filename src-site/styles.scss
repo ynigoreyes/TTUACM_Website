@@ -27,7 +27,7 @@ body {
     display: inline !important;
     overflow: auto;
   }
-  background-color: mat-color($acm-primary);
+  background-color: mat-color($acm-accent, darker);
   a {
     color: #fff;
   }
