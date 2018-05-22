@@ -1,7 +1,7 @@
 @import '~@angular/material/theming';
 @import '../../../styles.scss';
 #footer-div {
-  background-color: mat-color($acm-primary);
+  background-color: mat-color($acm-accent, darker);
   text-align: center;
   color: #ffffff;
 }
@@ -23,16 +23,6 @@ img {
   // position: relative;
   width: 35px;
   height: 35px;
-}
-
-button#contact-button {
-  background-color: mat-color($acm-primary, lighter);
-  padding: 5px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 20px;
-  margin-bottom: 0px;
-  width: 30px;
 }
 
 @media (min-width: 950px) {
