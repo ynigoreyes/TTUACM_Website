@@ -1,11 +1,19 @@
 .logo-container {
   display: flex;
   margin-bottom: 40px;
+  width: 50%;
+  margin: 0 auto;
   .logos {
     flex: 1;
     img {
       width: 35px;
       cursor: pointer;
     }
+  }
+}
+
+@media(min-width: 768px) {
+  .logo-container{
+    width: 40%;
   }
 }
