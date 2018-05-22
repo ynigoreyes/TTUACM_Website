@@ -1,0 +1,32 @@
+<div id="contact-background">
+  <div class="container-fluid contact-div">
+    <mat-card class="contact-container">
+      <div class="login-header">
+        <img src="../../../assets/acm_logo.svg" />
+        <h3>Questions?</h3>
+      </div>
+
+      <form class="contact-container" [formGroup]="ContactForm" (ngSubmit)="onSubmit(ContactForm.value)">
+        <mat-form-field>
+          <input formControlName="name" type="text" matInput placeholder="Name">
+        </mat-form-field>
+        <mat-form-field>
+          <input formControlName="email" type="text" matInput placeholder="Email">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-select formControlName="topic" placeholder="Topic">
+            <mat-option *ngFor="let topic of topics" value={{topic}}>
+              {{topic}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <input formControlName="message" type="text" matInput placeholder="What's up?">
+        </mat-form-field>
+        <button mat-raised-button type="submit" [disabled]="!ContactForm.valid">
+          Send Message
+        </button>
+      </form>
+    </mat-card>
+  </div>
+</div>

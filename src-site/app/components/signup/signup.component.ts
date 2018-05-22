@@ -110,10 +110,6 @@ export class SignupComponent {
 
   public googleSignUp(): void {
     console.log('Google Click');
-    // this.oauth2Service.googleAuth().subscribe(data => {
-    //   console.log(data);
-    // });
-
   }
 
   public gitHubSignUp(): void {
