@@ -13,7 +13,8 @@ const userSchema = mongoose.Schema({
   resetPasswordToken: { type: String, default: '' },
   resetPasswordExpires: { type: Date, default: null },
   hasPaidDues: { type: String, default: false },
-  verified: { type: String, default: false }
+  verified: { type: String, default: false },
+  blocked: { type: Boolean, default: false }
 });
 
 // Moved the Hashing to the controller
