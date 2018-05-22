@@ -4,7 +4,7 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class ContactService {
-  message: any;
+  message: object;
 
   constructor(private http: HttpClient) { }
 

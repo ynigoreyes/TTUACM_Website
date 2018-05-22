@@ -14,6 +14,19 @@ Setting up the environment:
 
   5)  To test the client, type "ng test" and navigate to localhost:4200
 
+TODO:
+  1) Forgot/Reset Password
+
+  2) SSL Certs
+
+  3) Facebook Auth
+
+  4) Basic email validation on Sign Up page
+
+  5) UI clean up
+
+  6) Events Page/Google Calendar Set up
+
 Contributing:
 
   You can find all controllers and routes in their respective directories.

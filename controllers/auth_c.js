@@ -11,5 +11,5 @@ exports.oauth2 = (req, res) => {
   });
 
   // The port should change depending on the environment
-  res.redirect(`http://localhost:80/?${qs}`);
+  res.redirect(`http://localhost:${process.env.DEV_PORT}/?${qs}`);
 };
