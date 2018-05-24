@@ -8,12 +8,13 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class AuthService {
-  private authToken: string;
+  private authToken: string = 'default';
   private user: object; // Change this to a behavior subject
 
   private signUpEP: string = 'http://localhost:80/users/register';
   private loginEP: string = 'http://localhost:80/users/login';
   private forgotEP: string = 'http://localhost:80/users/forgot';
+  private resetEP: string = 'http://localhost:80/users/reset';
   private confirmationEP: string = 'http://localhost:80/users/confirmation';
   constructor(private http: HttpClient) { }
 
@@ -98,11 +99,14 @@ export class AuthService {
     localStorage.clear();
   }
 
-  public forgotUser(email): Observable<object> {
+  /**
+   * Sends to fogot login endpoint which accepts only an email in the body
+   */
+  public forgotUser(userEmail): Observable<object> {
     const headers = new HttpHeaders;
     headers.append(`Content-type`, `application/json`);
 
-    const post = this.http.post(this.forgotEP, email, { headers: headers });
+    const post = this.http.post(this.forgotEP, {email: userEmail}, { headers: headers });
 
     return post;
   }
@@ -111,8 +115,19 @@ export class AuthService {
     const headers = new HttpHeaders;
     headers.append(`Content-type`, `application/json`);
 
-    const post: Observable<object> = this.http.post(this.confirmationEP, email, {headers: headers});
+    const post: Observable<object> = this.http.post(this.confirmationEP, email, { headers: headers });
 
     return post;
   }
+
+  public resetPassword(password): Observable<object> {
+    const headers = new HttpHeaders;
+    headers.append(`Content-type`, `application/json`);
+
+    const endpoint = `${ this.resetEP }/${this.getToken().split(' ')[1]}`;
+    const post = this.http.post(endpoint, password, {headers: headers});
+
+    return post;
+  }
+
 }
