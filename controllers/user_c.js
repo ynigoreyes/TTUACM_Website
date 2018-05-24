@@ -4,7 +4,6 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const async = require('async');
 const jwt = require('jsonwebtoken');
-const fs = require('fs');
 
 // Bcrypt options
 const bcrypt = require('bcryptjs');
@@ -73,39 +72,33 @@ exports.login = (req, res) => {
   });
 };
 
-// I will fix this lol
-// Work on this after finals
-exports.forgotLogin = (req, res, next) => {
+// Check to see if this works on Postman
+exports.forgotLogin = (req, res) => {
+  console.log(req.body);
   async.waterfall([
-
-    // This is where we create a temporary token
-    function funcNamePlaceHolder1(done) {
-      crypto.randomBytes(20, (err, buf) => {
-        let token = buf.toString('hex');
-        done(err, token);
-      });
-    },
-
     // We save the token into the user document along with an expiration date
-    function funcNamePlaceHolder2(token, done) {
+    function generateTokenAndSave(done) {
       User.findOne({ email: req.body.email }, (err, user) => {
-        if (!user) {
-          req.flash('forgotMessage', 'No account with that email was found.');
-          return res.redirect('/forgot');
+        const currentUser = user;
+
+        // No user was found
+        if (currentUser === null) {
+          done(new Error('User not found'));
         } else if (err) {
-          req.flash('forgotMessage', 'Error');
-          return res.redirect('/forgot');
+          done(err);
+        } else {
+          currentUser.resetPasswordToken = token = generateHexToken();
+          currentUser.resetPasswordExpires = Date.now() + (3 * 60 * 60 * 1000); // 3 Hours
+          currentUser.save((err) => {
+            done(err, token, currentUser);
+          });
         }
-        user.resetPasswordToken = token;
-        user.resetPasswordExpires = Date.now() + 10800000; // 3 Hours
-        user.save((err) => {
-          done(err, token, user);
-        });
       });
     },
 
     // Sends the email to the user that requested a password reset
-    function funcNamePlaceHolder3(token, user, done) {
+    function sendResetEmail(token, user, done) {
+      console.log('still sent');
       const mailOptions = {
         to: user.email,
         from: 'Texas Tech ACM',
@@ -116,21 +109,24 @@ exports.forgotLogin = (req, res, next) => {
           'If you did not request this, please ignore this email and your password will remain unchanged.\n',
       };
       smtpTransport.sendMail(mailOptions, (err) => {
-        req.flash('forgotMessage', `An email has been sent to ${user.email} with a reset link.`);
+        res.status(200).json({success: true});
         done(err, 'done');
       });
     },
   ], (err) => {
-    if (err) return next(err);
-    res.redirect('/forgot');
+    if (err !== 'User not found') {
+      console.log(err)
+      res.status(200).json({ success: false });
+    } else if (err) {
+      res.status(404).json({ success: false });
+    }
   });
 };
 
-// We should fix this too. Can we go over what this is supposed to do?
 exports.reset = (req, res) => {
   async.waterfall([
     function funcNamePlaceHolder1(done) {
-      User.findOne({ 'resetPasswordToken': req.params.token, 'resetPasswordExpires': { $gt: Date.now() } }, (err, user) => {
+      User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, (err, user) => {
         if (!user) req.flash('resetMessage', 'Password reset link is invalid or expired.');
         else if (req.body.password !== req.body.confirmPassword) {
           req.flash('forgotMessage', 'Password and confirm password must match.');
@@ -144,8 +140,7 @@ exports.reset = (req, res) => {
           user.resetPasswordExpires = undefined;
           user.save((err) => {
             if (err) {
-              req.flash('loginMessage', 'Error saving to database')
-              return res.redirect('/login')
+              done(err);
             }
             req.logIn(user, function (err) {
               done(err, user)
@@ -219,10 +214,6 @@ exports.resetToken = (req, res) => {
 };
 
 /**
- * This is a test for the registration.
- * I'm not sure how the signup method up top really works so I will test my
- * http req on this route
- *
  * This is how the object will look...
  * {
  * firstName: 'Miggy',
@@ -333,12 +324,15 @@ exports.getProfile = (req, res) => {
   res.json({ user: req.user });
 };
 
+/**
+ * Sends email to whoever's email is on the nodemailer transport
+ */
 exports.contactUs = (req, res) => {
   const mailOptions = {
     from: `ACM: Texas Tech Contact Us <${process.env.dev_emailUsername}>`,
     to: process.env.dev_emailUsername,
     subject: 'ACM Question',
-    html: `<h1> Sender: ${req.body.name}${'\n\n'}Topic: ${req.body.topic}${'\n\n'}Message: ${req.body.message}</h1>`,
+    text: `You got a message!\n\nSender: ${req.body.name}:\n\nTopic: ${req.body.topic}\n\nMessage: ${req.body.message}\n`
   };
 
   smtpTransport.sendMail(mailOptions, (err) => {
@@ -352,6 +346,7 @@ exports.contactUs = (req, res) => {
   });
 };
 
+// Generates a HexToken, usually for quick random tokens; does not require string
 function generateHexToken() {
   const token = crypto.randomBytes(20);
   return token.toString('hex');
