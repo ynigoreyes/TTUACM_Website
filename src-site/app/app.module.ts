@@ -11,7 +11,6 @@ import { AppComponent } from './app.component';
 import { TeamComponent } from './components/team/team.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { EventsComponent } from './components/events/events.component';
-import { ForgotComponent } from './components/forgot/forgot.component';
 import { HomeComponent } from './components/home/home.component';
 import { ErrorComponent } from './components/error/error.component';
 import { LoginComponent } from './components/login/login.component';
@@ -30,19 +29,22 @@ import { EventsService } from './services/events.service';
 import { Oauth2Service } from './services/oauth2.service';
 import { AuthMethodsComponent } from './components/_includes/auth-methods/auth-methods.component';
 import { ContactComponent } from './components/contact/contact.component';
+import { RedirectComponent } from './components/forgot/redirect/redirect.component';
+import { PromptComponent } from './components/forgot/prompt/prompt.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'team', component: TeamComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'events', component: EventsComponent },
-  { path: 'forgot', component: ForgotComponent },
+  { path: 'prompt', component: PromptComponent },
+  { path: 'redirect', component: RedirectComponent },
+  { path: 'reset', component: RedirectComponent, canActivate: [AuthGuard] },
   { path: 'error', component: ErrorComponent },
   { path: 'login', component: LoginComponent },
   { path: 'contact-us', component: ContactComponent },
   { path: 'dashboard', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'confirmation', component: ConfirmationComponent},
-  { path: 'reset', component: ResetComponent },
   // Fallback Route
   { path: '**', redirectTo: '/'}
 ];
@@ -53,7 +55,6 @@ const appRoutes: Routes = [
     TeamComponent,
     SignupComponent,
     EventsComponent,
-    ForgotComponent,
     HomeComponent,
     ErrorComponent,
     LoginComponent,
@@ -65,7 +66,9 @@ const appRoutes: Routes = [
     FeedComponent,
     ConfirmationComponent,
     AuthMethodsComponent,
-    ContactComponent
+    ContactComponent,
+    RedirectComponent,
+    PromptComponent
   ],
   imports: [
     BrowserModule,
