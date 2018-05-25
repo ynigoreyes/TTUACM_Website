@@ -115,7 +115,7 @@ exports.forgotLogin = (req, res) => {
     },
   ], (err) => {
     if (err !== 'User not found') {
-      console.log(err)
+      console.log(err);
       res.status(200).json({ success: false });
     } else if (err) {
       res.status(404).json({ success: false });

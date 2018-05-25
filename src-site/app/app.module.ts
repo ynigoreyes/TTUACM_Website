@@ -39,6 +39,8 @@ const appRoutes: Routes = [
   { path: 'events', component: EventsComponent },
   { path: 'prompt', component: PromptComponent },
   { path: 'prompt/:tokenError', component: PromptComponent },
+  // Delete this path bellow soon, this is just so i can see the design
+  { path: 'redirect', component: RedirectComponent },
   { path: 'redirect/:token', component: RedirectComponent },
   { path: 'reset', component: RedirectComponent, canActivate: [AuthGuard] },
   { path: 'error', component: ErrorComponent },

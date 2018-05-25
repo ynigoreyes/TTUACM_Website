@@ -26,20 +26,15 @@ export class SignupComponent {
   // During production, remove initial value
   // This is for debugging purposes only
   public SignUpForm = new FormGroup({
-    firstName: new FormControl('Miggy'),
-    lastName: new FormControl('Reyes'),
-    email: new FormControl('email@gmail.com'),
-    password: new FormControl('password'),
-    confirmPassword: new FormControl('password'),
-    classification: new FormControl('Freshman')
+    firstName: new FormControl(''),
+    lastName: new FormControl(''),
+    email: new FormControl('', Validators.email),
+    password: new FormControl('', Validators.minLength(8)),
+    confirmPassword: new FormControl(''),
+    classification: new FormControl('')
   }, {
       updateOn: 'blur',
-      validators: [
-        Validators.required,
-        this.checkPasswords,
-        this.checkPasswordLength,
-        // this.checkPasswordContent
-      ]
+      validators: Validators.required
     });
 
   /**
@@ -82,29 +77,16 @@ export class SignupComponent {
    * Makes sure that the passwords match
    */
   checkPasswords(post: FormGroup) {
-    const password: string = post.get('password').value;
-    const confirmPassword: string = post.get('confirmPassword').value;
-
-    return password === confirmPassword ? null : { mismatch: true };
-  }
-
-  checkPasswordLength(post: FormGroup) {
-    return post.get('password').value.length >= 8 ? null : { passLength: true };
-  }
-
-  checkPasswordContent(post: FormGroup) {
-    const email = post.get('email').value;
-    console.log(email);
-
-    // REGEX only works on browser console.... IDK What to do really
-    const re =
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-    if (re.test(email.toLowerCase)) {
-      return null;
+    const password: string = post['password'];
+    const confirmPassword: string = post['confirmPassword'];
+    if (password !== confirmPassword) {
+      setTimeout(() => {
+        this.SignUpForm.controls['confirmPassword'].setErrors({mismatch: true});
+      });
     } else {
-      console.log('Failed REGEX');
-      return { invalidEmail: true };
+      setTimeout(() => {
+        this.SignUpForm.controls['confirmPassword'].setErrors(null);
+      });
     }
   }
 
