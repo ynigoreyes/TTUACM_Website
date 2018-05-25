@@ -9,22 +9,15 @@
       <form class="reset-container" [formGroup]="ResetForm" (ngSubmit)="changePassword(ResetForm.value)">
         <mat-form-field>
           <input type="password" formControlName="password" matInput placeholder="Password">
+          <mat-hint align="end">Min Length: 8</mat-hint>
+          <mat-error>Password must be at least 8 characters long</mat-error>
         </mat-form-field>
         <mat-form-field>
-          <input type="password" formControlName="confirmPassword" matInput placeholder="Confirm Password">
+          <input (blur)="checkPasswords(ResetForm.value)"type="password" formControlName="confirmPassword" matInput placeholder="Confirm Password">
+          <mat-error>Passwords do not match</mat-error>
         </mat-form-field>
         <button class="submit-buttons" mat-raised-button type="submit" id="btn-reset" [disabled]="!ResetForm.valid">Reset Password</button>
       </form>
-      <div class="error-container"
-      *ngIf="ResetForm.controls['password'].dirty && ResetForm.controls['confirmPassword'].dirty && ResetForm.errors != null">
-        <div *ngIf="ResetForm.errors.mismatch">
-          Passwords do not match
-        </div>
-        <div *ngIf="ResetForm.errors.passLength">
-          Password must be at least 8 characters long
-        </div>
-      </div>
     </mat-card>
-
   </div>
 </div>

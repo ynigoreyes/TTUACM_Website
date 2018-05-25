@@ -34,10 +34,10 @@ export class ContactComponent implements OnInit {
 
   public ContactForm = new FormGroup({
     name: new FormControl(this.autoFillName),
-    email: new FormControl(this.autoFillEmail, Validators.required),
+    email: new FormControl(this.autoFillEmail, [Validators.required, Validators.email]),
     topic: new FormControl(this.topics[0]),
     message: new FormControl('', Validators.required)
-  }, {updateOn: 'blur'});
+  }, { updateOn: 'blur' });
 
   /**
    * Auto Fill the form with the user's email and name
@@ -62,11 +62,11 @@ export class ContactComponent implements OnInit {
     this.contactService.sendEmail(data).subscribe(status => {
       if (status === 'sucess') {
         this.snackbar.open('Message successfully sent. Thank You!',
-        'Close', {duration: 3000});
+          'Close', { duration: 3000 });
         this.router.navigate(['/']);
       } else {
         this.snackbar.open('Error sending message, please try again later...',
-        'Close', {duration: 2000});
+          'Close', { duration: 2000 });
       }
     });
   }
