@@ -89,16 +89,4 @@ export class SignupComponent {
       });
     }
   }
-
-  public googleSignUp(): void {
-    console.log('Google Click');
-  }
-
-  public gitHubSignUp(): void {
-    console.log('GitHub Click');
-  }
-
-  public facebookSignUp(): void {
-    console.log('Facebook Click');
-  }
 }
