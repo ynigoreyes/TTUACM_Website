@@ -12,6 +12,7 @@
         </mat-form-field>
         <mat-form-field>
           <input formControlName="email" type="text" matInput placeholder="Email">
+          <mat-error>Email doesn't look right... Try again bro</mat-error>
         </mat-form-field>
         <mat-form-field>
           <mat-select formControlName="topic" placeholder="Topic">
@@ -22,6 +23,7 @@
         </mat-form-field>
         <mat-form-field>
           <input formControlName="message" type="text" matInput placeholder="What's up?">
+          <mat-hint align="end">You will be blocked if you spam us with emails</mat-hint>
         </mat-form-field>
         <button mat-raised-button type="submit" [disabled]="!ContactForm.valid">
           Send Message

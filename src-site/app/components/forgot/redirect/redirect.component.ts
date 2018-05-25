@@ -21,15 +21,11 @@ export class RedirectComponent implements OnInit {
   private resetToken: string;
 
   public ResetForm = new FormGroup({
-    password: new FormControl(''),
+    password: new FormControl('', Validators.minLength(8)),
     confirmPassword: new FormControl('')
   }, {
       updateOn: 'blur',
-      validators: [
-        Validators.required,
-        this.checkPasswords,
-        this.checkPasswordLength
-      ]
+      validators: Validators.required
     });
 
   ngOnInit(): void {
@@ -60,14 +56,16 @@ export class RedirectComponent implements OnInit {
    * Makes sure that the passwords match
    */
   checkPasswords(post: FormGroup) {
-    const password: string = post.get('password').value;
-    const confirmPassword: string = post.get('confirmPassword').value;
-
-    return password === confirmPassword ? null : { mismatch: true };
+    const password: string = post['password'];
+    const confirmPassword: string = post['confirmPassword'];
+    if (password !== confirmPassword) {
+      setTimeout(() => {
+        this.ResetForm.controls['confirmPassword'].setErrors({ mismatch: true });
+      });
+    } else {
+      setTimeout(() => {
+        this.ResetForm.controls['confirmPassword'].setErrors(null);
+      });
+    }
   }
-
-  checkPasswordLength(post: FormGroup) {
-    return post.get('password').value.length >= 8 ? null : { passLength: true };
-  }
-
 }
