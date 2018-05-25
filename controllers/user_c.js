@@ -4,7 +4,6 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const async = require('async');
 const jwt = require('jsonwebtoken');
-const querystring = require('querystring');
 
 // Bcrypt options
 const bcrypt = require('bcryptjs');
@@ -131,20 +130,21 @@ exports.reset = (req, res) => {
      *
      * We find the user using the password token that they provide
      */
-    function verifyUser(done) {
-      console.log('Finding user');
-      User.findOneAndUpdate({
-        resetPasswordToken: req.params.token,
-        resetPasswordExpires: { $gt: Date.now() }
-      },
-      {
-        // Need to encrypt the password first
-        password: req.body.password,
-        resetPasswordToken: undefined,
-        resetPasswordExpires: undefined
-      }, {new: true}, (err, user) => {
-        if (err) throw err;
-        done(null, user);
+    function verifyUserAndUpdate(done) {
+      bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+        User.findOneAndUpdate({
+          resetPasswordToken: req.params.token,
+          resetPasswordExpires: { $gt: Date.now() }
+        },
+        {
+          // Need to encrypt the password first
+          password: hash,
+          resetPasswordToken: undefined,
+          resetPasswordExpires: undefined
+        }, {new: true}, (err, user) => {
+          if (err) throw err;
+          done(null, user);
+        });
       });
     },
 
