@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const async = require('async');
 const jwt = require('jsonwebtoken');
+const querystring = require('querystring');
 
 // Bcrypt options
 const bcrypt = require('bcryptjs');
@@ -105,11 +106,11 @@ exports.forgotLogin = (req, res) => {
         subject: 'TTU ACM Password Reset',
         text: `${'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
           'Please click on the following link, or paste this into your browser to complete the process:\n\n'}${
-          req.protocol}://${req.headers.host}/reset/${token}\n\n` +
+          req.protocol}://${req.headers.host}/users/reset/${token}\n\n` +
           'If you did not request this, please ignore this email and your password will remain unchanged.\n',
       };
       smtpTransport.sendMail(mailOptions, (err) => {
-        res.status(200).json({success: true});
+        res.status(200).json({ success: true });
         done(err, 'done');
       });
     },
@@ -125,50 +126,53 @@ exports.forgotLogin = (req, res) => {
 
 exports.reset = (req, res) => {
   async.waterfall([
-    function funcNamePlaceHolder1(done) {
-      User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, (err, user) => {
-        if (!user) req.flash('resetMessage', 'Password reset link is invalid or expired.');
-        else if (req.body.password !== req.body.confirmPassword) {
-          req.flash('forgotMessage', 'Password and confirm password must match.');
-          return res.redirect('/forgot');
-        } else if (err) {
-          req.flash('forgotMessage', 'Password and confrim password must match.');
-          return res.redirect('/forgot');
-        } else {
-          user.password = req.body.password;
-          user.resetPasswordToken = undefined;
-          user.resetPasswordExpires = undefined;
-          user.save((err) => {
-            if (err) {
-              done(err);
-            }
-            req.logIn(user, function (err) {
-              done(err, user)
-            }
-            )
-          });
-        }
+    /**
+     * Changes the password of the requested user
+     *
+     * We find the user using the password token that they provide
+     */
+    function verifyUser(done) {
+      console.log('Finding user');
+      User.findOneAndUpdate({
+        resetPasswordToken: req.params.token,
+        resetPasswordExpires: { $gt: Date.now() }
+      },
+      {
+        // Need to encrypt the password first
+        password: req.body.password,
+        resetPasswordToken: undefined,
+        resetPasswordExpires: undefined
+      }, {new: true}, (err, user) => {
+        if (err) throw err;
+        done(null, user);
       });
     },
-    function funcNamePlaceHolder2(user, done) {
-      const mailOptions = {
-        to: user.email,
-        from: 'acmtexastech@gmail.com',
-        subject: 'Your password has been changed',
-        text: 'Hello,\n\n' +
-          'This is a confirmation that the password for your account has been changed.\n',
-      };
-      smtpTransport.sendMail(mailOptions, (err) => {
-        req.flash('resetMessage', 'Your password has been changed.');
-        done(err);
-      });
+
+    /**
+     * Send the notification to the user that informtion in their account has changed
+     */
+    function sendNotification(user, done) {
+      if (!user) {
+        done(new Error('No user found'));
+      } else {
+        console.log('sending mail');
+        const mailOptions = {
+          to: user.email,
+          from: process.env.dev_emailUsername,
+          subject: 'Your password has been changed',
+          text: 'Hello,\n\n' +
+            'This is a confirmation that the password for your account has been changed.\n',
+        };
+        smtpTransport.sendMail(mailOptions, () => {
+          res.status(200).json({success: true});
+          done(null);
+        });
+      }
     },
-    // TODO: Write error handling
   ], (err) => {
-    res.redirect('/');
     if (err) {
-      req.flash('loginMessage', 'Error sending confirmation email');
-      res.redirect('/login');
+      console.log(err);
+      res.status(404).json({ success: false });
     }
   });
 };
@@ -196,20 +200,28 @@ exports.confirmToken = (req, res) => {
   });
 };
 
+/**
+ * Hits when the user clicks the link that is sent to their email
+ *
+ * Will check whether or not the token passed in the URL is valid
+ */
 exports.resetToken = (req, res) => {
-  User.findOne({ 'local.resetPasswordToken': req.params.token, 'local.resetPasswordExpires': { $gt: Date.now() } }, (err, user) => {
-    if (!user) {
-      req.flash('forgotMessage', 'Password reset token is invalid or has expired.');
-      return res.redirect('/forgot');
+  User.findOne({
+    resetPasswordToken: req.params.token,
+    resetPasswordExpires: { $gt: Date.now() }
+  }, (err, user) => {
+    if (!user || err) {
+      // User was not found or the token was expired, either way...
+      // Signals the front end to tell the user that their token was invalid
+      // and that they may need to send another email
+      res.redirect(`http://localhost:${process.env.DEV_PORT}/prompt/${true}`);
+    } else {
+      // The token is valid and will signal front end to render the login page
+      // The token we are passing is the same token that is in the database
+      const token = req.params.token;
+
+      res.redirect(`http://localhost:${process.env.DEV_PORT}/redirect/${token}`);
     }
-    if (err) {
-      req.flash('forgotMessage', 'Error');
-      return res.redirect('/forgot');
-    }
-    // TODO: Move some of this functionality to Angular
-    // Figure out how this flash messaging module works
-    // What are the modules being passed to this render method?
-    res.render('reset', { user: req.user, message: req.flash('resetMessage') });
   });
 };
 
