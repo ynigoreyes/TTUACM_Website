@@ -1,0 +1,5 @@
+@import '~@angular/material/theming';
+@import '../../../../styles.scss';
+#reset-card {
+  background-color: mat-color($acm-primary, darker);
+}

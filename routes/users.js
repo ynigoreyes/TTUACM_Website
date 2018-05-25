@@ -27,10 +27,10 @@ router.post('/forgot', UserCrtl.forgotLogin);
 /* GET confirm page */
 router.get('/confirm/:token', UserCrtl.confirmToken);
 
-/* GET reset page */
+/* GET reset page (This is the route that the email hits) */
 router.get('/reset/:token', UserCrtl.resetToken);
 
-/* POST reset page */
+/* POST reset page (This is the route that Angular hits) */
 router.post('/reset/:token', UserCrtl.reset);
 
 /* GET User profile */
