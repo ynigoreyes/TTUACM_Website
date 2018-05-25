@@ -18,9 +18,11 @@ export class AuthService {
   private confirmationEP: string = 'http://localhost:80/users/confirmation';
   constructor(private http: HttpClient) { }
 
+  // User observable
   private userObs = new BehaviorSubject<object>({});
   public currentUserObs = this.userObs.asObservable();
 
+  // Email observable
   private userEmail = new BehaviorSubject<string>(`No Email`);
   public currentEmail = this.userEmail.asObservable();
 
@@ -39,6 +41,7 @@ export class AuthService {
     this.userEmail.next(message);
   }
 
+  // Allows us to update the user globaly
   public setUser(user: object): void {
     this.userObs.next(user);
   }
@@ -57,6 +60,8 @@ export class AuthService {
   }
 
   /**
+   * TODO: Change this to be compatible with observables, but only the user.
+   * The token must be set in local storage to keep a session going
    * Runs when the user logs in correctly
    * @param token The token given by the API
    * @param user The user that just logged in; similar to a session... I think
@@ -66,6 +71,10 @@ export class AuthService {
 
     this.authToken = token;
     this.user = user;
+  }
+
+  public setToken(token) {
+    localStorage.setItem('id_token', token);
   }
 
   /**
@@ -111,6 +120,21 @@ export class AuthService {
     return post;
   }
 
+  /**
+   * Hits the reset POST endpoint and changes the user's password
+   * @param password The new password to be replaced
+   * @param token The hex token that will be used for identification
+   */
+  public resetPassword(userPassword, token): Observable<object> {
+    const headers = new HttpHeaders;
+    headers.append(`Content-type`, `application/json`);
+
+    return this.http.post(
+      `${this.resetEP}/${token}`,
+      {password: userPassword}, {headers: headers});
+
+  }
+
   public sendConfirmation(email): Observable<object> {
     const headers = new HttpHeaders;
     headers.append(`Content-type`, `application/json`);
@@ -120,14 +144,5 @@ export class AuthService {
     return post;
   }
 
-  public resetPassword(password): Observable<object> {
-    const headers = new HttpHeaders;
-    headers.append(`Content-type`, `application/json`);
-
-    const endpoint = `${ this.resetEP }/${this.getToken().split(' ')[1]}`;
-    const post = this.http.post(endpoint, password, {headers: headers});
-
-    return post;
-  }
 
 }
