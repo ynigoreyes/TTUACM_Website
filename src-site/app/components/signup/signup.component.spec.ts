@@ -6,13 +6,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SignupComponent } from './signup.component';
 import { AuthService } from '../../services/auth.service';
 
-// import { MatFormFieldModule } from '@angular/material/form-field';
 import { MaterialModule } from '../../material.module';
 import { RouterModule } from '@angular/router';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Oauth2Service } from '../../services/oauth2.service';
 
-describe('Checking Password Length', () => {
+describe('SignUpComponent', () => {
   let component: SignupComponent;
   let fixture: ComponentFixture<SignupComponent>;
 
@@ -22,15 +23,15 @@ describe('Checking Password Length', () => {
       imports: [
         MaterialModule,
         BrowserAnimationsModule,
-        FormsModule,
-        ReactiveFormsModule,
         RouterTestingModule
       ],
       providers: [
+        Oauth2Service,
         AuthService,
         HttpClient,
         HttpHandler
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     })
     .compileComponents();
   }));
@@ -41,7 +42,7 @@ describe('Checking Password Length', () => {
     fixture.detectChanges();
   });
 
-  it('should validate the password length', () => {
-    expect(component.checkPasswordLength(component.SignUpForm['password']).passLength).toBeTruthy();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 });

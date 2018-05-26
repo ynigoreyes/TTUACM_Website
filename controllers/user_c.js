@@ -32,7 +32,7 @@ exports.login = (req, res) => {
   // In the test, we are not able to see the email passed
   User.getUserByEmail(email, (err, foundUser) => {
     if (err) {
-      console.log(err);
+      console.log(`Error in login sequence function: \n\n${err}`);
       res.status(404).json({
         success: false,
         user: null,
@@ -74,13 +74,11 @@ exports.login = (req, res) => {
 
 // Check to see if this works on Postman
 exports.forgotLogin = (req, res) => {
-  console.log(req.body);
   async.waterfall([
     // We save the token into the user document along with an expiration date
     function generateTokenAndSave(done) {
       User.findOne({ email: req.body.email }, (err, user) => {
         const currentUser = user;
-
         // No user was found
         if (currentUser === null) {
           done(new Error('User not found'));
@@ -98,7 +96,6 @@ exports.forgotLogin = (req, res) => {
 
     // Sends the email to the user that requested a password reset
     function sendResetEmail(token, user, done) {
-      console.log('still sent');
       const mailOptions = {
         to: user.email,
         from: 'Texas Tech ACM',
@@ -109,16 +106,14 @@ exports.forgotLogin = (req, res) => {
           'If you did not request this, please ignore this email and your password will remain unchanged.\n',
       };
       smtpTransport.sendMail(mailOptions, (err) => {
-        res.status(200).json({ success: true });
+        res.status(200).json({ success: true, recipient: user });
         done(err, 'done');
       });
     },
   ], (err) => {
-    if (err !== 'User not found') {
+    if (err) {
       console.log(err);
-      res.status(200).json({ success: false });
-    } else if (err) {
-      res.status(404).json({ success: false });
+      res.status(200).json({ success: false, recipient: null });
     }
   });
 };
