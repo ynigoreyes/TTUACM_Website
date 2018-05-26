@@ -1,6 +1,7 @@
 # API Credentials and Keys
 client_secret.json
 credentials.json
+launch.json
 
 # Docker Stuff
 Dockerfile

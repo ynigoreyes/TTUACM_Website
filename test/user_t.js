@@ -20,13 +20,14 @@ chai.use(chaiHttp);
 
 
 // Node Endpoints
-const localhost = 'http://localhost:80';
+const localhost = `http://localhost:${process.env.PORT}`;
 const loginURL = '/users/login';
 const logoutURL = '/users/logout';
 const profileURL = '/users/profile';
 const contactURL = '/users/contact-us';
 const teamURL = '/users/get-team';
 const registerURL = '/users/register';
+const forgotURL = '/users/forgot';
 
 const testUserData = { // eslint-disable-line
   email: 'testUserEmail@gmail.com',
@@ -74,13 +75,15 @@ describe('User Suite', () => {
 
           // Checks for valid tokens and success status
           expect(res.body.token, tokenError).to.not.be.null;
-          expect(res.body.token, tokenError).to.be.of.length.greaterThan(1);
+          expect(res.body.token, tokenError).to.be.of.length.greaterThan(15);
           expect(res.body.success).to.be.true;
 
           // Checks for a required email
           expect(res.body.user, objectError).to.be.an('object');
           expect(res.body.user.email, emailError).to.not.be.null
           expect(res.body.user.email, emailError).to.not.be.undefined
+          expect(res.body.user.email).to.equal(testUserData.email)
+
           // Checks for absence of error
           expect(err).to.be.null;
           done();
@@ -88,23 +91,21 @@ describe('User Suite', () => {
     });
   });
 
-  describe('Email Duplication Test', () => {
-    it('Should not let the user register if the email is taken', (done) => {
-      const saveError = `Error in blocking the creation of another user.`;
+  describe('Forgot Password Test', () => {
+    it('Returns a valid endpoint when given an email', (done) => {
       chai.request(localhost)
-        .post(registerURL)
+        .post(forgotURL)
         .set('Content-Type', 'application/json')
-        .send(testUserData)
+        .send({
+          // A fake email, but should still send
+          email: testUserData.email
+        })
         .end((err, res) => {
-          console.log(err, res)
-          expect(res.body.emailAvailable, "Email is actually still available").to.be.false;
-          expect(res.body.success).to.be.false;
-          User.count({}, (err, count) => {
-            expect(count, saveError).to.equal(1);
-            done()
-          })
+          // Fails the test, but succeeds IRL
+          expect(res.body.success, 'Failed in sending').to.be.true;
+          expect(res.body.recipient, 'Null value for user... Probaby did not find it').to.be.an('object')
         });
-    })
+    });
   });
 
   after('Deleting the Test User', (done) => {
