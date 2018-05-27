@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { EventsService } from '../../services/events.service';
+import { DeviceService } from '../../services/device.service';
 
 export interface Events {
   id: number;
@@ -19,13 +20,17 @@ export interface Events {
 export class EventsComponent {
   public allEvents: Array<Events>;
   public displayedEvents: Array<Events>;
+  public smallScreenSize: boolean;
 
   public lengthOfEvents: number;
   public minNumberEvent: number;
   public maxNumberEvent: number;
   public changeAmount = 10;
 
-  constructor(private eventService: EventsService) {
+  constructor(
+    private eventService: EventsService,
+    private deviceService: DeviceService
+  ) {
     this.eventService.getEvents().subscribe((res) => {
 
     this.minNumberEvent = 0;
@@ -36,6 +41,7 @@ export class EventsComponent {
     // Current Events Displayed
     this.displayedEvents = this.allEvents.slice(this.minNumberEvent, this.maxNumberEvent);
     });
+    this.checkForSmallScreen();
   }
 
   /**
@@ -88,5 +94,17 @@ export class EventsComponent {
     let year = newDate.getFullYear();
     return `${month}-${day}-${year}`;
 
+  }
+
+  public checkForSmallScreen(): void {
+    let smallCheck: boolean;
+    let xsmallCheck: boolean;
+    this.deviceService.checkSmScreen().subscribe(status => {
+      smallCheck = status.matches;
+    });
+    this.deviceService.checkXsScreen().subscribe(status => {
+      xsmallCheck = status.matches;
+    });
+    this.smallScreenSize =  smallCheck || xsmallCheck;
   }
 }

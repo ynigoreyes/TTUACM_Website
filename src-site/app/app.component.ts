@@ -3,6 +3,7 @@ import { MatSidenav } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import * as jwt_decode from 'jwt-decode';
+import { DeviceService } from './services/device.service';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,8 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    public authService: AuthService
+    public authService: AuthService,
+    public deviceService: DeviceService
   ) { }
 
   ngOnInit(): void {

@@ -31,6 +31,7 @@ import { AuthMethodsComponent } from './components/_includes/auth-methods/auth-m
 import { ContactComponent } from './components/contact/contact.component';
 import { RedirectComponent } from './components/forgot/redirect/redirect.component';
 import { PromptComponent } from './components/forgot/prompt/prompt.component';
+import { DeviceService } from './services/device.service';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -39,8 +40,6 @@ const appRoutes: Routes = [
   { path: 'events', component: EventsComponent },
   { path: 'prompt', component: PromptComponent },
   { path: 'prompt/:tokenError', component: PromptComponent },
-  // Delete this path bellow soon, this is just so i can see the design
-  { path: 'redirect', component: RedirectComponent },
   { path: 'redirect/:token', component: RedirectComponent },
   { path: 'reset', component: RedirectComponent, canActivate: [AuthGuard] },
   { path: 'error', component: ErrorComponent },
@@ -89,7 +88,8 @@ const appRoutes: Routes = [
     AuthService,
     AuthGuard,
     EventsService,
-    Oauth2Service
+    Oauth2Service,
+    DeviceService
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]

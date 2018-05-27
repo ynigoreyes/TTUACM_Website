@@ -1,16 +1,20 @@
-<div class="container event-div">
+<div (window:resize)="checkForSmallScreen()" class="container event-div">
   <div class="text-center nav-button-container">
     <button (click)=getPrevEvents() mat-raised-button class="nav-buttons left-button">
-      < </button>
-        <span class="google-header">ACM TTU Meetings</span>
-        <button (click)=getNextEvents() mat-raised-button class="nav-buttons right-button">
-          >
-        </button>
+      Prev 10
+    </button>
+    <span class="google-header">ACM TTU Meetings</span>
+    <button (click)=getNextEvents() mat-raised-button class="nav-buttons right-button">
+      Next 10
+    </button>
   </div>
   <mat-card *ngFor="let event of displayedEvents" class="text-center eachEvent">
     <div>
       <small>
         <em id="event-id">{{event.id}}</em>
+      </small>
+      <small>
+        <em id="date">{{getDate(event.startTime)}}</em>
       </small>
     </div>
     <br>
@@ -20,34 +24,25 @@
         {{event.description}}
       </div>
       <hr>
-      <div class="date">
-        {{getDate(event.startTime)}}
-      </div>
-      <div class="location">
-        Meeting will be at: {{event.location}} on {{event.day}}s
-      </div>
-      <div class="time">
-        Starting at {{getTime(event.startTime)}} and ending at {{getTime(event.endTime)}}
-      </div>
     </mat-card-content>
-    <mat-card-actions>
-      <button mat-raised-button color="accent" class="card-buttons">
-        Attending
-      </button>
-      <button mat-raised-button class="card-buttons">
-        Maybe
-      </button>
-      <button mat-raised-button color="warn" class="card-buttons">
-        Not Attending
-      </button>
-    </mat-card-actions>
+    <mat-card-footer>
+      <span class="location">
+        Meetings will be held at: {{event.location}} on {{event.day}}s
+      </span>
+      <span *ngIf="smallScreenSize === false"> | </span>
+      <div *ngIf="smallScreenSize === true"></div>
+      <span class="time">
+        Starting at {{getTime(event.startTime)}} and ending at {{getTime(event.endTime)}}
+      </span>
+    </mat-card-footer>
   </mat-card>
   <div class="text-center nav-button-container">
     <button (click)=getPrevEvents() mat-raised-button class="nav-buttons left-button">
-      < </button>
-        <span class="google-header">ACM TTU Meetings</span>
-        <button (click)=getNextEvents() mat-raised-button class="nav-buttons right-button">
-          >
-        </button>
+      Prev 10
+    </button>
+    <span class="google-header">ACM TTU Meetings</span>
+    <button (click)=getNextEvents() mat-raised-button class="nav-buttons right-button">
+      Next 10
+    </button>
   </div>
 </div>
