@@ -14,6 +14,10 @@ authRouter.get('/google', passport.authenticate('google', {
 /* Callback URL for Google */
 authRouter.get('/google/redirect', passport.authenticate('google'), AuthCtrl.oauth2);
 
+authRouter.get('/google/calendar', (req, res) => {
+  console.log(res, req);
+});
+
 /* GETS the GitHub Login Screen */
 authRouter.get('/github', passport.authenticate('github', {
   scope: [
