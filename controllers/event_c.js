@@ -88,12 +88,26 @@ module.exports.getEvents = (req, res) => {
       if (err) return console.log(`The API returned an error: ${err}`);
       const events = data.items;
       if (events.length) {
+        // Will store all of the events and return
         eventsList = [];
+
+        // Maps all of the numbers to days
+        const weekday = [
+          'Sunday',
+          'Monday',
+          'Tuesday',
+          'Wednesday',
+          'Thursday',
+          'Friday',
+          'Saturday'
+        ];
         events.map((event, i) => {
           const start = event.start.dateTime || event.start.date;
           const end = event.end.dateTime || event.end.date;
           // Event Object
           eventsList.push({
+            id: i,
+            day: `${weekday[new Date(start).getDay()]}`,
             startTime: start,
             endTime: end,
             title: event.summary || 'N/A',
