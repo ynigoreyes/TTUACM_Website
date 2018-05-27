@@ -24,8 +24,5 @@ describe('AppComponent', () => {
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
-    it('should create', () => {
-      expect(component).toBeTruthy();
-    });
   }));
 });
