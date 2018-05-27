@@ -51,7 +51,6 @@ module.exports = (passport) => {
     User.findOne({ googleId: profile.id }).then((currentUser) => {
       if (currentUser) {
         // User exists in database
-        console.log('User Exists');
         done(null, currentUser);
       } else {
         // User does not exist... Create a new one
@@ -64,7 +63,6 @@ module.exports = (passport) => {
         };
         const newUser = new User(data);
         newUser.save().then((user) => {
-          console.log(`Created new user: ${user}`);
           done(null, user);
         });
       }
@@ -80,7 +78,6 @@ module.exports = (passport) => {
     clientSecret: githubClientSecret
   };
   passport.use(new GitHubStrategy(githubOpts, (accessToken, refreshToken, profile, done) => {
-    console.log(profile);
     User.findOne({ githubId: profile.id })
       .then((currentUser) => {
         if (currentUser) {
@@ -101,7 +98,6 @@ module.exports = (passport) => {
           const newUser = new User(data);
           newUser.save()
             .then((user) => {
-              console.log(`Created new user: ${user}`);
               done(null, user);
             });
         }
