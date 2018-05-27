@@ -1,6 +1,15 @@
 import { Component } from '@angular/core';
 import { EventsService } from '../../services/events.service';
 
+export interface Events {
+  id: number;
+  day: string;
+  startTime: string;
+  endTime: string;
+  title: string;
+  location?: string;
+  description?: string;
+}
 
 @Component({
   selector: 'app-events',
@@ -8,8 +17,8 @@ import { EventsService } from '../../services/events.service';
   styleUrls: ['./events.component.scss']
 })
 export class EventsComponent {
-  public events: any;
-  public displayedEvents: any;
+  public allEvents: Array<Events>;
+  public displayedEvents: Array<Events>;
 
   public lengthOfEvents: number;
   public minNumberEvent: number;
@@ -17,16 +26,15 @@ export class EventsComponent {
   public changeAmount = 10;
 
   constructor(private eventService: EventsService) {
-    this.eventService.getEvents().subscribe((results) => {
+    this.eventService.getEvents().subscribe((res) => {
 
     this.minNumberEvent = 0;
     this.maxNumberEvent = 10;
     // A Cache for all the events
-    this.events = results['data'];
-    this.lengthOfEvents = this.events.length;
-
+    this.allEvents = res['events'];
+    this.lengthOfEvents = this.allEvents.length;
     // Current Events Displayed
-    this.displayedEvents = this.events.slice(this.minNumberEvent, this.maxNumberEvent);
+    this.displayedEvents = this.allEvents.slice(this.minNumberEvent, this.maxNumberEvent);
     });
   }
 
@@ -42,7 +50,7 @@ export class EventsComponent {
       this.maxNumberEvent = 10;
     }
 
-    this.displayedEvents = this.events.slice(this.minNumberEvent, this.maxNumberEvent);
+    this.displayedEvents = this.allEvents.slice(this.minNumberEvent, this.maxNumberEvent);
   }
 
   /**
@@ -56,7 +64,29 @@ export class EventsComponent {
       this.minNumberEvent = this.lengthOfEvents - this.changeAmount;
       this.maxNumberEvent = this.lengthOfEvents;
     }
-    this.displayedEvents = this.events.slice(this.minNumberEvent, this.maxNumberEvent);
+    this.displayedEvents = this.allEvents.slice(this.minNumberEvent, this.maxNumberEvent);
   }
 
+  // Converts the date from the API into something readable
+  public getTime(date) {
+    let newDate = new Date(date);
+    let hours = newDate.getHours();
+    let minutes: any = newDate.getMinutes();
+    let ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    let strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
+  }
+
+  // Converts the date into mm-dd-yyyy
+  public getDate(date) {
+    let newDate = new Date(date);
+    let month = newDate.getMonth() + 1;
+    let day = newDate.getDay();
+    let year = newDate.getFullYear();
+    return `${month}-${day}-${year}`;
+
+  }
 }
