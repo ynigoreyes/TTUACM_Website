@@ -1,4 +1,5 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { LayoutModule } from '@angular/cdk/layout';
 import {
   MatSidenavModule,
   MatButtonModule,
@@ -23,7 +24,8 @@ import {
     MatMenuModule,
     MatIconModule,
     MatSnackBarModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    LayoutModule
   ],
   exports: [
     MatSidenavModule,
@@ -35,7 +37,8 @@ import {
     MatMenuModule,
     MatIconModule,
     MatSnackBarModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    LayoutModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })

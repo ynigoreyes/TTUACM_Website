@@ -106,7 +106,7 @@ module.exports.getEvents = (req, res) => {
           const end = event.end.dateTime || event.end.date;
           // Event Object
           eventsList.push({
-            id: i,
+            id: i + 1,
             day: `${weekday[new Date(start).getDay()]}`,
             startTime: start,
             endTime: end,
