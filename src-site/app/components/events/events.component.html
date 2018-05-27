@@ -2,7 +2,7 @@
   <div class="text-center nav-button-container">
     <button (click)=getPrevEvents() mat-raised-button class="nav-buttons left-button">
       < </button>
-        <span class="google-header">Google Caledar</span>
+        <span class="google-header">ACM TTU Meetings</span>
         <button (click)=getNextEvents() mat-raised-button class="nav-buttons right-button">
           >
         </button>
@@ -15,10 +15,23 @@
     </div>
     <br>
     <mat-card-title>{{event.title}}</mat-card-title>
-    <hr>
-    <mat-card-content>{{event.body}}</mat-card-content>
+    <mat-card-content>
+      <div class="description">
+        {{event.description}}
+      </div>
+      <hr>
+      <div class="date">
+        {{getDate(event.startTime)}}
+      </div>
+      <div class="location">
+        Meeting will be at: {{event.location}} on {{event.day}}s
+      </div>
+      <div class="time">
+        Starting at {{getTime(event.startTime)}} and ending at {{getTime(event.endTime)}}
+      </div>
+    </mat-card-content>
     <mat-card-actions>
-      <button mat-raised-button color="primary" class="card-buttons">
+      <button mat-raised-button color="accent" class="card-buttons">
         Attending
       </button>
       <button mat-raised-button class="card-buttons">
@@ -32,7 +45,7 @@
   <div class="text-center nav-button-container">
     <button (click)=getPrevEvents() mat-raised-button class="nav-buttons left-button">
       < </button>
-        <span class="google-header">Google Caledar</span>
+        <span class="google-header">ACM TTU Meetings</span>
         <button (click)=getNextEvents() mat-raised-button class="nav-buttons right-button">
           >
         </button>

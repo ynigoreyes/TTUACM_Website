@@ -16,9 +16,9 @@
           <mat-icon>home</mat-icon><a (click)="close()" [routerLink]="['/']">Home</a>
         </li>
         <!-- This is the Events route that is not done yet -->
-        <!-- <li class="router-links" *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+        <li class="router-links" *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
           <mat-icon>event</mat-icon><a (click)="close()" [routerLink]="['/events']">Events</a>
-        </li> -->
+        </li>
         <li class="router-links" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
           <mat-icon>people</mat-icon><a (click)="close()" [routerLink]="['/team']">Team</a>
         </li>
