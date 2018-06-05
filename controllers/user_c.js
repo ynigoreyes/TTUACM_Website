@@ -10,7 +10,6 @@ const bcrypt = require('bcryptjs');
 
 const saltRounds = 10;
 
-
 // Test Login Route for exports.authenticate
 exports.login = (req, res) => {
   const email = req.body.email;
@@ -240,7 +239,6 @@ exports.resetToken = (req, res) => {
  * This can also be used when the user does not want to use an auth service
  */
 exports.register = (req, res) => {
-  console.log(global.smtpTransporter);
   // If the email is available, continue with the proccess
   // Generates the salt used for hashing
   bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
@@ -309,7 +307,6 @@ exports.register = (req, res) => {
    * @param {object} user The user object created
    */
   function sendConfirmationEmail(user) {
-    console.log(global.smtpTransporter);
     const mailOptions = {
       to: user.email,
       from: 'Texas Tech ACM',
@@ -342,14 +339,14 @@ exports.getProfile = (req, res) => {
 };
 
 /**
- * Sends email to whoever's email is on the nodemailer transport
+ * Sends email to us from who ever's email was given
  */
 exports.contactUs = (req, res) => {
   const mailOptions = {
-    from: `ACM: Texas Tech Contact Us <${process.env.email_username}>`,
-    to: req.body.email,
+    from: req.body.email,
+    to: process.env.email_username,
     subject: 'ACM Question',
-    text: `You got a message!\n\nSender: ${req.body.name}:\n\nTopic: ${
+    text: `You got a message!\n\nSender: ${req.body.name}\n\nEmail: ${req.body.email}\n\nTopic: ${
       req.body.topic
     }\n\nMessage: ${req.body.message}\n`
   };
