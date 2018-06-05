@@ -10,13 +10,12 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 export class AuthService {
   private authToken: string = 'default';
   private user: object; // Change this to a behavior subject
-  private PORT: string = '8080';
 
-  private signUpEP: string = `http://localhost:${this.PORT}/users/register`;
-  private loginEP: string = `http://localhost:${this.PORT}/users/login`;
-  private forgotEP: string = `http://localhost:${this.PORT}/users/forgot`;
-  private resetEP: string = `http://localhost:${this.PORT}/users/reset`;
-  private confirmationEP: string = `http://localhost:${this.PORT}/users/confirmation`;
+  private signUpEP: string = `/users/register`;
+  private loginEP: string = `/users/login`;
+  private forgotEP: string = `/users/forgot`;
+  private resetEP: string = `/users/reset`;
+  private confirmationEP: string = `/users/confirmation`;
   constructor(private http: HttpClient) { }
 
   // User observable

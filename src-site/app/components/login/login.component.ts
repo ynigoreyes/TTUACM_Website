@@ -43,7 +43,7 @@ export class LoginComponent {
         // Stores the user's information into the local storage
         this.authService.storeUserData(data['token'], data['user']);
 
-        this.router.navigate(['/events']);
+        this.router.navigate(['/all-events']);
       }
     });
   }
