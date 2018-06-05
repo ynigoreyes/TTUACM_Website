@@ -82,15 +82,6 @@ module.exports.findAllUsers = (callback) => {
   });
 };
 
-// Verify email address using token
-// module.exports.verify = (user, token, done) => {
-//   user.confirmEmailToken = undefined;
-//   user.verified = true;
-//   this.save((err) => {
-//     done(err);
-//   });
-// };
-
 module.exports.deleteUserByEmail = (userEmail) => {
   User.deleteOne({ email: userEmail }, (err) => {
     if (err) {

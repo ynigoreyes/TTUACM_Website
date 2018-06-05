@@ -1,6 +1,7 @@
 const JwtStrategy = require('passport-jwt').Strategy;
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const GitHubStrategy = require('passport-github').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 
 const User = require('../models/user');
@@ -54,8 +55,10 @@ module.exports = (passport) => {
       User.findOne({ googleId: profile.id }).then((currentUser) => {
         if (currentUser) {
           // User exists in database
+          console.log(currentUser);
           done(null, currentUser);
         } else {
+          console.log(profile);
           // User does not exist... Create a new one
           const data = {
             googleId: profile.id,
@@ -96,6 +99,44 @@ module.exports = (passport) => {
               email: emailData,
               firstName: profile.displayName.split(' ')[0],
               lastName: profile.displayName.split(' ')[1],
+              verified: true
+            };
+            const newUser = new User(data);
+            newUser.save().then((user) => {
+              done(null, user);
+            });
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    })
+  );
+  // Facebook Strategy
+  const facebookClientID = process.env.facebook_clientID;
+  const facebookClientSecret = process.env.facebook_client_secret;
+  const facebookOpts = {
+    callbackURL: '/auth/facebook/redirect',
+    clientID: facebookClientID,
+    clientSecret: facebookClientSecret,
+    profileFields: ['id', 'emails', 'name']
+  };
+  passport.use(
+    new FacebookStrategy(facebookOpts, (accessToken, refreshToken, profile, done) => {
+      User.findOne({ facebookId: profile.id })
+        .then((currentUser) => {
+          if (currentUser) {
+            done(null, currentUser);
+          } else {
+            // Sometimes, the user has their email access set to private
+            // In that case, we save their id instead
+            console.log(profile);
+            const emailData = profile._json.email === null ? profile.id : profile._json.email;
+            const data = {
+              facebookId: profile.id,
+              email: emailData,
+              firstName: profile._json.first_name,
+              lastName: profile._json.last_name,
               verified: true
             };
             const newUser = new User(data);
