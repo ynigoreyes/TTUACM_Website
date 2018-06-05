@@ -130,7 +130,6 @@ module.exports = (passport) => {
           } else {
             // Sometimes, the user has their email access set to private
             // In that case, we save their id instead
-            console.log(profile);
             const emailData = profile._json.email === null ? profile.id : profile._json.email;
             const data = {
               facebookId: profile.id,
