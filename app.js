@@ -41,6 +41,11 @@ mongoose.connection.on('error', (err) => {
 if (process.env.NODE_ENV === 'production') {
   nmconfig.generateProdTransporter();
 } else {
+  console.log('\nRunning in development.\nClient should be running on http://localhost:4200\n\n');
+  console.log('Current environment variables available');
+  console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
+  console.log(`CLIENT: ${process.env.CLIENT}`);
+  console.log(`PORT: ${process.env.PORT}\n`);
   nmconfig.generateTestTransporter();
 }
 

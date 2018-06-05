@@ -7,13 +7,15 @@ import { environment } from '../../environments/environment';
 export class ContactService {
   message: object;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   sendEmail(message) {
     const headers = new HttpHeaders();
 
     headers.append('Content-Type', 'application/json');
-    const post = this.http.post(`/users/contact-us`, message, { headers: headers });
+    const post = this.http.post(`${environment.host}/users/contact-us`, message, {
+      headers: headers
+    });
 
     return post;
   }
