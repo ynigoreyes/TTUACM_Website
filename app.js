@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const mongoose = require('mongoose');
-const fs = require('fs');
+const nmconfig = require('./config/nodemailer-transporter');
 
 mongoose.Promise = global.Promise;
 
@@ -16,6 +16,7 @@ require('dotenv').config({ path: path.join(__dirname, '/.env') });
 // Express Routing and App setup
 const app = express();
 
+
 // Where the views will be
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -24,7 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
  * Connected to a local replica of Mongo so that we can store data
  * and see how it looks like without connecting to our actual database
  */
-mongoose.connect(process.env.dev_db, {
+mongoose.connect(process.env.db, {
   useMongoClient: true,
   socketTimeoutMS: 0,
   keepAlive: true,
@@ -36,6 +37,12 @@ mongoose.connection.on('connected', () => {
 mongoose.connection.on('error', (err) => {
   console.log(`Error Connecting to database... \n${err}`);
 });
+
+if (process.env.NODE_ENV === 'production') {
+  nmconfig.generateProdTransporter();
+} else {
+  nmconfig.generateTestTransporter();
+}
 
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions

@@ -4,6 +4,8 @@ const chai = require('chai');
 const path = require('path');
 
 const mongoose = require('mongoose');
+var Mockgoose = require('mockgoose').Mockgoose;
+var mockgoose = new Mockgoose(mongoose);
 const User = require('../models/user');
 mongoose.Promise = global.Promise;
 
@@ -18,7 +20,6 @@ const expect = chai.expect;
 // Test Router Setup
 chai.use(chaiHttp);
 
-
 // Node Endpoints
 const localhost = `http://localhost:${process.env.PORT}`;
 const loginURL = '/users/login';
@@ -29,39 +30,44 @@ const teamURL = '/users/get-team';
 const registerURL = '/users/register';
 const forgotURL = '/users/forgot';
 
-const testUserData = { // eslint-disable-line
+const testUserData = {
+  // eslint-disable-line
   email: 'testUserEmail@gmail.com',
   password: 'testUserPassword',
   firstName: 'testFirstName',
   lastName: 'testLastName',
-  classification: 'Scrub',
+  classification: 'Scrub'
 };
 
 describe('User Suite', () => {
-  before('Creating a Test User', (done) => {
-    mongoose.connect(process.env.dev_db, {
-      useMongoClient: true,
-      socketTimeoutMS: 0,
-      keepAlive: true,
-      reconnectTries: 30
-    });
-    User.remove({})
-      .then(
-        chai.request(localhost)
-          .post(registerURL)
-          .set('Content-Type', 'application/json')
-          .send(testUserData)
-          .end((err, res) => {
-            if (res.body.success === true) {
-              done();
-            }
-          })
+  before('Creating a Test User', done => {
+    mockgoose.prepareStorage().then(() => {
+      mongoose.connect(
+        process.env.db,
+        {
+          useMongoClient: true,
+          socketTimeoutMS: 0,
+          keepAlive: true,
+          reconnectTries: 30
+        }
       );
+      chai
+        .request(localhost)
+        .post(registerURL)
+        .set('Content-Type', 'application/json')
+        .send(testUserData)
+        .end((err, res) => {
+          if (res.body.success === true) {
+            done();
+          }
+        });
+    });
   });
 
   describe('Login Test', () => {
-    it('Returns a successful status code and a valid Token', (done) => {
-      chai.request(localhost)
+    it('Returns a successful status code and a valid Token', done => {
+      chai
+        .request(localhost)
         .post(loginURL)
         .set('Content-Type', 'application/json')
         .send({
@@ -70,8 +76,8 @@ describe('User Suite', () => {
         })
         .end((err, res) => {
           const objectError = 'Response is not an object';
-          const emailError = 'Email is not valid (null/undefined)'
-          const tokenError = 'Token is empty'
+          const emailError = 'Email is not valid (null/undefined)';
+          const tokenError = 'Token is empty';
 
           // Checks for valid tokens and success status
           expect(res.body.token, tokenError).to.not.be.null;
@@ -80,9 +86,9 @@ describe('User Suite', () => {
 
           // Checks for a required email
           expect(res.body.user, objectError).to.be.an('object');
-          expect(res.body.user.email, emailError).to.not.be.null
-          expect(res.body.user.email, emailError).to.not.be.undefined
-          expect(res.body.user.email).to.equal(testUserData.email)
+          expect(res.body.user.email, emailError).to.not.be.null;
+          expect(res.body.user.email, emailError).to.not.be.undefined;
+          expect(res.body.user.email).to.equal(testUserData.email);
 
           // Checks for absence of error
           expect(err).to.be.null;
@@ -92,8 +98,9 @@ describe('User Suite', () => {
   });
 
   describe('Forgot Password Test', () => {
-    it('Returns a valid endpoint when given an email', (done) => {
-      chai.request(localhost)
+    it('Returns a valid endpoint when given an email', done => {
+      chai
+        .request(localhost)
         .post(forgotURL)
         .set('Content-Type', 'application/json')
         .send({
@@ -103,12 +110,14 @@ describe('User Suite', () => {
         .end((err, res) => {
           // Fails the test, but succeeds IRL
           expect(res.body.success, 'Failed in sending').to.be.true;
-          expect(res.body.recipient, 'Null value for user... Probaby did not find it').to.be.an('object')
+          expect(res.body.recipient, 'Null value for user... Probaby did not find it').to.be.an(
+            'object'
+          );
         });
     });
   });
 
-  after('Deleting the Test User', (done) => {
+  after('Deleting the Test User', done => {
     User.remove({}).then(done());
   });
 });
