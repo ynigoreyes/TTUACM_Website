@@ -26,7 +26,6 @@ import { AuthService } from './services/auth.service';
 import { FeedComponent } from './components/profile/feed/feed.component';
 import { AuthGuard } from './guards/auth.guard';
 import { EventsService } from './services/events.service';
-import { Oauth2Service } from './services/oauth2.service';
 import { AuthMethodsComponent } from './components/_includes/auth-methods/auth-methods.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { RedirectComponent } from './components/forgot/redirect/redirect.component';
@@ -88,7 +87,6 @@ const appRoutes: Routes = [
     AuthService,
     AuthGuard,
     EventsService,
-    Oauth2Service,
     DeviceService
   ],
   bootstrap: [AppComponent],
