@@ -5,17 +5,18 @@ import { Observable } from 'rxjs/Observable';
 // import { BehaviourSubject } from 'rxjs/BehaviourSubject';
 import 'rxjs/add/operator/map';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable()
 export class AuthService {
   private authToken: string = 'default';
   private user: object; // Change this to a behavior subject
 
-  private signUpEP: string = `/users/register`;
-  private loginEP: string = `/users/login`;
-  private forgotEP: string = `/users/forgot`;
-  private resetEP: string = `/users/reset`;
-  private confirmationEP: string = `/users/confirmation`;
+  private signUpEP: string = `${environment.host}/users/register`;
+  private loginEP: string = `/${environment.host}users/login`;
+  private forgotEP: string = `/${environment.host}users/forgot`;
+  private resetEP: string = `/${environment.host}users/reset`;
+  private confirmationEP: string = `/${environment.host}users/confirmation`;
   constructor(private http: HttpClient) { }
 
   // User observable

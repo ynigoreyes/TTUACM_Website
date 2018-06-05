@@ -55,10 +55,8 @@ module.exports = (passport) => {
       User.findOne({ googleId: profile.id }).then((currentUser) => {
         if (currentUser) {
           // User exists in database
-          console.log(currentUser);
           done(null, currentUser);
         } else {
-          console.log(profile);
           // User does not exist... Create a new one
           const data = {
             googleId: profile.id,

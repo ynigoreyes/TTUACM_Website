@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-auth-methods',
@@ -8,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 export class AuthMethodsComponent implements OnInit {
 
   constructor() { }
-
+  public location: string = environment.host;
   ngOnInit() {
   }
 

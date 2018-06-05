@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import * as jwt_decode from 'jwt-decode';
 import { DeviceService } from './services/device.service';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -26,6 +27,9 @@ export class AppComponent implements OnInit {
         this.authService.storeUserData(params.token, user.data);
       }
     });
+    if (!environment.production) {
+      console.log('Running in development...');
+    }
   }
 
   public open() {
