@@ -57,10 +57,9 @@ export class ContactComponent implements OnInit {
       topic: post['topic'].trim(),
       message: post['message'].trim()
     };
-    console.log(data);
 
     this.contactService.sendEmail(data).subscribe(status => {
-      if (status === 'sucess') {
+      if (status['success'] === true) {
         this.snackbar.open('Message successfully sent. Thank You!',
           'Close', { duration: 3000 });
         this.router.navigate(['/']);
