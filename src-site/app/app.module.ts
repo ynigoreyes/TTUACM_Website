@@ -37,7 +37,7 @@ const appRoutes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'team', component: TeamComponent },
   { path: 'signup', component: SignupComponent },
-  { path: 'events', component: EventsComponent },
+  { path: 'all-events', component: EventsComponent },
   { path: 'prompt', component: PromptComponent },
   { path: 'prompt/:tokenError', component: PromptComponent },
   { path: 'redirect/:token', component: RedirectComponent },

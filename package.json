@@ -10,7 +10,7 @@
     "client-test": "ng test",
     "start": "NODE_ENV=dev PORT=8080 node ./bin/www",
     "start-prod": "NODE_ENV=prod PORT=8080 node ./bin/www",
-    "build": "ng build --prod",
+    "build": "ng build --prod --aot",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
