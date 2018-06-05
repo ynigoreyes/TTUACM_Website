@@ -5,8 +5,7 @@ launch.json
 .vscode
 
 # Docker Stuff
-Dockerfile
-.dockerignore
+docker-compose.override.yml
 
 # Logs
 logs
@@ -69,6 +68,8 @@ typings/
 
 # Mongo Login
 mongo.txt
+connect-db.sh
+credentials.csv
 
 # FrontEnd Ignores
 

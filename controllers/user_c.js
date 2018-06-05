@@ -1,28 +1,15 @@
 const User = require('../models/user');
 
 const crypto = require('crypto');
-const nodemailer = require('nodemailer');
 const async = require('async');
 const jwt = require('jsonwebtoken');
+const nmConfig = require('../config/nodemailer-transporter');
 
 // Bcrypt options
 const bcrypt = require('bcryptjs');
 
 const saltRounds = 10;
 
-
-/**
- * Transporter for nodemailer
- * We are using a test email and password.
- * I took this out so that we could dry up some of the code
- */
-const smtpTransport = nodemailer.createTransport({
-  service: 'Gmail',
-  auth: {
-    user: process.env.dev_emailUsername,
-    pass: process.env.dev_emailPassword,
-  },
-});
 
 // Test Login Route for exports.authenticate
 exports.login = (req, res) => {
@@ -41,17 +28,19 @@ exports.login = (req, res) => {
     } else if (foundUser !== null) {
       // If there is a user with that email, check their password
       bcrypt.compare(inputPassword, foundUser.password, (err, response) => {
-        if (err) { console.log(err); }
+        if (err) {
+          console.log(err);
+        }
         if (response) {
           // We don't want to pass back the password at all
           const token = jwt.sign({ data: foundUser }, process.env.session_secret, {
-            expiresIn: 604800, // 1 week
+            expiresIn: 604800 // 1 week
           });
 
           res.status(200).json({
             success: true,
             user: foundUser,
-            token: `JWT ${token}`,
+            token: `JWT ${token}`
           });
         } else {
           res.status(200).json({
@@ -74,102 +63,114 @@ exports.login = (req, res) => {
 
 // Check to see if this works on Postman
 exports.forgotLogin = (req, res) => {
-  async.waterfall([
-    // We save the token into the user document along with an expiration date
-    function generateTokenAndSave(done) {
-      User.findOne({ email: req.body.email }, (err, user) => {
-        const currentUser = user;
-        // No user was found
-        if (currentUser === null) {
-          done(new Error('User not found'));
-        } else if (err) {
-          done(err);
-        } else {
-          currentUser.resetPasswordToken = token = generateHexToken();
-          currentUser.resetPasswordExpires = Date.now() + (3 * 60 * 60 * 1000); // 3 Hours
-          currentUser.save((err) => {
-            done(err, token, currentUser);
-          });
-        }
-      });
-    },
+  async.waterfall(
+    [
+      // We save the token into the user document along with an expiration date
+      function generateTokenAndSave(done) {
+        User.findOne({ email: req.body.email }, (err, user) => {
+          const currentUser = user;
+          // No user was found
+          if (currentUser === null) {
+            done(new Error('User not found'));
+          } else if (err) {
+            done(err);
+          } else {
+            currentUser.resetPasswordToken = token = generateHexToken();
+            currentUser.resetPasswordExpires = Date.now() + 3 * 60 * 60 * 1000; // 3 Hours
+            currentUser.save((err) => {
+              done(err, token, currentUser);
+            });
+          }
+        });
+      },
 
-    // Sends the email to the user that requested a password reset
-    function sendResetEmail(token, user, done) {
-      const mailOptions = {
-        to: user.email,
-        from: 'Texas Tech ACM',
-        subject: 'TTU ACM Password Reset',
-        text: `${'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
-          'Please click on the following link, or paste this into your browser to complete the process:\n\n'}${
-          req.protocol}://${req.headers.host}/users/reset/${token}\n\n` +
-          'If you did not request this, please ignore this email and your password will remain unchanged.\n',
-      };
-      smtpTransport.sendMail(mailOptions, (err) => {
-        res.status(200).json({ success: true, recipient: user });
-        done(err, 'done');
-      });
-    },
-  ], (err) => {
-    if (err) {
-      console.log(err);
-      res.status(200).json({ success: false, recipient: null });
+      // Sends the email to the user that requested a password reset
+      function sendResetEmail(token, user, done) {
+        const mailOptions = {
+          to: user.email,
+          from: 'Texas Tech ACM',
+          subject: 'TTU ACM Password Reset',
+          text:
+            `${'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+              'Please click on the following link, or paste this into your browser to complete the process:\n\n'}${
+              req.protocol
+            }://${req.headers.host}/users/reset/${token}\n\n` +
+            'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+        };
+        global.smtpTransporter.sendMail(mailOptions, (err) => {
+          res.status(200).json({ success: true, recipient: user });
+          done(err, 'done');
+        });
+      }
+    ],
+    (err) => {
+      if (err) {
+        console.log(err);
+        res.status(200).json({ success: false, recipient: null });
+      }
     }
-  });
+  );
 };
 
 exports.reset = (req, res) => {
-  async.waterfall([
-    /**
-     * Changes the password of the requested user
-     *
-     * We find the user using the password token that they provide
-     */
-    function verifyUserAndUpdate(done) {
-      bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
-        User.findOneAndUpdate({
-          resetPasswordToken: req.params.token,
-          resetPasswordExpires: { $gt: Date.now() }
-        },
-        {
-          // Need to encrypt the password first
-          password: hash,
-          resetPasswordToken: undefined,
-          resetPasswordExpires: undefined
-        }, {new: true}, (err, user) => {
-          if (err) throw err;
-          done(null, user);
+  async.waterfall(
+    [
+      /**
+       * Changes the password of the requested user
+       *
+       * We find the user using the password token that they provide
+       */
+      function verifyUserAndUpdate(done) {
+        bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+          User.findOneAndUpdate(
+            {
+              resetPasswordToken: req.params.token,
+              resetPasswordExpires: { $gt: Date.now() }
+            },
+            {
+              // Need to encrypt the password first
+              password: hash,
+              resetPasswordToken: undefined,
+              resetPasswordExpires: undefined
+            },
+            { new: true },
+            (err, user) => {
+              if (err) throw err;
+              done(null, user);
+            }
+          );
         });
-      });
-    },
+      },
 
-    /**
-     * Send the notification to the user that informtion in their account has changed
-     */
-    function sendNotification(user, done) {
-      if (!user) {
-        done(new Error('No user found'));
-      } else {
-        console.log('sending mail');
-        const mailOptions = {
-          to: user.email,
-          from: process.env.dev_emailUsername,
-          subject: 'Your password has been changed',
-          text: 'Hello,\n\n' +
-            'This is a confirmation that the password for your account has been changed.\n',
-        };
-        smtpTransport.sendMail(mailOptions, () => {
-          res.status(200).json({success: true});
-          done(null);
-        });
+      /**
+       * Send the notification to the user that informtion in their account has changed
+       */
+      function sendNotification(user, done) {
+        if (!user) {
+          done(new Error('No user found'));
+        } else {
+          const mailOptions = {
+            to: user.email,
+            from: process.env.email_username,
+            subject: 'Your password has been changed',
+            text:
+              'Hello,\n\n' +
+              'This is a confirmation that the password for your account has been changed.\n'
+          };
+          global.smtpTransporter.sendMail(mailOptions, () => {
+            res.status(200).json({ success: true });
+            done(null);
+          });
+        }
       }
-    },
-  ], (err) => {
-    if (err) {
-      console.log(err);
-      res.status(404).json({ success: false });
+    ],
+    (err) => {
+      if (err) {
+        console.log(err);
+        res.status(404).json({ success: false });
+      }
     }
-  });
+  );
 };
 
 /**
@@ -201,23 +202,26 @@ exports.confirmToken = (req, res) => {
  * Will check whether or not the token passed in the URL is valid
  */
 exports.resetToken = (req, res) => {
-  User.findOne({
-    resetPasswordToken: req.params.token,
-    resetPasswordExpires: { $gt: Date.now() }
-  }, (err, user) => {
-    if (!user || err) {
-      // User was not found or the token was expired, either way...
-      // Signals the front end to tell the user that their token was invalid
-      // and that they may need to send another email
-      res.redirect(`http://localhost:${process.env.DEV_PORT}/prompt/${true}`);
-    } else {
-      // The token is valid and will signal front end to render the login page
-      // The token we are passing is the same token that is in the database
-      const token = req.params.token;
+  User.findOne(
+    {
+      resetPasswordToken: req.params.token,
+      resetPasswordExpires: { $gt: Date.now() }
+    },
+    (err, user) => {
+      if (!user || err) {
+        // User was not found or the token was expired, either way...
+        // Signals the front end to tell the user that their token was invalid
+        // and that they may need to send another email
+        res.redirect(`http://localhost:${process.env.PORT}/prompt/${true}`);
+      } else {
+        // The token is valid and will signal front end to render the login page
+        // The token we are passing is the same token that is in the database
+        const token = req.params.token;
 
-      res.redirect(`http://localhost:${process.env.DEV_PORT}/redirect/${token}`);
+        res.redirect(`http://localhost:${process.env.PORT}/redirect/${token}`);
+      }
     }
-  });
+  );
 };
 
 /**
@@ -236,6 +240,7 @@ exports.resetToken = (req, res) => {
  * This can also be used when the user does not want to use an auth service
  */
 exports.register = (req, res) => {
+  console.log(global.smtpTransporter);
   // If the email is available, continue with the proccess
   // Generates the salt used for hashing
   bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
@@ -304,14 +309,19 @@ exports.register = (req, res) => {
    * @param {object} user The user object created
    */
   function sendConfirmationEmail(user) {
+    console.log(global.smtpTransporter);
     const mailOptions = {
       to: user.email,
       from: 'Texas Tech ACM',
       subject: 'Welcome to ACM: TTU',
-      html: `<p>Please click on the following link, or paste this into your browser to verify your account:</p>\n\n<a>${req.protocol}://${req.headers.host}/users/confirm/${user.confirmEmailToken}</a>\n\n<p>If you did not sign up for an account, please ignore this email.</p>\n`,
+      html: `<p>Please click on the following link, or paste this into your browser to verify your account:</p>\n\n<a>${
+        req.protocol
+      }://${req.headers.host}/users/confirm/${
+        user.confirmEmailToken
+      }</a>\n\n<p>If you did not sign up for an account, please ignore this email.</p>\n`
     };
 
-    smtpTransport.sendMail(mailOptions, (err) => {
+    global.smtpTransporter.sendMail(mailOptions, (err) => {
       if (err) {
         // This error is usually a connection error
         // Will not throw error is email is not found
@@ -336,18 +346,19 @@ exports.getProfile = (req, res) => {
  */
 exports.contactUs = (req, res) => {
   const mailOptions = {
-    from: `ACM: Texas Tech Contact Us <${process.env.dev_emailUsername}>`,
-    to: process.env.dev_emailUsername,
+    from: `ACM: Texas Tech Contact Us <${process.env.email_username}>`,
+    to: req.body.email,
     subject: 'ACM Question',
-    text: `You got a message!\n\nSender: ${req.body.name}:\n\nTopic: ${req.body.topic}\n\nMessage: ${req.body.message}\n`
+    text: `You got a message!\n\nSender: ${req.body.name}:\n\nTopic: ${
+      req.body.topic
+    }\n\nMessage: ${req.body.message}\n`
   };
 
-  smtpTransport.sendMail(mailOptions, (err) => {
+  global.smtpTransporter.sendMail(mailOptions, (err) => {
     if (err) {
       console.log(err);
       res.status(500).json({ success: false });
     } else {
-      console.log(`Message Sent to ${secret.testEmailUsername} at ${Date()}`);
       res.status(200).json({ success: true });
     }
   });

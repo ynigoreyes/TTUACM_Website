@@ -24,8 +24,6 @@ export class AppComponent implements OnInit {
       if (params.token) {
         const user = jwt_decode(params.token);
         this.authService.storeUserData(params.token, user.data);
-
-        console.log(`User is logged in: ${this.authService.loggedIn()}`);
       }
     });
   }
