@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/map';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class ContactService {
@@ -12,7 +13,7 @@ export class ContactService {
     const headers = new HttpHeaders();
 
     headers.append('Content-Type', 'application/json');
-    const post = this.http.post('http://localhost:80/users/contact-us', message, { headers: headers });
+    const post = this.http.post(`/users/contact-us`, message, { headers: headers });
 
     return post;
   }
