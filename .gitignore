@@ -6,6 +6,7 @@ launch.json
 
 # Docker Stuff
 docker-compose.override.yml
+docker-deploy/
 
 # Logs
 logs
@@ -117,3 +118,4 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+docker-compose.override.yml

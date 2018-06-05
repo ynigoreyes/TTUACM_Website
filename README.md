@@ -25,8 +25,6 @@ TODO:
 
   3) UI clean up
 
-  4) Events Page
-
 Contributing:
 
   You can find all controllers and routes in their respective directories.
