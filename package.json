@@ -12,7 +12,8 @@
     "client-test": "ng test",
     "start": "NODE_ENV=dev CLIENT=http://localhost:4200 node ./bin/www",
     "build": "ng build --prod --aot",
-    "test": "ng e2e && npm run client-test && npm run api-test"
+    "test": "ng e2e && npm run client-test && npm run api-test",
+    "docker": "docker-compose -f docker-compose-dev.yml up"
   },
   "private": true,
   "dependencies": {
