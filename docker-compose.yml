@@ -1,0 +1,41 @@
+version: "2"
+services:
+  web:
+  image: acmtexastech/acmttu-web:app
+    build:
+      context: .
+      args:
+
+        PORT: ${PORT}
+
+        db: ${db}
+
+        session_secret: ${session_secret}
+
+        email_username: ${email_username}
+        email_password: ${email_password}
+
+        # Google Credentials
+        google_clientID: ${google_clientID}
+        google_client_secret: ${google_client_secret}
+
+        # Google Calendar API Key
+        GCalAPIKey: ${GCalAPIKey}
+
+        # GitHub Credentials
+        github_clientID: ${github_clientID}
+        github_client_secret: ${github_client_secret}
+
+        # Facebook Credentials
+        facebook_clientID: ${facebook_clientID}
+        facebook_client_secret: ${facebook_client_secret}
+        # Idk what this one is used for, but I found it?
+        facebook_client_token: ${facebook_client_token}
+
+    ports:
+      # The ports have to be the same so that the backend redirects correctly
+      - "${PORT}:${PORT}"
+    networks:
+      - webnet
+networks:
+  webnet:
