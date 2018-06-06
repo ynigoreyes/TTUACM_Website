@@ -5,7 +5,7 @@ launch.json
 .vscode
 
 # Docker Stuff
-docker-compose.override.yml
+docker-compose.yml
 docker-deploy/
 
 # Logs

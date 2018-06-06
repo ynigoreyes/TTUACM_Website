@@ -5,7 +5,7 @@
 
 MaterialModule = require('@angular/material');
 
-module.exports = function (config) {
+module.exports = function(config) {
   config.set({
     basePath: '',
     frameworks: ['jasmine', '@angular/cli'],
@@ -13,16 +13,17 @@ module.exports = function (config) {
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
       require('karma-jasmine-html-reporter'),
+      require('karma-phantomjs-launcher'),
       require('karma-coverage-istanbul-reporter'),
       require('@angular/cli/plugins/karma'),
       require('@angular/material')
     ],
-    client:{
+    client: {
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
-    browsers: ['ChromeHeadless'],
+    browsers: ['PhantomJS'],
     coverageIstanbulReporter: {
-      reports: [ 'html', 'lcovonly' ],
+      reports: ['html', 'lcovonly'],
       fixWebpackSourcePaths: true
     },
     angularCli: {
@@ -33,7 +34,8 @@ module.exports = function (config) {
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
-    autoWatch: true,
-    singleRun: false
+    autoWatch: false,
+    singleRun: true,
+    concurrency: Infinity
   });
 };
