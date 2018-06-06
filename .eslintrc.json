@@ -15,6 +15,7 @@
     "function-paren-newline": "off",
     "arrow-body-style": "off",
     "no-unused-vars": "off",
-    "no-mixed-operators": "off"
+    "no-mixed-operators": "off",
+    "global-require": "off"
   }
 }

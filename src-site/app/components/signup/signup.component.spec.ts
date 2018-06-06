@@ -11,7 +11,6 @@ import { RouterModule } from '@angular/router';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { Oauth2Service } from '../../services/oauth2.service';
 
 describe('SignUpComponent', () => {
   let component: SignupComponent;
@@ -26,7 +25,6 @@ describe('SignUpComponent', () => {
         RouterTestingModule
       ],
       providers: [
-        Oauth2Service,
         AuthService,
         HttpClient,
         HttpHandler
