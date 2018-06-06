@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from '../../material.module';
 import { AppComponent } from '../../app.component';
 import { HttpClientModule } from '@angular/common/http';
+import { DeviceService } from '../../services/device.service';
 
 describe('NavbarComponent', () => {
   let component: NavbarComponent;
@@ -24,7 +25,8 @@ describe('NavbarComponent', () => {
       ],
       providers: [
         AuthService,
-        AppComponent
+        AppComponent,
+        DeviceService
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     })
