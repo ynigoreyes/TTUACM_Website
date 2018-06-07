@@ -2,6 +2,17 @@
 @import '../../../styles.scss';
 div.event-div {
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+  .loading-screens {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-basis: 500px;
+  }
+  .loading-screens > {
+    flex-basis: 30px;
+  }
 }
 
 mat-card.eachEvent {
