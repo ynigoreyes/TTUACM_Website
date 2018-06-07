@@ -28,5 +28,6 @@ exports.generateProdTransporter = () => {
     }
   });
   global.smtpTransporter = smtpTransporter;
-  console.log(smtpTransporter);
+  console.log('Running production');
+  console.log(`Email in use ${process.env.email_username}`);
 };
