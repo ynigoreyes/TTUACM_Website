@@ -1,3 +1,4 @@
+<!-- Main Content -->
 <div (window:resize)="checkForSmallScreen()" class="container event-div">
   <div class="text-center nav-button-container">
     <button (click)=getPrevEvents() mat-raised-button class="nav-buttons left-button">
@@ -8,34 +9,42 @@
       Next 10
     </button>
   </div>
-  <mat-card *ngFor="let event of displayedEvents" class="text-center eachEvent">
-    <div>
-      <small>
-        <em id="event-id">{{event.id}}</em>
-      </small>
-      <small>
-        <em id="date">{{getDate(event.startTime)}}</em>
-      </small>
-    </div>
-    <br>
-    <mat-card-title>{{event.title}}</mat-card-title>
-    <mat-card-content>
-      <div class="description">
-        {{event.description}}
+  <div class="loading-screens" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div class="loading-screens" *ngIf="!loading && error">
+    <mat-icon>error</mat-icon>
+  </div>
+  <div *ngIf="!loading && !error">
+    <mat-card *ngFor="let event of displayedEvents" class="text-center eachEvent">
+      <div>
+        <small>
+          <em id="event-id">{{event.id}}</em>
+        </small>
+        <small>
+          <em id="date">{{getDate(event.startTime)}}</em>
+        </small>
       </div>
-      <hr>
-    </mat-card-content>
-    <mat-card-footer>
-      <span class="location">
-        Meetings will be held at: {{event.location}} on {{event.day}}s
-      </span>
-      <span *ngIf="smallScreenSize === false"> | </span>
-      <div *ngIf="smallScreenSize === true"></div>
-      <span class="time">
-        Starting at {{getTime(event.startTime)}} and ending at {{getTime(event.endTime)}}
-      </span>
-    </mat-card-footer>
-  </mat-card>
+      <br>
+      <mat-card-title>{{event.title}}</mat-card-title>
+      <mat-card-content>
+        <div class="description">
+          {{event.description}}
+        </div>
+        <hr>
+      </mat-card-content>
+      <mat-card-footer>
+        <span class="location">
+          Meetings will be held at: {{event.location}} on {{event.day}}s
+        </span>
+        <span *ngIf="smallScreenSize === false"> | </span>
+        <div *ngIf="smallScreenSize === true"></div>
+        <span class="time">
+          Starting at {{getTime(event.startTime)}} and ending at {{getTime(event.endTime)}}
+        </span>
+      </mat-card-footer>
+    </mat-card>
+  </div>
   <div class="text-center nav-button-container">
     <button (click)=getPrevEvents() mat-raised-button class="nav-buttons left-button">
       Prev 10

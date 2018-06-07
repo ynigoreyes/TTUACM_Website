@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { EventsService } from '../../services/events.service';
 import { DeviceService } from '../../services/device.service';
+import { environment } from '../../../environments/environment';
+import { MatSnackBar } from '@angular/material';
 
 export interface Events {
   id: number;
@@ -21,6 +23,8 @@ export class EventsComponent {
   public allEvents: Array<Events>;
   public displayedEvents: Array<Events>;
   public smallScreenSize: boolean;
+  public loading: boolean = true;
+  public error: boolean = false;
 
   public lengthOfEvents: number;
   public minNumberEvent: number;
@@ -28,20 +32,28 @@ export class EventsComponent {
   public changeAmount = 10;
 
   constructor(
+    private snackbar: MatSnackBar,
     private eventService: EventsService,
     private deviceService: DeviceService
   ) {
-    this.eventService.getEvents().subscribe((res) => {
-
-    this.minNumberEvent = 0;
-    this.maxNumberEvent = 10;
-    // A Cache for all the events
-    this.allEvents = res['events'];
-    this.lengthOfEvents = this.allEvents.length;
-    // Current Events Displayed
-    this.displayedEvents = this.allEvents.slice(this.minNumberEvent, this.maxNumberEvent);
-    });
-    this.checkForSmallScreen();
+    this.eventService.getEvents().subscribe(
+      res => {
+        this.minNumberEvent = 0;
+        this.maxNumberEvent = 10;
+        // A Cache for all the events
+        this.allEvents = res['events'];
+        this.lengthOfEvents = this.allEvents.length;
+        // Current Events Displayed
+        this.displayedEvents = this.allEvents.slice(this.minNumberEvent, this.maxNumberEvent);
+        this.checkForSmallScreen();
+        this.loading = false;
+      },
+      err => {
+        this.loading = false;
+        this.error = true;
+        this.snackbar.open('Error occured when loading events.');
+      }
+    );
   }
 
   /**
@@ -93,7 +105,6 @@ export class EventsComponent {
     let day = newDate.getDay();
     let year = newDate.getFullYear();
     return `${month}-${day}-${year}`;
-
   }
 
   public checkForSmallScreen(): void {
@@ -105,6 +116,6 @@ export class EventsComponent {
     this.deviceService.checkXsScreen().subscribe(status => {
       xsmallCheck = status.matches;
     });
-    this.smallScreenSize =  smallCheck || xsmallCheck;
+    this.smallScreenSize = smallCheck || xsmallCheck;
   }
 }
