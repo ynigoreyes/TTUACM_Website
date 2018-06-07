@@ -1,7 +1,7 @@
 version: "2"
 services:
   web:
-  image: acmtexastech/acmttu-web:app
+    image: acmtexastech/acmttu-web:app
     build:
       context: .
       args:
