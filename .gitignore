@@ -2,6 +2,7 @@
 client_secret.json
 credentials.json
 launch.json
+.prod.env
 .vscode
 
 # Docker Stuff
@@ -119,3 +120,4 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+.prod.env
