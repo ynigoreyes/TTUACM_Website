@@ -5,8 +5,8 @@ launch.json
 .vscode
 
 # Docker Stuff
+docker-compose-prod.yml
 docker-compose-dev.yml
-docker-compose.yml
 docker-deploy/
 
 # Logs
@@ -119,5 +119,3 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-docker-compose.override.yml
-docker-compose-dev.yml
