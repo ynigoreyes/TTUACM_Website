@@ -1,0 +1,38 @@
+language: node_js
+node_js:
+  - 9.11.1
+
+env:
+  - DOCKER_COMPOSE_VERSION=1.8.0
+
+services:
+  - docker
+
+cache:
+  directories:
+    - "node_modules"
+
+before_install:
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - base=https://github.com/docker/machine/releases/download/v0.14.0 && curl -L $base/docker-machine-$(uname -s)-$(uname -m) >/tmp/docker-machine && sudo install /tmp/docker-machine /usr/local/bin/docker-machine
+
+install:
+  - npm install
+
+before_script:
+  - docker -v
+  - docker-compose -v
+  - docker-machine -v
+  - docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
+
+script:
+
+  - echo "restructuring for testing"
+  - docker build -t acmtexastech/ttuweb:dev .
+  - docker push acmtexastech/ttuweb
+
+notifications:
+  email: false

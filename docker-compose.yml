@@ -5,7 +5,7 @@ services:
     build:
       context: .
       args:
-
+        # This has to be 8080 for the most part
         PORT: ${PORT}
 
         db: ${db}

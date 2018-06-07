@@ -6,8 +6,6 @@ COPY . /app
 
 COPY package.json /app
 
-RUN npm install --silent --prod
-
 ARG session_secret
 ARG db
 ARG email_username
@@ -39,4 +37,4 @@ ENV PORT=${PORT}
 
 EXPOSE ${PORT}
 
-CMD [ "npm", "run", "start" ]
+CMD [ "npm", "run", "app-prod" ]
