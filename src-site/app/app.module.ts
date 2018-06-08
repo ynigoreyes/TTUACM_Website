@@ -15,7 +15,6 @@ import { HomeComponent } from './components/home/home.component';
 import { ErrorComponent } from './components/error/error.component';
 import { LoginComponent } from './components/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
-import { ResetComponent } from './components/reset/reset.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { CarouselComponent } from './components/carousel/carousel.component';
@@ -60,7 +59,6 @@ const appRoutes: Routes = [
     ErrorComponent,
     LoginComponent,
     ProfileComponent,
-    ResetComponent,
     FooterComponent,
     NavbarComponent,
     CarouselComponent,
