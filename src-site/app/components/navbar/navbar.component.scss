@@ -1,31 +1,68 @@
 @import '~@angular/material/theming';
 @import '../../../../src-site/styles.scss';
-.navbar {
+// .acm-navbar {
+//   display: flex;
+//   flex-direction: row;
+//   background-color: mat-color($acm-accent, darker);
+//   box-shadow: 0 3px 5px -1px rgba(0, 0, 0, .2), 0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12);
+//   .title {
+//     flex: 2;
+//   }
+//   .link-group {
+//     flex: 3;
+//     display: flex;
+//     flex-direction: row;
+//     .router-links {
+//       display: flex;
+//       align-items: center;
+//       justify-content: center;
+//       flex-direction: row;
+//       font-size: 1vw;
+//       margin: 5px 10px;
+//     }
+//     a {
+//       flex: 1;
+//       color: white;
+//     }
+//     a:hover {
+//       color: white;
+//       text-decoration: none;
+//     }
+//   }
+// }
+mat-toolbar-row {
   display: flex;
   flex-direction: row;
-  background-color: mat-color($acm-accent, darker);
-  box-shadow: 0 3px 5px -1px rgba(0, 0, 0, .2), 0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12);
-  a {
+  box-sizing: border-box;
+  padding: 0 16px;
+  width: 100%;
+  align-items: center;
+  white-space: nowrap;
+  .title {
+    font-size: $md-text;
+  }
+  .spacer {
+    flex: 1 1 auto;
+  }
+  .nav-buttons {
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-buttons> {
     flex: 1;
-    color: white;
-    font-size: $md-text;
-    margin: 5px 20px;
+    a {
+      font-size: $md-text;
+    }
   }
-  a:hover {
-    color: white;
-    text-decoration: none;
-  }
-  button {
-    min-width: 1%;
-  }
-  mat-icon {
-    font-size: $md-text;
-    height: 100%;
-    width: 100%;
-  }
-  .page {
-    flex: 1;
-    font-size: $md-text;
-    justify-self: right;
+}
+
+@media(max-width:768px) {
+  mat-toolbar-row {
+    justify-content: center;
+    .nav-buttons>a {
+      font-size: $sm-text;
+    }
   }
 }

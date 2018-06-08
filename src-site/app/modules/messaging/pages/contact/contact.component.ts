@@ -4,6 +4,7 @@ import { ContactService } from '../../services/contact.service';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../user-auth/services/auth.service';
+import { UserStateService } from '../../../../shared/services/user-state.service';
 
 @Component({
   selector: 'app-contact',
@@ -14,9 +15,9 @@ export class ContactComponent implements OnInit {
 
   constructor(
     private contactService: ContactService,
-    private authService: AuthService,
     private snackbar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    public userStateService: UserStateService
   ) { }
 
   public user: object = {
@@ -45,7 +46,7 @@ export class ContactComponent implements OnInit {
    */
   ngOnInit() {
     // Not yet implimented. Will save for another day
-    this.authService.currentUserObs.subscribe(currentUser => {
+    this.userStateService.currentUser$.subscribe(currentUser => {
       this.user = currentUser;
     });
   }

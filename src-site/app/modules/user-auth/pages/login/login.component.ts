@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { MatSnackBar } from '@angular/material';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UserPost, User } from '../../models/UserPost';
+import { UserStateService } from '../../../../shared/services/user-state.service';
 
 @Component({
   selector: 'app-login',
@@ -13,11 +15,12 @@ export class LoginComponent {
 
   constructor(
     private router: Router,
+    private snackBar: MatSnackBar,
     private authService: AuthService,
-    private snackBar: MatSnackBar
+    public userStateService: UserStateService
   ) { }
 
-  LoginForm = new FormGroup ({
+  LoginForm = new UserPost ({
     email: new FormControl('', {
       validators: [Validators.required]
     }),
@@ -26,10 +29,10 @@ export class LoginComponent {
     })
   });
 
-  public attemptLogin(post: FormGroup) {
-    const postUser = {
-      email: post['email'].trim(),
-      password: post['password'].trim()
+  public attemptLogin(post: UserPost) {
+    const postUser: User = {
+      email: post.email.trim(),
+      password: post.password.trim()
     };
     this.authService.authenticateUser(postUser).subscribe(data => {
       if (data['user'] === null) {
@@ -41,7 +44,8 @@ export class LoginComponent {
         this.snackBar.open(`Welcome ${data['user'].firstName}!`, 'Close', { duration: 2000 });
 
         // Stores the user's information into the local storage
-        this.authService.storeUserData(data['token'], data['user']);
+        this.userStateService.setToken(data['token']);
+        this.userStateService.setUser(data['user']);
 
         this.router.navigate(['/all-events']);
       }

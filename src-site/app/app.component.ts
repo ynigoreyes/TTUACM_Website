@@ -3,8 +3,8 @@ import { MatSidenav } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import * as jwt_decode from 'jwt-decode';
 import { environment } from '../environments/environment';
-import { AuthService } from './modules/user-auth/services/auth.service';
 import { DeviceService } from './shared/services/device.service';
+import { UserStateService } from './shared/services/user-state.service';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    public authService: AuthService,
+    public userStateService: UserStateService,
     public deviceService: DeviceService
   ) {
     this.saveToken();
@@ -32,21 +32,13 @@ export class AppComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe(params => {
       if (params.token) {
         const user = jwt_decode(params.token);
-        this.authService.storeUserData(params.token, user.data);
+        this.userStateService.setUser(user);
       }
     });
   }
 
-  public open() {
-    this.sidenav.open();
-  }
-
-  public close() {
-    this.sidenav.close();
-  }
-
   logout() {
-    this.authService.logOut();
+    this.userStateService.logOut();
     this.router.navigate(['/login']);
     return false;
   }

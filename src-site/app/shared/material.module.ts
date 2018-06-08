@@ -8,6 +8,7 @@ import {
   MatFormFieldModule,
   MatCardModule,
   MatMenuModule,
+  MatToolbarModule,
   MatIconModule,
   MatSnackBarModule,
   MatProgressSpinnerModule
@@ -22,6 +23,7 @@ import {
     MatFormFieldModule,
     MatCardModule,
     MatMenuModule,
+    MatToolbarModule,
     MatIconModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
@@ -35,6 +37,7 @@ import {
     MatFormFieldModule,
     MatCardModule,
     MatMenuModule,
+    MatToolbarModule,
     MatIconModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,

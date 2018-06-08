@@ -1,54 +1,11 @@
 <div id="Big-Div">
-  <mat-sidenav-container (backdropClick)="close()">
-    <div>
-      <app-navbar class="mat-navbar"></app-navbar>
-    </div>
-    <div>
-      <router-outlet></router-outlet>
-    </div>
-    <div>
-      <app-footer></app-footer>
-    </div>
-    <!-- This is the sideNav that will be available at every page -->
-    <mat-sidenav #sidenav (keydown.escape)="close()" class="example-sidenav" disableClose>
-      <ul>
-        <!-- Home Button -->
-        <li class="router-links" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-          <mat-icon>home</mat-icon>
-          <a (click)="close()" [routerLink]="['/']">Home</a>
-        </li>
-        <!-- Event Button -->
-        <li class="router-links" *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-          <mat-icon>event</mat-icon>
-          <a (click)="close()" [routerLink]="['events/all-events']">Events</a>
-        </li>
-        <!-- Team Button -->
-        <li class="router-links" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-          <mat-icon>people</mat-icon>
-          <a (click)="close()" [routerLink]="['/team']">Team</a>
-        </li>
-        <!-- Sign Up Button -->
-        <li class="router-links" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-          <mat-icon>add</mat-icon>
-          <a (click)="close()" [routerLink]="['auth/signup']">Sign Up</a>
-        </li>
-        <!-- Login Button -->
-        <li class="router-links" *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-          <mat-icon>sentiment_satisfied</mat-icon>
-          <a (click)="close()" [routerLink]="['auth/login']">Login</a>
-        </li>
-        <!-- Logout Button -->
-        <li class="router-links" *ngIf="authService.loggedIn()">
-          <mat-icon>sentiment_very_dissatisfied</mat-icon>
-          <a (click)="close()" [routerLink]="['/']" (click)="logout()">LogOut</a>
-        </li>
-        <!-- Contact Us Button -->
-        <li class="router-links" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-          <mat-icon>contact_support</mat-icon>
-          <a (click)="close()" [routerLink]="['/messaging']">Contact Us</a>
-        </li>
-      </ul>
-    </mat-sidenav>
-
-  </mat-sidenav-container>
+  <div>
+    <app-navbar class="mat-navbar"></app-navbar>
+  </div>
+  <div>
+    <router-outlet></router-outlet>
+  </div>
+  <div>
+    <app-footer></app-footer>
+  </div>
 </div>

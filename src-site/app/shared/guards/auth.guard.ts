@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
-import { AuthService } from '../../modules/user-auth/services/auth.service';
+import { UserStateService } from '../services/user-state.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    private authService: AuthService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private userStateService: UserStateService
   ) {
 
   }
 
   // Checks to see if the user is logged in. If not, it will redirect to Login
   canActivate() {
-    if (this.authService.loggedIn()) {
+    if (this.userStateService.loggedIn()) {
       return true;
     } else {
       this.snackBar.open(`Unauthorized`, 'Close', { duration: 4000 });

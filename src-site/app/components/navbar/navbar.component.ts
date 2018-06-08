@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppComponent } from '../../app.component';
-
+import { UserStateService } from '../../shared/services/user-state.service';
+import { DeviceService } from '../../shared/services/device.service';
 
 @Component({
   selector: 'app-navbar',
@@ -9,18 +10,17 @@ import { AppComponent } from '../../app.component';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {
-
+  public isSmallDevice: boolean;
   constructor(
-    private appComp: AppComponent,
-    private router: Router
-  ) { }
-
-  public close() {
-    this.appComp.close();
+    private router: Router,
+    public state: UserStateService,
+    public device: DeviceService
+  ) {
+    this.isSmallDevice = window.innerWidth <= 768;
   }
 
-  public open() {
-    this.appComp.open();
+  @HostListener('window:resize', ['$event'])
+  checkScreen(event) {
+    this.isSmallDevice = event.target.innerWidth <= 768;
   }
-
 }
