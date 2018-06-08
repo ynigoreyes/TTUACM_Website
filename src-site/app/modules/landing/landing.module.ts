@@ -7,10 +7,7 @@ import { TeamComponent } from './pages/team/team.component';
 import { LandingComponent } from './landing.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    LandingRoutingModule
-  ],
+  imports: [CommonModule, LandingRoutingModule],
   declarations: [HomeComponent, TeamComponent, LandingComponent]
 })
-export class LandingModule { }
+export class LandingModule {}
