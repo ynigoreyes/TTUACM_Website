@@ -6,7 +6,7 @@ import { AuthService } from '../../../services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from '../../../material.module';
+import { MaterialModule } from '../../../shared/material.module';
 
 describe('FeedComponent', () => {
   let component: FeedComponent;

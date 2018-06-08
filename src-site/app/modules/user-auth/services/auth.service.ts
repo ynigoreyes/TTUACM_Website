@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 // import { BehaviourSubject } from 'rxjs/BehaviourSubject';
 import 'rxjs/add/operator/map';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { environment } from '../../environments/environment.prod';
+import { environment } from '../../../../environments/environment';
 
 @Injectable()
 export class AuthService {

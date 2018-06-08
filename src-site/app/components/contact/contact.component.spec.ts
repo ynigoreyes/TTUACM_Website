@@ -5,7 +5,7 @@ import { NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ContactService } from '../../services/contact.service';
 import { HttpClientModule, HttpClient, HttpHandler } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
-import { MaterialModule } from '../../material.module';
+import { MaterialModule } from '../../shared/material.module';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 

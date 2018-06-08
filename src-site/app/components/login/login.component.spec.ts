@@ -6,7 +6,7 @@ import { HttpHandler, HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from '../../material.module';
+import { MaterialModule } from '../../shared/material.module';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;

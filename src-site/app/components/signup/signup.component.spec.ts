@@ -6,7 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SignupComponent } from './signup.component';
 import { AuthService } from '../../services/auth.service';
 
-import { MaterialModule } from '../../material.module';
+import { MaterialModule } from '../../shared/material.module';
 import { RouterModule } from '@angular/router';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';

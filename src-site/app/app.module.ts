@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { MatDialogModule, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MaterialModule } from './material.module';
+
 
 import { AppComponent } from './app.component';
 import { TeamComponent } from './components/team/team.component';
@@ -31,6 +31,7 @@ import { ContactComponent } from './components/contact/contact.component';
 import { RedirectComponent } from './components/forgot/redirect/redirect.component';
 import { PromptComponent } from './components/forgot/prompt/prompt.component';
 import { DeviceService } from './services/device.service';
+import { MaterialModule } from './shared/material.module';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -69,7 +70,7 @@ const appRoutes: Routes = [
     AuthMethodsComponent,
     ContactComponent,
     RedirectComponent,
-    PromptComponent
+    PromptComponent,
   ],
   imports: [
     BrowserModule,
