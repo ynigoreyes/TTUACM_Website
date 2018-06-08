@@ -6,10 +6,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./confirm-password.component.scss']
 })
 export class ConfirmPasswordComponent implements OnInit {
+  constructor(private authService: AuthService) {}
 
-  constructor() { }
+  public userEmail: string;
 
   ngOnInit() {
+    this.authService.currentEmail.subscribe(email => {
+      this.userEmail = email;
+    });
   }
-
 }
