@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material';
+import { AuthService } from '../../services/auth.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-forgot-redirect',
@@ -16,7 +20,7 @@ export class ForgotRedirectComponent implements OnInit {
 
   private resetToken: string;
 
-  public ResetForm = new FormGroup({
+  public ResetForm = new FormGroup ({
     password: new FormControl('', Validators.minLength(8)),
     confirmPassword: new FormControl('')
   }, {

@@ -1,10 +1,10 @@
 import { Component, ViewChild, OnInit, Output } from '@angular/core';
 import { MatSidenav } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AuthService } from './services/auth.service';
 import * as jwt_decode from 'jwt-decode';
-import { DeviceService } from './services/device.service';
 import { environment } from '../environments/environment';
+import { AuthService } from './modules/user-auth/services/auth.service';
+import { DeviceService } from './shared/services/device.service';
 
 @Component({
   selector: 'app-root',
@@ -18,18 +18,23 @@ export class AppComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     public authService: AuthService,
     public deviceService: DeviceService
-  ) { }
+  ) {
+    this.saveToken();
+  }
 
   ngOnInit(): void {
-    this.activatedRoute.queryParams.subscribe((params) => {
+    if (!environment.production) {
+      console.log('Running in development...');
+    }
+  }
+
+  private saveToken(): void {
+    this.activatedRoute.queryParams.subscribe(params => {
       if (params.token) {
         const user = jwt_decode(params.token);
         this.authService.storeUserData(params.token, user.data);
       }
     });
-    if (!environment.production) {
-      console.log('Running in development...');
-    }
   }
 
   public open() {

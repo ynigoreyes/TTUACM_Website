@@ -15,8 +15,8 @@ const routes: Routes = [
     loadChildren: './modules/events/events.module#EventsModule'
   },
   {
-    path: 'contact-us',
-    loadChildren: './modules/events/events.module#EventsModule'
+    path: 'messaging',
+    loadChildren: './modules/messaging/messaging.module#MessagingModule'
   },
   {
     path: 'error',

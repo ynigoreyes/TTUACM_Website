@@ -1,11 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Events } from '../../interfaces/Events.interface';
+import { EventsService } from '../../services/events.service';
+import { DeviceService } from '../../../../shared/services/device.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss']
 })
-export class CalendarComponent implements OnInit {
+export class CalendarComponent {
   public allEvents: Array<Events>;
   public displayedEvents: Array<Events>;
   public smallScreenSize: boolean;
@@ -21,7 +25,8 @@ export class CalendarComponent implements OnInit {
     private snackbar: MatSnackBar,
     private eventService: EventsService,
     private deviceService: DeviceService
-  ) {
+  ) { this.loadAllEvents(); }
+  public loadAllEvents(): void {
     this.eventService.getEvents().subscribe(
       res => {
         this.minNumberEvent = 0;

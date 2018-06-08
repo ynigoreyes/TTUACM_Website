@@ -10,9 +10,12 @@ import { ConfirmPasswordComponent } from './pages/confirm-password/confirm-passw
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ProfileEditComponent } from './pages/profile-edit/profile-edit.component';
 import { UserAuthComponent } from './user-auth.component';
+import { AuthMethodsComponent } from './components/auth-methods/auth-methods.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { MaterialModule } from '../../shared/material.module';
 
 @NgModule({
-  imports: [CommonModule, UserAuthRoutingModule],
+  imports: [CommonModule, UserAuthRoutingModule, ReactiveFormsModule, FormsModule, MaterialModule],
   declarations: [
     LoginComponent,
     RegistrationComponent,
@@ -21,7 +24,8 @@ import { UserAuthComponent } from './user-auth.component';
     ConfirmPasswordComponent,
     ProfileComponent,
     ProfileEditComponent,
-    UserAuthComponent
+    UserAuthComponent,
+    AuthMethodsComponent
   ]
 })
 export class UserAuthModule {}

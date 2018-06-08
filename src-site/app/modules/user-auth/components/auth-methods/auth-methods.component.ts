@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
-  selector: 'app-auth-methods',
+  selector: 'app-authmethods',
   templateUrl: './auth-methods.component.html',
   styleUrls: ['./auth-methods.component.scss']
 })

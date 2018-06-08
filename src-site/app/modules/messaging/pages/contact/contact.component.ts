@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from '@angular/forms';
 import { ContactService } from '../../services/contact.service';
-import { AuthService } from '../../services/auth.service';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../user-auth/services/auth.service';
 
 @Component({
   selector: 'app-contact',

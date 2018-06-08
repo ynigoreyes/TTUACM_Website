@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { MatSnackBar } from '@angular/material';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
   constructor(
     private router: Router,
@@ -13,7 +17,7 @@ export class LoginComponent implements OnInit {
     private snackBar: MatSnackBar
   ) { }
 
-  LoginForm = new FormGroup({
+  LoginForm = new FormGroup ({
     email: new FormControl('', {
       validators: [Validators.required]
     }),

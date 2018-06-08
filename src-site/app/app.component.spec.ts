@@ -3,10 +3,10 @@ import { AppComponent } from './app.component';
 import { MaterialModule } from './shared/material.module';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
-import { AuthService } from './services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DeviceService } from './services/device.service';
+import { AuthService } from './modules/user-auth/services/auth.service';
+import { DeviceService } from './shared/services/device.service';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {

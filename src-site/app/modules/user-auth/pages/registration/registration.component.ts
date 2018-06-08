@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { MatSnackBar } from '@angular/material';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.scss']
 })
-export class RegistrationComponent implements OnInit {
+export class RegistrationComponent {
 
   studentClassification = ['Freshman', 'Sophomore', 'Junior', 'Senior', 'Graduate', 'PhD'];
   constructor(
@@ -16,7 +20,7 @@ export class RegistrationComponent implements OnInit {
 
   // During production, remove initial value
   // This is for debugging purposes only
-  public SignUpForm = new FormGroup(
+  public SignUpForm = new FormGroup (
     {
       firstName: new FormControl(''),
       lastName: new FormControl(''),

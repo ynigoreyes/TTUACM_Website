@@ -1,7 +1,7 @@
 @import '~@angular/material/theming';
-@import '../../../../styles.scss';
+@import '../../../../../styles.scss';
 div#reset-background {
-  background-image: url('../../../../assets/images/backgrounds/Material-1.svg');
+  background-image: url('../../../../../assets/images/backgrounds/Material-1.svg');
   height: 100%;
   background-position: center;
   background-repeat: no-repeat;

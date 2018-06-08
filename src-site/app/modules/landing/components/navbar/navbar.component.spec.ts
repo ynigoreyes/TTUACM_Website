@@ -2,13 +2,10 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NavbarComponent } from './navbar.component';
 import { NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from '../../shared/material.module';
-import { AppComponent } from '../../app.component';
 import { HttpClientModule } from '@angular/common/http';
-import { DeviceService } from '../../services/device.service';
+
 
 describe('NavbarComponent', () => {
   let component: NavbarComponent;
@@ -18,15 +15,9 @@ describe('NavbarComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ NavbarComponent ],
       imports: [
-        MaterialModule,
         BrowserAnimationsModule,
         RouterTestingModule,
         HttpClientModule
-      ],
-      providers: [
-        AuthService,
-        AppComponent,
-        DeviceService
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     })

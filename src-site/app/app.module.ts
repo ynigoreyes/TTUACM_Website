@@ -6,6 +6,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { MaterialModule } from './shared/material.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { AuthService } from './modules/user-auth/services/auth.service';
+import { UserStateService } from './shared/services/user-state.service';
+import { DeviceService } from './shared/services/device.service';
 
 @NgModule({
   declarations: [
@@ -19,7 +22,10 @@ import { AppRoutingModule } from './app-routing.module';
     MaterialModule
   ],
   providers: [
-    HttpClientModule
+    HttpClientModule,
+    DeviceService,
+    AuthService,
+    UserStateService
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
