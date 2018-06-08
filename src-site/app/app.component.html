@@ -15,17 +15,12 @@
         <li class="router-links" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
           <mat-icon>home</mat-icon><a (click)="close()" [routerLink]="['/']">Home</a>
         </li>
-        <!-- This is the Events route that is not done yet -->
         <li class="router-links" *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
           <mat-icon>event</mat-icon><a (click)="close()" [routerLink]="['/all-events']">Events</a>
         </li>
         <li class="router-links" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
           <mat-icon>people</mat-icon><a (click)="close()" [routerLink]="['/team']">Team</a>
         </li>
-        <!-- Same with this one -->
-        <!-- <li class="router-links" *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-          <mat-icon>explore</mat-icon><a (click)="close()" [routerLink]="['/dashboard']">Dashboard</a>
-        </li> -->
         <li class="router-links" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
           <mat-icon>add</mat-icon><a (click)="close()" [routerLink]="['/signup']">Sign Up</a>
         </li>
