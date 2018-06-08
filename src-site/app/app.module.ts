@@ -9,10 +9,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AuthService } from './modules/user-auth/services/auth.service';
 import { UserStateService } from './shared/services/user-state.service';
 import { DeviceService } from './shared/services/device.service';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    NavbarComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
