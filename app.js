@@ -1,3 +1,5 @@
+require('events').EventEmitter.prototype._maxListeners = 100;
+
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
@@ -16,7 +18,6 @@ require('dotenv').config({ path: path.join(__dirname, '/.env') });
 // Express Routing and App setup
 const app = express();
 
-
 // Where the views will be
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -25,12 +26,15 @@ app.use(express.static(path.join(__dirname, 'public')));
  * Connected to a local replica of Mongo so that we can store data
  * and see how it looks like without connecting to our actual database
  */
-mongoose.connect(process.env.db, {
-  useMongoClient: true,
-  socketTimeoutMS: 0,
-  keepAlive: true,
-  reconnectTries: 30
-});
+mongoose.connect(
+  process.env.db,
+  {
+    useMongoClient: true,
+    socketTimeoutMS: 0,
+    keepAlive: true,
+    reconnectTries: 30
+  }
+);
 mongoose.connection.on('connected', () => {
   console.log('Database Connection Successful');
 });
@@ -67,7 +71,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
  * I change port to 80. CORS is so that I can hit the API from the
  * development port without errors
  */
-app.use(cors({origin: true}));
+app.use(cors({ origin: true }));
 
 // Routes
 const usersRoute = require('./routes/users');
@@ -78,7 +82,6 @@ app.use('/users', usersRoute);
 app.use('/events', eventsRoute);
 app.use('/auth', authRoute);
 
-
 /**
  * During production, this should redirect everyone that puts
  * in a weird url to the index page. Uncomment when deploying for production
@@ -87,7 +90,6 @@ app.use('/auth', authRoute);
 app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, './public/index.html'));
 });
-
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {
