@@ -12,14 +12,31 @@ const nmconfig = require('./config/nodemailer-transporter');
 
 mongoose.Promise = global.Promise;
 
-// dotenv file placed in root directory during development
-require('dotenv').config({ path: path.join(__dirname, '/.env') });
-
 // Express Routing and App setup
 const app = express();
 
 // Where the views will be
 app.use(express.static(path.join(__dirname, 'public')));
+
+if (process.env.NODE_ENV === 'prod') {
+  console.log(`Mongo DB Connected using:\n${process.env.db}`);
+  // dotenv file placed in root directory during development
+  require('dotenv').config({ path: path.join(__dirname, '/.prod.env') });
+  for (const property in process.env) {
+    if (process.env.hasOwnProperty(property)) {
+      console.log(`${property}: ${process.env[property]}\n`);
+    }
+  }
+  nmconfig.generateProdTransporter();
+} else {
+  require('dotenv').config({ path: path.join(__dirname, '/.env') });
+  for (const property in process.env) {
+    if (process.env.hasOwnProperty(property)) {
+      console.log(`${property}: ${process.env[property]}\n`);
+    }
+  }
+  nmconfig.generateTestTransporter();
+}
 
 /**
  * Now using MongoClient
@@ -41,18 +58,6 @@ mongoose.connection.on('connected', () => {
 mongoose.connection.on('error', (err) => {
   console.log(`Error Connecting to database... \n${err}`);
 });
-
-if (process.env.NODE_ENV === 'prod') {
-  console.log(`Mongo DB Connected using:\n${process.env.db}`);
-  nmconfig.generateProdTransporter();
-} else {
-  console.log('\nRunning in development.\nClient should be running on http://localhost:4200\n\n');
-  console.log('Current environment variables available');
-  console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
-  console.log(`CLIENT: ${process.env.CLIENT}`);
-  console.log(`PORT: ${process.env.PORT}\n`);
-  nmconfig.generateTestTransporter();
-}
 
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions

@@ -5,6 +5,7 @@ import { EventsRoutingModule } from './events-routing.module';
 import { CalendarComponent } from './page/calendar/calendar.component';
 import { EventsComponent } from './events.component';
 import { MaterialModule } from '../../shared/material.module';
+import { EventsService } from './services/events.service';
 
 @NgModule({
   imports: [
@@ -12,6 +13,7 @@ import { MaterialModule } from '../../shared/material.module';
     EventsRoutingModule,
     MaterialModule
   ],
-  declarations: [CalendarComponent, EventsComponent]
+  declarations: [CalendarComponent, EventsComponent],
+  providers: [EventsService]
 })
 export class EventsModule { }

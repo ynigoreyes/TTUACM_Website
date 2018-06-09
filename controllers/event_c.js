@@ -1,3 +1,4 @@
+/* eslint-disable */
 const fs = require('fs');
 const readline = require('readline');
 const { google } = require('googleapis');
@@ -15,7 +16,6 @@ module.exports.getEvents = (req, res) => {
   } catch (err) {
     return console.log('Error loading client secret file:', err);
   }
-
   /**
    * Create an OAuth2 client with the given credentials, and then execute the
    * given callback function.
@@ -26,8 +26,7 @@ module.exports.getEvents = (req, res) => {
   function authorize(credentials, callback) {
     const { client_secret, client_id, redirect_uris } = credentials.installed;
     let token = {};
-    const oAuth2Client = new google.auth.OAuth2(
-      client_id, client_secret, redirect_uris[0]);
+    const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
 
     // Check if we have previously stored a token.
     try {
@@ -49,14 +48,14 @@ module.exports.getEvents = (req, res) => {
     console.log('nut getAccessToken');
     const authUrl = oAuth2Client.generateAuthUrl({
       access_type: 'offline',
-      scope: SCOPES,
+      scope: SCOPES
     });
     console.log('Authorize this app by visiting this url:', authUrl);
     const rl = readline.createInterface({
       input: process.stdin,
-      output: process.stdout,
+      output: process.stdout
     });
-    rl.question('Enter the code from that page here: ', (code) => {
+    rl.question('Enter the code from that page here: ', code => {
       rl.close();
       oAuth2Client.getToken(code, (err, token) => {
         if (err) return callback(err);
@@ -79,49 +78,52 @@ module.exports.getEvents = (req, res) => {
    */
   function listEvents(auth) {
     const calendar = google.calendar({ version: 'v3', auth });
-    calendar.events.list({
-      calendarId: 'primary',
-      timeMin: (new Date()).toISOString(),
-      singleEvents: true,
-      orderBy: 'startTime',
-    }, (err, { data }) => {
-      if (err) return console.log(`The API returned an error: ${err}`);
-      const events = data.items;
-      if (events.length) {
-        // Will store all of the events and return
-        eventsList = [];
+    calendar.events.list(
+      {
+        calendarId: 'primary',
+        timeMin: new Date().toISOString(),
+        singleEvents: true,
+        orderBy: 'startTime'
+      },
+      (err, { data }) => {
+        if (err) return console.log(`The API returned an error: ${err}`);
+        const events = data.items;
+        if (events.length) {
+          // Will store all of the events and return
+          eventsList = [];
 
-        // Maps all of the numbers to days
-        const weekday = [
-          'Sunday',
-          'Monday',
-          'Tuesday',
-          'Wednesday',
-          'Thursday',
-          'Friday',
-          'Saturday'
-        ];
-        events.map((event, i) => {
-          const start = event.start.dateTime || event.start.date;
-          const end = event.end.dateTime || event.end.date;
-          // Event Object
-          eventsList.push({
-            id: i + 1,
-            day: `${weekday[new Date(start).getDay()]}`,
-            startTime: start,
-            endTime: end,
-            title: event.summary || 'N/A',
-            location: event.location || 'N/A',
-            creator: event.creator.displayName || 'N/A',
-            description: event.description || 'N/A'
+          // Maps all of the numbers to days
+          const weekday = [
+            'Sunday',
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+            'Saturday'
+          ];
+          events.map((event, i) => {
+            const start = event.start.dateTime || event.start.date;
+            const end = event.end.dateTime || event.end.date;
+            // Event Object
+            eventsList.push({
+              id: i + 1,
+              day: `${weekday[new Date(start).getDay()]}`,
+              startTime: start,
+              endTime: end,
+              title: event.summary || 'N/A',
+              location: event.location || 'N/A',
+              creator: event.creator.displayName || 'N/A',
+              description: event.description || 'N/A'
+            });
           });
-        });
-        // Sends back the event object
-        res.json({ events: eventsList });
-      } else {
-        // Sends back an empty list
-        res.json({ events: [] });
+          // Sends back the event object
+          res.json({ events: eventsList });
+        } else {
+          // Sends back an empty list
+          res.json({ events: [] });
+        }
       }
-    });
+    );
   }
 };

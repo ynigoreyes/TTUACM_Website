@@ -1,4 +1,3 @@
-# ignore .env in production, I can't run this through travis so we have to keep it
 Dockerfile
 .dockerignore
 .editorconfig
@@ -12,4 +11,3 @@ tslint.json
 README.md
 connect-db.sh
 colors.txt
-docker-compose.yml

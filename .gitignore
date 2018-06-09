@@ -1,9 +1,6 @@
 # API Credentials and Keys
 client_secret.json
 credentials.json
-launch.json
-.prod.env
-.vscode
 
 # Docker Stuff
 docker-compose-prod.yml
@@ -68,6 +65,7 @@ typings/
 
 # dotenv environment variables file
 .env
+.prod.env
 
 # Mongo Login
 mongo.txt
@@ -120,4 +118,5 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-.prod.env
+launch.json
+.vscode

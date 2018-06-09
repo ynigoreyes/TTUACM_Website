@@ -1,23 +1,28 @@
 @import '~@angular/material/theming';
 @import '../../../../../styles.scss';
-
 .home-content {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: mat-color($acm-primary, lighter);
+  padding: 10px;
+  color: black;
+  background-color: #dedede;
   header {
-    font-size: $sm-text;
-    width: 60%;
+    font-size: $lg-text;
+    width: 100%;
     text-align: center;
+    margin-top: 50px;
   }
   .feature-list {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     width: 100%;
+    margin: 75px auto;
     app-feature {
       flex: auto;
+      margin-bottom: 45px;
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Events } from '../../interfaces/Events.interface';
 import { EventsService } from '../../services/events.service';
 import { DeviceService } from '../../../../shared/services/device.service';
@@ -9,7 +9,7 @@ import { MatSnackBar } from '@angular/material';
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss']
 })
-export class CalendarComponent {
+export class CalendarComponent implements OnDestroy {
   public allEvents: Array<Events>;
   public displayedEvents: Array<Events>;
   public smallScreenSize: boolean;
@@ -108,5 +108,9 @@ export class CalendarComponent {
       xsmallCheck = status.matches;
     });
     this.smallScreenSize = smallCheck || xsmallCheck;
+  }
+
+  ngOnDestroy(): void {
+    this.snackbar.dismiss();
   }
 }

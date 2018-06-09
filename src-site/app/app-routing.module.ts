@@ -19,6 +19,10 @@ const routes: Routes = [
     loadChildren: './modules/messaging/messaging.module#MessagingModule'
   },
   {
+    path: 'explore',
+    loadChildren: './modules/explore/explore.module#ExploreModule'
+  },
+  {
     path: 'error',
     loadChildren: './modules/errors/errors.module#ErrorsModule'
   },
