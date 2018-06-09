@@ -1,3 +1,9 @@
-<p>
-  home works!
-</p>
+<app-carousel></app-carousel>
+<div class='home-content'>
+  <header>The Association for Computing Machinery chapter at Texas Tech University</header>
+  <div class="spacer spacer-1"></div>
+  <div class="feature-list">
+    <app-feature *ngFor="let feature of features"></app-feature>
+  </div>
+  <div class="spacer spacer-2"></div>
+</div>

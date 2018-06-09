@@ -1,0 +1,23 @@
+@import '~@angular/material/theming';
+@import '../../../../../styles.scss';
+
+.home-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: mat-color($acm-primary, lighter);
+  header {
+    font-size: $sm-text;
+    width: 60%;
+    text-align: center;
+  }
+  .feature-list {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    app-feature {
+      flex: auto;
+    }
+  }
+}

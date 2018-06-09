@@ -8,6 +8,7 @@ import { LandingComponent } from './landing.component';
 import { CarouselComponent } from './components/carousel/carousel.component';
 import { MaterialModule } from '../../shared/material.module';
 import { UserStateService } from '../../shared/services/user-state.service';
+import { FeatureComponent } from './pages/home/components/feature/feature.component';
 
 @NgModule({
   imports: [CommonModule, LandingRoutingModule, MaterialModule],
@@ -16,6 +17,7 @@ import { UserStateService } from '../../shared/services/user-state.service';
     TeamComponent,
     LandingComponent,
     CarouselComponent,
+    FeatureComponent,
   ],
   providers: [UserStateService]
 })
