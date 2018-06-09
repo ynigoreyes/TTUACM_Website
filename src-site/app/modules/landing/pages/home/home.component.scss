@@ -26,3 +26,10 @@
     }
   }
 }
+
+@media(max-width:425px) {
+  .home-content>header {
+    font-size: 25px;
+    padding: 0px 20px;
+  }
+}

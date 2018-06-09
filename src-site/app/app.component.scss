@@ -1,7 +1,7 @@
 @import '~@angular/material/theming';
 @import '../styles.scss';
 div#Big-Div {
-  background-color: #c62828;
+  background-color: mat-color($acm-primary, lighter);
   color: #ffffff;
   width: 100%;
   .example-sidenav {

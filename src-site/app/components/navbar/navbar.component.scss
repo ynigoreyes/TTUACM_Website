@@ -1,11 +1,13 @@
 @import '~@angular/material/theming';
 @import '../../../../src-site/styles.scss';
 mat-toolbar-row {
+  background-color: mat-color($acm-accent);
   display: flex;
   flex-direction: row;
   box-sizing: border-box;
-  padding: 0 16px;
+  padding: 0 42px;
   width: 100%;
+
   align-items: center;
   white-space: nowrap;
   .title {
@@ -30,10 +32,16 @@ mat-toolbar-row {
 
 @media(max-width:768px) {
   mat-toolbar-row {
-    height: 40px;
+    height: 64px;
     justify-content: center;
   }
   .nav-buttons>a {
     font-size: $xs-text
+  }
+}
+
+@media(max-width:425px) {
+  mat-toolbar-row {
+    height: 36px;
   }
 }

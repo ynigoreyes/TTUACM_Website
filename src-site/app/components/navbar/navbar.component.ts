@@ -16,11 +16,11 @@ export class NavbarComponent {
     public state: UserStateService,
     public device: DeviceService
   ) {
-    this.isSmallDevice = window.innerWidth <= 768;
+    this.isSmallDevice = window.innerWidth <= 425;
   }
 
   @HostListener('window:resize', ['$event'])
   checkScreen(event) {
-    this.isSmallDevice = event.target.innerWidth <= 768;
+    this.isSmallDevice = event.target.innerWidth <= 425;
   }
 }
