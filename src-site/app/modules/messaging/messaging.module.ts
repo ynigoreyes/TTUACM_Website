@@ -6,15 +6,11 @@ import { MessagingComponent } from './messaging.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { MaterialModule } from '../../shared/material.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { UserStateService } from '../../shared/services/user-state.service';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MessagingRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MaterialModule,
-  ],
-  declarations: [MessagingComponent, ContactComponent]
+  imports: [CommonModule, MessagingRoutingModule, FormsModule, ReactiveFormsModule, MaterialModule],
+  declarations: [MessagingComponent, ContactComponent],
+  providers: [UserStateService]
 })
-export class MessagingModule { }
+export class MessagingModule {}

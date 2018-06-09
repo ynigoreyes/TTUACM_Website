@@ -4,7 +4,11 @@ import { NavbarComponent } from './navbar.component';
 import { NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpHandler, HttpClient } from '@angular/common/http';
+import { UserStateService } from '../../shared/services/user-state.service';
+import { AuthService } from '../../modules/user-auth/services/auth.service';
+import { MaterialModule } from '../../shared/material.module';
+import { DeviceService } from '../../shared/services/device.service';
 
 
 describe('NavbarComponent', () => {
@@ -15,9 +19,16 @@ describe('NavbarComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ NavbarComponent ],
       imports: [
+        MaterialModule,
         BrowserAnimationsModule,
-        RouterTestingModule,
-        HttpClientModule
+        RouterTestingModule
+      ],
+      providers: [
+        AuthService,
+        HttpClient,
+        HttpHandler,
+        UserStateService,
+        DeviceService
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     })
@@ -28,8 +39,5 @@ describe('NavbarComponent', () => {
     fixture = TestBed.createComponent(NavbarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
-  it('should create', () => {
-    expect(component).toBeTruthy();
   });
 });

@@ -1,7 +1,7 @@
 @import '~@angular/material/theming';
 @import '../../../../src-site/styles.scss';
 #footer-div {
-  background-color: mat-color($acm-accent, darker);
+  background-color: mat-color($acm-primary, darker);
   text-align: center;
   color: #ffffff;
 }

@@ -46,7 +46,7 @@ export class ContactComponent implements OnInit {
    */
   ngOnInit() {
     // Not yet implimented. Will save for another day
-    this.userStateService.currentUser$.subscribe(currentUser => {
+    this.userStateService.userObject.subscribe(currentUser => {
       this.user = currentUser;
     });
   }

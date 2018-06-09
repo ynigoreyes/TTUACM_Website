@@ -13,7 +13,7 @@ export class ConfirmPasswordComponent implements OnInit {
   public userEmail: string;
 
   ngOnInit() {
-    this.userStateService.currentEmail$.subscribe(email => {
+    this.userStateService.userEmail.subscribe(email => {
       this.userEmail = email;
     });
   }

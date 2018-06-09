@@ -5,7 +5,6 @@ import { NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AuthService } from '../../../user-auth/services/auth.service';
 
 describe('FooterComponent', () => {
   let component: FooterComponent;
@@ -18,9 +17,6 @@ describe('FooterComponent', () => {
         BrowserAnimationsModule,
         RouterTestingModule,
         HttpClientModule
-      ],
-      providers: [
-        AuthService
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     })

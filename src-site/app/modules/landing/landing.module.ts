@@ -7,6 +7,7 @@ import { TeamComponent } from './pages/team/team.component';
 import { LandingComponent } from './landing.component';
 import { CarouselComponent } from './components/carousel/carousel.component';
 import { MaterialModule } from '../../shared/material.module';
+import { UserStateService } from '../../shared/services/user-state.service';
 
 @NgModule({
   imports: [CommonModule, LandingRoutingModule, MaterialModule],
@@ -15,6 +16,7 @@ import { MaterialModule } from '../../shared/material.module';
     TeamComponent,
     LandingComponent,
     CarouselComponent,
-  ]
+  ],
+  providers: [UserStateService]
 })
 export class LandingModule {}

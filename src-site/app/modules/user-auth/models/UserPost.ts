@@ -8,7 +8,9 @@ export class UserPost extends FormGroup {
   public password: string;
   public confirmPassword: string;
 }
-
+/**
+ * User object that persists throughout session
+ */
 export interface User {
   firstName?: string;
   lastName?: string;

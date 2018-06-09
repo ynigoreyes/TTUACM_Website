@@ -13,6 +13,7 @@ import { UserAuthComponent } from './user-auth.component';
 import { AuthMethodsComponent } from './components/auth-methods/auth-methods.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MaterialModule } from '../../shared/material.module';
+import { UserStateService } from '../../shared/services/user-state.service';
 
 @NgModule({
   imports: [CommonModule, UserAuthRoutingModule, ReactiveFormsModule, FormsModule, MaterialModule],
@@ -26,6 +27,7 @@ import { MaterialModule } from '../../shared/material.module';
     ProfileEditComponent,
     UserAuthComponent,
     AuthMethodsComponent
-  ]
+  ],
+  providers: [UserStateService]
 })
 export class UserAuthModule {}
