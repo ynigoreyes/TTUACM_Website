@@ -16,9 +16,10 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    public userStateService: UserStateService,
+    public state: UserStateService,
     public deviceService: DeviceService
   ) {
+    this.state.logOut();
     this.saveToken();
   }
 
@@ -32,13 +33,14 @@ export class AppComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe(params => {
       if (params.token) {
         const user = jwt_decode(params.token);
-        this.userStateService.setUser(user);
+        this.state.setUser(user);
+        this.state.setToken(params.token);
       }
     });
   }
 
   logout() {
-    this.userStateService.logOut();
+    this.state.logOut();
     this.router.navigate(['/login']);
     return false;
   }

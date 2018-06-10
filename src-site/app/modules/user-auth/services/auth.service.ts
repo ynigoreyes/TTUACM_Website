@@ -10,10 +10,10 @@ import { environment } from '../../../../environments/environment';
 @Injectable()
 export class AuthService {
   private signUpEP: string = `${environment.host}/users/register`;
-  private loginEP: string = `/${environment.host}users/login`;
-  private forgotEP: string = `/${environment.host}users/forgot`;
-  private resetEP: string = `/${environment.host}users/reset`;
-  private confirmationEP: string = `/${environment.host}users/confirmation`;
+  private loginEP: string = `${environment.host}/users/login`;
+  private forgotEP: string = `${environment.host}/users/forgot`;
+  private resetEP: string = `${environment.host}/users/reset`;
+  private confirmationEP: string = `${environment.host}/users/confirmation`;
   constructor(private http: HttpClient) {}
 
   public registerUser(newUser) {
@@ -33,9 +33,7 @@ export class AuthService {
   public authenticateUser(existingUser): Observable<object> {
     const headers = new HttpHeaders();
     headers.append('Content-type', 'application/json');
-
     const post = this.http.post(this.loginEP, existingUser, { headers: headers });
-
     return post;
   }
 

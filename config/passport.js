@@ -52,25 +52,28 @@ module.exports = (passport) => {
   };
   passport.use(
     new GoogleStrategy(googleOpts, (accessToken, refreshToken, profile, done) => {
-      User.findOne({ googleId: profile.id }).then((currentUser) => {
-        if (currentUser) {
-          // User exists in database
-          done(null, currentUser);
-        } else {
-          // User does not exist... Create a new one
-          const data = {
-            googleId: profile.id,
-            email: profile.email,
-            firstName: profile.displayName.split(' ')[0],
-            lastName: profile.displayName.split(' ')[1],
-            verified: true
-          };
-          const newUser = new User(data);
-          newUser.save().then((user) => {
-            done(null, user);
-          });
-        }
-      });
+      User.findOne({ googleId: profile.id })
+        .then((currentUser) => {
+          if (currentUser) {
+            // User exists in database
+            done(null, currentUser);
+          } else {
+            const data = {
+              googleId: profile.id,
+              email: profile.email,
+              firstName: profile.displayName.split(' ')[0],
+              lastName: profile.displayName.split(' ')[1],
+              verified: true
+            };
+            User.mergeAccounts(profile, data, 'googleId', (err, user) => {
+              done(err, user);
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          done(err, null);
+        });
     })
   );
 
@@ -99,14 +102,14 @@ module.exports = (passport) => {
               lastName: profile.displayName.split(' ')[1],
               verified: true
             };
-            const newUser = new User(data);
-            newUser.save().then((user) => {
-              done(null, user);
+            User.mergeAccounts(profile, data, 'githubId', (err, user) => {
+              done(err, user);
             });
           }
         })
         .catch((err) => {
           console.error(err);
+          done(err, null);
         });
     })
   );
@@ -136,14 +139,14 @@ module.exports = (passport) => {
               lastName: profile._json.last_name,
               verified: true
             };
-            const newUser = new User(data);
-            newUser.save().then((user) => {
-              done(null, user);
+            User.mergeAccounts(profile, data, 'facebookId', (err, user) => {
+              done(err, user);
             });
           }
         })
         .catch((err) => {
           console.error(err);
+          done(err, null);
         });
     })
   );

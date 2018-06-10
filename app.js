@@ -27,6 +27,7 @@ if (process.env.NODE_ENV === 'prod') {
       console.log(`${property}: ${process.env[property]}\n`);
     }
   }
+  connectDB();
   nmconfig.generateProdTransporter();
 } else {
   require('dotenv').config({ path: path.join(__dirname, '/.env') });
@@ -35,6 +36,7 @@ if (process.env.NODE_ENV === 'prod') {
       console.log(`${property}: ${process.env[property]}\n`);
     }
   }
+  connectDB();
   nmconfig.generateTestTransporter();
 }
 
@@ -43,21 +45,23 @@ if (process.env.NODE_ENV === 'prod') {
  * Connected to a local replica of Mongo so that we can store data
  * and see how it looks like without connecting to our actual database
  */
-mongoose.connect(
-  process.env.db,
-  {
-    useMongoClient: true,
-    socketTimeoutMS: 0,
-    keepAlive: true,
-    reconnectTries: 30
-  }
-);
-mongoose.connection.on('connected', () => {
-  console.log('Database Connection Successful');
-});
-mongoose.connection.on('error', (err) => {
-  console.log(`Error Connecting to database... \n${err}`);
-});
+function connectDB() {
+  mongoose.connect(
+    process.env.db,
+    {
+      useMongoClient: true,
+      socketTimeoutMS: 0,
+      keepAlive: true,
+      reconnectTries: 30
+    }
+  );
+  mongoose.connection.on('connected', () => {
+    console.log('Database Connection Successful');
+  });
+  mongoose.connection.on('error', (err) => {
+    console.log(`Error Connecting to database... \n${err}`);
+  });
+}
 
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions

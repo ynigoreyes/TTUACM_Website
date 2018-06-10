@@ -20,12 +20,13 @@ exports.login = (req, res) => {
     if (err) {
       console.log(`Error in login sequence function: \n\n${err}`);
       res.status(404).json({
-        success: false,
         user: null,
         msg: 'Unknown Error has occured, Please try again later'
       });
-    } else if (foundUser !== null) {
+    } else if (foundUser !== null && foundUser.password !== null) {
       // If there is a user with that email, check their password
+      // TODO: When the user tries to log in with their email when they
+      // registered with OAuth2, there is no password saved
       bcrypt.compare(inputPassword, foundUser.password, (err, response) => {
         if (err) {
           console.log(err);
@@ -37,13 +38,11 @@ exports.login = (req, res) => {
           });
 
           res.status(200).json({
-            success: true,
             user: foundUser,
             token: `JWT ${token}`
           });
         } else {
-          res.status(200).json({
-            success: false,
+          res.status(401).json({
             user: null,
             msg: 'Invalid Login'
           });
@@ -51,8 +50,7 @@ exports.login = (req, res) => {
       });
     } else {
       // If the was no user found with that user name
-      res.status(200).json({
-        success: false,
+      res.status(404).json({
         user: null,
         msg: 'User Not Found'
       });

@@ -18,7 +18,8 @@
     "no-mixed-operators": "off",
     "global-require": "off",
     "no-restricted-syntax": "off",
-    "no-prototype-builtins":"off"
+    "no-prototype-builtins":"off",
+    "no-param-reassign": "off"
 
   }
 }

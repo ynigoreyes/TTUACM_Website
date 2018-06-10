@@ -17,6 +17,7 @@ export class NavbarComponent {
     public device: DeviceService
   ) {
     this.isSmallDevice = window.innerWidth <= 425;
+    console.log(this.state.loggedIn());
   }
 
   @HostListener('window:resize', ['$event'])
