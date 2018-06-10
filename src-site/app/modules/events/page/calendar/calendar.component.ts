@@ -93,7 +93,7 @@ export class CalendarComponent implements OnDestroy {
   public getDate(date) {
     let newDate = new Date(date);
     let month = newDate.getMonth() + 1;
-    let day = newDate.getDay();
+    let day = newDate.getDate();
     let year = newDate.getFullYear();
     return `${month}-${day}-${year}`;
   }
