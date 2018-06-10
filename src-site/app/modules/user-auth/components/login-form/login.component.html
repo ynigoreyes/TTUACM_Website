@@ -7,6 +7,7 @@
   <!-- Password -->
   <mat-form-field>
     <input type="password" formControlName="password" matInput placeholder="Password">
+    <mat-error>Password is empty</mat-error>
   </mat-form-field>
   <!-- Submit -->
   <button class="submit-buttons" mat-raised-button type="submit" id="btn-login" [disabled]="!LoginForm.valid">Login</button>
