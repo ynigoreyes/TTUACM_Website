@@ -4,7 +4,7 @@ const GitHubStrategy = require('passport-github').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 
-const User = require('../models/user');
+const User = require('../models/user.model');
 
 /**
  * Uses a JWT stategy to verify the token

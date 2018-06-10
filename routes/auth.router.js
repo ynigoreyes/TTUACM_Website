@@ -2,7 +2,7 @@ const express = require('express');
 const passport = require('passport');
 
 const authRouter = express.Router();
-const AuthCtrl = require('../controllers/auth_c');
+const AuthCtrl = require('../controllers/auth.controller');
 
 /* GETS the Google Login Screen */
 authRouter.get(

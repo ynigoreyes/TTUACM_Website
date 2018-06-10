@@ -83,9 +83,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors({ origin: true }));
 
 // Routes
-const usersRoute = require('./routes/users');
-const eventsRoute = require('./routes/events');
-const authRoute = require('./routes/auth');
+const usersRoute = require('./routes/user.router');
+const eventsRoute = require('./routes/event.router');
+const authRoute = require('./routes/auth.router');
 
 app.use('/users', usersRoute);
 app.use('/events', eventsRoute);

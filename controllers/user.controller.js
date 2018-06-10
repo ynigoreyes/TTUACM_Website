@@ -1,4 +1,4 @@
-const User = require('../models/user');
+const User = require('../models/user.model');
 
 const crypto = require('crypto');
 const async = require('async');
@@ -24,9 +24,6 @@ exports.login = (req, res) => {
         msg: 'Unknown Error has occured, Please try again later'
       });
     } else if (foundUser !== null && foundUser.password !== null) {
-      // If there is a user with that email, check their password
-      // TODO: When the user tries to log in with their email when they
-      // registered with OAuth2, there is no password saved
       bcrypt.compare(inputPassword, foundUser.password, (err, response) => {
         if (err) {
           console.log(err);
