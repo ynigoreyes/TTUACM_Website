@@ -11,6 +11,8 @@
     <ng-container *ngIf="isSmallDevice;then NavigationTabs"></ng-container>
   </mat-toolbar-row>
 </mat-toolbar>
+
+<!-- Navigation Tabs for Application -->
 <ng-template #NavigationTabs>
   <span class="nav-buttons" *ngIf="state.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
     <a [routerLink]="['events/all-events']">Events</a>

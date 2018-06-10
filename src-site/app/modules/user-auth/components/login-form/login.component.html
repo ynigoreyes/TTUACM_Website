@@ -1,0 +1,15 @@
+<form [formGroup]="LoginForm" (ngSubmit)="attemptLogin(LoginForm.value)">
+  <!-- Email -->
+  <mat-form-field>
+    <input formControlName="email" matInput placeholder="Email">
+    <mat-error>Invalid Email</mat-error>
+  </mat-form-field>
+  <!-- Password -->
+  <mat-form-field>
+    <input type="password" formControlName="password" matInput placeholder="Password">
+  </mat-form-field>
+  <!-- Submit -->
+  <button class="submit-buttons" mat-raised-button type="submit" id="btn-login" [disabled]="!LoginForm.valid">Login</button>
+  <a class="login-links" [routerLink]="['/forgot']">Forgot Password?</a>
+</form>
+<app-authmethods></app-authmethods>

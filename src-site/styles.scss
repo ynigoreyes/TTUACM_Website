@@ -12,7 +12,7 @@ $acm-theme: mat-dark-theme($acm-primary, $acm-accent, $acm-warn);
 $xl-text: 50px;
 $lg-text: 40px;
 $md-text: 30px;
-$sm-text: 20px;
+$sm-text: 15px;
 $xs-text: 10px;
 // Custom BreakPoints
 $xs-screen: 320;
@@ -70,4 +70,9 @@ body {
   @include mat-tabs-theme($acm-theme);
   @include mat-toolbar-theme($acm-theme);
   @include mat-tooltip-theme($acm-theme);
+}
+
+// Mat-Tabs OverRide
+.mat-tab-label {
+  flex: auto;
 }

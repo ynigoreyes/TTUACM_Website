@@ -9,6 +9,7 @@ import {
   MatCardModule,
   MatMenuModule,
   MatToolbarModule,
+  MatTabsModule,
   MatIconModule,
   MatSnackBarModule,
   MatProgressSpinnerModule
@@ -24,6 +25,7 @@ import {
     MatCardModule,
     MatMenuModule,
     MatToolbarModule,
+    MatTabsModule,
     MatIconModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
@@ -38,6 +40,7 @@ import {
     MatCardModule,
     MatMenuModule,
     MatToolbarModule,
+    MatTabsModule,
     MatIconModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,

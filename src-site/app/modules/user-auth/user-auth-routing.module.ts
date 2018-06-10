@@ -1,20 +1,19 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { RegistrationComponent } from './pages/registration/registration.component';
-import { LoginComponent } from './pages/login/login.component';
 import { ForgotComponent } from './pages/forgot/forgot.component';
 import { ForgotRedirectComponent } from './pages/forgot-redirect/forgot-redirect.component';
 import { AuthGuard } from '../../shared/guards/auth.guard';
 import { ConfirmPasswordComponent } from './pages/confirm-password/confirm-password.component';
+import { AuthComponent } from './pages/auth/auth.component';
 
 const routes: Routes = [
   {
-    path: 'signup',
-    component: RegistrationComponent
+    path: '',
+    component: AuthComponent
   },
   {
-    path: 'login',
-    component: LoginComponent
+    path: 'forgot/:tokenError',
+    component: ForgotComponent
   },
   {
     path: 'forgot',
@@ -32,10 +31,6 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'forgot/:tokenError',
-    component: ForgotComponent
-  },
-  {
     path: 'confirmation',
     component: ConfirmPasswordComponent
   }
@@ -45,4 +40,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class UserAuthRoutingModule { }
+export class UserAuthRoutingModule {}

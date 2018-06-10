@@ -1,0 +1,27 @@
+<main *ngIf="!isSmallDevice" class='forBigScreen'>
+  <ng-container *ngIf="!isSmallDevice;then LoginForm"></ng-container>
+  <span class="divider"></span>
+  <ng-container *ngIf="!isSmallDevice;then RegistrationForm"></ng-container>
+</main>
+
+<!-- Renders when there is a small viewport -->
+<mat-tab-group *ngIf="isSmallDevice" class="forLittleScreen">
+  <mat-tab mat-stretch-tabs="yes" label="Login">
+    <ng-container *ngIf="isSmallDevice;then LoginForm"></ng-container>
+  </mat-tab>
+  <mat-tab mat-stretch-tabs="yes" label="Register">
+    <ng-container *ngIf="isSmallDevice;then RegistrationForm"></ng-container>
+  </mat-tab>
+</mat-tab-group>
+
+<ng-template #LoginForm>
+  <section>
+    <app-login></app-login>
+  </section>
+</ng-template>
+
+<ng-template #RegistrationForm>
+  <section>
+    <app-registration></app-registration>
+  </section>
+</ng-template>

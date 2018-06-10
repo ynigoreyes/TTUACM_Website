@@ -1,0 +1,32 @@
+<form [formGroup]="SignUpForm" (ngSubmit)="attemptRegister(SignUpForm.value)">
+  <!-- First Name -->
+  <mat-form-field>
+    <input formControlName="firstName" matInput placeholder="First Name">
+  </mat-form-field>
+  <!-- Last Name -->
+  <mat-form-field>
+    <input formControlName="lastName" matInput placeholder="Last Name">
+  </mat-form-field>
+  <!-- Email -->
+  <mat-form-field>
+    <input formControlName="email" matInput placeholder="Email">
+    <mat-error>Invalid Email</mat-error>
+  </mat-form-field>
+  <!-- Password -->
+  <mat-form-field>
+    <input type="password" formControlName="password" matInput placeholder="Password">
+    <mat-hint align="end">Min Length: 8</mat-hint>
+    <mat-error>Password must be at least 8 characters long</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <input (blur)="checkPasswords(SignUpForm.value)" type="password" formControlName="confirmPassword" matInput placeholder="Confirm Password">
+    <mat-error>Passwords do not match</mat-error>
+  </mat-form-field>
+  <!-- Classification -->
+  <mat-form-field>
+    <mat-select formControlName="classification" placeholder="Classification">
+      <mat-option *ngFor="let class of studentClassification" value={{class}}>{{class}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button class="submit-buttons" mat-raised-button type="submit" id="btn-signup" [disabled]="!SignUpForm.valid">Sign Up</button>
+</form>

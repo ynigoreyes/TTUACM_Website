@@ -1,21 +1,21 @@
 @import '~@angular/material/theming';
 @import '../../../../../styles.scss';
-.logo-container {
+main {
   display: flex;
-  margin-bottom: 40px;
-  width: 50%;
-  margin: 0 auto;
-  .logos {
-    flex: 1;
-    img {
-      width: 35px;
-      cursor: pointer;
-    }
+  flex-direction: column;
+  .mat-button {
+    margin: 10px 0px;
+    font-size: $sm-text;
+    width: 100%;
+    text-align: left;
   }
-}
-
-@media(min-width: 768px) {
-  .logo-container {
-    width: 40%;
+  .google {
+    background-color: #db3236;
+  }
+  .facebook {
+    background-color: #3B5998;
+  }
+  .github {
+    background-color: #333333;
   }
 }
