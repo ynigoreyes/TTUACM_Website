@@ -11,6 +11,7 @@ import { UserStateService } from './shared/services/user-state.service';
 import { DeviceService } from './shared/services/device.service';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { AuthGuard } from './shared/guards/auth.guard';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { FooterComponent } from './components/footer/footer.component';
     HttpClientModule,
     DeviceService,
     AuthService,
-    UserStateService
+    UserStateService,
+    AuthGuard
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]

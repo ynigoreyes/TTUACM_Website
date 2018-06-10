@@ -17,11 +17,29 @@
     border-radius: 100px;
     box-shadow: 3px 3px 6px #888;
   }
+  mat-icon:hover {
+    cursor: pointer;
+    animation-duration: 0.5s;
+    animation-name: rise;
+    transform: translate(-3px, -3px);
+    box-shadow: 6px 6px 6px #888;
+  }
   header {
     font-size: $md-text;
   }
   section {
     padding: 10px 20px;
     font-size: $xs-text;
+  }
+}
+
+@keyframes rise {
+  from {
+    transform: translate(0px, 0px);
+    box-shadow: 3px 3px 6px #888;
+  }
+  to {
+    transform: translate(-3px, -3px);
+    box-shadow: 6px 6px 6px #888;
   }
 }

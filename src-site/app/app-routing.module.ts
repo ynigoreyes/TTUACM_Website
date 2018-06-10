@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AuthGuard } from './shared/guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -12,7 +13,8 @@ const routes: Routes = [
   },
   {
     path: 'events',
-    loadChildren: './modules/events/events.module#EventsModule'
+    loadChildren: './modules/events/events.module#EventsModule',
+    canLoad: [AuthGuard]
   },
   {
     path: 'messaging',

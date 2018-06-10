@@ -25,7 +25,7 @@ export class AuthGuard implements CanActivate, CanLoad {
       return true;
     } else {
       this.snackBar.open(`You must login first`, 'Close', { duration: 4000 });
-      this.router.navigate(['/login']);
+      this.router.navigate(['/auth']);
     }
   }
 }
