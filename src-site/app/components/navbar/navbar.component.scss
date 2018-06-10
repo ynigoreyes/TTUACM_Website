@@ -1,13 +1,12 @@
 @import '~@angular/material/theming';
 @import '../../../../src-site/styles.scss';
-mat-toolbar-row {
+.firstRow {
   background-color: mat-color($acm-accent);
   display: flex;
   flex-direction: row;
   box-sizing: border-box;
   padding: 0 42px;
   width: 100%;
-
   align-items: center;
   white-space: nowrap;
   .menu {
@@ -34,12 +33,22 @@ mat-toolbar-row {
 }
 
 @media(max-width:768px) {
-  mat-toolbar-row {
+  .firstRow {
     height: 64ngpx;
     justify-content: center;
     padding: 0px 24px;
   }
   .nav-buttons>a {
     font-size: $xs-text
+  }
+  .secondRow {
+    flex-direction: column;
+    height: auto;
+    align-items: flex-start;
+    padding: 0px 24px;
+  }
+  .secondRow>span {
+    width: 100%;
+    border-top: 1px solid #00000038;
   }
 }
