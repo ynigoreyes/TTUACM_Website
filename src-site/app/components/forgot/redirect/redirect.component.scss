@@ -1,0 +1,87 @@
+@import '~@angular/material/theming';
+@import '../../../../styles.scss';
+div#reset-background {
+  background-image: url('../../../../assets/images/backgrounds/Material-1.svg');
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: auto;
+}
+
+.reset-div {
+  text-align: center;
+  width: 100%;
+  padding: 15px;
+}
+
+.reset-container {
+  background-color: mat-color($acm-primary, darker);
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+}
+
+.reset-header {
+  text-align: center;
+}
+
+.reset-header img {
+  width: 150px;
+}
+
+#error-message {
+  display: none;
+}
+
+.reset-container>* {
+  width: 100%;
+}
+
+.reset-container form {
+  margin-bottom: 20px;
+}
+
+.reset-container form>* {
+  margin: 5px 0;
+}
+
+button#btn-reset {
+  background-color: mat-color($acm-accent, lighter);
+}
+
+a.reset-links {
+  color: white;
+}
+
+a.reset-links:hover {
+  text-decoration: true;
+}
+
+a.reset-links:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #000;
+  visibility: hidden;
+  -webkit-transform: scaleX(0);
+  transform: scaleX(0);
+  -webkit-transition: all 0.3s ease-in-out 0s;
+  transition: all 0.3s ease-in-out 0s;
+}
+
+a.reset-links:hover:before {
+  visibility: visible;
+  -webkit-transform: scaleX(1);
+  transform: scaleX(1);
+}
+
+@media (min-width: 992px) {
+  .reset-div {
+    padding: 150px;
+    width: 80%;
+  }
+}

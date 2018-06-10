@@ -1,0 +1,57 @@
+@import '~@angular/material/theming';
+@import '../../../styles.scss';
+div.event-div {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  .loading-screens {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-basis: 500px;
+  }
+  .loading-screens > {
+    flex-basis: 30px;
+  }
+}
+
+mat-card.eachEvent {
+  display: flex;
+  flex-direction: column;
+  margin: 30px auto 30px auto;
+  mat-card-title {
+    font-size: $lg-text;
+  }
+  mat-card-content {
+    font-size: $sm-text;
+    flex-grow: 1;
+    width: 70%;
+    align-self: center;
+  }
+}
+
+em#event-id {
+  float: right;
+}
+
+button.right-button {
+  float: right
+}
+
+button.left-button {
+  float: left
+}
+
+div.nav-button-container {
+  color: black;
+  width: 100%;
+}
+
+span.google-header {
+  color: white;
+  font-size: 4vw;
+}
+
+em#date {
+  float: left;
+}

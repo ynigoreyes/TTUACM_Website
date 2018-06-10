@@ -1,8 +1,14 @@
-# Network settings
-bin/www
-
 # API Credentials and Keys
 client_secret.json
+credentials.json
+launch.json
+.prod.env
+.vscode
+
+# Docker Stuff
+docker-compose-prod.yml
+docker-compose-dev.yml
+docker-deploy/
 
 # Logs
 logs
@@ -39,7 +45,7 @@ bower_components
 build/Release
 
 # Dependency directories
-node_modules/
+
 jspm_packages/
 
 # Typescript v1 declaration files
@@ -62,3 +68,56 @@ typings/
 
 # dotenv environment variables file
 .env
+
+# Mongo Login
+mongo.txt
+connect-db.sh
+credentials.csv
+
+# FrontEnd Ignores
+
+# compiled output
+/public
+/dist
+/dist-server
+/tmp
+/out-tsc
+
+# dependencies
+node_modules/
+site/node_modules/
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+
+# e2e
+/e2e/*.js
+/e2e/*.map
+
+# System Files
+.DS_Store
+Thumbs.db
+.prod.env

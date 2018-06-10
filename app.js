@@ -1,58 +1,113 @@
-var express = require('express')
-var path = require('path')
-var favicon = require('serve-favicon')
-var logger = require('morgan')
-var cookieParser = require('cookie-parser')
-var bodyParser = require('body-parser')
-var passport = require('passport')
-var flash = require('connect-flash')
-var session = require('express-session')
-var configDB = require('./config/database.js')
-var mongoose = require('mongoose')
+const express = require('express');
+const path = require('path');
+const cors = require('cors');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const passport = require('passport');
+const mongoose = require('mongoose');
+const nmconfig = require('./config/nodemailer-transporter');
 
-var app = express()
+mongoose.Promise = global.Promise;
 
-mongoose.connect(configDB.url)
-require('./config/passport')(passport)
+// dotenv file placed in root directory during development
+require('dotenv').config({ path: path.join(__dirname, '/.env') });
 
-// Passport setup
-app.use(session({secret: 'Texas-Tech-ACM-is-the-best'})) // session secret
-app.use(passport.initialize())
-app.use(passport.session()) // persistent login sessions
-app.use(flash()) // use connect-flash for flash messages stored in session
+// Express Routing and App setup
+const app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'jade')
 
-// uncomment after placing your favicon in /public
-app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
-app.use(logger('dev'))
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(cookieParser())
-app.use(express.static(path.join(__dirname, 'public')))
+// Where the views will be
+app.use(express.static(path.join(__dirname, 'public')));
+
+/**
+ * Now using MongoClient
+ * Connected to a local replica of Mongo so that we can store data
+ * and see how it looks like without connecting to our actual database
+ */
+mongoose.connect(process.env.db, {
+  useMongoClient: true,
+  socketTimeoutMS: 0,
+  keepAlive: true,
+  reconnectTries: 30
+});
+mongoose.connection.on('connected', () => {
+  console.log('Database Connection Successful');
+});
+mongoose.connection.on('error', (err) => {
+  console.log(`Error Connecting to database... \n${err}`);
+});
+
+if (process.env.NODE_ENV === 'prod') {
+  console.log(`Mongo DB Connected using:\n ${process.env.db}`);
+  nmconfig.generateProdTransporter();
+} else {
+  console.log('\nRunning in development.\nClient should be running on http://localhost:4200\n\n');
+  console.log('Current environment variables available');
+  console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
+  console.log(`CLIENT: ${process.env.CLIENT}`);
+  console.log(`PORT: ${process.env.PORT}\n`);
+  nmconfig.generateTestTransporter();
+}
+
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+require('./config/passport')(passport);
+
+app.use(logger('dev'));
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+/**
+ * CORS
+ *
+ * Handles all of the requests from different ports/origins.
+ * Development port for Angular is on port 4200 and will throw errors if
+ * I change port to 80. CORS is so that I can hit the API from the
+ * development port without errors
+ */
+app.use(cors({origin: true}));
 
 // Routes
-require('./routes/index')(app, passport)
-// app.use('/', index)
+const usersRoute = require('./routes/users');
+const eventsRoute = require('./routes/events');
+const authRoute = require('./routes/auth');
 
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  var err = new Error('Not Found')
-  err.status = 404
-  next(err)
-})
+app.use('/users', usersRoute);
+app.use('/events', eventsRoute);
+app.use('/auth', authRoute);
 
-// error handler
-app.use(function (err, req, res, next) {
+
+/**
+ * During production, this should redirect everyone that puts
+ * in a weird url to the index page. Uncomment when deploying for production
+ */
+
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
+
+// Catch 404 and forward to error handler
+app.use((req, res, next) => {
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+// Error Handler
+
+app.use((err, req, res) => {
   // set locals, only providing error in development
-  res.locals.message = err.message
-  res.locals.error = req.app.get('env') === 'development' ? err : {}
+  res.locals.message = err.message;
+
+  // Grabs the environment varibale 'env'
+  // If it is development, then we are in dev mode, else: error is not recorded
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500)
-  res.render('error')
-})
+  res.redirect(`${req.protocol}://${req.headers.host}/error`);
+});
 
-module.exports = app
+module.exports = app;

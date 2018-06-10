@@ -1,0 +1,27 @@
+@import '~@angular/material/theming';
+@import '../../../styles.scss';
+div#news {
+  text-align: center;
+  margin: auto;
+  background-color: #1b1b1b;
+  color: #ffffff;
+}
+
+div#text-div {
+  width: 60%;
+  margin: auto;
+}
+
+h1#mission-caption {
+  margin: auto;
+}
+
+p#mission-statement {
+  font-size: 15px;
+}
+
+@media(max-width: 600px) {
+  div#text-div {
+    width: 90%;
+  }
+}
