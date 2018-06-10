@@ -11,6 +11,7 @@ import { DeviceService } from '../../shared/services/device.service';
 })
 export class NavbarComponent {
   public isSmallDevice: boolean;
+  public openDrawer: boolean = false;
   constructor(
     private router: Router,
     public state: UserStateService,
@@ -22,5 +23,13 @@ export class NavbarComponent {
   @HostListener('window:resize', ['$event'])
   checkScreen(event) {
     this.isSmallDevice = event.target.innerWidth <= 425;
+  }
+
+  toggleDrawer(): void {
+    if (this.openDrawer === false) {
+      this.openDrawer = true;
+    } else {
+      this.openDrawer = false;
+    }
   }
 }

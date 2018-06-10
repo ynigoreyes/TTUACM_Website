@@ -1,13 +1,12 @@
 <mat-toolbar color='accent'>
   <mat-toolbar-row class="firstRow">
-    <span>
-      <a class='title' [routerLink]="['/']">ACM: Texas Tech</a>
-    </span>
-    <span *ngIf="!isSmallDevice" class="spacer"></span>
+    <a class='title' [routerLink]="['/']">ACM: Texas Tech</a>
+    <span class="spacer"></span>
+    <mat-icon (click)="toggleDrawer()" class="menu" *ngIf="isSmallDevice">menu</mat-icon>
     <ng-container *ngIf="!isSmallDevice;then NavigationTabs">
     </ng-container>
   </mat-toolbar-row>
-  <mat-toolbar-row *ngIf="isSmallDevice" class='secondRow'>
+  <mat-toolbar-row *ngIf="isSmallDevice && openDrawer" class='secondRow'>
     <ng-container *ngIf="isSmallDevice;then NavigationTabs"></ng-container>
   </mat-toolbar-row>
 </mat-toolbar>

@@ -10,6 +10,9 @@ mat-toolbar-row {
 
   align-items: center;
   white-space: nowrap;
+  .menu {
+    align-self: center;
+  }
   .title {
     font-size: $sm-text;
   }
@@ -32,16 +35,11 @@ mat-toolbar-row {
 
 @media(max-width:768px) {
   mat-toolbar-row {
-    height: 64px;
+    height: 64ngpx;
     justify-content: center;
+    padding: 0px 24px;
   }
   .nav-buttons>a {
     font-size: $xs-text
-  }
-}
-
-@media(max-width:425px) {
-  mat-toolbar-row {
-    height: 36px;
   }
 }
