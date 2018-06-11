@@ -10,6 +10,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
   styleUrls: ['./forgot.component.scss']
 })
 export class ForgotComponent implements OnInit {
+  public loading: boolean = false;
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -35,8 +36,11 @@ export class ForgotComponent implements OnInit {
 
   public attemptForget(post: FormGroup) {
     const currentEmail = post['email'].trim();
+    this.loading = true;
+
     this.authService.forgotUser(currentEmail).subscribe(status => {
-      this.router.navigate(['/redirect']);
+      this.loading = false;
+      this.router.navigate(['/auth/redirect']);
     });
   }
 }
