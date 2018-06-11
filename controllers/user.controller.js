@@ -11,7 +11,7 @@ const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 
 // Test Login Route for exports.authenticate
-exports.login = (req, res) => {
+function login(req, res) {
   const email = req.body.email;
   const inputPassword = req.body.password;
 
@@ -53,10 +53,10 @@ exports.login = (req, res) => {
       });
     }
   });
-};
+}
 
 // Check to see if this works on Postman
-exports.forgotLogin = (req, res) => {
+function forgotLogin(req, res) {
   async.waterfall(
     [
       // We save the token into the user document along with an expiration date
@@ -92,7 +92,7 @@ exports.forgotLogin = (req, res) => {
             'If you did not request this, please ignore this email and your password will remain unchanged.\n'
         };
         global.smtpTransporter.sendMail(mailOptions, (err) => {
-          res.status(200).json({ success: true, recipient: user });
+          res.status(200).json({ recipient: user });
           done(err, 'done');
         });
       }
@@ -100,13 +100,13 @@ exports.forgotLogin = (req, res) => {
     (err) => {
       if (err) {
         console.log(err);
-        res.status(200).json({ success: false, recipient: null });
+        res.status(404).json({ recipient: null });
       }
     }
   );
-};
+}
 
-exports.reset = (req, res) => {
+function reset(req, res) {
   async.waterfall(
     [
       /**
@@ -165,7 +165,7 @@ exports.reset = (req, res) => {
       }
     }
   );
-};
+}
 
 /**
  * Endpoint hit when a user clicks on their confirmation link
@@ -173,7 +173,7 @@ exports.reset = (req, res) => {
  * Compares the url token with the token saved in the database.
  * If thre is a match, the user is verified and redirected to log in
  */
-exports.confirmToken = (req, res) => {
+function confirmToken(req, res) {
   const query = {
     confirmEmailToken: req.params.token
   };
@@ -188,43 +188,49 @@ exports.confirmToken = (req, res) => {
       res.redirect(`${req.protocol}://${req.headers.host}/login`);
     }
   });
-};
+}
 
 /**
  * Hits when the user clicks the link that is sent to their email
  *
  * Will check whether or not the token passed in the URL is valid
+ * @param req: Request Object
+ * @param req.param.token: Token sent with url
  */
-exports.resetToken = (req, res) => {
-  User.findOne(
-    {
-      resetPasswordToken: req.params.token,
-      resetPasswordExpires: { $gt: Date.now() }
-    },
-    (err, user) => {
-      if (!user || err) {
-        // User was not found or the token was expired, either way...
-        // Signals the front end to tell the user that their token was invalid
-        // and that they may need to send another email
-        res.redirect(`http://localhost:${process.env.PORT}/prompt/${true}`);
-      } else {
-        // The token is valid and will signal front end to render the login page
-        // The token we are passing is the same token that is in the database
-        const token = req.params.token;
-
-        res.redirect(`http://localhost:${process.env.PORT}/redirect/${token}`);
+function resetToken(req) {
+  return new Promise((resolve, reject) => {
+    if (!req.params.token) reject(new Error('No Token Passed to Endpoint'));
+    User.findOne(
+      {
+        resetPasswordToken: req.params.token,
+        resetPasswordExpires: { $gt: Date.now() }
+      },
+      (err, user) => {
+        if (err) {
+          reject(new Error('Invalid token'));
+        } else if (!user) {
+          // User was not found or the token was expired, either way...
+          // Signals the front end to tell the user that their token was invalid
+          // and that they may need to send another email
+          reject(new Error('No User found'));
+        } else {
+          // The token is valid and will signal front end to render the login page
+          // The token we are passing is the same token that is in the database
+          resolve(req.params.token);
+        }
       }
-    }
-  );
-};
+    );
+  });
+}
 
 /**
  * This is how the object will look...
+ * @example
  * {
  * firstName: 'Miggy',
  * lastName: 'Reyes',
  * username: 'miggylol',
- * email: 'email@gmail.com',
+ * email: 'email{at}gmail.com',
  * classification: 'Freshman',
  * password: 'password'
  * }
@@ -233,7 +239,7 @@ exports.resetToken = (req, res) => {
  *
  * This can also be used when the user does not want to use an auth service
  */
-exports.register = (req, res) => {
+function register(req, res) {
   // If the email is available, continue with the proccess
   // Generates the salt used for hashing
   bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
@@ -323,20 +329,20 @@ exports.register = (req, res) => {
       }
     });
   }
-};
+}
 
 /**
  * Gets the user's profile based on the ID in their
  * local storage
  */
-exports.getProfile = (req, res) => {
+function getProfile(req, res) {
   res.json({ user: req.user });
-};
+}
 
 /**
  * Sends email to us from who ever's email was given
  */
-exports.contactUs = (req, res) => {
+function contactUs(req, res) {
   const mailOptions = {
     from: req.body.email,
     to: process.env.email_username,
@@ -354,10 +360,21 @@ exports.contactUs = (req, res) => {
       res.status(200).json({ success: true });
     }
   });
-};
+}
 
 // Generates a HexToken, usually for quick random tokens; does not require string
 function generateHexToken() {
   const token = crypto.randomBytes(20);
   return token.toString('hex');
 }
+
+module.exports = {
+  login,
+  register,
+  resetToken,
+  confirmToken,
+  contactUs,
+  forgotLogin,
+  reset,
+  getProfile,
+};

@@ -1,4 +1,5 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
@@ -8,8 +9,12 @@ import { Component, OnInit, HostListener } from '@angular/core';
 export class AuthComponent {
   public isSmallDevice: boolean;
   constructor(
+    private route: ActivatedRoute
   ) {
     this.isSmallDevice = window.innerWidth <= 556;
+    this.route.queryParamMap.subscribe((params) => {
+      console.log(params);
+    });
   }
 
   @HostListener('window:resize', ['$event'])

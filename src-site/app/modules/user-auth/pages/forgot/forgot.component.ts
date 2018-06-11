@@ -38,9 +38,9 @@ export class ForgotComponent implements OnInit {
     const currentEmail = post['email'].trim();
     this.loading = true;
 
-    this.authService.forgotUser(currentEmail).subscribe(status => {
+    this.authService.forgotUser(currentEmail).subscribe(() => {
       this.loading = false;
-      this.router.navigate(['/auth/redirect']);
+      this.snackbar.open(`Email sent to ${currentEmail}`);
     });
   }
 }

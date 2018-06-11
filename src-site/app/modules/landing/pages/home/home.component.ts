@@ -1,12 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Feature } from './models/Feature.interface';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UserStateService } from '../../../../shared/services/user-state.service';
+import * as jwt_decode from 'jwt-decode';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
   public features: Array<Feature> = [
     {
       icon: 'event',
@@ -31,9 +35,37 @@ export class HomeComponent implements OnInit {
       description:
         'We support software and hardware projects and provide knowledge from individuals who are passionate about teaching others.',
       logoBackgroundColor: '#1976d2'
-    },
+    }
   ];
-  constructor() {}
+  constructor(
+    public activatedRoute: ActivatedRoute,
+    public state: UserStateService,
+    public router: Router,
+    public snackbar: MatSnackBar
+  ) {
+    this.checkLoggedIn();
+  }
 
-  ngOnInit() {}
+  /**
+   * Checks if the has logged in using OAuth
+   * On Failure: Redirect to login screen
+   * On Success: Logs the user in
+   */
+  checkLoggedIn(): void {
+    this.activatedRoute.queryParams.subscribe(
+      (params) => {
+        if (params.token) {
+          try {
+            const user = jwt_decode(params.token);
+            this.state.setUser(user);
+            this.state.setToken(params.token);
+          } catch (err) {
+            this.router.navigate(['/auth']);
+            this.snackbar.open('Authentication Error', 'Close', {
+              duration: 2000
+            });
+          }
+        }
+      });
+  }
 }

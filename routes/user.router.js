@@ -1,5 +1,6 @@
 const express = require('express');
 const passport = require('passport');
+const querystring = require('querystring');
 
 // Controller
 const UserCrtl = require('../controllers/user.controller');
@@ -28,7 +29,18 @@ router.post('/forgot', UserCrtl.forgotLogin);
 router.get('/confirm/:token', UserCrtl.confirmToken);
 
 /* GET reset page (This is the route that the email hits) */
-router.get('/reset/:token', UserCrtl.resetToken);
+router.get('/reset/:token', (req, res) => {
+  UserCrtl.resetToken(req)
+    .then((token) => {
+      const qs = querystring.stringify({ token });
+      res.redirect(`${process.env.CLIENT}/auth/forgot/redirect/${qs}`);
+    })
+    .catch((err) => {
+      const qs = querystring.stringify({ err });
+      res.redirect(`${process.env.CLIENT}/auth/${qs}`);
+      console.log(err.message);
+    });
+});
 
 /* POST reset page (This is the route that Angular hits) */
 router.post('/reset/:token', UserCrtl.reset);

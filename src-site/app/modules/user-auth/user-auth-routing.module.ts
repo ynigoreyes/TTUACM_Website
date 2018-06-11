@@ -12,6 +12,11 @@ const routes: Routes = [
     component: AuthComponent
   },
   {
+    // This is when there is an error validating a forgot password attemp
+    path: ':errors',
+    component: AuthComponent
+  },
+  {
     path: 'forgot/:tokenError',
     component: ForgotComponent
   },
@@ -20,14 +25,15 @@ const routes: Routes = [
     component: ForgotComponent,
     children: [
       {
-        path: 'redirect/:token',
+        path: 'redirect',
         component: ForgotRedirectComponent,
-        canActivate: [AuthGuard]
+        pathMatch: 'full'
       },
       {
-        path: 'redirect',
+        path: 'redirect/:token',
         component: ForgotRedirectComponent
       }
+      // Take this bottom route out before production
     ]
   },
   {
