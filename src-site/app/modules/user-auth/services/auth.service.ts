@@ -33,8 +33,7 @@ export class AuthService {
   public authenticateUser(existingUser): Observable<object> {
     const headers = new HttpHeaders();
     headers.append('Content-type', 'application/json');
-    const post = this.http.post(this.loginEP, existingUser, { headers: headers });
-    return post;
+    return this.http.post(this.loginEP, existingUser, { headers: headers });
   }
 
   /**

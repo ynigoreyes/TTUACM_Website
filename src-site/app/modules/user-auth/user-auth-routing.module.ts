@@ -9,31 +9,19 @@ import { AuthComponent } from './pages/auth/auth.component';
 const routes: Routes = [
   {
     path: '',
-    component: AuthComponent
+    component: AuthComponent,
   },
   {
-    // This is when there is an error validating a forgot password attemp
-    path: ':errors',
-    component: AuthComponent
-  },
-  {
-    path: 'forgot/:tokenError',
+    path: 'forgot',
     component: ForgotComponent
   },
   {
     path: 'forgot',
-    component: ForgotComponent,
     children: [
       {
         path: 'redirect',
-        component: ForgotRedirectComponent,
-        pathMatch: 'full'
-      },
-      {
-        path: 'redirect/:token',
         component: ForgotRedirectComponent
-      }
-      // Take this bottom route out before production
+      },
     ]
   },
   {

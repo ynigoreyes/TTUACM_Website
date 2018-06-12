@@ -1,8 +1,5 @@
-import { Component, HostListener, AfterViewInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AppComponent } from '../../app.component';
+import { Component, HostListener } from '@angular/core';
 import { UserStateService } from '../../shared/services/user-state.service';
-import { DeviceService } from '../../shared/services/device.service';
 
 @Component({
   selector: 'app-navbar',
@@ -12,11 +9,7 @@ import { DeviceService } from '../../shared/services/device.service';
 export class NavbarComponent {
   public isSmallDevice: boolean;
   public openDrawer: boolean = false;
-  constructor(
-    private router: Router,
-    public state: UserStateService,
-    public device: DeviceService
-  ) {
+  constructor(public state: UserStateService) {
     this.isSmallDevice = window.innerWidth <= 425;
   }
 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
@@ -13,7 +13,6 @@ export class ForgotComponent implements OnInit {
   public loading: boolean = false;
   constructor(
     private authService: AuthService,
-    private router: Router,
     private activatedRoute: ActivatedRoute,
     private snackbar: MatSnackBar
   ) {}

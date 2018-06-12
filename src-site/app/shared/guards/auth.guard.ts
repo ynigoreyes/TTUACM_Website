@@ -20,6 +20,9 @@ export class AuthGuard implements CanActivate, CanLoad {
     return this.checkLoggedIn();
   }
 
+  /**
+   * Checks to see if the user is currently logged in
+   */
   private checkLoggedIn() {
     if (this.userStateService.loggedIn()) {
       return true;

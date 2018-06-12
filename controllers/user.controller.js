@@ -3,7 +3,6 @@ const User = require('../models/user.model');
 const crypto = require('crypto');
 const async = require('async');
 const jwt = require('jsonwebtoken');
-const nmConfig = require('../config/nodemailer-transporter');
 
 // Bcrypt options
 const bcrypt = require('bcryptjs');
@@ -106,65 +105,82 @@ function forgotLogin(req, res) {
   );
 }
 
-function reset(req, res) {
-  async.waterfall(
-    [
-      /**
-       * Changes the password of the requested user
-       *
-       * We find the user using the password token that they provide
-       */
-      function verifyUserAndUpdate(done) {
-        bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
-          User.findOneAndUpdate(
-            {
-              resetPasswordToken: req.params.token,
-              resetPasswordExpires: { $gt: Date.now() }
-            },
-            {
-              // Need to encrypt the password first
-              password: hash,
-              resetPasswordToken: undefined,
-              resetPasswordExpires: undefined
-            },
-            { new: true },
-            (err, user) => {
-              if (err) throw err;
-              done(null, user);
-            }
-          );
-        });
-      },
+/**
+ * Resets the user password
+ *
+ * @param {string} req.params.token - HEX Token passed through the URL
+ * @param {string} password - new password that will replace the old one
+ *
+ * @returns {Promise.<null, Error>} - Rejects with an error
+ * from verifyUser or sendChangedPasswordEmail
+ */
+function resetPassword(token, password) {
+  return new Promise((resolve, reject) => {
+    verifyUser(token, password)
+      .then((user) => {
+        sendChangedPasswordEmail(user)
+          .then(resolve())
+          .catch(err => reject(err));
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
 
-      /**
-       * Send the notification to the user that informtion in their account has changed
-       */
-      function sendNotification(user, done) {
-        if (!user) {
-          done(new Error('No user found'));
-        } else {
-          const mailOptions = {
-            to: user.email,
-            from: process.env.email_username,
-            subject: 'Your password has been changed',
-            text:
-              'Hello,\n\n' +
-              'This is a confirmation that the password for your account has been changed.\n'
-          };
-          global.smtpTransporter.sendMail(mailOptions, () => {
-            res.status(200).json({ success: true });
-            done(null);
-          });
+/**
+ * Verifies the user based on whether or not they pass a valid JWT Token
+ *
+ * @param {string} token - JWT Token
+ * @param {string} passwordAttempt - Attempted password from user
+ * @returns {Promise.<object, Error>} - Resolves with user or rejects with
+ * an error from bcrypt or finding a document in Mongo
+ */
+function verifyUser(token, passwordAttempt) {
+  return new Promise((resolve, reject) => {
+    bcrypt.hash(passwordAttempt, saltRounds, (err, hash) => {
+      if (err) reject(err);
+      User.findOneAndUpdate(
+        {
+          resetPasswordToken: token,
+          resetPasswordExpires: { $gt: Date.now() }
+        },
+        {
+          // Need to encrypt the password first
+          password: hash,
+          resetPasswordToken: undefined,
+          resetPasswordExpires: undefined
+        },
+        { new: true },
+        (err, user) => {
+          if (err) reject(err);
+          resolve(user);
         }
-      }
-    ],
-    (err) => {
-      if (err) {
-        console.log(err);
-        res.status(404).json({ success: false });
-      }
-    }
-  );
+      );
+    });
+  });
+}
+
+/**
+ * Send the notification to the user that informtion in their account has changed
+ * @param {string} email User's email
+ * @returns {Promise.<null, Error>} Rejects with an error if there is something wrong with the email
+ */
+function sendChangedPasswordEmail(email) {
+  return new Promise((resolve, reject) => {
+    const mailOptions = {
+      to: email,
+      from: process.env.email_username,
+      subject: 'Your password has been changed',
+      text:
+        'Hello,\n\n' +
+        'This is a confirmation that the password for your account has been changed.\n'
+    };
+    global.smtpTransporter.sendMail(mailOptions, (err) => {
+      if (err) reject(err);
+      resolve();
+    });
+  });
 }
 
 /**
@@ -224,20 +240,19 @@ function resetToken(req) {
 }
 
 /**
- * This is how the object will look...
+ * Register a new User
+ *
  * @example
- * {
+ * <caption>
  * firstName: 'Miggy',
  * lastName: 'Reyes',
  * username: 'miggylol',
- * email: 'email{at}gmail.com',
+ * email: 'email@gmail.com',
  * classification: 'Freshman',
  * password: 'password'
- * }
- *
- * This can be accessed using req.body.
- *
- * This can also be used when the user does not want to use an auth service
+ * </caption>
+ * @param {Object} req - Request Object
+ * @param {Object} res - Response Object
  */
 function register(req, res) {
   // If the email is available, continue with the proccess
@@ -305,7 +320,7 @@ function register(req, res) {
   /**
    * Sends a confirmation email to the user with a link/endpoint
    * to verify their email
-   * @param {object} user The user object created
+   * @param {Object} user The user object created
    */
   function sendConfirmationEmail(user) {
     const mailOptions = {
@@ -332,8 +347,7 @@ function register(req, res) {
 }
 
 /**
- * Gets the user's profile based on the ID in their
- * local storage
+ * @todo Impliment a profile page with resumes and other things
  */
 function getProfile(req, res) {
   res.json({ user: req.user });
@@ -341,24 +355,33 @@ function getProfile(req, res) {
 
 /**
  * Sends email to us from who ever's email was given
+ *
+ * @param {Object} options - options object
+ * @param {string} options.name - student name
+ * @param {string} options.email - student email
+ * @param {string} options.topic - student topic
+ * @param {string} options.message - student message
+ *
+ * @returns {null}
  */
-function contactUs(req, res) {
-  const mailOptions = {
-    from: req.body.email,
-    to: process.env.email_username,
-    subject: 'ACM Question',
-    text: `You got a message!\n\nSender: ${req.body.name}\n\nEmail: ${req.body.email}\n\nTopic: ${
-      req.body.topic
-    }\n\nMessage: ${req.body.message}\n`
-  };
+function contactUs(options) {
+  return new Promise((resolve, reject) => {
+    const mailOptions = {
+      from: options.email,
+      to: process.env.email_username,
+      subject: 'ACM Question',
+      text: `You got a message!\n\nSender: ${options.name}\n\nEmail: ${options.email}\n\nTopic: ${
+        options.topic
+      }\n\nMessage: ${options.message}\n`
+    };
 
-  global.smtpTransporter.sendMail(mailOptions, (err) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ success: false });
-    } else {
-      res.status(200).json({ success: true });
-    }
+    global.smtpTransporter.sendMail(mailOptions, (err) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      }
+      resolve();
+    });
   });
 }
 
@@ -375,6 +398,6 @@ module.exports = {
   confirmToken,
   contactUs,
   forgotLogin,
-  reset,
-  getProfile,
+  resetPassword,
+  getProfile
 };

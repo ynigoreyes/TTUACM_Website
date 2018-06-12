@@ -1,5 +1,5 @@
 <!-- Main Content -->
-<div (window:resize)="checkForSmallScreen()" class="container event-div">
+<div class="container event-div">
   <div class="text-center nav-button-container">
     <button (click)=getPrevEvents() mat-raised-button class="nav-buttons left-button">
       Prev 10
@@ -37,8 +37,8 @@
         <span class="location">
           Meetings will be held at: {{event.location}} on {{event.day}}s
         </span>
-        <span *ngIf="smallScreenSize === false"> | </span>
-        <div *ngIf="smallScreenSize === true"></div>
+        <span *ngIf="!isSmallScreen"> | </span>
+        <div *ngIf="isSmallScreen"></div>
         <span class="time">
           Starting at {{getTime(event.startTime)}} and ending at {{getTime(event.endTime)}}
         </span>

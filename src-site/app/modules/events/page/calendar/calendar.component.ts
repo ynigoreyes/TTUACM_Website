@@ -1,7 +1,6 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, HostListener } from '@angular/core';
 import { Events } from '../../interfaces/Events.interface';
 import { EventsService } from '../../services/events.service';
-import { DeviceService } from '../../../../shared/services/device.service';
 import { MatSnackBar } from '@angular/material';
 
 @Component({
@@ -12,7 +11,7 @@ import { MatSnackBar } from '@angular/material';
 export class CalendarComponent implements OnDestroy {
   public allEvents: Array<Events>;
   public displayedEvents: Array<Events>;
-  public smallScreenSize: boolean;
+  public isSmallScreen: boolean;
   public loading: boolean = true;
   public error: boolean = false;
 
@@ -21,11 +20,9 @@ export class CalendarComponent implements OnDestroy {
   public maxNumberEvent: number;
   public changeAmount = 10;
 
-  constructor(
-    private snackbar: MatSnackBar,
-    private eventService: EventsService,
-    private deviceService: DeviceService
-  ) { this.loadAllEvents(); }
+  constructor(private snackbar: MatSnackBar, private eventService: EventsService) {
+    this.loadAllEvents();
+  }
   public loadAllEvents(): void {
     this.eventService.getEvents().subscribe(
       res => {
@@ -36,7 +33,6 @@ export class CalendarComponent implements OnDestroy {
         this.lengthOfEvents = this.allEvents.length;
         // Current Events Displayed
         this.displayedEvents = this.allEvents.slice(this.minNumberEvent, this.maxNumberEvent);
-        this.checkForSmallScreen();
         this.loading = false;
       },
       err => {
@@ -98,16 +94,9 @@ export class CalendarComponent implements OnDestroy {
     return `${month}-${day}-${year}`;
   }
 
-  public checkForSmallScreen(): void {
-    let smallCheck: boolean;
-    let xsmallCheck: boolean;
-    this.deviceService.checkSmScreen().subscribe(status => {
-      smallCheck = status.matches;
-    });
-    this.deviceService.checkXsScreen().subscribe(status => {
-      xsmallCheck = status.matches;
-    });
-    this.smallScreenSize = smallCheck || xsmallCheck;
+  @HostListener('window:resize', ['$event'])
+  checkScreen(event) {
+    this.isSmallScreen = event.target.innerWidth <= 425;
   }
 
   ngOnDestroy(): void {

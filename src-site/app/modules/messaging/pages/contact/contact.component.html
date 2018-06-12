@@ -1,34 +1,24 @@
-<div id="contact-background">
-  <div class="container-fluid contact-div">
-    <mat-card class="contact-container">
-      <div class="contact-header">
-        <img src="../../../assets/acm_logo.svg" />
-        <h3>Questions?</h3>
-      </div>
+<main>
+  <header>Contact Us</header>
+  <section class="form-content">
+    <app-contact-form></app-contact-form>
+    <ng-container *ngIf="!isSmallScreen;then MoreInfo"></ng-container>
+  </section>
+</main>
 
-      <form class="contact-container" [formGroup]="ContactForm" (ngSubmit)="onSubmit(ContactForm.value)">
-        <mat-form-field>
-          <input formControlName="name" type="text" matInput placeholder="Name">
-        </mat-form-field>
-        <mat-form-field>
-          <input formControlName="email" type="text" matInput placeholder="Email">
-          <mat-error>Email doesn't look right... Try again bro</mat-error>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-select formControlName="topic" placeholder="Topic">
-            <mat-option *ngFor="let topic of topics" value={{topic}}>
-              {{topic}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-          <input formControlName="message" type="text" matInput placeholder="What's up?">
-          <mat-hint align="end">You will be blocked if you spam us with emails</mat-hint>
-        </mat-form-field>
-        <button mat-raised-button type="submit" [disabled]="!ContactForm.valid">
-          Send Message
-        </button>
-      </form>
-    </mat-card>
-  </div>
-</div>
+<ng-template #MoreInfo>
+  <section class="MoreInfo">
+    <span class="icons">
+      <mat-icon>email</mat-icon>
+      <mat-icon>home</mat-icon>
+    </span>
+    <span class="info-text">
+      <section class="email">
+        acmtexastech@gmail.com
+      </section>
+      <section class="Address">
+        2500 Broadway, Lubbock, TX 79409
+      </section>
+    </span>
+  </section>
+</ng-template>

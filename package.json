@@ -13,7 +13,8 @@
     "start": "NODE_ENV=dev CLIENT=http://localhost:4200 node ./bin/www",
     "build": "ng build --prod --aot",
     "test": "ng e2e && npm run client-test && npm run api-test",
-    "docker": "docker-compose -f docker-compose-dev.yml up"
+    "docker": "docker-compose -f docker-compose-dev.yml up",
+    "docs": "./node_modules/.bin/esdoc && open ./docs/index.html"
   },
   "private": true,
   "dependencies": {
@@ -69,6 +70,8 @@
     "chai": "^4.1.2",
     "chai-http": "~4.0.0",
     "codelyzer": "~4.0.1",
+    "esdoc": "^0.5.2",
+    "esdoc-node": "^1.0.2",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "~12.1.0",
     "eslint-config-google": "~0.9.1",

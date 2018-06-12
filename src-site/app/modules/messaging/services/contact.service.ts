@@ -13,10 +13,6 @@ export class ContactService {
     const headers = new HttpHeaders();
 
     headers.append('Content-Type', 'application/json');
-    const post = this.http.post(`${environment.host}/users/contact-us`, message, {
-      headers: headers
-    });
-
-    return post;
+    return this.http.post(`${environment.host}/users/contact-us`, message, { headers });
   }
 }

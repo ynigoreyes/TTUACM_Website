@@ -1,87 +1,42 @@
 @import '~@angular/material/theming';
 @import '../../../../../styles.scss';
-div#contact-background {
-  background-image: url('../../../../../assets/images/backgrounds/Material-1.svg');
-  height: 100%;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  width: auto;
-}
-
-.contact-div {
-  text-align: center;
-  width: 100%;
-  padding: 15px;
-}
-
-.contact-container {
-  background-color: mat-color($acm-primary, darker);
+main {
+  header {
+    font-size: $md-text;
+  }
   display: flex;
   flex-direction: column;
-  margin: auto;
-}
-
-.contact-header {
-  text-align: center;
-}
-
-.contact-header img {
-  width: 150px;
-}
-
-#error-message {
-  display: none;
-}
-
-.contact-container>* {
-  width: 100%;
-}
-
-.contact-container form {
-  margin-bottom: 20px;
-}
-
-.contact-container form>* {
-  margin: 5px 0;
-}
-
-button#btn-contact {
-  background-color: mat-color($acm-accent, lighter);
-}
-
-a.contact-links {
-  color: white;
-}
-
-a.contact-links:hover {
-  text-decoration: true;
-}
-
-a.contact-links:before {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 2px;
-  bottom: 0;
-  left: 0;
-  background-color: #000;
-  visibility: hidden;
-  -webkit-transform: scaleX(0);
-  transform: scaleX(0);
-  -webkit-transition: all 0.3s ease-in-out 0s;
-  transition: all 0.3s ease-in-out 0s;
-}
-
-a.contact-links:hover:before {
-  visibility: visible;
-  -webkit-transform: scaleX(1);
-  transform: scaleX(1);
-}
-
-@media (min-width: 992px) {
-  .contact-div {
-    padding: 150px;
+  align-items: center;
+  justify-content: center;
+  margin: 36px;
+  .form-content {
+    display: flex;
+    flex-direction: row;
     width: 80%;
+    app-contact-form {
+      flex: 2;
+    }
   }
+}
+
+// Template
+.MoreInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-left: 86px;
+  .icons {
+    display: flex;
+    flex-direction: column;
+  }
+  .info-text {
+    margin: 0px 40px;
+    text-align: center;
+  }
+}
+
+mat-icon,
+.info-text>section {
+  margin-top: 56px;
 }

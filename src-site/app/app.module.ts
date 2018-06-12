@@ -2,13 +2,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule, Routes } from '@angular/router';
 import { MaterialModule } from './shared/material.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AuthService } from './modules/user-auth/services/auth.service';
 import { UserStateService } from './shared/services/user-state.service';
-import { DeviceService } from './shared/services/device.service';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { AuthGuard } from './shared/guards/auth.guard';
@@ -28,7 +26,6 @@ import { AuthGuard } from './shared/guards/auth.guard';
   ],
   providers: [
     HttpClientModule,
-    DeviceService,
     AuthService,
     UserStateService,
     AuthGuard

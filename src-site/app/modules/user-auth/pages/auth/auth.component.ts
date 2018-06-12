@@ -8,18 +8,12 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class AuthComponent {
   public isSmallDevice: boolean;
-  constructor(
-    private route: ActivatedRoute
-  ) {
+  constructor() {
     this.isSmallDevice = window.innerWidth <= 556;
-    this.route.queryParamMap.subscribe((params) => {
-      console.log(params);
-    });
   }
 
   @HostListener('window:resize', ['$event'])
   checkScreen(event) {
     this.isSmallDevice = event.target.innerWidth <= 556;
-    console.log(this.isSmallDevice);
   }
 }

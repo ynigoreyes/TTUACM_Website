@@ -72,14 +72,6 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-/**
- * CORS
- *
- * Handles all of the requests from different ports/origins.
- * Development port for Angular is on port 4200 and will throw errors if
- * I change port to 80. CORS is so that I can hit the API from the
- * development port without errors
- */
 app.use(cors({ origin: true }));
 
 // Routes
@@ -95,7 +87,6 @@ app.use('/auth', authRoute);
  * During production, this should redirect everyone that puts
  * in a weird url to the index page. Uncomment when deploying for production
  */
-
 app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, './public/index.html'));
 });
