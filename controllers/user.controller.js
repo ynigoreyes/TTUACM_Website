@@ -254,97 +254,57 @@ function resetToken(token) {
  * </caption>
  * @param {Object} req - Request Object
  * @param {Object} res - Response Object
+ * @todo BREAK THIS UP!!!! I need to send another
+ * @todo email but I can't get to the function within this function
  */
-function register(req, res) {
-  // If the email is available, continue with the proccess
-  // Generates the salt used for hashing
-  bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({
-        success: false
+function register(user) {
+  return new Promise((resolve, reject) => {
+    // If the email is available, continue with the proccess
+    // Generates the salt used for hashing
+    bcrypt.hash(user.password, saltRounds, async (err, hash) => {
+      if (err) reject(err);
+      const token = await generateHexToken();
+
+      user.password = hash;
+      user.confirmEmailToken = token;
+
+      // New User Object from the mongoose User Schema
+      const newUser = new User(user);
+
+      // Saves the new user
+      newUser.save((err, user) => {
+        if (err) reject(err);
+        resolve(user);
       });
-    } else {
-      // Passed the hashed password into the saveUser function
-      // so that the we can save the user with a hashed password
-      saveUser(hash);
-    }
-  });
-
-  /**
-   * This saves the user with the hashed password
-   *
-   * The data we are going to save into the database
-   * The rest of the model has defualt values
-   *
-   * The data saved is the user's:
-   *  * email
-   *  * hashed password
-   *  * first and last name
-   *  * their classification
-   *
-   * @param {string} hash The hashed password
-   */
-  function saveUser(hash) {
-    const token = generateHexToken();
-    const data = {
-      email: req.body.email,
-      password: hash,
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      classification: req.body.classification,
-      confirmEmailToken: token
-    };
-
-    // New User Object from the mongoose User Schema
-    const newUser = new User(data);
-
-    // Saves the new user
-    newUser.save((err, user) => {
-      if (err) {
-        // This email is not available
-        res.status(200).json({
-          success: false,
-          emailAvailable: false
-        });
-      } else {
-        // Send back only the user's username and names
-        sendConfirmationEmail(user);
-        res.status(200).json({
-          success: true,
-          emailAvailable: true
-        });
-      }
     });
-  }
+  });
+}
 
-  /**
-   * Sends a confirmation email to the user with a link/endpoint
-   * to verify their email
-   * @param {Object} user The user object created
-   */
-  function sendConfirmationEmail(user) {
+/**
+ * Sends a confirmation email to the user with a link/endpoint
+ * to verify their email
+ * @param {Object} email - User's Email
+ * @param {Object} req - Express Request Object
+ */
+function sendConfirmationEmail(email, token, req) {
+  return new Promise((resolve, reject) => {
     const mailOptions = {
-      to: user.email,
+      to: email,
       from: 'Texas Tech ACM',
       subject: 'Welcome to ACM: TTU',
       html: `<p>Please click on the following link, or paste this into your browser to verify your account:</p>\n\n<a>${
         req.protocol
       }://${req.headers.host}/users/confirm/${
-        user.confirmEmailToken
+        token
       }</a>\n\n<p>If you did not sign up for an account, please ignore this email.</p>\n`
     };
 
     global.smtpTransporter.sendMail(mailOptions, (err) => {
-      if (err) {
-        // This error is usually a connection error
-        // Will not throw error is email is not found
-        console.log(err);
-      } else {
-        console.log(`Email send to ${user.email}`);
-      }
+      if (err) reject(err);
+      resolve();
+      console.log(`Email send to ${email}`);
     });
-  }
+  });
 }
 
 /**
@@ -388,8 +348,10 @@ function contactUs(options) {
 
 // Generates a HexToken, usually for quick random tokens; does not require string
 function generateHexToken() {
-  const token = crypto.randomBytes(20);
-  return token.toString('hex');
+  return new Promise((resolve, reject) => {
+    const token = crypto.randomBytes(20);
+    resolve(token.toString('hex'));
+  });
 }
 
 module.exports = {
@@ -400,5 +362,6 @@ module.exports = {
   contactUs,
   forgotLogin,
   resetPassword,
-  getProfile
+  getProfile,
+  sendConfirmationEmail
 };

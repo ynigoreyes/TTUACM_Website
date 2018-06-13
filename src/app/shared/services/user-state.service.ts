@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { tokenNotExpired } from 'angular2-jwt';
-import { waterfall } from 'async';
 
 @Injectable()
 export class UserStateService {
@@ -15,6 +14,9 @@ export class UserStateService {
 
   // Token Subject
   public userToken = new BehaviorSubject<string>(`No Token`);
+
+  // Confirm Token Subject
+  public HEXToken = new BehaviorSubject<string>(`No HEX Token`);
 
   /**
    * Set the globally available user object
@@ -43,6 +45,14 @@ export class UserStateService {
   public setToken(token: string): void {
     localStorage.setItem('id_token', token);
     this.userToken.next(token);
+  }
+
+  /**
+   * Set the globally available token string
+   * @param token The token given by the API
+   */
+  public setHEXToken(token: string): void {
+    this.HEXToken.next(token);
   }
 
   /**

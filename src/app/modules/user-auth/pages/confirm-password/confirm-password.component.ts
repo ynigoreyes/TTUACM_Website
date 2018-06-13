@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { UserStateService } from '../../../../shared/services/user-state.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-confirmpassword',
@@ -8,13 +9,46 @@ import { UserStateService } from '../../../../shared/services/user-state.service
   styleUrls: ['./confirm-password.component.scss']
 })
 export class ConfirmPasswordComponent implements OnInit {
-  constructor(public userStateService: UserStateService) {}
+  constructor(
+    public state: UserStateService,
+    public auth: AuthService,
+    public snackbar: MatSnackBar
+  ) {}
 
   public userEmail: string;
+  public userToken: string;
 
   ngOnInit() {
-    this.userStateService.userEmail.subscribe(email => {
-      this.userEmail = email;
+    this.state.userEmail.subscribe(email => {
+      // this.userEmail = email;
+      this.userEmail = 'ynigoreyes@gmail.com';
+      console.log(this.userEmail);
     });
+    this.state.HEXToken.subscribe(token => {
+      // this.userEmail = email;
+      // this.userToken = token;
+      this.userToken = '531f7f791ca66bc5cf55fc9e2a2314e6eaa45865';
+      console.log(this.userToken);
+    });
+  }
+
+  /**
+   * Resends the email using the email attempt
+   *
+   * @returns {null} None
+   */
+  resendEmail(): void {
+    this.auth.resendConfirmationEmail(this.userEmail, this.userToken).subscribe(
+      () => {
+        this.snackbar.open('Email Delivered', 'Close', {
+          duration: 2000
+        });
+      },
+      err => {
+        this.snackbar.open('Error Sending Email', 'Close', {
+          duration: 2000
+        });
+      }
+    );
   }
 }

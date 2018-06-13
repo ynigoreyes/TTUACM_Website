@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { tokenNotExpired } from 'angular2-jwt';
 import { Observable } from 'rxjs/Observable';
-// import { BehaviourSubject } from 'rxjs/BehaviourSubject';
 import 'rxjs/add/operator/map';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { environment } from '../../../../environments/environment';
 
 @Injectable()
@@ -14,6 +11,8 @@ export class AuthService {
   private forgotEP: string = `${environment.host}/users/forgot`;
   private resetEP: string = `${environment.host}/users/reset`;
   private confirmationEP: string = `${environment.host}/users/confirmation`;
+
+  private resendEP: string = `${environment.host}/users/confirm`;
   constructor(private http: HttpClient) {}
 
   public registerUser(newUser) {
@@ -66,10 +65,21 @@ export class AuthService {
     const headers = new HttpHeaders();
     headers.append(`Content-type`, `application/json`);
 
-    const post: Observable<object> = this.http.post(this.confirmationEP, email, {
-      headers: headers
-    });
+    const post: Observable<object> = this.http.post(
+      this.confirmationEP,
+      { email },
+      {
+        headers: headers
+      }
+    );
 
     return post;
+  }
+
+  public resendConfirmationEmail(email, token): Observable<object> {
+    const headers = new HttpHeaders();
+    headers.append(`Content-type`, `application/json`);
+
+    return this.http.post(this.resendEP, { email: email, token: token }, { headers });
   }
 }

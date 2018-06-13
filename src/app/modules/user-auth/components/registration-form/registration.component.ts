@@ -55,17 +55,14 @@ export class RegistrationComponent {
 
     this.authService.registerUser(postUser).subscribe(
       data => {
-        if (data === false) {
-          this.snackBar.open(`Error Creating User. Please Reload page...`, `Close`, {
-            duration: 3000
-          });
-        } else if (data[`emailAvailable`] === false) {
+        if (data[`emailAvailable`] === false) {
           this.snackBar.open(`Email has already been taken`, `Close`, { duration: 2000 });
         } else {
           this.snackBar.open(`Please check your email for confirmation`, `Close`, {
             duration: 2000
           });
           this.userStateService.setEmail(postUser.email);
+          this.userStateService.setHEXToken(data['user'].confirmEmailToken);
           this.router.navigate(['auth/confirmation']);
         }
       },

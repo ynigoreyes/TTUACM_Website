@@ -17,7 +17,35 @@ const membersOnlyRoute = passport.authenticate('jwt', { session: false });
 // Routes pertaining to the user's account
 
 /* POST Registion */
-router.post('/register', UserCrtl.register);
+router.post('/register', (req, res) => {
+  const user = {
+    email: req.body.email,
+    password: req.body.password,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    classification: req.body.classification,
+    confirmEmailToken: null
+  };
+  UserCrtl.register(user)
+    .then((user) => {
+      UserCrtl.sendConfirmationEmail(user.email, user.confirmEmailToken, req)
+        .then(() => {
+          res.status(201).json({ user });
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(404).json({ err });
+        });
+    })
+    .catch((err) => {
+      console.log(err);
+      if (err === 'unavailable') {
+        res.status(404).json({ emailAvailable: false });
+      } else {
+        res.status(404).json({ err });
+      }
+    });
+});
 
 /* POST Login */
 router.post('/login', UserCrtl.login);
@@ -28,7 +56,7 @@ router.post('/forgot', UserCrtl.forgotLogin);
 /**
  * Confirms the user has a valid email account
  *
- * - endpoint `users/confirm/:token`
+ * - endpoint: `users/confirm/:token`
  * - VERB: GET
  *
  * @typedef {function} UserRouter-confirmToken
@@ -36,7 +64,7 @@ router.post('/forgot', UserCrtl.forgotLogin);
 router.get('/confirm/:token', (req, res) => {
   UserCrtl.confirmToken(req.params.token)
     .then(() => {
-      const qs = querystring.stringify({ verify: 'success'});
+      const qs = querystring.stringify({ verify: 'success' });
       res.redirect(`${process.env.CLIENT}/auth/?${qs}`);
     })
     .catch((err) => {
@@ -44,6 +72,25 @@ router.get('/confirm/:token', (req, res) => {
       console.log(err);
       const qs = querystring.stringify({ err: 'Error Validating Email' });
       res.redirect(`${process.env.CLIENT}/?${qs}`);
+    });
+});
+
+/**
+ * Resends the confirmation email to the requested user
+ *
+ * - endpoint: `/users/confirm`
+ * - VERB: POST
+ *
+ * @typedef {function} UserRouter-sendConfirmationEmail
+ */
+router.post('/confirm', (req, res) => {
+  UserCrtl.sendConfirmationEmail(req.body.email, req.body.token, req)
+    .then(() => {
+      res.status(200).json();
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(404).json({err: 'Error Sending Confirmation Email'});
     });
 });
 
