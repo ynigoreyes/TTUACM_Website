@@ -16,7 +16,20 @@ const membersOnlyRoute = passport.authenticate('jwt', { session: false });
 
 // Routes pertaining to the user's account
 
-/* POST Registion */
+/**
+ * Registers the user and saved them as a unverified user
+ *
+ * - endpoint: `/users/register`
+ * - Verb: POST
+ *
+ * OnFailure: Sends an error message
+ * OnSuccess: Sends the user back as JSON
+ *
+ * @typedef {function} UserRouter-register
+ * @typedef {function} UserRouter-sendConfirmationEmail
+ *
+ * @todo convert this to async await
+ */
 router.post('/register', (req, res) => {
   const user = {
     email: req.body.email,
@@ -47,8 +60,30 @@ router.post('/register', (req, res) => {
     });
 });
 
-/* POST Login */
-router.post('/login', UserCrtl.login);
+/**
+ * JWT Login/Authentication
+ * User must not have signed up using OAuth2
+ *
+ * - endpoint: `/users/login`
+ * - Verb: POST
+ *
+ * OnFailure: Sends an error message
+ * OnSuccess: Sends the JWT Token of the user
+ *
+ * @typedef {function} UserRouter-login
+ */
+router.post('/login', (req, res) => {
+  const email = req.body.email;
+  const inputPassword = req.body.password;
+  UserCrtl.login(email, inputPassword)
+    .then((token) => {
+      res.status(200).json({ token: `JWT ${token}` });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(404).json({ msg: err.message });
+    });
+});
 
 /* POST forgot page */
 router.post('/forgot', UserCrtl.forgotLogin);
@@ -58,6 +93,9 @@ router.post('/forgot', UserCrtl.forgotLogin);
  *
  * - endpoint: `users/confirm/:token`
  * - VERB: GET
+ *
+ * OnFailure: Redirects to error page
+ * OnSuccess: Redirects to the login page with querystring to signal a notification
  *
  * @typedef {function} UserRouter-confirmToken
  */
@@ -81,6 +119,9 @@ router.get('/confirm/:token', (req, res) => {
  * - endpoint: `/users/confirm`
  * - VERB: POST
  *
+ * OnFailure: Tells the user that the email has failed to send
+ * OnSuccess: Sends a successful status code
+ *
  * @typedef {function} UserRouter-sendConfirmationEmail
  */
 router.post('/confirm', (req, res) => {
@@ -90,7 +131,7 @@ router.post('/confirm', (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-      res.status(404).json({err: 'Error Sending Confirmation Email'});
+      res.status(404).json({ err: 'Error Sending Confirmation Email' });
     });
 });
 
@@ -100,9 +141,11 @@ router.post('/confirm', (req, res) => {
  * - endpoint: `/users/reset/:token`
  * - Verb: GET
  *
+ * OnFailure: Redirects to the login screen with an error in query string
+ * OnSuccess: Redirects to the forgot-redirect page to change password
+ *
  * @typedef {function} UserRouter-resetToken
- * @param {string} token - A string that contains the HEX code/Reset token
- * of a lost account
+ * @param {string} token - A string that contains the HEX code/Reset token of a lost account
  */
 router.get('/reset/:token', (req, res) => {
   UserCrtl.resetToken(req.params.token)
@@ -122,6 +165,9 @@ router.get('/reset/:token', (req, res) => {
  *
  * - Endpoint: `/users/reset/:token`
  * - Verb: POST
+ *
+ * OnFailure: Sends a success status code
+ * OnSuccess: Sends a error status code
  *
  * @typedef {function} UserRouter-resetPassword
  */

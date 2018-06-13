@@ -9,48 +9,45 @@ const bcrypt = require('bcryptjs');
 
 const saltRounds = 10;
 
-// Test Login Route for exports.authenticate
-function login(req, res) {
-  const email = req.body.email;
-  const inputPassword = req.body.password;
-
-  // In the test, we are not able to see the email passed
-  User.getUserByEmail(email, (err, foundUser) => {
-    if (err) {
-      console.log(`Error in login sequence function: \n\n${err}`);
-      res.status(404).json({
-        user: null,
-        msg: 'Unknown Error has occured, Please try again later'
-      });
-    } else if (foundUser !== null && foundUser.password !== null) {
-      bcrypt.compare(inputPassword, foundUser.password, (err, response) => {
-        if (err) {
-          console.log(err);
-        }
-        if (response) {
-          // We don't want to pass back the password at all
-          const token = jwt.sign({ data: foundUser }, process.env.session_secret, {
-            expiresIn: 604800 // 1 week
-          });
-
-          res.status(200).json({
-            user: foundUser,
-            token: `JWT ${token}`
-          });
-        } else {
-          res.status(401).json({
-            user: null,
-            msg: 'Invalid Login'
-          });
-        }
-      });
-    } else {
-      // If the was no user found with that user name
-      res.status(404).json({
-        user: null,
-        msg: 'User Not Found'
-      });
-    }
+/**
+ * Checks to see if there is a valid username and password combination
+ * that also has verified their email
+ *
+ * @param {string} email - user email
+ * @param {string} password - user password
+ *
+ * @todo What if the user somehow didn't get the verification email. How do we handle that?
+ */
+function login(email, password) {
+  return new Promise((resolve, reject) => {
+    User.getUserByEmail(email, (err, foundUser) => {
+      // Internal Server Error
+      if (err) {
+        reject(err);
+        // If the user has not been verified
+      } else if (!foundUser) {
+        reject(new Error('User Not Found'));
+      } else if (!foundUser.verified) {
+        reject(new Error('User Not Verified'));
+        // If the user has a signed up using a local auth strategy
+      } else if (foundUser !== null && foundUser.password !== null) {
+        bcrypt.compare(password, foundUser.password, (err, response) => {
+          if (err) {
+            reject(err);
+          } else if (response) {
+            const token = jwt.sign({ data: foundUser }, process.env.session_secret, {
+              expiresIn: 604800 // 1 week
+            });
+            resolve(token);
+          } else {
+            reject(new Error('Invalid Login'));
+          }
+        });
+      } else {
+        // If the was no user found with that user name
+        reject(new Error('Internal Server Error'));
+      }
+    });
   });
 }
 
@@ -294,9 +291,9 @@ function sendConfirmationEmail(email, token, req) {
       subject: 'Welcome to ACM: TTU',
       html: `<p>Please click on the following link, or paste this into your browser to verify your account:</p>\n\n<a>${
         req.protocol
-      }://${req.headers.host}/users/confirm/${
-        token
-      }</a>\n\n<p>If you did not sign up for an account, please ignore this email.</p>\n`
+      }://${
+        req.headers.host
+      }/users/confirm/${token}</a>\n\n<p>If you did not sign up for an account, please ignore this email.</p>\n`
     };
 
     global.smtpTransporter.sendMail(mailOptions, (err) => {

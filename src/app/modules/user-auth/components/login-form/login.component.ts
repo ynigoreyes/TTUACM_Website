@@ -59,8 +59,9 @@ export class LoginComponent {
 
         this.router.navigate(['/events/all-events']);
       },
-      (err: LoginResponse) => {
-        this.snackBar.open(`Invalid Login`, 'Close', {
+      (err) => {
+        console.log(err);
+        this.snackBar.open(err['error'].msg, 'Close', {
           duration: 2000
         });
       }
