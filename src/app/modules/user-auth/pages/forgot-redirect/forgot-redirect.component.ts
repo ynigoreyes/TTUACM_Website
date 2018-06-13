@@ -45,6 +45,9 @@ export class ForgotRedirectComponent {
 
   /**
    * Accepts a valid password to replace the user's password
+   *
+   * @param {FormGroup} post - A form with the values of the new password
+   * @param {string} post.password - The new valid password
    */
   changePassword(post: FormGroup) {
     this.authService.resetPassword(post['password'], this.resetToken).subscribe(
@@ -63,7 +66,11 @@ export class ForgotRedirectComponent {
   }
 
   /**
-   * Makes sure that the passwords match
+   * Accepts a valid password to replace the user's password
+   *
+   * @param {FormGroup} post - A form with the values of the new password
+   * @param {string} post.password - The password attempt
+   * @param {string} post.confirmPassword - The confirmation that the user has typed the correct password
    */
   checkPasswords(post: FormGroup) {
     const password: string = post['password'];
