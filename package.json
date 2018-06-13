@@ -13,7 +13,7 @@
     "start": "NODE_ENV=dev CLIENT=http://localhost:4200 node ./bin/www",
     "build": "ng build --prod --aot",
     "test": "ng e2e && npm run client-test && npm run api-test",
-    "docker": "docker build -t acmtexastech . && docker run -p 80:8080 acmtexastech",
+    "docker": "docker build -t acmtexastech/acmtttu-web . && docker run -p 80:8080 acmtexastech/acmtttu-web",
     "docs": "./node_modules/.bin/esdoc"
   },
   "private": true,

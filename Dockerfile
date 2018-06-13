@@ -7,10 +7,13 @@ COPY . /app
 EXPOSE 8080
 
 RUN npm install --silent --prod
+RUN npm install @angular/cli@1.7.4
+
+RUN npm run build
 
 CMD [ "npm", "run", "app" ]
 
 # Command to run image in a container:
 
-# docker build -t acmttu .
-# docker run [-d for detached] -p 80:8080 acmttu
+# docker build -t acmtexastech/acmttu-web .
+# docker run [-d for detached] -p 80:8080 acmtexastech/acmttu-web
