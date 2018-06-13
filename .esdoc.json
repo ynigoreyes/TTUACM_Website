@@ -2,7 +2,7 @@
   "source": ".",
   "destination": "./docs",
   "includes": ["^controllers", "^routes"],
-  "excludes": ["client_secret.json", "credentials.json"],
+  "excludes": ["client_secret.json", "credentials.json", "\\*\\.json"],
   "unexportIdentifier": true,
   "undocumentIdentifier": false,
   "title": "TTU Website",

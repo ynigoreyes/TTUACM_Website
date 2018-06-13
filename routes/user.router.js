@@ -26,7 +26,6 @@ const membersOnlyRoute = passport.authenticate('jwt', { session: false });
  * OnSuccess: Sends the user back as JSON
  *
  * @typedef {function} UserRouter-register
- * @typedef {function} UserRouter-sendConfirmationEmail
  *
  * @todo convert this to async await
  */
@@ -181,7 +180,18 @@ router.post('/reset/:token', (req, res) => {
     });
 });
 
-/* GET User profile */
+/**
+ * Gets the user's profile to fill in a profile page
+ * This route requires authentication
+ *
+ * - endpoint: `/users/profile`
+ * - Verb: GET
+ *
+ * OnFailure: Sends an error statuscode
+ * OnSuccess: Sends a success statuscode
+ *
+ * @typedef {function} UserRouter-getProfile
+ */
 router.get('/profile', membersOnlyRoute, UserCrtl.getProfile);
 
 /**

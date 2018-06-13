@@ -17,6 +17,7 @@ const saltRounds = 10;
  * @param {string} password - user password
  *
  * @todo What if the user somehow didn't get the verification email. How do we handle that?
+ * @returns {Promise.<token, Error>} Resolves with a JWT and rejects with an error
  */
 function login(email, password) {
   return new Promise((resolve, reject) => {
@@ -249,10 +250,10 @@ function resetToken(token) {
  * classification: 'Freshman',
  * password: 'password'
  * </caption>
- * @param {Object} req - Request Object
- * @param {Object} res - Response Object
- * @todo BREAK THIS UP!!!! I need to send another
- * @todo email but I can't get to the function within this function
+ * @param {Object} user - user object
+ * @param {string} user.password - user password
+ *
+ * @returns {Promise.<Object, Error>} Resolves with a user objectand rejects with an error
  */
 function register(user) {
   return new Promise((resolve, reject) => {
@@ -280,8 +281,10 @@ function register(user) {
 /**
  * Sends a confirmation email to the user with a link/endpoint
  * to verify their email
+ *
  * @param {Object} email - User's Email
  * @param {Object} req - Express Request Object
+ * @returns {Promise.<null, Error>}
  */
 function sendConfirmationEmail(email, token, req) {
   return new Promise((resolve, reject) => {
@@ -305,6 +308,9 @@ function sendConfirmationEmail(email, token, req) {
 }
 
 /**
+ * Fetches the user's profile
+ *
+ * @param {string} email - user's unique email
  * @todo Impliment a profile page with resumes and other things
  */
 function getProfile(req, res) {
@@ -320,7 +326,7 @@ function getProfile(req, res) {
  * @param {string} options.topic - student topic
  * @param {string} options.message - student message
  *
- * @returns {null}
+ * @returns {Promise.<null, Error>}
  */
 function contactUs(options) {
   return new Promise((resolve, reject) => {
