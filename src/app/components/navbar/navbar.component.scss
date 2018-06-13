@@ -11,6 +11,9 @@
 
 // Stretch out registration page
 // Events should be availble to all
+a {
+  text-decoration: none;
+}
 .firstRow {
   background-color: mat-color($acm-accent);
   display: flex;
@@ -24,7 +27,7 @@
     align-self: center;
   }
   .title {
-    font-size: $sm-text;
+    font-size: $md-text;
   }
   .spacer {
     flex: 1 1 auto;
@@ -38,19 +41,23 @@
   .nav-buttons> {
     flex: 1;
     a {
-      font-size: $xs-text;
+      font-size: 15px;
     }
   }
 }
 
+// When Smaller than tablet
 @media(max-width:768px) {
   .firstRow {
+    .title {
+      font-size: 20px;
+    }
     height: 64ngpx;
     justify-content: center;
     padding: 0px 24px;
   }
   .nav-buttons>a {
-    font-size: $xs-text
+    font-size: 15px
   }
   .secondRow {
     flex-direction: column;
