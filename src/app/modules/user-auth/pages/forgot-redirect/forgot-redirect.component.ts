@@ -52,7 +52,7 @@ export class ForgotRedirectComponent {
   changePassword(post: FormGroup) {
     this.authService.resetPassword(post['password'], this.resetToken).subscribe(
       () => {
-        this.router.navigate(['auth/login']);
+        this.router.navigate(['/auth']);
         this.snackbar.open('You have successfully updated your password', 'Close', {
           duration: 2000
         });
