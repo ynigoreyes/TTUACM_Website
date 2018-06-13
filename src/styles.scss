@@ -20,7 +20,6 @@ $sm-screen: 425;
 $md-screen: 768;
 $lg-screen: 1024;
 $xl-screen: 1440;
-
 // Global Styles
 html,
 body {
@@ -42,6 +41,9 @@ body {
   }
   a:hover {
     color: #fff;
+  } // Panel OverRide
+  .mat-select-panel {
+    max-height: 1000px;
   }
 }
 
