@@ -12,7 +12,7 @@
     "client-test": "ng test",
     "start": "NODE_ENV=dev CLIENT=http://localhost:4200 node ./bin/www",
     "build": "ng build --prod --aot",
-    "test": "ng e2e && npm run client-test && npm run api-test",
+    "test": "./node_modules/.bin/mocha --recursive ./test --reporter spec --timeout 120000000 --exit",
     "docker": "docker build -t acmtexastech/acmtttu-web . && docker run -p 80:8080 acmtexastech/acmtttu-web",
     "docs": "./node_modules/.bin/esdoc"
   },
@@ -61,18 +61,17 @@
     "zone.js": "~0.8.19"
   },
   "devDependencies": {
-    "ajv": "~6.4.0",
     "@angular/cli": "~1.7.4",
     "@angular/compiler-cli": "~5.2.10",
     "@angular/language-service": "~5.2.10",
     "@types/jasmine": "~2.8.3",
     "@types/jasminewd2": "~2.0.2",
     "@types/node": "~6.0.106",
-    "ts-node": "~4.1.0",
-    "tslint": "~5.9.1",
-    "typescript": "~2.5.3",
+    "ajv": "~6.4.0",
     "chai": "^4.1.2",
     "chai-http": "~4.0.0",
+    "chai-moment": "^0.1.0",
+    "chai-shallow-deep-equal": "^1.4.6",
     "codelyzer": "~4.0.1",
     "esdoc": "^0.5.2",
     "esdoc-node": "^1.0.2",
@@ -90,8 +89,13 @@
     "karma-jasmine-html-reporter": "^1.1.0",
     "karma-phantomjs-launcher": "^1.0.4",
     "mockgoose": "^7.3.5",
+    "npm-run-all": "^4.1.3",
     "protractor": "^5.3.2",
-    "supertest": "^3.1.0"
+    "sinon": "^6.0.0",
+    "supertest": "^3.1.0",
+    "ts-node": "~4.1.0",
+    "tslint": "~5.9.1",
+    "typescript": "~2.5.3"
   },
   "engines": {
     "node": "~8.9.4",
