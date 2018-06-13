@@ -6,7 +6,7 @@ COPY . /app
 
 EXPOSE 8080
 
-RUN npm install --silent
+RUN npm install --silent --prod
 
 CMD [ "npm", "run", "app" ]
 
