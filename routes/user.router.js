@@ -25,16 +25,24 @@ router.post('/login', UserCrtl.login);
 /* POST forgot page */
 router.post('/forgot', UserCrtl.forgotLogin);
 
-/* GET confirm page */
+/**
+ * Confirms the user has a valid email account
+ *
+ * - endpoint `users/confirm/:token`
+ * - VERB: GET
+ *
+ * @typedef {function} UserRouter-confirmToken
+ */
 router.get('/confirm/:token', (req, res) => {
   UserCrtl.confirmToken(req.params.token)
     .then(() => {
-      const qs = querystring.stringify({ verifyPass: 'success'});
-      res.redirect(`${process.env.CLIENT}/auth/login${qs}`);
+      const qs = querystring.stringify({ verify: 'success'});
+      res.redirect(`${process.env.CLIENT}/auth/?${qs}`);
     })
     .catch((err) => {
+      console.log('Error Occured');
       console.log(err);
-      const qs = querystring.stringify({ err });
+      const qs = querystring.stringify({ err: 'Error Validating Email' });
       res.redirect(`${process.env.CLIENT}/?${qs}`);
     });
 });
@@ -50,7 +58,7 @@ router.get('/confirm/:token', (req, res) => {
  * of a lost account
  */
 router.get('/reset/:token', (req, res) => {
-  UserCrtl.resetToken(req)
+  UserCrtl.resetToken(req.params.token)
     .then((token) => {
       const qs = querystring.stringify({ token });
       res.redirect(`${process.env.CLIENT}/auth/forgot/redirect/?${qs}`);
@@ -58,7 +66,7 @@ router.get('/reset/:token', (req, res) => {
     .catch((err) => {
       const qs = querystring.stringify({ err });
       res.redirect(`${process.env.CLIENT}/auth/?${qs}`);
-      console.log(err.message);
+      console.log(err);
     });
 });
 

@@ -34,3 +34,5 @@ Contributing:
 
   Port 8080 is the port that is currently set as an OAuth2 api callback endpoint.
   If development port does not match, authentication will fail
+
+  TODO: Make the footer all better

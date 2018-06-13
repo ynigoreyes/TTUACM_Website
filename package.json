@@ -6,7 +6,7 @@
   "scripts": {
     "app": "NODE_ENV=dev CLIENT='' node ./bin/www",
     "app-prod": "NODE_ENV=prod CLIENT='' node ./bin/www",
-    "api": "sudo nodemon",
+    "api": "nodemon",
     "api-test": "./node_modules/.bin/mocha --reporter spec --timeout 120000000 --exit",
     "client": "ng serve --aot",
     "client-test": "ng test",
@@ -14,7 +14,7 @@
     "build": "ng build --prod --aot",
     "test": "ng e2e && npm run client-test && npm run api-test",
     "docker": "docker build -t acmtexastech . && docker run -p 80:8080 acmtexastech",
-    "docs": "./node_modules/.bin/esdoc && open ./docs/index.html"
+    "docs": "./node_modules/.bin/esdoc"
   },
   "private": true,
   "dependencies": {
@@ -57,9 +57,7 @@
     "passport-google-oauth2": "~0.1.6",
     "passport-jwt": "~4.0.0",
     "rxjs": "~5.5.10",
-    "zone.js": "~0.8.19"
-  },
-  "devDependencies": {
+    "zone.js": "~0.8.19",
     "@angular/cli": "~1.7.4",
     "@angular/compiler-cli": "~5.2.10",
     "@angular/language-service": "~5.2.10",
@@ -67,6 +65,11 @@
     "@types/jasminewd2": "~2.0.2",
     "@types/node": "~6.0.106",
     "ajv": "~6.4.0",
+    "ts-node": "~4.1.0",
+    "tslint": "~5.9.1",
+    "typescript": "~2.5.3"
+  },
+  "devDependencies": {
     "chai": "^4.1.2",
     "chai-http": "~4.0.0",
     "codelyzer": "~4.0.1",
@@ -87,10 +90,7 @@
     "karma-phantomjs-launcher": "^1.0.4",
     "mockgoose": "^7.3.5",
     "protractor": "^5.3.2",
-    "supertest": "^3.1.0",
-    "ts-node": "~4.1.0",
-    "tslint": "~5.9.1",
-    "typescript": "~2.5.3"
+    "supertest": "^3.1.0"
   },
   "engines": {
     "node": "~8.9.4",

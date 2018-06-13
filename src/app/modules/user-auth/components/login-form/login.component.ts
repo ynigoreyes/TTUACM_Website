@@ -35,15 +35,22 @@ export class LoginComponent {
     })
   });
 
-  public attemptLogin(post: UserPost) {
+  /**
+   * Logs in the user's email and password and sends to backend to check if
+   * password matches
+   *
+   * OnError: Tells the user that is an invalid credentials
+   * OnSuccess: Redirects the user to the Events page and sets a token in local storage
+   *
+   * @param {UserPost} post - User Login Form Values/Object
+   */
+  public attemptLogin(post: UserPost): void {
     const postUser: User = {
       email: post.email.trim(),
       password: post.password.trim()
     };
     this.authService.authenticateUser(postUser).subscribe(
       (data: LoginResponse) => {
-        // If the user is found, we want to save their token and data into local storage
-        console.log('Got a response from the server');
         this.snackBar.open(`Welcome ${data.user.firstName}!`, 'Close', { duration: 2000 });
 
         // Stores the user's information into the local storage

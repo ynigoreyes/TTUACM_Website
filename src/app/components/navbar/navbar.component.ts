@@ -18,11 +18,10 @@ export class NavbarComponent {
     this.isSmallDevice = event.target.innerWidth <= 425;
   }
 
+  /**
+   * Opens the drawer when the screen is small
+   */
   toggleDrawer(): void {
-    if (this.openDrawer === false) {
-      this.openDrawer = true;
-    } else {
-      this.openDrawer = false;
-    }
+    this.openDrawer = !this.openDrawer;
   }
 }

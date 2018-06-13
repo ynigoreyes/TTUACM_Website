@@ -163,6 +163,7 @@ function verifyUser(token, passwordAttempt) {
 
 /**
  * Send the notification to the user that informtion in their account has changed
+ *
  * @param {string} email User's email
  * @returns {Promise.<null, Error>} Rejects with an error if there is something wrong with the email
  */
@@ -188,6 +189,7 @@ function sendChangedPasswordEmail(email) {
  *
  * Compares the url token with the token saved in the database.
  * If thre is a match, the user is verified and redirected to log in
+ * @param {string} token - HEX Token
  */
 function confirmToken(token) {
   return new Promise((resolve, reject) => {
@@ -212,12 +214,12 @@ function confirmToken(token) {
  * @param req: Request Object
  * @param req.param.token: Token sent with url
  */
-function resetToken(req) {
+function resetToken(token) {
   return new Promise((resolve, reject) => {
-    if (!req.params.token) reject(new Error('No Token Passed to Endpoint'));
+    if (!token) reject(new Error('No Token Passed to Endpoint'));
     User.findOne(
       {
-        resetPasswordToken: req.params.token,
+        resetPasswordToken: token,
         resetPasswordExpires: { $gt: Date.now() }
       },
       (err, user) => {
@@ -231,7 +233,7 @@ function resetToken(req) {
         } else {
           // The token is valid and will signal front end to render the login page
           // The token we are passing is the same token that is in the database
-          resolve(req.params.token);
+          resolve(token);
         }
       }
     );
