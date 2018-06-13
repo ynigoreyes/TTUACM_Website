@@ -21,7 +21,7 @@ module.exports = function(config) {
     client: {
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
-    browsers: ['PhantomJS'],
+    browsers: ['Chrome'],
     coverageIstanbulReporter: {
       reports: ['html', 'lcovonly'],
       fixWebpackSourcePaths: true
@@ -34,8 +34,7 @@ module.exports = function(config) {
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
-    autoWatch: false,
-    singleRun: true,
-    concurrency: Infinity
+    autoWatch: true,
+    concurrency: Infinity,
   });
 };

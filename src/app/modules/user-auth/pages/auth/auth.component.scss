@@ -1,0 +1,25 @@
+@import '~@angular/material/theming';
+@import '../../../../../styles.scss';
+.forBigScreen {
+  background-color: mat-color($acm-primary, darker);
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: center;
+  margin: 90px;
+  .divider {
+    border-left: 1px solid #888;
+    height: 500px;
+    align-self: flex-end;
+  }
+  section {
+    margin: 0px 60px;
+  }
+}
+
+.forLittleScreen {
+  section {
+    padding: 30px;
+  }
+  height: 600px;
+}

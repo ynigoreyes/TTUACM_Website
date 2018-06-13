@@ -1,0 +1,11 @@
+<app-carousel></app-carousel>
+<main class='home-content'>
+  <header>The Association for Computing Machinery</header>
+  <caption>@ Texas Tech University</caption>
+
+  <div class="feature-list">
+    <app-feature *ngFor="let feature of features"
+    [feature]=feature
+    ></app-feature>
+  </div>
+</main>

@@ -1,0 +1,31 @@
+<mat-toolbar color='accent'>
+  <mat-toolbar-row class="firstRow">
+    <a class='title' [routerLink]="['/']">ACM: Texas Tech</a>
+    <span class="spacer"></span>
+    <mat-icon (click)="toggleDrawer()" class="menu" *ngIf="isSmallDevice">menu</mat-icon>
+    <ng-container *ngIf="!isSmallDevice;then NavigationTabs">
+    </ng-container>
+  </mat-toolbar-row>
+  <mat-toolbar-row *ngIf="isSmallDevice && openDrawer" class='secondRow'>
+    <ng-container *ngIf="isSmallDevice;then NavigationTabs"></ng-container>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<!-- Navigation Tabs for Application -->
+<ng-template #NavigationTabs>
+  <span class="nav-buttons" *ngIf="state.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+    <a [routerLink]="['events/all-events']">Events</a>
+  </span>
+  <span class="nav-buttons" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+    <a [routerLink]="['auth']">Sign Up</a>
+  </span>
+  <span class="nav-buttons" *ngIf="!state.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+    <a [routerLink]="['auth']">Login</a>
+  </span>
+  <span class="nav-buttons" *ngIf="state.loggedIn()">
+    <a [routerLink]="['/']" (click)="state.logOut()">LogOut</a>
+  </span>
+  <span class="nav-buttons" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+    <a [routerLink]="['messaging']">Contact Us</a>
+  </span>
+</ng-template>

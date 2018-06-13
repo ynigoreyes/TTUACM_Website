@@ -1,0 +1,21 @@
+@import '~@angular/material/theming';
+@import '../../../../../styles.scss';
+main {
+  display: flex;
+  flex-direction: column;
+  .mat-button {
+    margin: 10px 0px;
+    font-size: $sm-text;
+    width: 100%;
+    text-align: left;
+  }
+  .google {
+    background-color: #db3236;
+  }
+  .facebook {
+    background-color: #3B5998;
+  }
+  .github {
+    background-color: #333333;
+  }
+}

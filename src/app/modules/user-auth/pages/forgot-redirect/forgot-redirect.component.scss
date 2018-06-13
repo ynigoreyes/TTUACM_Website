@@ -1,0 +1,12 @@
+@import '~@angular/material/theming';
+@import '../../../../../styles.scss';
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 42px;
+  mat-form-field {
+    margin: 12px;
+  }
+}
