@@ -4,11 +4,11 @@ WORKDIR /app
 
 COPY . /app
 
-ENV NODE_ENV=prod
-
 EXPOSE 8080
 
-CMD [ "npm", "run", "app-prod" ]
+RUN npm install --silent
+
+CMD [ "npm", "run", "app" ]
 
 # Command to run image in a container:
 

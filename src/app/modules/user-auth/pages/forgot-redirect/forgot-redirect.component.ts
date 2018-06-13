@@ -47,18 +47,19 @@ export class ForgotRedirectComponent {
    * Accepts a valid password to replace the user's password
    */
   changePassword(post: FormGroup) {
-    this.authService.resetPassword(post['password'], this.resetToken).subscribe(status => {
-      if (status['success'] === true) {
-        this.router.navigate(['/login']);
+    this.authService.resetPassword(post['password'], this.resetToken).subscribe(
+      () => {
+        this.router.navigate(['auth/login']);
         this.snackbar.open('You have successfully updated your password', 'Close', {
           duration: 2000
         });
-      } else {
+      },
+      err => {
         this.snackbar.open('Error updating your password... Please try again later', 'Close', {
           duration: 2000
         });
       }
-    });
+    );
   }
 
   /**

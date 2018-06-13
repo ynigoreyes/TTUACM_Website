@@ -39,7 +39,9 @@ export class ForgotComponent implements OnInit {
 
     this.authService.forgotUser(currentEmail).subscribe(() => {
       this.loading = false;
-      this.snackbar.open(`Email sent to ${currentEmail}`);
+      this.snackbar.open(`Email sent to ${currentEmail}`, 'Close', {
+        duration: 2000
+      });
     });
   }
 }

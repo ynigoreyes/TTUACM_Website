@@ -43,9 +43,7 @@ export class AuthService {
     const headers = new HttpHeaders();
     headers.append(`Content-type`, `application/json`);
 
-    const post = this.http.post(this.forgotEP, { email: userEmail }, { headers: headers });
-
-    return post;
+    return this.http.post(this.forgotEP, { email: userEmail }, { headers: headers });
   }
 
   /**

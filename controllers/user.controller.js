@@ -189,20 +189,19 @@ function sendChangedPasswordEmail(email) {
  * Compares the url token with the token saved in the database.
  * If thre is a match, the user is verified and redirected to log in
  */
-function confirmToken(req, res) {
-  const query = {
-    confirmEmailToken: req.params.token
-  };
-  const update = {
-    confirmEmailToken: '',
-    verified: true
-  };
-  User.findOneAndUpdate(query, update, (err, user) => {
-    if (err || user === null) {
-      res.redirect(`${req.protocol}://${req.headers.host}/error`);
-    } else {
-      res.redirect(`${req.protocol}://${req.headers.host}/login`);
-    }
+function confirmToken(token) {
+  return new Promise((resolve, reject) => {
+    const query = {
+      confirmEmailToken: token
+    };
+    const update = {
+      confirmEmailToken: '',
+      verified: true
+    };
+    User.findOneAndUpdate(query, update, (err, user) => {
+      if (err || user === null) reject(err);
+      resolve();
+    });
   });
 }
 

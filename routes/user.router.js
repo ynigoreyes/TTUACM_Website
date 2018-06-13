@@ -26,9 +26,29 @@ router.post('/login', UserCrtl.login);
 router.post('/forgot', UserCrtl.forgotLogin);
 
 /* GET confirm page */
-router.get('/confirm/:token', UserCrtl.confirmToken);
+router.get('/confirm/:token', (req, res) => {
+  UserCrtl.confirmToken(req.params.token)
+    .then(() => {
+      const qs = querystring.stringify({ verifyPass: 'success'});
+      res.redirect(`${process.env.CLIENT}/auth/login${qs}`);
+    })
+    .catch((err) => {
+      console.log(err);
+      const qs = querystring.stringify({ err });
+      res.redirect(`${process.env.CLIENT}/?${qs}`);
+    });
+});
 
-/* GET reset page (This is the route that the email hits) */
+/**
+ * This endpoint is hit by an emai to reset a user password
+ *
+ * - endpoint: `/users/reset/:token`
+ * - Verb: GET
+ *
+ * @typedef {function} UserRouter-resetToken
+ * @param {string} token - A string that contains the HEX code/Reset token
+ * of a lost account
+ */
 router.get('/reset/:token', (req, res) => {
   UserCrtl.resetToken(req)
     .then((token) => {

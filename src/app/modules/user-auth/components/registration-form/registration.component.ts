@@ -66,7 +66,7 @@ export class RegistrationComponent {
             duration: 2000
           });
           this.userStateService.setEmail(postUser.email);
-          this.router.navigate(['/confirmation']);
+          this.router.navigate(['auth/confirmation']);
         }
       },
       err => {

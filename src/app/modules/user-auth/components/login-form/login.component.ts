@@ -50,7 +50,7 @@ export class LoginComponent {
         this.userStateService.setToken(data.token);
         this.userStateService.setUser(data.user);
 
-        this.router.navigate(['/all-events']);
+        this.router.navigate(['/events/all-events']);
       },
       (err: LoginResponse) => {
         this.snackBar.open(`Invalid Login`, 'Close', {

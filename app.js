@@ -18,6 +18,7 @@ const app = express();
 // Where the views will be
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Production/Development Set up
 if (process.env.NODE_ENV === 'prod') {
   console.log(`Mongo DB Connected using:\n${process.env.db}`);
   // dotenv file placed in root directory during development
@@ -41,9 +42,7 @@ if (process.env.NODE_ENV === 'prod') {
 }
 
 /**
- * Now using MongoClient
- * Connected to a local replica of Mongo so that we can store data
- * and see how it looks like without connecting to our actual database
+ * Connects to the testing db in Mongo Atlas
  */
 function connectDB() {
   mongoose.connect(

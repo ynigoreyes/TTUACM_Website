@@ -2,12 +2,11 @@ Dockerfile
 .dockerignore
 .editorconfig
 karma.conf.js
-.angular-cli.json
-.eslintrc.jsonsrc-site
+.eslintrc.json
 test
 .vscode
-tsconfig.json
 tslint.json
 README.md
 connect-db.sh
 colors.txt
+node_modules
