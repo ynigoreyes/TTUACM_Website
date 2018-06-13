@@ -1,12 +1,9 @@
 const User = require('../models/user.model');
-
 const crypto = require('crypto');
-const async = require('async');
 const jwt = require('jsonwebtoken');
-
-// Bcrypt options
 const bcrypt = require('bcryptjs');
 
+// Bcrypt options
 const saltRounds = 10;
 
 /**
@@ -39,7 +36,7 @@ function login(email, password) {
             const token = jwt.sign({ data: foundUser }, process.env.session_secret, {
               expiresIn: 604800 // 1 week
             });
-            resolve(token);
+            resolve({ token, foundUser });
           } else {
             reject(new Error('Invalid Login'));
           }
@@ -52,55 +49,90 @@ function login(email, password) {
   });
 }
 
-// Check to see if this works on Postman
-function forgotLogin(req, res) {
-  async.waterfall(
-    [
-      // We save the token into the user document along with an expiration date
-      function generateTokenAndSave(done) {
-        User.findOne({ email: req.body.email }, (err, user) => {
-          const currentUser = user;
-          // No user was found
-          if (currentUser === null) {
-            done(new Error('User not found'));
-          } else if (err) {
-            done(err);
-          } else {
-            currentUser.resetPasswordToken = token = generateHexToken();
-            currentUser.resetPasswordExpires = Date.now() + 3 * 60 * 60 * 1000; // 3 Hours
-            currentUser.save((err) => {
-              done(err, token, currentUser);
-            });
-          }
+/**
+ * Starts the process of reseting a lost password for an existing user
+ *
+ * @param {string} email - user email
+ * @returns {Promise.<null, Object>} Resolves: object containg a HEX and a user, Rejects: error
+ */
+function forgotLogin(email) {
+  return new Promise((resolve, reject) => {
+    User.findOne({ email }, (err, user) => {
+      if (user === null) {
+        reject(new Error('User not found'));
+      } else if (err) {
+        reject(err);
+      } else {
+        user.resetPasswordToken = token = generateHexToken();
+        user.resetPasswordExpires = Date.now() + 3 * 60 * 60 * 1000; // 3 Hours
+        currentUser.save((err) => {
+          if (err) reject(err);
+          resolve({ token, user });
         });
-      },
+      }
+    });
+  });
+}
 
-      // Sends the email to the user that requested a password reset
-      function sendResetEmail(token, user, done) {
-        const mailOptions = {
-          to: user.email,
-          from: 'Texas Tech ACM',
-          subject: 'TTU ACM Password Reset',
-          text:
-            `${'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
-              'Please click on the following link, or paste this into your browser to complete the process:\n\n'}${
-              req.protocol
-            }://${req.headers.host}/users/reset/${token}\n\n` +
-            'If you did not request this, please ignore this email and your password will remain unchanged.\n'
-        };
-        global.smtpTransporter.sendMail(mailOptions, (err) => {
-          res.status(200).json({ recipient: user });
-          done(err, 'done');
-        });
+/**
+ * Send the reset email to the user
+ *
+ * @param {string} email - users email
+ * @param {string} token - HEX token/reset token
+ * @param {Object} req - Express Request Object
+ * @returns {Promise.<null, Error>} Rejects with an error if there is something wrong with the email
+ */
+function sendResetEmail(token, email, req) {
+  return new Promise((resolve, reject) => {
+    const mailOptions = {
+      to: email,
+      from: 'Texas Tech ACM',
+      subject: 'TTU ACM Password Reset',
+      text:
+        `${'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+          'Please click on the following link, or paste this into your browser to complete the process:\n\n'}${
+          req.protocol
+        }://${req.headers.host}/users/reset/${token}\n\n` +
+        'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+    };
+    global.smtpTransporter.sendMail(mailOptions, (err) => {
+      if (err) reject(err);
+      resolve();
+    });
+  });
+}
+
+/**
+ * Hits when the user clicks the link that is sent to their email
+ *
+ * Will check whether or not the token passed in the URL is valid
+ * @param {string} token - HEX token associated with an account (resetPasswordToken)
+ * @returns {Promise.<token, Error>} Resolves: HEX Token, Rejects: an error
+ */
+function resetToken(token) {
+  return new Promise((resolve, reject) => {
+    if (!token) reject(new Error('No Token Passed to Endpoint'));
+    User.findOne(
+      {
+        resetPasswordToken: token,
+        resetPasswordExpires: { $gt: Date.now() }
+      },
+      (err, user) => {
+        if (err) {
+          reject(new Error('Invalid token'));
+        } else if (!user) {
+          // User was not found or the token was expired, either way...
+          // Signals the front end to tell the user that their token was invalid
+          // and that they may need to send another email
+          reject(new Error('No User found'));
+        } else {
+          // The token is valid and will signal front end to render the login page
+          // The token we are passing is the same token that is in the database
+          resolve(token);
+        }
       }
-    ],
-    (err) => {
-      if (err) {
-        console.log(err);
-        res.status(404).json({ recipient: null });
-      }
-    }
-  );
+    );
+  });
 }
 
 /**
@@ -188,6 +220,7 @@ function sendChangedPasswordEmail(email) {
  * Compares the url token with the token saved in the database.
  * If thre is a match, the user is verified and redirected to log in
  * @param {string} token - HEX Token
+ * @returns {Promise.<null, Error>} Rejects: an error
  */
 function confirmToken(token) {
   return new Promise((resolve, reject) => {
@@ -202,39 +235,6 @@ function confirmToken(token) {
       if (err || user === null) reject(err);
       resolve();
     });
-  });
-}
-
-/**
- * Hits when the user clicks the link that is sent to their email
- *
- * Will check whether or not the token passed in the URL is valid
- * @param req: Request Object
- * @param req.param.token: Token sent with url
- */
-function resetToken(token) {
-  return new Promise((resolve, reject) => {
-    if (!token) reject(new Error('No Token Passed to Endpoint'));
-    User.findOne(
-      {
-        resetPasswordToken: token,
-        resetPasswordExpires: { $gt: Date.now() }
-      },
-      (err, user) => {
-        if (err) {
-          reject(new Error('Invalid token'));
-        } else if (!user) {
-          // User was not found or the token was expired, either way...
-          // Signals the front end to tell the user that their token was invalid
-          // and that they may need to send another email
-          reject(new Error('No User found'));
-        } else {
-          // The token is valid and will signal front end to render the login page
-          // The token we are passing is the same token that is in the database
-          resolve(token);
-        }
-      }
-    );
   });
 }
 
@@ -366,5 +366,6 @@ module.exports = {
   forgotLogin,
   resetPassword,
   getProfile,
-  sendConfirmationEmail
+  sendConfirmationEmail,
+  sendResetEmail
 };

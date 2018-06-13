@@ -75,17 +75,16 @@ router.post('/login', (req, res) => {
   const email = req.body.email;
   const inputPassword = req.body.password;
   UserCrtl.login(email, inputPassword)
-    .then((token) => {
-      res.status(200).json({ token: `JWT ${token}` });
+    .then((response) => {
+      const token = response.token;
+      const user = response.foundUser;
+      res.status(200).json({ token: `JWT ${token}`, user });
     })
     .catch((err) => {
       console.log(err);
       res.status(404).json({ msg: err.message });
     });
 });
-
-/* POST forgot page */
-router.post('/forgot', UserCrtl.forgotLogin);
 
 /**
  * Confirms the user has a valid email account
@@ -135,7 +134,30 @@ router.post('/confirm', (req, res) => {
 });
 
 /**
- * This endpoint is hit by an emai to reset a user password
+ * Verifies that the user is resetting the password of an account they own
+ *
+ * - endpoint: `/users/forgot`
+ * - Verb: POST
+ *
+ * OnFailure: Sends an internal server error message
+ * OnSuccess: Sends the user that the email was sent to
+ *
+ * @typedef {function} UserRouter-forgotLogin
+ */
+router.post('/forgot', async (req, res) => {
+  try {
+    const email = req.body.email;
+    const { token, user } = await UserCrtl.forgotLogin(email);
+    const status = await UserCrtl.sendResetEmail(token, user, req);
+    res.status(200).json({ recipient: user });
+  } catch (err) {
+    console.log(err);
+    res.status(404).json({ msg: err.message });
+  }
+});
+
+/**
+ * This endpoint is hit by an email to reset a user password
  *
  * - endpoint: `/users/reset/:token`
  * - Verb: GET
