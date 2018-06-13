@@ -12,7 +12,8 @@ import {
   MatTabsModule,
   MatIconModule,
   MatSnackBarModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatGridListModule
 } from '@angular/material';
 
 @NgModule({
@@ -29,6 +30,7 @@ import {
     MatIconModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
+    MatGridListModule,
     LayoutModule
   ],
   exports: [
@@ -44,6 +46,7 @@ import {
     MatIconModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
+    MatGridListModule,
     LayoutModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]

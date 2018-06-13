@@ -1,6 +1,8 @@
-<main>
-  <mat-card *ngFor="let member of team" class="team">
-    <h4 class="name">{{member.firstName}} {{member.lastName}}</h4>
-    <small class="position">{{member.position}}</small>
-  </mat-card>
-</main>
+<mat-grid-list cols="2" gutterSize="15px" rowHeight="200px">
+  <mat-grid-tile *ngFor="let member of team" class="team">
+    <mat-card>
+      <mat-card-header class="name">{{member.firstName}} {{member.lastName}}</mat-card-header>
+      <small class="position">{{member.position}}</small>
+    </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>
