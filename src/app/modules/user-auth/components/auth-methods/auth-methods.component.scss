@@ -3,11 +3,15 @@
 main {
   display: flex;
   flex-direction: column;
+  margin: 24px 0px;
+  section {
+    text-align: center;
+  }
   .mat-button {
     margin: 10px 0px;
     font-size: $sm-text;
-    width: 100%;
-    text-align: left;
+    width: 75%;
+    text-align: center;
   }
   .google {
     background-color: #db3236;

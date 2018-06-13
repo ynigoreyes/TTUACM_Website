@@ -6,14 +6,15 @@
   flex-direction: row;
   align-items: baseline;
   justify-content: center;
-  margin: 90px;
+  margin: 64px 36px;
   .divider {
     border-left: 1px solid #888;
     height: 500px;
     align-self: flex-end;
   }
   section {
-    margin: 0px 60px;
+    margin: 0px 56px;
+    width: 100%;
   }
 }
 
