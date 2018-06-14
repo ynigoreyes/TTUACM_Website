@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { ContactService } from '../../services/contact.service';
-import { UserStateService } from '../../../../shared/services/user-state.service';
+import { UserStateService } from '@acm-shared/services/user-state.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
