@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserAuthComponent } from './user-auth.component';
+import { MaterialModule } from '../../shared/material.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('UserAuthComponent', () => {
   let component: UserAuthComponent;
@@ -8,7 +10,9 @@ describe('UserAuthComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UserAuthComponent ]
+      imports: [MaterialModule],
+      declarations: [ UserAuthComponent ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
     .compileComponents();
   }));

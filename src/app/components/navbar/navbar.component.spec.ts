@@ -8,7 +8,6 @@ import { HttpClientModule, HttpHandler, HttpClient } from '@angular/common/http'
 import { UserStateService } from '../../shared/services/user-state.service';
 import { AuthService } from '../../modules/user-auth/services/auth.service';
 import { MaterialModule } from '../../shared/material.module';
-import { DeviceService } from '../../shared/services/device.service';
 
 
 describe('NavbarComponent', () => {
@@ -27,8 +26,7 @@ describe('NavbarComponent', () => {
         AuthService,
         HttpClient,
         HttpHandler,
-        UserStateService,
-        DeviceService
+        UserStateService
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     })

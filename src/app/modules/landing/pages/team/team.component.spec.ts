@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TeamComponent } from './team.component';
+import { MaterialModule } from '../../../../shared/material.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('TeamComponent', () => {
   let component: TeamComponent;
@@ -8,7 +10,9 @@ describe('TeamComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TeamComponent ]
+      imports: [MaterialModule],
+      declarations: [ TeamComponent ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
     .compileComponents();
   }));

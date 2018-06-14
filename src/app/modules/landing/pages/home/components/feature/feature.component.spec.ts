@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FeatureComponent } from './feature.component';
+import { MaterialModule } from '../../../../../../shared/material.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('FeatureComponent', () => {
   let component: FeatureComponent;
@@ -8,7 +10,9 @@ describe('FeatureComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FeatureComponent ]
+      imports: [MaterialModule],
+      declarations: [ FeatureComponent ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
     .compileComponents();
   }));

@@ -4,8 +4,4 @@ export class AppPage {
   navigateTo() {
     return browser.get('/');
   }
-
-  getParagraphText() {
-    return element(by.scss('app-root h1')).getText();
-  }
 }

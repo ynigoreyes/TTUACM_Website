@@ -6,7 +6,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthService } from './modules/user-auth/services/auth.service';
-import { DeviceService } from './shared/services/device.service';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -21,8 +20,7 @@ describe('AppComponent', () => {
         HttpClientModule
       ],
       providers: [
-        AuthService,
-        DeviceService
+        AuthService
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();

@@ -2,7 +2,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CalendarComponent } from './calendar.component';
 import { NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { DeviceService } from '../../../../shared/services/device.service';
 import { UserStateService } from '../../../../shared/services/user-state.service';
 import { HttpHandler, HttpClient } from '@angular/common/http';
 import { AuthService } from '../../../user-auth/services/auth.service';
@@ -28,7 +27,6 @@ describe('CalendarComponent', () => {
         HttpClient,
         HttpHandler,
         UserStateService,
-        DeviceService,
         EventsService
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]

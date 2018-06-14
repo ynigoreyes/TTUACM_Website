@@ -2,7 +2,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ForgotRedirectComponent } from './forgot-redirect.component';
 import { NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { DeviceService } from '../../../../shared/services/device.service';
 import { UserStateService } from '../../../../shared/services/user-state.service';
 import { AuthService } from '../../services/auth.service';
 import { HttpClient, HttpHandler } from '@angular/common/http';
@@ -18,7 +17,7 @@ describe('ForgotRedirectComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ForgotRedirectComponent],
       imports: [MaterialModule, BrowserAnimationsModule, RouterTestingModule],
-      providers: [AuthService, HttpClient, HttpHandler, UserStateService, DeviceService],
+      providers: [AuthService, HttpClient, HttpHandler, UserStateService],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
