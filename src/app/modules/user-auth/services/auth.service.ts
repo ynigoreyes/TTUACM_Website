@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-import { environment } from '../../../../environments/environment';
+import { environment } from '@acm-environments/environment';
 
 @Injectable()
 export class AuthService {

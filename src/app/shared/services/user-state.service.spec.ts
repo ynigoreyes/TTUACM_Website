@@ -1,9 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
 
 import { UserStateService } from './user-state.service';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
-import { User } from '../../modules/user-auth/models/UserPost';
 import * as jwt from 'jsonwebtoken';
 import { HttpClientModule } from '@angular/common/http';
 
