@@ -1,36 +1,38 @@
 <!-- Main Content -->
-<div class="container event-div">
-  <div class="text-center nav-button-container">
-    <button (click)=getPrevEvents() mat-raised-button class="nav-buttons left-button">
-      Prev 10
-    </button>
-    <span class="google-header">ACM TTU Meetings</span>
-    <button (click)=getNextEvents() mat-raised-button class="nav-buttons right-button">
-      Next 10
-    </button>
-  </div>
-  <div class="loading-screens" *ngIf="loading">
+<main>
+  <span class="text-center google-header">Meetings and Events</span>
+  <!-- Loading/Error Screen -->
+  <section class="loading-screens" *ngIf="loading">
     <mat-spinner></mat-spinner>
-  </div>
-  <div class="loading-screens" *ngIf="!loading && error">
+  </section>
+  <section class="loading-screens" *ngIf="!loading && error">
     <mat-icon>error</mat-icon>
-  </div>
-  <div *ngIf="!loading && !error">
-    <mat-card *ngFor="let event of displayedEvents" class="text-center eachEvent">
-      <div>
+  </section>
+  <!-- Main Content -->
+  <section *ngIf="!loading && !error">
+    <section class="nav-buttons">
+      <button mat-raised-button (click)=getNextEvents()>
+        <
+      </button>
+      <button mat-raised-button (click)=getPrevEvents()>
+        >
+      </button>
+    </section>
+    <mat-card *ngFor="let event of displayedEvents">
+      <section>
         <small>
           <em id="event-id">{{event.id}}</em>
         </small>
         <small>
           <em id="date">{{getDate(event.startTime)}}</em>
         </small>
-      </div>
+      </section>
       <br>
       <mat-card-title>{{event.title}}</mat-card-title>
       <mat-card-content>
-        <div class="description">
+        <section class="description">
           {{event.description}}
-        </div>
+        </section>
         <hr>
       </mat-card-content>
       <mat-card-footer>
@@ -38,20 +40,18 @@
           Meetings will be held at: {{event.location}} on {{event.day}}s
         </span>
         <span *ngIf="!isSmallScreen"> | </span>
-        <div *ngIf="isSmallScreen"></div>
+        <section *ngIf="isSmallScreen"></section>
         <span class="time">
           Starting at {{getTime(event.startTime)}} and ending at {{getTime(event.endTime)}}
         </span>
       </mat-card-footer>
     </mat-card>
-  </div>
-  <div class="text-center nav-button-container">
-    <button (click)=getPrevEvents() mat-raised-button class="nav-buttons left-button">
-      Prev 10
-    </button>
-    <span class="google-header">ACM TTU Meetings</span>
-    <button (click)=getNextEvents() mat-raised-button class="nav-buttons right-button">
-      Next 10
-    </button>
-  </div>
-</div>
+  </section>
+</main>
+
+<!-- <button (click)=getPrevEvents() mat-raised-button class="nav-buttons left-button">
+  Prev 10
+</button> -->
+<!-- <button (click)=getNextEvents() mat-raised-button class="nav-buttons right-button">
+  Next 10
+</button> -->

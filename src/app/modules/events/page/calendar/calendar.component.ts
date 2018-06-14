@@ -21,6 +21,7 @@ export class CalendarComponent implements OnDestroy {
   public changeAmount = 10;
 
   constructor(private snackbar: MatSnackBar, private eventService: EventsService) {
+    this.isSmallScreen = window.innerWidth < 426;
     this.loadAllEvents();
   }
   public loadAllEvents(): void {
@@ -96,7 +97,7 @@ export class CalendarComponent implements OnDestroy {
 
   @HostListener('window:resize', ['$event'])
   checkScreen(event) {
-    this.isSmallScreen = event.target.innerWidth <= 425;
+    this.isSmallScreen = event.target.innerWidth < 426;
   }
 
   ngOnDestroy(): void {

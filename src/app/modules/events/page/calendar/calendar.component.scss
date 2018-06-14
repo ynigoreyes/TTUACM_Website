@@ -1,9 +1,11 @@
 @import '~@angular/material/theming';
 @import 'styles';
-div.event-div {
+// Loading and Error Screen
+main {
   padding: 10px;
   display: flex;
   flex-direction: column;
+  margin: 16px 0px;
   .loading-screens {
     display: flex;
     align-items: center;
@@ -13,12 +15,35 @@ div.event-div {
   .loading-screens> {
     flex-basis: 30px;
   }
+  .nav-buttons {
+    display: flex;
+    flex-direction: row;
+    margin-top: 24px;
+    .mat-raised-button {
+      width: 100% !important;
+      margin: 0px 5px;
+      background: #00000012
+    }
+  }
 }
 
-mat-card.eachEvent {
+// Event Content
+mat-card {
   display: flex;
   flex-direction: column;
-  margin: 30px auto 30px auto;
+  margin: 30px auto;
+  justify-content: center;
+  text-align: center;
+  #event-id {
+    float: right;
+  }
+  #date {
+    float: left;
+  }
+  .google-header {
+    color: white;
+    font-size: 25px;
+  }
   mat-card-title {
     font-size: $lg-text;
   }
@@ -28,30 +53,20 @@ mat-card.eachEvent {
     width: 70%;
     align-self: center;
   }
+  mat-card-footer {
+    margin: 0px;
+  }
 }
 
-em#event-id {
-  float: right;
+// Buttons And Headers
+@media(max-width: 426px) {
+  mat-card-footer>span {
+    font-size: 12px;
+  }
 }
 
-button.right-button {
-  float: right
-}
-
-button.left-button {
-  float: left
-}
-
-div.nav-button-container {
-  color: black;
-  width: 100%;
-}
-
-span.google-header {
-  color: white;
-  font-size: 4vw;
-}
-
-em#date {
-  float: left;
+@media(min-width: 425px) {
+  .google-header {
+    font-size: 36px;
+  }
 }
