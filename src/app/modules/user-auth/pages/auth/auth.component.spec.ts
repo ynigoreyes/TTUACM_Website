@@ -1,25 +1,26 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { AuthComponent } from './auth.component';
+import { FakeSnackBar } from '../../../../shared/mocks/snackbar.mock';
+import {
+  FakeVerifiedQueryParams,
+  FakeErrorQueryParams
+} from '../../testing-utils/mocks/activated-router.mock';
 
 describe('AuthComponent', () => {
   let component: AuthComponent;
-  let fixture: ComponentFixture<AuthComponent>;
-
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ AuthComponent ]
-    })
-    .compileComponents();
-  }));
-
+  let fakeVerifiedActivatedRoute: any;
+  let fakeErrorActivatedRoute: any;
+  let fakeSnackBar: any;
   beforeEach(() => {
-    fixture = TestBed.createComponent(AuthComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    fakeSnackBar = FakeSnackBar;
   });
-
-  it('should create', () => {
+  fit('Should create a component', () => {
+    fakeVerifiedActivatedRoute = { queryParams: FakeVerifiedQueryParams };
+    component = new AuthComponent(<any>fakeVerifiedActivatedRoute, <any>fakeSnackBar);
+    expect(component).toBeTruthy();
+  });
+  fit('Should create a component', () => {
+    fakeErrorActivatedRoute = { queryParams: FakeErrorQueryParams };
+    component = new AuthComponent(<any>fakeErrorActivatedRoute, <any>fakeSnackBar);
     expect(component).toBeTruthy();
   });
 });
