@@ -23,7 +23,7 @@ export class FakeFailureContactService extends ContactService {
 
   sendEmail(message: ContactPost): any {
     return new Observable((observer) => {
-      observer.next(new Error('New Error'));
+      observer.error(new Error('New Error'));
     });
   }
 }
