@@ -25,7 +25,7 @@ script:
   - npm run client-test
   - npm run api-test
 
-deploy:
+after-script:
 
   - docker build -t acmtexastech/ttuweb .
   - docker push acmtexastech/ttuweb
