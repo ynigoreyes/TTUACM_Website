@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { ExploreRoutingModule } from './explore-routing.module';
 import { FeedComponent } from './pages/feed/feed.component';
-import { ExploreComponent } from './explore.component';
 import { FeaturedComponent } from './pages/featured/featured.component';
 import { ComingSoonComponent } from '../../components/coming-soon/coming-soon.component';
 
@@ -13,6 +12,6 @@ import { ComingSoonComponent } from '../../components/coming-soon/coming-soon.co
     CommonModule,
     ExploreRoutingModule
   ],
-  declarations: [FeedComponent, ExploreComponent, FeaturedComponent, ComingSoonComponent]
+  declarations: [FeedComponent, FeaturedComponent, ComingSoonComponent]
 })
 export class ExploreModule { }

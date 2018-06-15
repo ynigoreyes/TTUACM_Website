@@ -58,10 +58,10 @@
     "passport-google-oauth2": "~0.1.6",
     "passport-jwt": "~4.0.0",
     "rxjs": "~5.5.10",
-    "zone.js": "~0.8.19"
+    "zone.js": "~0.8.19",
+    "@angular/cli": "~1.7.4"
   },
   "devDependencies": {
-    "@angular/cli": "~1.7.4",
     "@angular/compiler-cli": "~5.2.10",
     "@angular/language-service": "~5.2.10",
     "@types/jasmine": "~2.8.3",

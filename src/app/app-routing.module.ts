@@ -4,7 +4,8 @@ import { Routes, RouterModule } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    loadChildren: './modules/landing/landing.module#LandingModule'
+    loadChildren: './modules/landing/landing.module#LandingModule',
+    pathMatch: 'full'
   },
   {
     path: 'auth',

@@ -9,6 +9,7 @@ const routes: Routes = [
   {
     path: '',
     component: AuthComponent,
+    pathMatch: 'full'
   },
   {
     path: 'forgot',

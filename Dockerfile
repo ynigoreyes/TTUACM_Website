@@ -7,7 +7,6 @@ COPY . /app
 EXPOSE 8080
 
 RUN npm install --silent --prod
-RUN npm install @angular/cli@1.7.4
 
 RUN npm run build
 

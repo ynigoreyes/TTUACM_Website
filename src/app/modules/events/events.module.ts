@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { EventsRoutingModule } from './events-routing.module';
 import { CalendarComponent } from './page/calendar/calendar.component';
-import { EventsComponent } from './events.component';
 import { MaterialModule } from '../../shared/material.module';
 import { EventsService } from './services/events.service';
 
@@ -13,7 +12,7 @@ import { EventsService } from './services/events.service';
     EventsRoutingModule,
     MaterialModule
   ],
-  declarations: [CalendarComponent, EventsComponent],
+  declarations: [CalendarComponent],
   providers: [EventsService]
 })
 export class EventsModule { }
