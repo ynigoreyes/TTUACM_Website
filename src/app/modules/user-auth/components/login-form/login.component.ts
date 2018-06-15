@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { MatSnackBar } from '@angular/material';
 import { FormControl, Validators } from '@angular/forms';
-import { UserPost, User } from '../../models/UserPost';
+import { UserPost, User } from '../../models/Users.model';
 import { UserStateService } from '../../../../shared/services/user-state.service';
 export interface LoginResponse {
   user?: {

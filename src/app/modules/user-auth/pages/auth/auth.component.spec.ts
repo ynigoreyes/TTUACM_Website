@@ -3,7 +3,7 @@ import { FakeSnackBar } from '@acm-shared/mocks/snackbar.mock';
 import {
   FakeVerifiedQueryParams,
   FakeErrorQueryParams
-} from '../../testing-utils/mocks/activated-router.mock';
+} from '../../mocks/activated-router.mock';
 
 describe('AuthComponent', () => {
   let component: AuthComponent;

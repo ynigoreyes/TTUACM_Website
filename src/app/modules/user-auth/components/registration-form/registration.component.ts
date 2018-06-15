@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { MatSnackBar } from '@angular/material';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { UserStateService } from '../../../../shared/services/user-state.service';
-import { UserPost, User } from '../../models/UserPost';
+import { UserPost, User } from '../../models/Users.model';
 
 @Component({
   selector: 'app-registration',

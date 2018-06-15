@@ -7,7 +7,6 @@ import { ForgotRedirectComponent } from './pages/forgot-redirect/forgot-redirect
 import { ConfirmPasswordComponent } from './pages/confirm-password/confirm-password.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ProfileEditComponent } from './pages/profile-edit/profile-edit.component';
-import { UserAuthComponent } from './user-auth.component';
 import { AuthMethodsComponent } from './components/auth-methods/auth-methods.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MaterialModule } from '../../shared/material.module';
@@ -26,7 +25,6 @@ import { LoginComponent } from './components/login-form/login.component';
     ConfirmPasswordComponent,
     ProfileComponent,
     ProfileEditComponent,
-    UserAuthComponent,
     AuthMethodsComponent,
     AuthComponent
   ],
