@@ -10,8 +10,8 @@ install:
   - npm install
 
 script:
-  # - npm run client-test
-  # - npm run api-test
+  - npm run client-test
+  - npm run api-test
   - npm run docs
 
 deploy:
