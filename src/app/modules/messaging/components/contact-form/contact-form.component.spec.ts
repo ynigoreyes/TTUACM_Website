@@ -31,7 +31,7 @@ describe('ContactFormComponent', () => {
     expect(component.onSubmit(<any>fakeMessage)).toBeUndefined();
   });
 
-  fit('Handle the errors when given a invalid post or Internal Server Error', () => {
+  it('Handle the errors when given a invalid post or Internal Server Error', () => {
     component = new ContactFormComponent(<any>fakeSnackBar, contactFailureService);
     expect(component.onSubmit(<any>fakeMessage)).toBeUndefined();
   });
