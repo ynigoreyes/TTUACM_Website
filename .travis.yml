@@ -24,6 +24,8 @@ before-script:
 script:
   - npm run client-test
   - npm run api-test
+
+after-success:
   - npm run docs
 
 deploy:
