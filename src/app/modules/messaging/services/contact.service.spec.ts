@@ -1,8 +1,9 @@
 import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { ContactPosts, FakeMessage } from '../mocks/contact-posts.mock';
+import { FakeMessage } from '../mocks/contact-posts.mock';
 
 import { ContactService } from './contact.service';
+import { ContactPost } from '../models/contact-form.model';
 
 describe('ContactService', () => {
   let service: ContactService;
@@ -23,7 +24,7 @@ describe('ContactService', () => {
   });
 
   it('#sendEmail should be called and use POST', () => {
-    let post: ContactPosts = FakeMessage;
+    let post: ContactPost = FakeMessage;
     service.sendEmail(post).subscribe(data => {
       expect(data).not.toThrowError();
     });

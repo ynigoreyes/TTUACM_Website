@@ -1,11 +1,6 @@
-export interface ContactPosts {
-  name: string;
-  email: string;
-  topic: string;
-  message: string;
-}
+import { ContactPost } from '../models/contact-form.model';
 
-export const FakeMessage: ContactPosts = {
+export const FakeMessage: ContactPost = {
   name: 'Big Hero 6',
   email: 'Big6@gmail.com',
   topic: 'Heroes!!',

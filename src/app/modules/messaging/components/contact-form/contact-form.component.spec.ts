@@ -1,33 +1,38 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { ContactFormComponent } from './contact-form.component';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { MaterialModule } from '../../../../shared/material.module';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
-import { UserStateService } from '../../../../shared/services/user-state.service';
+import { FakeSnackBar } from '@acm-shared/mocks/snackbar.mock';
+import {
+  FakeSuccessContactService,
+  FakeFailureContactService
+} from '../../services/fake-contact.service';
+import { FakeMessage } from '../../mocks/contact-posts.mock';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ContactPost } from '../../models/contact-form.model';
 
 describe('ContactFormComponent', () => {
   let component: ContactFormComponent;
-  let fixture: ComponentFixture<ContactFormComponent>;
-
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [MaterialModule, ReactiveFormsModule],
-      declarations: [ ContactFormComponent ],
-      providers: [MatSnackBar, UserStateService],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
-    .compileComponents();
-  }));
+  let fakeSnackBar = FakeSnackBar;
+  let fakeMessage: ContactPost = FakeMessage;
+  let contactSuccessService: FakeSuccessContactService;
+  let contactFailureService: FakeFailureContactService;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ContactFormComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [FakeSuccessContactService, FakeFailureContactService]
+    });
+    contactSuccessService = TestBed.get(FakeSuccessContactService);
+    contactFailureService = TestBed.get(FakeFailureContactService);
+    component = new ContactFormComponent(<any>fakeSnackBar, contactSuccessService);
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('Post without any errors when given a valid post', () => {
+    expect(component.onSubmit(<any>fakeMessage)).toBeUndefined();
+  });
+
+  it('Handle the errors when given a invalid post or Internal Server Error', () => {
+    component = new ContactFormComponent(<any>fakeSnackBar, contactFailureService);
+    expect(component.onSubmit(<any>fakeMessage)).toBeUndefined();
   });
 });

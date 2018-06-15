@@ -1,19 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { ContactService } from '../../services/contact.service';
-import { UserStateService } from '@acm-shared/services/user-state.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ContactPost } from '../../models/contact-form.model';
 
 @Component({
   selector: 'app-contact-form',
   templateUrl: './contact-form.component.html',
   styleUrls: ['./contact-form.component.scss']
 })
-export class ContactFormComponent implements OnInit {
+export class ContactFormComponent {
   constructor(
     private snackbar: MatSnackBar,
-    private contactService: ContactService,
-    public userStateService: UserStateService
+    private contactService: ContactService
   ) {}
 
   public user: object = {
@@ -30,39 +29,25 @@ export class ContactFormComponent implements OnInit {
     'Emergency'
   ];
 
-  public autoFillName = this.user['name'] != null ? this.user['name'] : '';
-  public autoFillEmail = this.user['email'] != null ? this.user['email'] : '';
-
   public ContactForm = new FormGroup(
     {
-      name: new FormControl(this.autoFillName),
-      email: new FormControl(this.autoFillEmail, [Validators.required, Validators.email]),
+      name: new FormControl(''),
+      email: new FormControl('', [Validators.required, Validators.email]),
       topic: new FormControl(this.topics[0]),
       message: new FormControl('', Validators.required)
     },
     { updateOn: 'change' }
   );
 
-  /**
-   * Auto Fill the form with the user's email and name
-   * by grabbing the current user from the auth service
-   */
-  ngOnInit() {
-    // Not yet implimented. Will save for another day
-    this.userStateService.userObject.subscribe(currentUser => {
-      this.user = currentUser;
-    });
-  }
-
-  public onSubmit(post: FormGroup): void {
-    const data: object = {
+  public onSubmit(post: FormGroup) {
+    const data: ContactPost = {
       name: post['name'].trim(),
       email: post['email'].trim(),
       topic: post['topic'].trim(),
       message: post['message'].trim()
     };
 
-    this.contactService.sendEmail(data).subscribe(
+    this.contactService.sendEmail(<ContactPost>data).subscribe(
       status => {
         this.snackbar.open('Message successfully sent. Thank You!', 'Close', { duration: 3000 });
       },
