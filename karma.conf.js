@@ -21,7 +21,8 @@ module.exports = function(config) {
     client: {
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
-    browsers: ['PhantomJS', 'Chrome'],
+    // 2 browsers. 1 for local tests and one for travis
+    browsers: ['ChromeHeadless'],
     coverageIstanbulReporter: {
       reports: ['html', 'lcovonly'],
       fixWebpackSourcePaths: true
@@ -30,7 +31,7 @@ module.exports = function(config) {
       environment: 'dev'
     },
     import: [MaterialModule],
-    reporters: ['progress', 'kjhtml'],
+    reporters: ['progress'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,

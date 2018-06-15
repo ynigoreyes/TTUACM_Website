@@ -20,15 +20,10 @@ export class ConfirmPasswordComponent implements OnInit {
 
   ngOnInit() {
     this.state.userEmail.subscribe(email => {
-      // this.userEmail = email;
-      this.userEmail = 'ynigoreyes@gmail.com';
-      console.log(this.userEmail);
+      this.userEmail = email;
     });
     this.state.HEXToken.subscribe(token => {
-      // this.userEmail = email;
-      // this.userToken = token;
-      this.userToken = '531f7f791ca66bc5cf55fc9e2a2314e6eaa45865';
-      console.log(this.userToken);
+      this.userToken = token;
     });
   }
 

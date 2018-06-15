@@ -32,11 +32,6 @@ if (process.env.NODE_ENV === 'prod') {
   nmconfig.generateProdTransporter();
 } else {
   require('dotenv').config({ path: path.join(__dirname, '/.env') });
-  for (const property in process.env) {
-    if (process.env.hasOwnProperty(property)) {
-      console.log(`${property}: ${process.env[property]}\n`);
-    }
-  }
   connectDB();
   nmconfig.generateTestTransporter();
 }

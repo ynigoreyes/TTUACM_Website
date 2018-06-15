@@ -51,7 +51,6 @@ export class LoginComponent {
     };
     this.authService.authenticateUser(postUser).subscribe(
       (data: LoginResponse) => {
-        console.log(data);
         this.snackBar.open(`Welcome ${data.user.firstName}!`, 'Close', { duration: 2000 });
 
         // Stores the user's information into the local storage
