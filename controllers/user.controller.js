@@ -65,7 +65,7 @@ function forgotLogin(email) {
       } else {
         user.resetPasswordToken = token = generateHexToken();
         user.resetPasswordExpires = Date.now() + 3 * 60 * 60 * 1000; // 3 Hours
-        currentUser.save((err) => {
+        user.save((err) => {
           if (err) reject(err);
           resolve({ token, user });
         });
@@ -149,16 +149,14 @@ function resetToken(token) {
  * from verifyUser or sendChangedPasswordEmail
  */
 function resetPassword(token, password) {
-  return new Promise((resolve, reject) => {
-    verifyUser(token, password)
-      .then((user) => {
-        sendChangedPasswordEmail(user)
-          .then(resolve())
-          .catch(err => reject(err));
-      })
-      .catch((err) => {
-        reject(err);
-      });
+  return new Promise(async (resolve, reject) => {
+    try {
+      const user = await verifyUser(token, password);
+      await sendChangedPasswordEmail(user);
+      resolve();
+    } catch (err) {
+      reject(err);
+    }
   });
 }
 
@@ -239,9 +237,9 @@ function confirmToken(token) {
       confirmEmailToken: '',
       verified: true
     };
-    User.findOneAndUpdate(query, update, (err, user) => {
+    User.findOneAndUpdate(query, update, { new: true }, (err, user) => {
       if (err || user === null) reject(err);
-      resolve();
+      resolve(user);
     });
   });
 }
@@ -267,6 +265,10 @@ function register(user) {
   return new Promise((resolve, reject) => {
     // If the email is available, continue with the proccess
     // Generates the salt used for hashing
+    User.findOne({email: user.email}, (err, user) => {
+      if (err) reject(err);
+      if (user) reject(new Error('unavailable'));
+    });
     bcrypt.hash(user.password, saltRounds, async (err, hash) => {
       if (err) reject(err);
       const token = await generateHexToken();
@@ -365,10 +367,8 @@ function contactUs(options) {
 
 // Generates a HexToken, usually for quick random tokens; does not require string
 function generateHexToken() {
-  return new Promise((resolve, reject) => {
-    const token = crypto.randomBytes(20);
-    resolve(token.toString('hex'));
-  });
+  const token = crypto.randomBytes(20);
+  return token.toString('hex');
 }
 
 module.exports = {
@@ -381,5 +381,7 @@ module.exports = {
   resetPassword,
   getProfile,
   sendConfirmationEmail,
-  sendResetEmail
+  sendChangedPasswordEmail,
+  sendResetEmail,
+  verifyUser
 };

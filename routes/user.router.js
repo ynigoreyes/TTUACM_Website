@@ -29,7 +29,7 @@ const membersOnlyRoute = passport.authenticate('jwt', { session: false });
  *
  * @todo convert this to async await
  */
-router.post('/register', (req, res) => {
+router.post('/register', async (req, res) => {
   const user = {
     email: req.body.email,
     password: req.body.password,
@@ -38,25 +38,18 @@ router.post('/register', (req, res) => {
     classification: req.body.classification,
     confirmEmailToken: null
   };
-  UserCrtl.register(user)
-    .then((user) => {
-      UserCrtl.sendConfirmationEmail(user.email, user.confirmEmailToken, req)
-        .then(() => {
-          res.status(201).json({ user });
-        })
-        .catch((err) => {
-          console.log(err);
-          res.status(404).json({ err });
-        });
-    })
-    .catch((err) => {
-      console.log(err);
-      if (err === 'unavailable') {
-        res.status(404).json({ emailAvailable: false });
-      } else {
-        res.status(404).json({ err });
-      }
-    });
+  try {
+    const createdUser = await UserCrtl.register(user);
+    await UserCrtl.sendConfirmationEmail(createdUser.email, createdUser.confirmEmailToken, req);
+    res.status(201).json({ user });
+  } catch (err) {
+    console.log(err);
+    if (err.message === 'unavailable') {
+      res.status(404).json({ emailAvailable: false });
+    } else {
+      res.status(404).json({ err });
+    }
+  }
 });
 
 /**

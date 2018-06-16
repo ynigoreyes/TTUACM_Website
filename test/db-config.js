@@ -46,7 +46,7 @@ function saveTestUser() {
       .send(test.user001)
       .expect(201)
       .end((err, res) => {
-        resolve();
+        resolve(res.body.user);
       });
   });
 }
@@ -62,7 +62,7 @@ function saveVerifiedTestUser() {
     data.password = bcryptjs.hashSync(data.password, saltRounds);
     verifiedUser = new User(data);
     verifiedUser.save((err, user) => {
-      resolve();
+      resolve(user);
     });
   });
 }
