@@ -20,7 +20,7 @@
     <a [routerLink]="['/auth']">Login/Sign up</a>
   </span>
   <span class="nav-buttons" *ngIf="state.loggedIn()">
-    <a [routerLink]="['/']" (click)="state.logOut()">LogOut</a>
+    <a [routerLink]="['/auth']" (click)="logout()">LogOut</a>
   </span>
   <span class="nav-buttons" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
     <a [routerLink]="['/messaging']">Contact Us</a>
