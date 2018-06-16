@@ -84,21 +84,25 @@ function forgotLogin(email) {
  */
 function sendResetEmail(token, email, req) {
   return new Promise((resolve, reject) => {
-    const mailOptions = {
-      to: email,
-      from: 'Texas Tech ACM',
-      subject: 'TTU ACM Password Reset',
-      text:
-        `${'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
-          'Please click on the following link, or paste this into your browser to complete the process:\n\n'}${
-          req.protocol
-        }://${req.headers.host}/users/reset/${token}\n\n` +
-        'If you did not request this, please ignore this email and your password will remain unchanged.\n'
-    };
-    global.smtpTransporter.sendMail(mailOptions, (err) => {
-      if (err) reject(err);
+    if (process.env.NODE_ENV !== 'test') {
+      const mailOptions = {
+        to: email,
+        from: 'Texas Tech ACM',
+        subject: 'TTU ACM Password Reset',
+        text:
+          `${'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+            'Please click on the following link, or paste this into your browser to complete the process:\n\n'}${
+            req.protocol
+          }://${req.headers.host}/users/reset/${token}\n\n` +
+          'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+      };
+      global.smtpTransporter.sendMail(mailOptions, (err) => {
+        if (err) reject(err);
+        resolve();
+      });
+    } else {
       resolve();
-    });
+    }
   });
 }
 
@@ -199,18 +203,22 @@ function verifyUser(token, passwordAttempt) {
  */
 function sendChangedPasswordEmail(email) {
   return new Promise((resolve, reject) => {
-    const mailOptions = {
-      to: email,
-      from: process.env.email_username,
-      subject: 'Your password has been changed',
-      text:
-        'Hello,\n\n' +
-        'This is a confirmation that the password for your account has been changed.\n'
-    };
-    global.smtpTransporter.sendMail(mailOptions, (err) => {
-      if (err) reject(err);
+    if (process.env.NODE_ENV !== 'test') {
+      const mailOptions = {
+        to: email,
+        from: process.env.email_username,
+        subject: 'Your password has been changed',
+        text:
+          'Hello,\n\n' +
+          'This is a confirmation that the password for your account has been changed.\n'
+      };
+      global.smtpTransporter.sendMail(mailOptions, (err) => {
+        if (err) reject(err);
+        resolve();
+      });
+    } else {
       resolve();
-    });
+    }
   });
 }
 
@@ -288,22 +296,25 @@ function register(user) {
  */
 function sendConfirmationEmail(email, token, req) {
   return new Promise((resolve, reject) => {
-    const mailOptions = {
-      to: email,
-      from: 'Texas Tech ACM',
-      subject: 'Welcome to ACM: TTU',
-      html: `<p>Please click on the following link, or paste this into your browser to verify your account:</p>\n\n<a>${
-        req.protocol
-      }://${
-        req.headers.host
-      }/users/confirm/${token}</a>\n\n<p>If you did not sign up for an account, please ignore this email.</p>\n`
-    };
-
-    global.smtpTransporter.sendMail(mailOptions, (err) => {
-      if (err) reject(err);
+    if (process.env.NODE_ENV !== 'test') {
+      const mailOptions = {
+        to: email,
+        from: 'Texas Tech ACM',
+        subject: 'Welcome to ACM: TTU',
+        html: `<p>Please click on the following link, or paste this into your browser to verify your account:</p>\n\n<a>${
+          req.protocol
+        }://${
+          req.headers.host
+        }/users/confirm/${token}</a>\n\n<p>If you did not sign up for an account, please ignore this email.</p>\n`
+      };
+      global.smtpTransporter.sendMail(mailOptions, (err) => {
+        if (err) reject(err);
+        resolve();
+        console.log(`Email send to ${email}`);
+      });
+    } else {
       resolve();
-      console.log(`Email send to ${email}`);
-    });
+    }
   });
 }
 
@@ -330,22 +341,25 @@ function getProfile(req, res) {
  */
 function contactUs(options) {
   return new Promise((resolve, reject) => {
-    const mailOptions = {
-      from: options.email,
-      to: process.env.email_username,
-      subject: 'ACM Question',
-      text: `You got a message!\n\nSender: ${options.name}\n\nEmail: ${options.email}\n\nTopic: ${
-        options.topic
-      }\n\nMessage: ${options.message}\n`
-    };
-
-    global.smtpTransporter.sendMail(mailOptions, (err) => {
-      if (err) {
-        console.log(err);
-        reject(err);
-      }
+    if (process.env.NODE_ENV !== 'test') {
+      const mailOptions = {
+        from: options.email,
+        to: process.env.email_username,
+        subject: 'ACM Question',
+        text: `You got a message!\n\nSender: ${options.name}\n\nEmail: ${options.email}\n\nTopic: ${
+          options.topic
+        }\n\nMessage: ${options.message}\n`
+      };
+      global.smtpTransporter.sendMail(mailOptions, (err) => {
+        if (err) {
+          console.log(err);
+          reject(err);
+        }
+        resolve();
+      });
+    } else {
       resolve();
-    });
+    }
   });
 }
 

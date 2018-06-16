@@ -19,7 +19,8 @@
     "global-require": "off",
     "no-restricted-syntax": "off",
     "no-prototype-builtins":"off",
-    "no-param-reassign": "off"
+    "no-param-reassign": "off",
+    "no-unused-expressions":"off"
 
   }
 }

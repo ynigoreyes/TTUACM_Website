@@ -36,6 +36,10 @@ if (process.env.NODE_ENV === 'prod') {
   nmconfig.generateTestTransporter();
 }
 
+if (process.env.NODE_ENV === 'dev') {
+  app.use(logger('dev'));
+}
+
 /**
  * Connects to the testing db in Mongo Atlas
  */
@@ -49,9 +53,6 @@ function connectDB() {
       reconnectTries: 30
     }
   );
-  mongoose.connection.on('connected', () => {
-    console.log('Database Connection Successful');
-  });
   mongoose.connection.on('error', (err) => {
     console.log(`Error Connecting to database... \n${err}`);
   });
@@ -61,7 +62,6 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 require('./config/passport')(passport);
 
-app.use(logger('dev'));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
