@@ -28,16 +28,5 @@ script:
   - npm run client-test
   - npm run api-test
 
-after-success:
-  - npm run docs
-
-deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
-  local_dir: docs/
-  on:
-    branch: master
-
 notifications:
   email: false
