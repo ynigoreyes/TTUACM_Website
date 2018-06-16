@@ -156,6 +156,7 @@ router.post('/forgot', async (req, res) => {
 
 /**
  * This endpoint is hit by an email to reset a user password
+ * This endpoint is hit first in the sequence
  *
  * - endpoint: `/users/reset/:token`
  * - Verb: GET
