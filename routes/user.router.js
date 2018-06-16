@@ -3,7 +3,7 @@ const passport = require('passport');
 const querystring = require('querystring');
 
 // Controller
-const UserCrtl = require('../controllers/user.controller');
+const controller = require('../controllers/user.controller');
 
 const router = express.Router();
 
@@ -39,14 +39,14 @@ router.post('/register', async (req, res) => {
     confirmEmailToken: null
   };
   try {
-    const createdUser = await UserCrtl.register(user);
-    await UserCrtl.sendConfirmationEmail(createdUser.email, createdUser.confirmEmailToken, req);
+    const createdUser = await controller.register(user);
+    await controller.sendConfirmationEmail(createdUser.email, createdUser.confirmEmailToken, req);
     res.status(201).json({ user });
   } catch (err) {
-    console.log(err);
     if (err.message === 'unavailable') {
       res.status(404).json({ emailAvailable: false });
     } else {
+      console.log(err);
       res.status(404).json({ err });
     }
   }
@@ -67,15 +67,18 @@ router.post('/register', async (req, res) => {
 router.post('/login', (req, res) => {
   const email = req.body.email;
   const inputPassword = req.body.password;
-  UserCrtl.login(email, inputPassword)
+  controller.login(email, inputPassword)
     .then((response) => {
       const token = response.token;
       const user = response.foundUser;
-      res.status(200).json({ token: `JWT ${token}`, user });
+      res.status(200).json({ token: `JWT ${token}`, user, msg: null });
     })
     .catch((err) => {
-      console.log(err);
-      res.status(404).json({ msg: err.message });
+      const errors = ['Invalid Login', 'User Not Verified', 'User Not Found'];
+      if (errors.indexOf(err.message) === -1) {
+        console.log(err.message);
+      }
+      res.status(404).json({ token: null, user: null, msg: err.message });
     });
 });
 
@@ -89,9 +92,10 @@ router.post('/login', (req, res) => {
  * OnSuccess: Redirects to the login page with querystring to signal a notification
  *
  * @typedef {function} UserRouter-confirmToken
+ * @param {querystring} token - HEX token saved in confirmEmailToken
  */
 router.get('/confirm/:token', (req, res) => {
-  UserCrtl.confirmToken(req.params.token)
+  controller.confirmToken(req.params.token)
     .then(() => {
       const qs = querystring.stringify({ verify: 'success' });
       res.redirect(`${process.env.CLIENT}/auth/?${qs}`);
@@ -116,13 +120,13 @@ router.get('/confirm/:token', (req, res) => {
  * @typedef {function} UserRouter-sendConfirmationEmail
  */
 router.post('/confirm', (req, res) => {
-  UserCrtl.sendConfirmationEmail(req.body.email, req.body.token, req)
+  controller.sendConfirmationEmail(req.body.email, req.body.token, req)
     .then(() => {
-      res.status(200).json();
+      res.status(200).json({});
     })
     .catch((err) => {
       console.log(err);
-      res.status(404).json({ err: 'Error Sending Confirmation Email' });
+      res.status(404).json({});
     });
 });
 
@@ -136,16 +140,17 @@ router.post('/confirm', (req, res) => {
  * OnSuccess: Sends the user that the email was sent to
  *
  * @typedef {function} UserRouter-forgotLogin
+ * @param {string} req.body.email - Email for the account that needs to change passwords
  */
 router.post('/forgot', async (req, res) => {
   try {
     const email = req.body.email;
-    const { token, user } = await UserCrtl.forgotLogin(email);
-    const status = await UserCrtl.sendResetEmail(token, user, req);
-    res.status(200).json({ recipient: user });
+    const { token, user } = await controller.forgotLogin(email);
+    await controller.sendResetEmail(token, user, req);
+    res.status(200).json({ recipient: user, msg: null });
   } catch (err) {
     console.log(err);
-    res.status(404).json({ msg: err.message });
+    res.status(404).json({ recipient: null, msg: err.message });
   }
 });
 
@@ -162,7 +167,7 @@ router.post('/forgot', async (req, res) => {
  * @param {string} token - A string that contains the HEX code/Reset token of a lost account
  */
 router.get('/reset/:token', (req, res) => {
-  UserCrtl.resetToken(req.params.token)
+  controller.resetToken(req.params.token)
     .then((token) => {
       const qs = querystring.stringify({ token });
       res.redirect(`${process.env.CLIENT}/auth/forgot/redirect/?${qs}`);
@@ -186,12 +191,12 @@ router.get('/reset/:token', (req, res) => {
  * @typedef {function} UserRouter-resetPassword
  */
 router.post('/reset/:token', (req, res) => {
-  UserCrtl.resetPassword(req.params.token, req.body.password)
-    .then((msg) => {
-      res.status(200).json({ msg });
+  controller.resetPassword(req.params.token, req.body.password)
+    .then((user) => {
+      res.status(200).json({user});
     })
     .catch((err) => {
-      res.status(404).json({ err });
+      res.status(404).json({user: null});
     });
 });
 
@@ -207,7 +212,7 @@ router.post('/reset/:token', (req, res) => {
  *
  * @typedef {function} UserRouter-getProfile
  */
-router.get('/profile', membersOnlyRoute, UserCrtl.getProfile);
+router.get('/profile', membersOnlyRoute, controller.getProfile);
 
 /**
  * Sends and question to ACM Email
@@ -224,9 +229,9 @@ router.post('/contact-us', (req, res) => {
     topic: req.body.topic,
     message: req.body.message
   };
-  UserCrtl.contactUs(emailInfo)
-    .then(() => res.status(200).json({}))
-    .catch(err => res.status(404).json({ err }));
+  controller.contactUs(emailInfo)
+    .then(() => res.status(200).json())
+    .catch(err => res.status(404).json());
 });
 
 module.exports = router;

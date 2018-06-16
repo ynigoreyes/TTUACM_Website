@@ -1,3 +1,4 @@
+/* eslint-disable */
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 const db = require('../db-config');
@@ -21,7 +22,7 @@ describe('User Controller Suite', () => {
       // Work around. The user saved in database seems to be passed by reference
       const email = 'testUser3Email@gmail.com';
       const password = 'testUser3Password';
-      return controller.login(email, password).then((payload) => {
+      return controller.login(email, password).then(payload => {
         expect(payload.token).to.not.be.null;
         expect(payload.foundUser).to.not.be.null;
       });
@@ -29,21 +30,21 @@ describe('User Controller Suite', () => {
     it('Should reject a user for having an invalid login', () => {
       const email = 'SomeRandomEmail';
       const password = 'WrongPassword';
-      return controller.login(email, password).catch((err) => {
+      return controller.login(email, password).catch(err => {
         expect(err.message).to.equal('User Not Found');
       });
     });
     it('Should reject a user that is not verified', () => {
       const email = 'testUserEmail@gmail.com';
       const password = 'testUserPassword';
-      return controller.login(email, password).catch((err) => {
+      return controller.login(email, password).catch(err => {
         expect(err.message).to.equal('User Not Verified');
       });
     });
     it('Should reject a verified user that gave an invalid password', () => {
       const email = 'testUser3Email@gmail.com';
       const password = 'wrongPassword';
-      return controller.login(email, password).catch((err) => {
+      return controller.login(email, password).catch(err => {
         expect(err.message).to.equal('Invalid Login');
       });
     });
@@ -56,12 +57,12 @@ describe('User Controller Suite', () => {
       await db.reset();
     });
     it('Should successfully register a new user', () => {
-      return controller.register(test.user001).then((user) => {
+      return controller.register(test.user001).then(user => {
         expect(user).to.not.be.null;
       });
     });
     it('Should not be able register a new user with the same email', () => {
-      return controller.register(test.user001).catch((err) => {
+      return controller.register(test.user001).catch(err => {
         expect(err.message).to.equal('unavailable');
       });
     });
@@ -75,14 +76,14 @@ describe('User Controller Suite', () => {
     });
     it('Should find the user and return a HEX token', () => {
       const email = test.user001.email;
-      return controller.forgotLogin(email).then((payload) => {
+      return controller.forgotLogin(email).then(payload => {
         expect(payload.token).to.not.be.null;
         expect(payload.user).to.not.be.null;
       });
     });
     it('Should reject with an error if the email was not found', () => {
       const email = 'SomeRandomEmail';
-      return controller.forgotLogin(email).catch((err) => {
+      return controller.forgotLogin(email).catch(err => {
         expect(err.message).to.not.be.null;
       });
     });
@@ -94,7 +95,7 @@ describe('User Controller Suite', () => {
     let token;
     let email;
     let req;
-    before((done) => {
+    before(done => {
       process.env.NODE_ENV = 'Whatever';
       done();
       token = '5743290574902750';
@@ -118,13 +119,13 @@ describe('User Controller Suite', () => {
         expect(true).to.be.true;
       });
     });
-    after((done) => {
+    after(done => {
       process.env.NODE_ENV = 'test';
       done();
     });
   });
   describe('#sendChangedPasswordEmail(email)', () => {
-    before((done) => {
+    before(done => {
       process.env.NODE_ENV = 'Whatever';
       done();
     });
@@ -135,7 +136,7 @@ describe('User Controller Suite', () => {
         expect(true).to.be.true;
       });
     });
-    after((done) => {
+    after(done => {
       process.env.NODE_ENV = 'test';
       done();
     });
@@ -151,7 +152,7 @@ describe('User Controller Suite', () => {
       payload = await controller.forgotLogin(email);
     });
     it('#verifyUser(token, passwordAttempt)', () => {
-      return controller.verifyUser(payload.token, password).then((user) => {
+      return controller.verifyUser(payload.token, password).then(user => {
         expect(user).to.not.be.null;
         expect(user.password).to.not.equal('testUserPassword');
       });
@@ -166,7 +167,7 @@ describe('User Controller Suite', () => {
       user = await db.saveVerifiedTestUser();
     });
     it('Should find the user and update their status to verified: true', () => {
-      return controller.confirmToken(user.confirmEmailToken).then((user) => {
+      return controller.confirmToken(user.confirmEmailToken).then(user => {
         expect(user.verified).to.equal(true);
         expect(user.confirmEmailToken).to.equal('');
       });

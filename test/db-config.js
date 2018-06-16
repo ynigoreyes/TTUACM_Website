@@ -37,7 +37,7 @@ function createTestConnection() {
 /**
  * Saves user001 into the database as a test
  *
- * @returns {Promise.<null, Error>} Rejects: an error or msg if no user was created
+ * @returns {Promise.<null, Error>} Rejects: an error. Resolves: the new user object
  */
 function saveTestUser() {
   return new Promise((resolve, reject) => {

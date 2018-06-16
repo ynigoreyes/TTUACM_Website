@@ -153,7 +153,7 @@ function resetPassword(token, password) {
     try {
       const user = await verifyUser(token, password);
       await sendChangedPasswordEmail(user);
-      resolve();
+      resolve(user);
     } catch (err) {
       reject(err);
     }
@@ -162,6 +162,7 @@ function resetPassword(token, password) {
 
 /**
  * Verifies the user based on whether or not they pass a valid JWT Token
+ * and checks to see if the user actually exists
  *
  * @param {string} token - JWT Token
  * @param {string} passwordAttempt - Attempted password from user
@@ -186,6 +187,7 @@ function verifyUser(token, passwordAttempt) {
         { new: true },
         (err, user) => {
           if (err) reject(err);
+          if (!user) reject(new Error('No User Found'));
           resolve(user);
         }
       );
