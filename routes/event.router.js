@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const EventsController = require('../controllers/event.controller');
+const controller = require('../controllers/event.controller');
 
 /**
  * Gets all the events using an OAuth2 Object
@@ -12,7 +12,16 @@ const EventsController = require('../controllers/event.controller');
  *
  * @typedef {function} EventsRouter-getEvents
  */
-router.get('/', EventsController.getEvents);
+router.get('/', (req, res) => {
+  controller
+    .listEvents()
+    .then((events) => {
+      res.status(200).json({ events });
+    })
+    .catch((err) => {
+      if (err) console.log(err);
+      res.status(404).json({ events: [], err });
+    });
+});
 
 module.exports = router;
-

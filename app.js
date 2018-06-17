@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const nmconfig = require('./config/nodemailer-transporter');
+require('./config/oauth2.config');
 
 mongoose.Promise = global.Promise;
 
