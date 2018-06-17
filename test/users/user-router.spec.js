@@ -1,7 +1,6 @@
 /* eslint-disable */
 const chai = require('chai');
 const path = require('path');
-const User = require('../../models/user.model');
 const request = require('supertest');
 const app = require('../../app.js');
 const mongoose = require('mongoose');
@@ -16,21 +15,18 @@ mongoose.Promise = global.Promise;
 
 // Bcrypt options
 const bcrypt = require('bcryptjs');
-const saltRounds = 10;
 
 require('dotenv').config({ path: path.resolve('.env') });
 
 // Node Endpoints
 const loginURL = '/users/login';
-const logoutURL = '/users/logout';
 const confirmURL = '/users/confirm';
-const profileURL = '/users/profile';
 const contactURL = '/users/contact-us';
 const registerURL = '/users/register';
 const forgotURL = '/users/forgot';
 const resetURL = '/users/reset';
 
-describe.only('User Router Suite', () => {
+describe('User Router Suite', () => {
   before(async () => {
     await db.createTestConnection();
   });
@@ -67,11 +63,14 @@ describe.only('User Router Suite', () => {
       });
     });
     it('Should allow verified user to log in and pass a token', done => {
-      db.saveVerifiedTestUser().then(user => {
-        test.verifiedUser001.password = 'testUser3Password';
+      db.saveVerifiedTestUser().then((user) => {
+        const post = {
+          email: 'testUser3Email@gmail.com',
+          password: 'testUser3Password'
+        }
         request(app)
           .post(loginURL)
-          .send(test.verifiedUser001)
+          .send(post)
           .end((err, res) => {
             expect(res.status).to.equal(200);
             expect(res.body.token).to.not.be.undefined;

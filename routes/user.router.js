@@ -27,7 +27,6 @@ const membersOnlyRoute = passport.authenticate('jwt', { session: false });
  *
  * @typedef {function} UserRouter-register
  *
- * @todo convert this to async await
  */
 router.post('/register', async (req, res) => {
   const user = {

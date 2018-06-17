@@ -277,6 +277,7 @@ function register(user) {
 
       user.password = hash;
       user.confirmEmailToken = token;
+      user.verified = false;
 
       // New User Object from the mongoose User Schema
       const newUser = new User(user);

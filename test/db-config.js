@@ -40,7 +40,7 @@ function createTestConnection() {
  * @returns {Promise.<null, Error>} Rejects: an error. Resolves: the new user object
  */
 function saveTestUser() {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     request(app)
       .post('/users/register')
       .send(test.user001)
@@ -57,8 +57,15 @@ function saveTestUser() {
  * @returns {Promise.<null, Error>} Rejects: an error or msg if no user was created
  */
 function saveVerifiedTestUser() {
-  return new Promise((resolve, reject) => {
-    const data = test.verifiedUser001;
+  return new Promise((resolve) => {
+    const data = {
+      email: 'testUser3Email@gmail.com',
+      password: 'testUser3Password',
+      firstName: 'testFirstName3',
+      lastName: 'testLastName3',
+      classification: 'MoreMeme',
+      verified: true
+    };
     data.password = bcryptjs.hashSync(data.password, saltRounds);
     verifiedUser = new User(data);
     verifiedUser.save((err, user) => {
@@ -68,7 +75,7 @@ function saveVerifiedTestUser() {
 }
 
 function reset() {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     mockgoose.helper.reset().then(resolve());
   });
 }

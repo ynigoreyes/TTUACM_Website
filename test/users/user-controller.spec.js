@@ -176,4 +176,7 @@ describe('User Controller Suite', () => {
       await db.reset();
     });
   });
+  after(async () => {
+    await db.reset();
+  });
 });
