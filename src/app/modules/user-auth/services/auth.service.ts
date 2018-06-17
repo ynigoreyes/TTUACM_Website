@@ -6,13 +6,13 @@ import { environment } from '@acm-environments/environment';
 
 @Injectable()
 export class AuthService {
-  private signUpEP: string = `${environment.host}/users/register`;
-  private loginEP: string = `${environment.host}/users/login`;
-  private forgotEP: string = `${environment.host}/users/forgot`;
-  private resetEP: string = `${environment.host}/users/reset`;
-  private confirmationEP: string = `${environment.host}/users/confirmation`;
+  private signUpEP: string = `${environment.host}/api/users/register`;
+  private loginEP: string = `${environment.host}/api/users/login`;
+  private forgotEP: string = `${environment.host}/api/users/forgot`;
+  private resetEP: string = `${environment.host}/api/users/reset`;
+  private confirmationEP: string = `${environment.host}/api/users/confirmation`;
 
-  private resendEP: string = `${environment.host}/users/confirm`;
+  private resendEP: string = `${environment.host}/api/users/confirm`;
   constructor(private http: HttpClient) {}
 
   public registerUser(newUser) {

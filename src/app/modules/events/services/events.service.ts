@@ -7,7 +7,7 @@ import { environment } from '@acm-environments/environment';
 export class EventsService {
 
   constructor(private http: HttpClient) { }
-  getEventsEP: string = `${environment.host}/events`;
+  getEventsEP: string = `${environment.host}/api/events`;
 
   public getEvents () {
     return this.http.get(this.getEventsEP);

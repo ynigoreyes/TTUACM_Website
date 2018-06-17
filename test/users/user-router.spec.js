@@ -19,12 +19,12 @@ const bcrypt = require('bcryptjs');
 require('dotenv').config({ path: path.resolve('.env') });
 
 // Node Endpoints
-const loginURL = '/users/login';
-const confirmURL = '/users/confirm';
-const contactURL = '/users/contact-us';
-const registerURL = '/users/register';
-const forgotURL = '/users/forgot';
-const resetURL = '/users/reset';
+const loginURL = '/api/users/login';
+const confirmURL = '/api/users/confirm';
+const contactURL = '/api/users/contact-us';
+const registerURL = '/api/users/register';
+const forgotURL = '/api/users/forgot';
+const resetURL = '/api/users/reset';
 
 describe('User Router Suite', () => {
   before(async () => {

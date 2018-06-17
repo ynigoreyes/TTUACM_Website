@@ -42,7 +42,7 @@ function createTestConnection() {
 function saveTestUser() {
   return new Promise((resolve) => {
     request(app)
-      .post('/users/register')
+      .post('/api/users/register')
       .send(test.user001)
       .expect(201)
       .end((err, res) => {

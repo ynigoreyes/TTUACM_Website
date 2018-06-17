@@ -6,7 +6,7 @@ import { ContactPost } from '../models/contact-form.model';
 
 @Injectable()
 export class ContactService {
-  public ContactUsURL = `${environment.host}/users/contact-us`;
+  public ContactUsURL = `${environment.host}/api/users/contact-us`;
   constructor(public http: HttpClient) {}
 
   sendEmail(message: ContactPost) {

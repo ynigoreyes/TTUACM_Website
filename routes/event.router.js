@@ -5,7 +5,7 @@ const router = express.Router();
 const controller = require('../controllers/event.controller');
 
 /**
- * Gets all the events using an OAuth2 Object
+ * Gets all the events in ACM Google Calendar using an OAuth2 Object
  *
  * - Endpoint: `/events`
  * - GET

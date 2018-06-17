@@ -46,7 +46,7 @@ module.exports = (passport) => {
   const googleClientSecret = process.env.google_client_secret;
   const googleOpts = {
     // Change this callback URL in production
-    callbackURL: '/auth/google/redirect',
+    callbackURL: '/api/auth/google/redirect',
     clientID: googleClientID,
     clientSecret: googleClientSecret
   };
@@ -81,7 +81,7 @@ module.exports = (passport) => {
   const githubClientID = process.env.github_clientID;
   const githubClientSecret = process.env.github_client_secret;
   const githubOpts = {
-    callbackURL: '/auth/github/redirect',
+    callbackURL: '/api/auth/github/redirect',
     clientID: githubClientID,
     clientSecret: githubClientSecret
   };
@@ -117,7 +117,7 @@ module.exports = (passport) => {
   const facebookClientID = process.env.facebook_clientID;
   const facebookClientSecret = process.env.facebook_client_secret;
   const facebookOpts = {
-    callbackURL: '/auth/facebook/redirect',
+    callbackURL: '/api/auth/facebook/redirect',
     clientID: facebookClientID,
     clientSecret: facebookClientSecret,
     profileFields: ['id', 'emails', 'name']

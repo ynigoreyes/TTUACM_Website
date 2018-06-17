@@ -74,9 +74,9 @@ const usersRoute = require('./routes/user.router');
 const eventsRoute = require('./routes/event.router');
 const authRoute = require('./routes/auth.router');
 
-app.use('/users', usersRoute);
-app.use('/events', eventsRoute);
-app.use('/auth', authRoute);
+app.use('/api/users', usersRoute);
+app.use('/api/events', eventsRoute);
+app.use('/api/auth', authRoute);
 
 /**
  * During production, this should redirect everyone that puts
