@@ -16,7 +16,7 @@ try {
   authorize(JSON.parse(content));
 } catch (err) {
   console.log('Error loading client secret file:', err);
-  process.exit();
+  process.exit(1);
 }
 /**
  * Create an OAuth2 client with the given credentials, and then execute the
