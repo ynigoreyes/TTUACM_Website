@@ -6,7 +6,6 @@ const { google } = require('googleapis');
  */
 function listEvents() {
   return new Promise((resolve, reject) => {
-    console.log(global.oAuth2Client);
     const calendar = google.calendar({ version: 'v3', auth: global.oAuth2Client });
     calendar.events.list(
       {

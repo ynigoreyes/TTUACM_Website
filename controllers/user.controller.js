@@ -152,9 +152,10 @@ function resetPassword(token, password) {
   return new Promise(async (resolve, reject) => {
     try {
       const user = await verifyUser(token, password);
-      await sendChangedPasswordEmail(user);
+      await sendChangedPasswordEmail(user.email);
       resolve(user);
     } catch (err) {
+      console.log(err);
       reject(err);
     }
   });
