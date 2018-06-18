@@ -38,11 +38,19 @@ export class AuthService {
   /**
    * Sends to fogot login endpoint which accepts only an email in the body
    */
-  public forgotUser(userEmail): Observable<object> {
+  public forgotUser(email): Observable<object> {
     const headers = new HttpHeaders();
     headers.append(`Content-type`, `application/json`);
 
-    return this.http.post(this.forgotEP, { email: userEmail }, { headers: headers });
+    const post: Observable<object> = this.http.post(
+      this.forgotEP,
+      { email },
+      {
+        headers: headers
+      }
+    );
+
+    return post;
   }
 
   /**

@@ -60,7 +60,6 @@ export class LoginComponent {
         this.router.navigate(['/events/all-events']);
       },
       (err) => {
-        console.log(err);
         this.snackBar.open(err['error'].msg, 'Close', {
           duration: 2000
         });

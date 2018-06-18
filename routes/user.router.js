@@ -144,9 +144,9 @@ router.post('/confirm', (req, res) => {
 router.post('/forgot', async (req, res) => {
   try {
     const email = req.body.email;
-    const { token, user } = await controller.forgotLogin(email);
-    await controller.sendResetEmail(token, user, req);
-    res.status(200).json({ recipient: user, msg: null });
+    const payload = await controller.forgotLogin(email);
+    await controller.sendResetEmail(payload.token, payload.user.email, req);
+    res.status(200).json({ recipient: payload.user, msg: null });
   } catch (err) {
     console.log(err);
     res.status(404).json({ recipient: null, msg: err.message });

@@ -81,6 +81,7 @@ function forgotLogin(email) {
  * @param {string} token - HEX token/reset token
  * @param {Object} req - Express Request Object
  * @returns {Promise.<null, Error>} Rejects with an error if there is something wrong with the email
+ * @todo Make this look cleaner
  */
 function sendResetEmail(token, email, req) {
   return new Promise((resolve, reject) => {
@@ -89,12 +90,11 @@ function sendResetEmail(token, email, req) {
         to: email,
         from: 'Texas Tech ACM',
         subject: 'TTU ACM Password Reset',
-        text:
-          `${'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
-            'Please click on the following link, or paste this into your browser to complete the process:\n\n'}${
-            req.protocol
-          }://${req.headers.host}/api/users/reset/${token}\n\n` +
-          'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+        html: `<p>You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\nPlease click on the following link, or paste this into your browser to complete the process:\n\n</p>\n\n<a>${
+          req.protocol
+        }://${
+          req.headers.host
+        }/api/users/reset/${token}</a>\n\n<p>If you did not request this, please ignore this email and your password will remain unchanged.</p>\n`
       };
       global.smtpTransporter.sendMail(mailOptions, (err) => {
         if (err) reject(err);
@@ -267,7 +267,7 @@ function register(user) {
   return new Promise((resolve, reject) => {
     // If the email is available, continue with the proccess
     // Generates the salt used for hashing
-    User.findOne({email: user.email}, (err, user) => {
+    User.findOne({ email: user.email }, (err, user) => {
       if (err) reject(err);
       if (user) reject(new Error('unavailable'));
     });
