@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
-  googleId: { type: String, defualt: '' },
-  facebookId: { type: String, defualt: '' },
-  githubId: { type: String, defualt: '' },
+  googleId: { type: String, default: '' },
+  facebookId: { type: String, default: '' },
+  githubId: { type: String, default: '' },
   email: { type: String, required: true },
   password: { type: String, required: false, default: null },
   firstName: { type: String, required: true },
@@ -18,7 +18,7 @@ const userSchema = mongoose.Schema({
 });
 
 // Moved the Hashing to the controller
-const User = module.exports = mongoose.model('User', userSchema);
+const User = module.exports = mongoose.model('Students', userSchema);
 
 // Bellow are query methods for the User Model
 // We passback the password in the callback so that we can check
