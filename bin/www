@@ -1,35 +1,37 @@
 #!/usr/bin/env node
-
+const fs = require('fs');
 /**
  * Module dependencies.
  */
+let port;
 
 const app = require('../app');
 const debug = require('debug')('ttuacm-website:server');
-const http = require('http');
+if (process.env.NODE_ENV === 'prod') {
+  const http = require('https');
+  port = 443;
+  const sslPath = '/etc/letsencrypt/live/acmttu.org/'
+  const options = {
+    key: fs.readFileSync(sslPath + 'privkey.pem'),
+    cert: fs.readFileSync(sslPath + 'fullchain.pem')
+  }
+  const server = http.createServer(options, app);
+  server.listen(port);
 
-/**
- * Get port from environment and store in Express.
- */
+  server.on('error', onError);
+  server.on('listening', onListening);
+} else {
+  const http = require('http');
+  port = 80;
+  const server = http.createServer(app);
+  server.listen(port);
+
+  server.on('error', onError);
+  server.on('listening', onListening);
+}
 
 
-const port = 80;
-app.set('port', port);
 
-/**
- * Create HTTP server.
- */
-
-const server = http.createServer(app);
-
-/**
- * Listen on provided port, on all network interfaces.
- */
-
-server.listen(port);
-console.log(`Listening on port: ${port}`);
-server.on('error', onError);
-server.on('listening', onListening);
 
 /**
  * Event listener for HTTP server "error" event.
@@ -64,9 +66,5 @@ function onError(error) {
  */
 
 function onListening() {
-  const addr = server.address();
-  const bind = typeof addr === 'string'
-    ? `pipe ${addr}`
-    : `port ${addr.port}`;
-  debug(`Listening on ${bind}`);
+  console.log(`Listening on ${port}`);
 }

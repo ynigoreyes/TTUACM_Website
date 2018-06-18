@@ -17,13 +17,13 @@ const app = express();
 
 // Where the views will be
 app.use(express.static(path.join(__dirname, 'public')));
+require('dotenv').config({ path: path.join(__dirname, '/.env') });
 
 // Production/Development Set up
 if (process.env.NODE_ENV === 'prod') {
   console.log('Running in production');
   console.log(`Mongo DB Connected using:\n${process.env.db}`);
   // dotenv file placed in root directory during development
-  require('dotenv').config({ path: path.join(__dirname, '/.prod.env') });
   for (const property in process.env) {
     if (process.env.hasOwnProperty(property)) {
       console.log(`${property}: ${process.env[property]}\n`);
@@ -32,7 +32,6 @@ if (process.env.NODE_ENV === 'prod') {
   connectDB();
   nmconfig.generateProdTransporter();
 } else {
-  require('dotenv').config({ path: path.join(__dirname, '/.env') });
   connectDB();
   nmconfig.generateTestTransporter();
 }
