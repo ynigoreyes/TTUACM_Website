@@ -93,7 +93,7 @@ function sendResetEmail(token, email, req) {
           `${'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
             'Please click on the following link, or paste this into your browser to complete the process:\n\n'}${
             req.protocol
-          }://${req.headers.host}/users/reset/${token}\n\n` +
+          }://${req.headers.host}/api/users/reset/${token}\n\n` +
           'If you did not request this, please ignore this email and your password will remain unchanged.\n'
       };
       global.smtpTransporter.sendMail(mailOptions, (err) => {
@@ -310,7 +310,7 @@ function sendConfirmationEmail(email, token, req) {
           req.protocol
         }://${
           req.headers.host
-        }/users/confirm/${token}</a>\n\n<p>If you did not sign up for an account, please ignore this email.</p>\n`
+        }/api/users/confirm/${token}</a>\n\n<p>If you did not sign up for an account, please ignore this email.</p>\n`
       };
       global.smtpTransporter.sendMail(mailOptions, (err) => {
         if (err) reject(err);

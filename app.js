@@ -20,6 +20,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Production/Development Set up
 if (process.env.NODE_ENV === 'prod') {
+  console.log('Running in production');
   console.log(`Mongo DB Connected using:\n${process.env.db}`);
   // dotenv file placed in root directory during development
   require('dotenv').config({ path: path.join(__dirname, '/.prod.env') });
