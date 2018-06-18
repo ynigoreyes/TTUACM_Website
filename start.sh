@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-sudo forever -c "npm run app-prod" ./ -f
+sudo forever -c "npm run app-prod" ./ 
