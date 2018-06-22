@@ -208,11 +208,20 @@ router.post('/reset/:token', (req, res) => {
  * - Verb: GET
  *
  * OnFailure: Sends an error statuscode
- * OnSuccess: Sends a success statuscode
+ * OnSuccess: Sends a success statuscode with an user Object
  *
  * @typedef {function} UserRouter-getProfile
  */
-router.get('/profile', membersOnlyRoute, controller.getProfile);
+router.get('/profile', membersOnlyRoute, (req, res) => {
+  controller.getProfile(req.user.email)
+    .then((user) => {
+      res.status(200).json({ user, err: null });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(404).json({ user: null, err });
+    });
+});
 
 /**
  * Sends and question to ACM Email

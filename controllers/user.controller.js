@@ -328,10 +328,19 @@ function sendConfirmationEmail(email, token, req) {
  * Fetches the user's profile
  *
  * @param {string} email - user's unique email
- * @todo Impliment a profile page with resumes and other things
+ * @returns {Promise.<object, Error>} Resolves: a user object; Rejects: Error
  */
-function getProfile(req, res) {
-  res.json({ user: req.user });
+function getProfile(email) {
+  return new Promise((resolve, reject) => {
+    User.findOne({ email })
+      .then((user) => {
+        if (!user) reject(new Error('Email Not Found'));
+        resolve(user);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
 }
 
 /**

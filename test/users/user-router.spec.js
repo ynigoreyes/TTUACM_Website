@@ -38,7 +38,7 @@ describe('User Router Suite', () => {
       await db.reset();
       expect(mockgoose.helper.isMocked()).to.be.true;
     });
-    it('Should reject a non-existing user', done => {
+    it('Should reject a non-existing user', (done) => {
       db.saveTestUser().then(() => {
         request(app)
           .post(loginURL)
@@ -50,7 +50,7 @@ describe('User Router Suite', () => {
           });
       });
     });
-    it('Should reject a non-verified user', done => {
+    it('Should reject a non-verified user', (done) => {
       db.saveTestUser().then(() => {
         request(app)
           .post(loginURL)
@@ -62,12 +62,12 @@ describe('User Router Suite', () => {
           });
       });
     });
-    it('Should allow verified user to log in and pass a token', done => {
+    it('Should allow verified user to log in and pass a token', (done) => {
       db.saveVerifiedTestUser().then((user) => {
         const post = {
           email: 'testUser3Email@gmail.com',
           password: 'testUser3Password'
-        }
+        };
         request(app)
           .post(loginURL)
           .send(post)
@@ -85,7 +85,7 @@ describe('User Router Suite', () => {
       await db.reset();
       expect(mockgoose.helper.isMocked()).to.be.true;
     });
-    it('Should allow a user to register', done => {
+    it('Should allow a user to register', (done) => {
       request(app)
         .post(registerURL)
         .send(test.user001)
@@ -100,7 +100,7 @@ describe('User Router Suite', () => {
           done();
         });
     });
-    it('Shoud reject a user that has the same email', done => {
+    it('Shoud reject a user that has the same email', (done) => {
       db.saveTestUser().then(() => {
         request(app)
           .post(registerURL)
@@ -122,8 +122,8 @@ describe('User Router Suite', () => {
       await db.reset();
       process.env.CLIENT = '';
     });
-    it('Should verify an email that has a confirmEmailToken in the database and redirect', done => {
-      db.saveTestUser().then(user => {
+    it('Should verify an email that has a confirmEmailToken in the database and redirect', (done) => {
+      db.saveTestUser().then((user) => {
         request(app)
           .get(`${confirmURL}/${user.confirmEmailToken}`)
           .end((err, res) => {
@@ -141,8 +141,8 @@ describe('User Router Suite', () => {
       expect(mockgoose.helper.isMocked()).to.be.true;
       process.env.CLIENT = '';
     });
-    it('Shoud send an email to the user about reseting their password and reset the password', done => {
-      db.saveTestUser().then(user => {
+    it('Shoud send an email to the user about reseting their password and reset the password', (done) => {
+      db.saveTestUser().then((user) => {
         const email = user.email;
         request(app)
           .post(forgotURL)
@@ -157,23 +157,26 @@ describe('User Router Suite', () => {
           });
       });
     });
-    it('Redirect the user to a page that prompts them for a new password', done => {
+    it('Redirect the user to a page that prompts them for a new password', (done) => {
       request(app)
         .get(`${resetURL}/${token}`)
         .end((err, res) => {
           expect(res.status).to.equal(302);
-          expect(res.header.location).to.equal(`/auth/forgot/redirect/?token=${token}`);
+          expect(res.header.location).to.equal(
+            `/auth/forgot/redirect/?token=${token}`
+          );
           done();
         });
     });
-    it('Should replace the password with the given password', done => {
+    it('Should replace the password with the given password', (done) => {
       request(app)
         .post(`${resetURL}/${token}`)
         .send({ password: 'A-New-Password' })
         .end((err, res) => {
           expect(res.status).to.equal(200);
           expect(res.body.user).to.not.be.null;
-          expect(bcrypt.compareSync('A-New-Password', res.body.user.password)).to.be.true;
+          expect(bcrypt.compareSync('A-New-Password', res.body.user.password))
+            .to.be.true;
           done();
         });
     });
@@ -182,7 +185,7 @@ describe('User Router Suite', () => {
     });
   });
   describe('Contact Us Functionality', () => {
-    it('Shoud send an email to ACM', done => {
+    it('Shoud send an email to ACM', (done) => {
       const post = {
         name: 'Curious User',
         email: 'redraider@ttu.edu',
@@ -194,6 +197,56 @@ describe('User Router Suite', () => {
         .send(post)
         .end((err, res) => {
           expect(res.status).to.equal(200);
+          done();
+        });
+    });
+  });
+  describe('Get User Profile Functionality', () => {
+    let authToken;
+    let email;
+    before('Create and get their token', async () => {
+      await db.reset();
+      expect(mockgoose.helper.isMocked()).to.be.true;
+
+      await db.saveVerifiedTestUser().then((user) => {
+        request(app)
+          .post(loginURL)
+          .send({ email: user.email, password: 'testUser3Password' })
+          .end((err, res) => {
+            expect(err).to.be.null;
+            expect(res.body.token).to.not.be.undefined;
+            expect(res.body.token).to.not.be.null;
+
+            authToken = res.body.token;
+            email = res.body.user.email;
+          });
+      });
+    });
+    it('Should reject access without JWT', (done) => {
+      request(app)
+        .get(profileURL)
+        .end((err, res) => {
+          expect(res.status).to.equal(401);
+          done();
+        });
+    });
+    it('Should reject access with invalid JWT', (done) => {
+      request(app)
+        .get(profileURL)
+        .set('Authorization', 'jflkdjsfkljdslafjlkdsjflkd')
+        .end((err, res) => {
+          expect(res.status).to.equal(401);
+          done();
+        });
+    });
+    it('Should allow access with JWT and valid email', (done) => {
+      request(app)
+        .get(profileURL)
+        .set('Authorization', authToken)
+        .send({ email })
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          expect(res.body.user).to.not.be.null;
           done();
         });
     });
