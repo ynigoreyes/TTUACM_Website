@@ -2,12 +2,11 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { tokenNotExpired } from 'angular2-jwt';
 
+import * as jwt_decode from 'jwt-decode';
+
 @Injectable()
 export class UserStateService {
   constructor() {}
-
-  // User Subject
-  public userObject = new BehaviorSubject<object>({});
 
   // Email Subject
   public userEmail = new BehaviorSubject<string>(`No Email`);
@@ -27,20 +26,8 @@ export class UserStateService {
   }
 
   /**
-   * Sets the globally available user object
-   * @example
-   *  email: string,
-   *  firstName: string,
-   *  lastName: string
-   * @param user A valid user object
-   */
-  public setUser(user: object): void {
-    this.userObject.next(user);
-  }
-
-  /**
    * Set the globally available token string
-   * @param token The token given by the API
+   * @param token The token given by the API which decodes to the user object
    */
   public setToken(token: string): void {
     localStorage.setItem('id_token', token);
@@ -53,6 +40,12 @@ export class UserStateService {
    */
   public setHEXToken(token: string): void {
     this.HEXToken.next(token);
+  }
+
+  public getUser(): object {
+    let token = localStorage.getItem('id_token');
+    let user = jwt_decode(token);
+    return user;
   }
 
   /**

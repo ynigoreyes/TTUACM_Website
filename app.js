@@ -57,6 +57,7 @@ function connectDB() {
   );
   mongoose.connection.on('error', (err) => {
     console.log(`Error Connecting to database... \n${err}`);
+    process.exit(1);
   });
 }
 

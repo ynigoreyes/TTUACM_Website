@@ -25,6 +25,7 @@ const contactURL = '/api/users/contact-us';
 const registerURL = '/api/users/register';
 const forgotURL = '/api/users/forgot';
 const resetURL = '/api/users/reset';
+const profileURL = '/api/users/profile';
 
 describe('User Router Suite', () => {
   before(async () => {

@@ -11,6 +11,9 @@ import { MatSnackBar } from '@angular/material';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
+  /**
+   * Determines what will be featured on the home page
+   */
   public features: Array<Feature> = [
     {
       icon: 'event',
@@ -31,7 +34,7 @@ export class HomeComponent {
     {
       icon: 'computer',
       header: 'Development',
-      reroute: `/explore/featured`,
+      reroute: `/explore/projects`,
       description:
         'We support software and hardware projects and provide knowledge from individuals who are passionate about teaching others.',
       logoBackgroundColor: '#1976d2'
@@ -56,8 +59,6 @@ export class HomeComponent {
       (params) => {
         if (params.token) {
           try {
-            const user = jwt_decode(params.token);
-            this.state.setUser(user);
             this.state.setToken(params.token);
           } catch (err) {
             this.router.navigate(['/auth']);

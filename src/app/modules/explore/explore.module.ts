@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 
 import { ExploreRoutingModule } from './explore-routing.module';
 import { FeedComponent } from './pages/feed/feed.component';
-import { FeaturedComponent } from './pages/featured/featured.component';
+import { ProjectsComponent } from './pages/projects/projects.component';
 import { ComingSoonComponent } from '../../components/coming-soon/coming-soon.component';
+import { ProfileComponent } from './pages/profile/profile.component';
 
 
 @NgModule({
@@ -12,6 +13,6 @@ import { ComingSoonComponent } from '../../components/coming-soon/coming-soon.co
     CommonModule,
     ExploreRoutingModule
   ],
-  declarations: [FeedComponent, FeaturedComponent, ComingSoonComponent]
+  declarations: [FeedComponent, ProjectsComponent, ComingSoonComponent, ProfileComponent]
 })
 export class ExploreModule { }
