@@ -224,6 +224,29 @@ router.get('/profile', membersOnlyRoute, (req, res) => {
 });
 
 /**
+ * Updates the user's current resume
+ * This route requires authentication
+ *
+ * - endpoint: `/users/update-resume`
+ * - Verb: POST
+ *
+ * OnFailure: Sends an error statuscode
+ * OnSuccess: Sends a success statuscode with an user Object
+ *
+ * @typedef {function} UserRouter-updateResume
+ */
+router.post('/update-resume', membersOnlyRoute, (req, res) => {
+  controller.updateResume(req.user._id, req.body.newPath)
+    .then((user) => {
+      res.status(200).json({ user, err: null });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(404).json({ user: null, err });
+    });
+});
+
+/**
  * Sends and question to ACM Email
  *
  * - Endpoint: `/users/contact-us`

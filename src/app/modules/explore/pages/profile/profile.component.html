@@ -1,15 +1,25 @@
+<header>
+  <section *ngIf="!loading">
+    <img class="profile-image" [src]="profileImage" alt="Profile Picture">
+  </section>
+  <section>
+    {{profile.firstName + " " + profile.lastName}}
+  </section>
+</header>
+
 <main>
-  <section>Profile information</section>
   <section>
-    Name:
-    {{profile.firstName + profile.lastName}}
-  </section>
-  <section>
-    Email:
-    {{profile.email}}
-  </section>
-  <section>
-    Classification:
-    {{profile.classification}}
+    <mat-card>
+      <mat-card-title>Email</mat-card-title>
+      {{profile.email}}
+    </mat-card>
+    <mat-card>
+      <mat-card-title>Classification</mat-card-title>
+      {{profile.classification}}
+    </mat-card>
+    <mat-card *ngIf="!loading">
+      <mat-card-title>Resume</mat-card-title>
+      <a target="_self" [href]="resumeFile">Download</a>
+    </mat-card>
   </section>
 </main>

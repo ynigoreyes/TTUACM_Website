@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { tokenNotExpired } from 'angular2-jwt';
 
 import * as jwt_decode from 'jwt-decode';
+import { Profile } from '../../modules/explore/pages/profile/profile.component';
 
 @Injectable()
 export class UserStateService {
@@ -42,10 +43,10 @@ export class UserStateService {
     this.HEXToken.next(token);
   }
 
-  public getUser(): object {
+  public getUser(): Profile {
     let token = localStorage.getItem('id_token');
     let user = jwt_decode(token);
-    return user;
+    return user.data;
   }
 
   /**

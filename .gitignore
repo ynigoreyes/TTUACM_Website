@@ -63,7 +63,8 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
+# environment variables file
+src/environments/
 .env
 .prod.env
 
@@ -111,6 +112,7 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+src/firebase_media
 
 # e2e
 /e2e/*.js

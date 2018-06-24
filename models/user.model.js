@@ -4,6 +4,8 @@ const userSchema = mongoose.Schema({
   googleId: { type: String, default: '' },
   facebookId: { type: String, default: '' },
   githubId: { type: String, default: '' },
+  profileImage: {type: String, default: ''},
+  resume: { type: String, default: '' },
   email: { type: String, required: true },
   password: { type: String, required: false, default: null },
   firstName: { type: String, required: true },
@@ -14,7 +16,7 @@ const userSchema = mongoose.Schema({
   resetPasswordExpires: { type: Date, default: null },
   hasPaidDues: { type: String, default: false },
   verified: { type: Boolean },
-  blocked: { type: Boolean, default: false }
+  blocked: { type: Boolean, default: false },
 });
 
 // Moved the Hashing to the controller

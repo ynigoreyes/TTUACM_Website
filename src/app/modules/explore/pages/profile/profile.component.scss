@@ -1,0 +1,35 @@
+header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 250px;
+  background-color: #c7342a;
+  box-shadow: 3px 3px 6px black;
+  .profile-image {
+    height: 100px;
+    width: auto;
+    display: block;
+    border: 2px solid;
+    border-radius: 12px;
+  }
+}
+
+// Desktop and Tablets
+@media(min-width: 768px) {
+  header {
+    .profile-image {
+      height: 175px;
+    }
+  }
+}
+
+main {
+  margin: 16px;
+  mat-card {
+    mat-card-title {
+      font-size: small;
+    }
+    margin: 8px 0px;
+  }
+}
