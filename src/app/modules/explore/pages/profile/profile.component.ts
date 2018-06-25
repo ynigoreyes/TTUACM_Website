@@ -75,23 +75,20 @@ export class ProfileComponent implements OnInit {
   updateCurrentResume(event: any) {
     let file: File = event.target.files[0];
     console.log(file);
-    let filename = `resumes/${Date.now()}_${file.name}`;
-    console.log(filename);
-    // Save the file into firebase
+    let path = `resumes/${Date.now()}_${file.name}`;
+    console.log(path);
 
-    return;
-    // let path = 'resumes/path';
-    // this.profileService.uploadResume(path).subscribe(
-    //   (data) => {
-    //     this.sb.open('Successfully updated resume', 'Close', {
-    //       duration: 2000
-    //     });
-    //   },
-    //   (err) => {
-    //     console.error(err);
-    //     this.sb.open('Error saving resume, please try again later.', 'Close', {
-    //       duration: 2000
-    //     });
-    //   });
+    this.profileService.uploadResume(path).subscribe(
+      (data) => {
+        this.sb.open('Successfully updated resume', 'Close', {
+          duration: 2000
+        });
+      },
+      (err) => {
+        console.error(err);
+        this.sb.open('Error saving resume, please try again later.', 'Close', {
+          duration: 2000
+        });
+      });
   }
 }

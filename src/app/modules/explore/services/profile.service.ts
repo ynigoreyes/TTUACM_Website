@@ -15,11 +15,14 @@ export class ProfileService {
    * @requires authentication: a user must be logged in
    * @param {string} path a path to the firebase storage location
    */
-  public uploadResume(newPath: string): Observable<Object> {
-      const headers = new HttpHeaders();
-      headers.append('Content-type', 'application/json');
-      headers.append('Authentication', localStorage.getItem('id_token'));
+  public uploadResume(path: string): Observable<Object> {
+    const headers = new HttpHeaders({
+      'Content-type': 'application/json',
+      'Authorization': localStorage.getItem('id_token')
+    });
+    const post = this.http.put(this.updateResumeEP, { path }, { headers });
+    console.log(headers);
 
-      return this.http.post(this.updateResumeEP, { newPath } , { headers });
+    return post;
   }
 }
