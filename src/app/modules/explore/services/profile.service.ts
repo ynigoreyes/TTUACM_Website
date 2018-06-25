@@ -21,7 +21,6 @@ export class ProfileService {
       'Authorization': localStorage.getItem('id_token')
     });
     const post = this.http.put(this.updateResumeEP, { path }, { headers });
-    console.log(headers);
 
     return post;
   }

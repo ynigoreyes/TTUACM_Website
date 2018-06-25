@@ -6,7 +6,7 @@ header {
   height: 250px;
   background-color: #c7342a;
   box-shadow: 3px 3px 6px black;
-  .profile-image {
+  .profile-picture {
     height: 100px;
     width: auto;
     display: block;
@@ -18,7 +18,7 @@ header {
 // Desktop and Tablets
 @media(min-width: 768px) {
   header {
-    .profile-image {
+    .profile-picture {
       height: 175px;
     }
   }
