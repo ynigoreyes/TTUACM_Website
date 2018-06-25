@@ -13,7 +13,7 @@ const expect = chai.expect;
 
 mongoose.Promise = global.Promise;
 
-// Bcrypt options
+// Bcrypt options\
 const bcrypt = require('bcryptjs');
 
 require('dotenv').config({ path: path.resolve('.env') });
