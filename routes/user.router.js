@@ -224,19 +224,19 @@ router.get('/profile', membersOnlyRoute, (req, res) => {
 });
 
 /**
- * Updates the user's current resume
+ * Updates the user's resume
  * This route requires authentication
  *
  * - endpoint: `/users/update-resume`
- * - Verb: POST
+ * - Verb: PUT
  *
  * OnFailure: Sends an error statuscode
  * OnSuccess: Sends a success statuscode with an user Object
  *
  * @typedef {function} UserRouter-updateResume
  */
-router.post('/update-resume', membersOnlyRoute, (req, res) => {
-  controller.updateResume(req.user._id, req.body.newPath)
+router.put('/update-resume', membersOnlyRoute, (req, res) => {
+  controller.updateResume(req.user._id, req.body.path)
     .then((user) => {
       res.status(200).json({ user, err: null });
     })

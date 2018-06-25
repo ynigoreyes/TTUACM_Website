@@ -1,3 +1,5 @@
+// TODO: Refactor. Move all login and sign authentication to the auth controller.
+// Leave all profile manipulation in here
 const User = require('../models/user.model');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
@@ -344,6 +346,26 @@ function getProfile(email) {
 }
 
 /**
+ * Fetches the user's profile
+ *
+ * @param {string} path - user's unique path to resume on Firebase
+ * @param {string} id - user's id
+ * @returns {Promise.<object, Error>} Resolves: a user object; Rejects: Error
+ */
+function updateResume(id, path) {
+  return new Promise((resolve, reject) => {
+    User.findByIdAndUpdate(id, {resume: path}, {new: true})
+      .then((user) => {
+        if (!user) reject(new Error('User Not Found'));
+        resolve(user);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
+/**
  * Sends email to us from who ever's email was given
  *
  * @param {Object} options - options object
@@ -396,5 +418,6 @@ module.exports = {
   sendConfirmationEmail,
   sendChangedPasswordEmail,
   sendResetEmail,
-  verifyUser
+  verifyUser,
+  updateResume
 };

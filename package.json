@@ -7,7 +7,7 @@
     "app": "NODE_ENV=dev CLIENT='' node ./bin/www",
     "app-prod": "NODE_ENV=prod CLIENT='' node ./bin/www",
     "api": "nodemon",
-    "api-test": "./node_modules/.bin/mocha --recursive ./test --reporter spec --timeout 120000000 --exit",
+    "api-test": "cross-env NODE_ENV=test ./node_modules/.bin/mocha --recursive ./test --reporter spec --timeout 120000000 --exit",
     "client": "ng serve --aot",
     "client-test": "ng test",
     "start": "NODE_ENV=dev CLIENT=http://localhost:4200 node ./bin/www",

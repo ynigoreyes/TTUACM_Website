@@ -36,8 +36,10 @@ if (process.env.NODE_ENV === 'prod') {
   nmconfig.generateTestTransporter();
 }
 
+// If we are in testing, keep the logger
 if (process.env.NODE_ENV === 'dev') {
   app.use(logger('dev'));
+  require('./config/oauth2.config');
 } else if (process.env.NODE_ENV !== 'test') {
   require('./config/oauth2.config');
 }

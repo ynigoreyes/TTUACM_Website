@@ -176,6 +176,21 @@ describe('User Controller Suite', () => {
       await db.reset();
     });
   });
+  describe('#updateResume(id, path)', () => {
+    let user;
+    const path = 'resume/update-path.jpg'
+    before(async () => {
+      user = await db.saveVerifiedTestUser();
+    });
+    it('Should find the user and update their resume', () => {
+      return controller.updateResume(user._id, path).then(user => {
+        expect(user.resume).to.equal(path);
+      });
+    });
+    after(async () => {
+      await db.reset();
+    });
+  });
   after(async () => {
     await db.reset();
   });
