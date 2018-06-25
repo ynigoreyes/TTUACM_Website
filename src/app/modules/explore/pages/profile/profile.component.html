@@ -20,7 +20,7 @@
     <mat-card *ngIf="!loading">
       <mat-card-title>Resume</mat-card-title>
       <a target="_self" [href]="resumeFile">Download</a>
-      <input type="file" (change)="updateCurrentResume($event)" value="Update">
+      <input type="file" (change)="updateCurrentResume($event)">
     </mat-card>
   </section>
 </main>

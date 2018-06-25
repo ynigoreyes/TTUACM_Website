@@ -44,9 +44,25 @@ export class UserStateService {
   }
 
   public getUser(): Profile {
-    let token = localStorage.getItem('id_token');
-    let user = jwt_decode(token);
-    return user.data;
+    let user = JSON.parse(localStorage.getItem('user'));
+    return user;
+  }
+
+  public setUser(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      try {
+        let token = localStorage.getItem('id_token');
+        let user = jwt_decode(token);
+        localStorage.setItem('user', JSON.stringify(user.data));
+        resolve(user.data);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  public updateUser(newUser) {
+    localStorage.setItem('user', JSON.stringify(newUser));
   }
 
   /**

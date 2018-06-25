@@ -60,6 +60,7 @@ export class HomeComponent {
         if (params.token) {
           try {
             this.state.setToken(params.token);
+            this.state.setUser();
           } catch (err) {
             this.router.navigate(['/auth']);
             this.snackbar.open('Authentication Error', 'Close', {

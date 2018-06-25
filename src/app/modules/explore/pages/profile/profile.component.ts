@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { UserStateService } from '@acm-shared/services/user-state.service';
-import { AngularFireStorage, AngularFireStorageReference } from 'angularfire2/storage';
+import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from 'angularfire2/storage';
 import { ProfileService } from '../../services/profile.service';
 import { MatSnackBar } from '@angular/material';
 
 export interface Profile {
+  resume: string;
   profilePicture: string;
   classification: string;
   email: string;
@@ -22,24 +23,27 @@ export interface Profile {
 export class ProfileComponent implements OnInit {
   public profile: Profile;
   public profileImage: any = `../../../../../assets/images/default.jpg`;
-  public resumeFile: any;
   public loading: boolean = true;
+
+  public resumeFile: any;
+  public resumePath: string;
 
   constructor(
     public state: UserStateService,
     public storage: AngularFireStorage,
     public profileService: ProfileService,
     public sb: MatSnackBar
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loadProfile()
       .then(() => {
         this.loading = false;
+        console.log(this.resumeFile);
       })
       .catch(err => {
         this.loading = false;
-        console.log(err);
+        console.error(err);
       });
   }
 
@@ -50,13 +54,12 @@ export class ProfileComponent implements OnInit {
     return new Promise(async (resolve, reject) => {
       this.profile = this.state.getUser();
       try {
-        const imageRef: AngularFireStorageReference = this.storage.ref(
-          `profile_pictures/test.jpeg`
-        );
-        const resumeRef: AngularFireStorageReference = this.storage.ref(`resumes/resume.pdf`);
-        this.profileImage = await imageRef.getDownloadURL().toPromise();
-        resolve();
+        const resumeRef: AngularFireStorageReference = this.storage.ref(this.profile.resume);
         this.resumeFile = await resumeRef.getDownloadURL().toPromise();
+        this.resumePath = this.profile.resume;
+
+        const imageRef: AngularFireStorageReference = this.storage.ref(this.profile.profilePicture);
+        this.profileImage = await imageRef.getDownloadURL().toPromise();
         resolve();
       } catch (err) {
         reject(err);
@@ -72,23 +75,72 @@ export class ProfileComponent implements OnInit {
    * `resumes/1529887889666_pdffake.pdf`
    * `firebase-folder-for-resumes/Current-Date-In-MS_filename`
    */
-  updateCurrentResume(event: any) {
+  async updateCurrentResume(event: any) {
     let file: File = event.target.files[0];
-    console.log(file);
-    let path = `resumes/${Date.now()}_${file.name}`;
-    console.log(path);
 
-    this.profileService.uploadResume(path).subscribe(
-      (data) => {
-        this.sb.open('Successfully updated resume', 'Close', {
-          duration: 2000
+    try {
+      if (this.resumeFile !== null) {
+        console.log('Deleting old resume...');
+        await this.deleteCurrentResume();
+      }
+      this.resumePath = `resumes/${Date.now()}_${file.name}`;
+      this.profile.resume = this.resumePath;
+
+      this.uploadCurrentResume(file, this.resumePath)
+        .then(() => {
+          this.profileService.uploadResume(this.resumePath).subscribe(
+            (data) => {
+              this.state.updateUser(this.profile);
+              this.sb.open('Successfully updated resume', 'Close', {
+                duration: 2000
+              });
+            },
+            (err) => {
+              console.error(err);
+              this.sb.open('Error saving resume, please try again later.', 'Close', {
+                duration: 2000
+              });
+            });
         });
-      },
-      (err) => {
-        console.error(err);
-        this.sb.open('Error saving resume, please try again later.', 'Close', {
-          duration: 2000
-        });
+    } catch (err) {
+      console.error(err);
+      this.sb.open('Cannot connect to servers at the moment, please try again later.', 'Close', {
+        duration: 2000
       });
+    }
+  }
+
+  /**
+   * Updates the current resume by removing the old and replacing it with the new one
+   */
+  private uploadCurrentResume(file: File, name: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let ref = this.storage.ref(name);
+      let task: AngularFireUploadTask = ref.put(file);
+      task
+        .then(async () => {
+          this.resumeFile = await ref.getDownloadURL().toPromise();
+          console.log(this.resumeFile);
+          resolve();
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
+  /**
+   * Deletes the users current resume
+   */
+  private deleteCurrentResume(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      try {
+        console.log(this.resumePath);
+        this.storage.ref(this.resumePath).delete();
+        resolve();
+      } catch (err) {
+        reject(err);
+      }
+    });
   }
 }
