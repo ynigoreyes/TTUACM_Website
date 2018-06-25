@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '@acm-environments/environment';
-import * as jwt from 'jwt-decode';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class ProfileService {
@@ -15,20 +15,11 @@ export class ProfileService {
    * @requires authentication: a user must be logged in
    * @param {string} path a path to the firebase storage location
    */
-  public uploadResume(newPath: string): Promise<Error> {
-    return new Promise((resolve, reject) => {
+  public uploadResume(newPath: string): Observable<Object> {
       const headers = new HttpHeaders();
       headers.append('Content-type', 'application/json');
       headers.append('Authentication', localStorage.getItem('id_token'));
 
-      this.http.post(this.updateResumeEP, { newPath } , { headers }).subscribe(
-        () => {
-          resolve();
-        },
-        err => {
-          reject(err);
-        }
-      );
-    });
+      return this.http.post(this.updateResumeEP, { newPath } , { headers });
   }
 }

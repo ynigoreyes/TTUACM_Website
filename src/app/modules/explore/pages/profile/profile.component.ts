@@ -68,24 +68,30 @@ export class ProfileComponent implements OnInit {
    * Saves the actual file into the firebase and the reference into Mongo
    *
    * @param event the upload event of a file
+   * @example FileName
+   * `resumes/1529887889666_pdffake.pdf`
+   * `firebase-folder-for-resumes/Current-Date-In-MS_filename`
    */
-  updateCurrentResume(event): void {
-    let filename = 'Fill this out with the name + the date.now thing';
+  updateCurrentResume(event: any) {
+    let file: File = event.target.files[0];
+    console.log(file);
+    let filename = `resumes/${Date.now()}_${file.name}`;
+    console.log(filename);
     // Save the file into firebase
 
-
-    let path = 'resumes/path';
-    this.profileService.uploadResume(path)
-      .then(() => {
-        this.sb.open('Successfully updated resume', 'Close', {
-          duration: 2000
-        });
-      })
-      .catch(err => {
-        console.error(err);
-        this.sb.open('Error saving resume, please try again later.', 'Close', {
-          duration: 2000
-        });
-      });
+    return;
+    // let path = 'resumes/path';
+    // this.profileService.uploadResume(path).subscribe(
+    //   (data) => {
+    //     this.sb.open('Successfully updated resume', 'Close', {
+    //       duration: 2000
+    //     });
+    //   },
+    //   (err) => {
+    //     console.error(err);
+    //     this.sb.open('Error saving resume, please try again later.', 'Close', {
+    //       duration: 2000
+    //     });
+    //   });
   }
 }
