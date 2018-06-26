@@ -1,3 +1,6 @@
+@import '~@angular/material/theming';
+@import 'styles';
+
 header {
   display: flex;
   flex-direction: column;
@@ -24,6 +27,7 @@ header {
   }
 }
 
+// Content
 main {
   margin: 16px;
   mat-card {
@@ -31,5 +35,11 @@ main {
       font-size: small;
     }
     margin: 8px 0px;
+    input {
+      display: none;
+    }
+    button {
+      background-color: mat-color($acm-primary, lighter);
+    }
   }
 }

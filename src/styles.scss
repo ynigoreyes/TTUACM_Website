@@ -4,7 +4,7 @@
 // Custom Theme
 @include mat-core();
 $acm-primary: mat-palette($mat-grey, 800, 500, 900);
-$acm-accent: mat-palette($mat-red, 800, 500, 900);
+$acm-accent: mat-palette($mat-red, 800, 700, 900);
 $acm-warn: mat-palette($mat-orange, 800, 500, 900);
 $acm-theme: mat-dark-theme($acm-primary, $acm-accent, $acm-warn);
 @include angular-material-theme($acm-theme);
@@ -41,6 +41,7 @@ body {
   }
   a:hover {
     color: #fff;
+    text-decoration: none;
   } // Panel OverRide
   .mat-select-panel {
     max-height: 1000px;

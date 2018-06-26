@@ -19,8 +19,11 @@
     </mat-card>
     <mat-card *ngIf="!loading">
       <mat-card-title>Resume</mat-card-title>
-      <a target="_self" [href]="resumeFile">Download</a>
-      <input type="file" (change)="updateCurrentResume($event)">
+      <a target="_self" [href]="resumeFile">
+        <button mat-raised-button>Download</button>
+      </a>
+      <input mat-raised-button type="file" #DownloadButton (change)="updateCurrentResume($event)">
+      <button (click)="DownloadButton.click()" mat-raised-button>Update Resume</button>
     </mat-card>
   </section>
 </main>
