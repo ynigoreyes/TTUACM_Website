@@ -1,0 +1,65 @@
+@import '~@angular/material/theming';
+@import 'styles';
+
+// Stretch out registration page
+
+a {
+  text-decoration: none;
+}
+.firstRow {
+  background-color: mat-color($acm-accent);
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  padding: 0 42px;
+  width: 100%;
+  align-items: center;
+  white-space: nowrap;
+  .menu {
+    align-self: center;
+  }
+  .title {
+    font-size: $md-text;
+  }
+  .spacer {
+    flex: 1 1 auto;
+  }
+  .nav-buttons {
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-buttons> {
+    flex: 1;
+    a {
+      font-size: 15px;
+    }
+  }
+}
+
+// When Smaller than tablet
+@media(max-width:768px) {
+  .firstRow {
+    .title {
+      font-size: 20px;
+    }
+    height: 64ngpx;
+    justify-content: center;
+    padding: 0px 24px;
+  }
+  .nav-buttons>a {
+    font-size: 15px
+  }
+  .secondRow {
+    flex-direction: column;
+    height: auto;
+    align-items: flex-start;
+    padding: 0px 24px;
+    margin-bottom: 8px;
+  }
+  .secondRow>span {
+    width: 100%;
+    border-top: 1px solid #00000038;
+  }
+}

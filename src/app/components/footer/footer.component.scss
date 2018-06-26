@@ -1,0 +1,22 @@
+@import '~@angular/material/theming';
+@import 'styles';
+main {
+  margin: 56px 0px;
+}
+section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: mat-color($acm-primary, darker);
+  img {
+    margin: 0px 12px;
+    width: 36px;
+  }
+}
+
+.copyright {
+  width: 100%;
+  text-align: center;
+  padding-top: 36px;
+  font-size: 15px;
+}

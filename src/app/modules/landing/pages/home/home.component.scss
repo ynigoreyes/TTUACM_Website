@@ -1,0 +1,35 @@
+@import '~@angular/material/theming';
+@import 'styles';
+.home-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  color: black;
+  background-color: white;
+  header {
+    font-size: $lg-text;
+    width: 100%;
+    text-align: center;
+    margin-top: 50px;
+  }
+  .feature-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 75px auto;
+    app-feature {
+      flex: auto;
+      margin-bottom: 45px;
+    }
+  }
+}
+
+@media(max-width:425px) {
+  .home-content>header {
+    font-size: 25px;
+    padding: 0px 20px;
+  }
+}

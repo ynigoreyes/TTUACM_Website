@@ -1,0 +1,42 @@
+@import '~@angular/material/theming';
+@import 'styles';
+main {
+  header {
+    font-size: $md-text;
+  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 36px;
+  .form-content {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    app-contact-form {
+      flex: 2;
+    }
+  }
+}
+
+// Template
+.MoreInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-left: 86px;
+  .icons {
+    display: flex;
+    flex-direction: column;
+  }
+  .info-text {
+    margin: 0px 40px;
+    text-align: center;
+  }
+}
+
+mat-icon,
+.info-text>section {
+  margin-top: 56px;
+}

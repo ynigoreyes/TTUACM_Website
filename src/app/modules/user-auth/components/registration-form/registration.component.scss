@@ -1,0 +1,6 @@
+@import '~@angular/material/theming';
+@import 'styles';
+form {
+  display: flex;
+  flex-direction: column;
+}

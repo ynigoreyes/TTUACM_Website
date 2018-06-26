@@ -1,0 +1,24 @@
+<main>
+  <header>Contact Us</header>
+  <section class="form-content">
+    <app-contact-form></app-contact-form>
+    <ng-container *ngIf="!isSmallScreen;then MoreInfo"></ng-container>
+  </section>
+</main>
+
+<ng-template #MoreInfo>
+  <section class="MoreInfo">
+    <span class="icons">
+      <mat-icon>email</mat-icon>
+      <mat-icon>home</mat-icon>
+    </span>
+    <span class="info-text">
+      <section class="email">
+        acmtexastech@gmail.com
+      </section>
+      <section class="Address">
+        2500 Broadway, Lubbock, TX 79409
+      </section>
+    </span>
+  </section>
+</ng-template>

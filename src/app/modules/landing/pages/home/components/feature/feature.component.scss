@@ -1,0 +1,45 @@
+@import '~@angular/material/theming';
+@import 'styles';
+.feature-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  text-align: center;
+  margin: auto;
+  mat-icon {
+    color: white;
+    font-size: 36px;
+    height: 78px;
+    width: 78px;
+    padding: 18px;
+    border-radius: 100px;
+    box-shadow: 3px 3px 6px #888;
+  }
+  mat-icon:hover {
+    cursor: pointer;
+    animation-duration: 0.5s;
+    animation-name: rise;
+    transform: translate(-3px, -3px);
+    box-shadow: 6px 6px 6px #888;
+  }
+  header {
+    font-size: $md-text;
+  }
+  section {
+    padding: 10px 12px;
+    font-size: 15px;
+  }
+}
+
+@keyframes rise {
+  from {
+    transform: translate(0px, 0px);
+    box-shadow: 3px 3px 6px #888;
+  }
+  to {
+    transform: translate(-3px, -3px);
+    box-shadow: 6px 6px 6px #888;
+  }
+}

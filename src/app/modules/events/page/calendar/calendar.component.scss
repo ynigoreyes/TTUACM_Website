@@ -1,0 +1,72 @@
+@import '~@angular/material/theming';
+@import 'styles';
+// Loading and Error Screen
+main {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  margin: 16px 0px;
+  .loading-screens {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-basis: 500px;
+  }
+  .loading-screens> {
+    flex-basis: 30px;
+  }
+  .nav-buttons {
+    display: flex;
+    flex-direction: row;
+    margin-top: 24px;
+    .mat-raised-button {
+      width: 100% !important;
+      margin: 0px 5px;
+      background: #00000012
+    }
+  }
+}
+
+// Event Content
+mat-card {
+  display: flex;
+  flex-direction: column;
+  margin: 30px auto;
+  justify-content: center;
+  text-align: center;
+  #event-id {
+    float: right;
+  }
+  #date {
+    float: left;
+  }
+  .google-header {
+    color: white;
+    font-size: 25px;
+  }
+  mat-card-title {
+    font-size: $lg-text;
+  }
+  mat-card-content {
+    font-size: $sm-text;
+    flex-grow: 1;
+    width: 70%;
+    align-self: center;
+  }
+  mat-card-footer {
+    margin: 0px;
+  }
+}
+
+// Buttons And Headers
+@media(max-width: 426px) {
+  mat-card-footer>span {
+    font-size: 12px;
+  }
+}
+
+@media(min-width: 425px) {
+  .google-header {
+    font-size: 36px;
+  }
+}

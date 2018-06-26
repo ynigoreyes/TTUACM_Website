@@ -1,0 +1,27 @@
+@import '~@angular/material/theming';
+@import 'styles';
+.forBigScreen {
+  background-color: mat-color($acm-primary, darker);
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: center;
+  margin: 64px 36px;
+  .divider {
+    border-left: 1px solid #888;
+    height: 500px;
+    align-self: flex-end;
+  }
+  section {
+    margin: 0px 56px;
+    width: 100%;
+  }
+}
+
+.forLittleScreen {
+  section {
+    padding: 30px;
+  }
+  height: 600px;
+}
+

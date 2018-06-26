@@ -1,58 +1,111 @@
-var express = require('express')
-var path = require('path')
-var favicon = require('serve-favicon')
-var logger = require('morgan')
-var cookieParser = require('cookie-parser')
-var bodyParser = require('body-parser')
-var passport = require('passport')
-var flash = require('connect-flash')
-var session = require('express-session')
-var configDB = require('./config/database.js')
-var mongoose = require('mongoose')
+require('events').EventEmitter.prototype._maxListeners = 100;
 
-var app = express()
+const express = require('express');
+const path = require('path');
+const cors = require('cors');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const passport = require('passport');
+const mongoose = require('mongoose');
+const nmconfig = require('./config/nodemailer-transporter');
 
-mongoose.connect(configDB.url)
-require('./config/passport')(passport)
+mongoose.Promise = global.Promise;
 
-// Passport setup
-app.use(session({secret: 'Texas-Tech-ACM-is-the-best'})) // session secret
-app.use(passport.initialize())
-app.use(passport.session()) // persistent login sessions
-app.use(flash()) // use connect-flash for flash messages stored in session
+// Express Routing and App setup
+const app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'jade')
+// Where the views will be
+app.use(express.static(path.join(__dirname, 'public')));
+require('dotenv').config({ path: path.join(__dirname, '/.env') });
 
-// uncomment after placing your favicon in /public
-app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
-app.use(logger('dev'))
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(cookieParser())
-app.use(express.static(path.join(__dirname, 'public')))
+// Production/Development Set up
+if (process.env.NODE_ENV === 'prod') {
+  console.log('Running in production');
+  console.log(`Mongo DB Connected using:\n${process.env.db}`);
+  // dotenv file placed in root directory during development
+  for (const property in process.env) {
+    if (process.env.hasOwnProperty(property)) {
+      console.log(`${property}: ${process.env[property]}\n`);
+    }
+  }
+  connectDB();
+  nmconfig.generateProdTransporter();
+} else {
+  connectDB();
+  nmconfig.generateTestTransporter();
+}
+
+if (process.env.NODE_ENV === 'dev') {
+  app.use(logger('dev'));
+} else if (process.env.NODE_ENV !== 'test') {
+  require('./config/oauth2.config');
+}
+
+/**
+ * Connects to the testing db in Mongo Atlas
+ */
+function connectDB() {
+  mongoose.connect(
+    process.env.db,
+    {
+      useMongoClient: true,
+      socketTimeoutMS: 0,
+      keepAlive: true,
+      reconnectTries: 30
+    }
+  );
+  mongoose.connection.on('error', (err) => {
+    console.log(`Error Connecting to database... \n${err}`);
+  });
+}
+
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+require('./config/passport')(passport);
+
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(cors({ origin: true }));
 
 // Routes
-require('./routes/index')(app, passport)
-// app.use('/', index)
+const usersRoute = require('./routes/user.router');
+const eventsRoute = require('./routes/event.router');
+const authRoute = require('./routes/auth.router');
 
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  var err = new Error('Not Found')
-  err.status = 404
-  next(err)
-})
+app.use('/api/users', usersRoute);
+app.use('/api/events', eventsRoute);
+app.use('/api/auth', authRoute);
 
-// error handler
-app.use(function (err, req, res, next) {
+/**
+ * During production, this should redirect everyone that puts
+ * in a weird url to the index page. Uncomment when deploying for production
+ */
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
+// Catch 404 and forward to error handler
+app.use((req, res, next) => {
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+// Error Handler
+
+app.use((err, req, res) => {
   // set locals, only providing error in development
-  res.locals.message = err.message
-  res.locals.error = req.app.get('env') === 'development' ? err : {}
+  res.locals.message = err.message;
+
+  // Grabs the environment varibale 'env'
+  // If it is development, then we are in dev mode, else: error is not recorded
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500)
-  res.render('error')
-})
+  res.redirect(`${req.protocol}://${req.headers.host}/error`);
+});
 
-module.exports = app
+module.exports = app;

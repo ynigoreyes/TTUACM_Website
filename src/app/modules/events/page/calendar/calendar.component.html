@@ -1,0 +1,57 @@
+<!-- Main Content -->
+<main>
+  <span class="text-center google-header">Meetings and Events</span>
+  <!-- Loading/Error Screen -->
+  <section class="loading-screens" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </section>
+  <section class="loading-screens" *ngIf="!loading && error">
+    <mat-icon>error</mat-icon>
+  </section>
+  <!-- Main Content -->
+  <section *ngIf="!loading && !error">
+    <section class="nav-buttons">
+      <button mat-raised-button (click)=getNextEvents()>
+        <
+      </button>
+      <button mat-raised-button (click)=getPrevEvents()>
+        >
+      </button>
+    </section>
+    <mat-card *ngFor="let event of displayedEvents">
+      <section>
+        <small>
+          <em id="event-id">{{event.id}}</em>
+        </small>
+        <small>
+          <em id="date">{{getDate(event.startTime)}}</em>
+        </small>
+      </section>
+      <br>
+      <mat-card-title>{{event.title}}</mat-card-title>
+      <mat-card-content>
+        <section class="description">
+          {{event.description}}
+        </section>
+        <hr>
+      </mat-card-content>
+      <mat-card-footer>
+        <span class="location">
+          Meetings will be held at: {{event.location}} on {{event.day}}s
+        </span>
+        <span *ngIf="!isSmallScreen"> | </span>
+        <section *ngIf="isSmallScreen"></section>
+        <span class="time">
+          Starting at {{getTime(event.startTime)}} and ending at {{getTime(event.endTime)}}
+        </span>
+      </mat-card-footer>
+    </mat-card>
+  </section>
+</main>
+
+<!-- <button (click)=getPrevEvents() mat-raised-button class="nav-buttons left-button">
+  Prev 10
+</button> -->
+<!-- <button (click)=getNextEvents() mat-raised-button class="nav-buttons right-button">
+  Next 10
+</button> -->

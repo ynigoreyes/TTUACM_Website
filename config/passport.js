@@ -1,95 +1,153 @@
-var LocalStrategy = require('passport-local').Strategy
-var User = require('../models/user')
-var crypto = require('crypto')
-var nodemailer = require('nodemailer')
-var async = require('async')
+const JwtStrategy = require('passport-jwt').Strategy;
+const GoogleStrategy = require('passport-google-oauth2').Strategy;
+const GitHubStrategy = require('passport-github').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
+const ExtractJwt = require('passport-jwt').ExtractJwt;
 
-module.exports = function (passport) {
-  passport.serializeUser(function (user, done) {
-    done(null, user.id)
-  })
+const User = require('../models/user.model');
 
-  passport.deserializeUser(function (id, done) {
-    User.findById(id, function (err, user) {
-      done(err, user)
+/**
+ * Uses a JWT stategy to verify the token
+ *
+ * @param {object} passport I'm not really sure. It's pretty magical tbh
+ */
+module.exports = (passport) => {
+  passport.serializeUser((user, done) => {
+    done(null, user.id);
+  });
+
+  passport.deserializeUser((id, done) => {
+    User.findById(id).then((user) => {
+      done(null, user);
+    });
+  });
+
+  // JWT Strategy
+  const jwtOpts = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('jwt'),
+    secretOrKey: process.env.session_secret
+  };
+  passport.use(
+    new JwtStrategy(jwtOpts, (jwtPayload, done) => {
+      User.getUserById(jwtPayload.data._id, (err, user) => {
+        if (err) {
+          return done(err, false);
+        }
+        if (user) {
+          return done(null, user);
+        }
+        return done(null, false);
+      });
     })
-  })
+  );
 
-  passport.use('local-login', new LocalStrategy({
-    usernameField: 'email',
-    passwordField: 'password',
-    passReqToCallback: true
-  },
-    function (req, email, password, done) {
-      User.findOne({'local.email': email}, function (err, user) {
-        if (err) return done(err)
-        if (!user) return done(null, false, req.flash('loginMessage', 'Invalid Username.'))
-        if (!user.validPassword(password)) return done(null, false, req.flash('loginMessage', 'Invalid Password.'))
-        if (!user.local.verified) return done(null, false, req.flash('loginMessage', 'Please confirm your email.'))
-        return done(null, user)
-      })
-    }))
-
-  passport.use('local-signup', new LocalStrategy({
-    usernameField: 'email',
-    passwordField: 'password',
-    passReqToCallback: true
-  },
-    function (req, email, password, done) {
-      process.nextTick(function () {
-        User.findOne({'local.email': email}, function (err, user) {
-          if (err) return done(err)
-          if (user) {
-            return done(null, false, req.flash('signupMessage', 'That email is already in use.'))
-          } else if (password !== req.body.confirmPassword) {
-            return done(null, false, req.flash('signupMessage', 'Password and confirm password must match.'))
+  // Google Strategy
+  const googleClientID = process.env.google_clientID;
+  const googleClientSecret = process.env.google_client_secret;
+  const googleOpts = {
+    // Change this callback URL in production
+    callbackURL: '/api/auth/google/redirect',
+    clientID: googleClientID,
+    clientSecret: googleClientSecret
+  };
+  passport.use(
+    new GoogleStrategy(googleOpts, (accessToken, refreshToken, profile, done) => {
+      User.findOne({ googleId: profile.id })
+        .then((currentUser) => {
+          if (currentUser) {
+            // User exists in database
+            done(null, currentUser);
           } else {
-            var newUser = new User()
-            async.waterfall([
-              function (done) {
-                var token = crypto.createHmac('sha256', email).digest('hex')
-                newUser.local.confirmEmailToken = token
-                done(err, token)
-              },
-              function (token, done) {
-                var smtpTransport = nodemailer.createTransport({
-                  service: 'Gmail',
-                  auth: {
-                    // TODO: Use OAuth2
-                    user: 'acmtexastech@gmail.com',
-                    pass: 'w1nnersallofus'
-                  }
-                })
-                var mailOptions = {
-                  to: email,
-                  from: 'Texas Tech ACM',
-                  subject: 'Confirm Account for TTU ACM',
-                  text: 'You are receiving this because you (or someone else) have signed up for an account with Texas Tech Association of Computing Machinery.\n\n' +
-                        'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-                        req.protocol + '://' + req.headers.host + '/confirm/' + token + '\n\n'
-                }
-                smtpTransport.sendMail(mailOptions, function (err) {
-                  done(err)
-                })
-              }
-            ], function (err) {
-              if (err) return next(err)
-            })
-            newUser.local.firstName = req.body.firstName
-            newUser.local.lastName = req.body.lastName
-            newUser.local.email = email
-            newUser.local.password = password
-            newUser.local.classification = req.body.classification
-            newUser.local.hasPaidDues = false
-            newUser.local.verified = false
-            newUser.save(function (err) {
-              if (err) {
-                throw err
-              }
-              return done(null, newUser, req.flash('loginMessage', 'We have sent an email to ' + email + ' to confirm your account.'))
-            })
+            const data = {
+              googleId: profile.id,
+              email: profile.email,
+              firstName: profile.displayName.split(' ')[0],
+              lastName: profile.displayName.split(' ')[1],
+              verified: true
+            };
+            User.mergeAccounts(profile, data, 'googleId', (err, user) => {
+              done(err, user);
+            });
           }
         })
-      })
-    }))
-}
+        .catch((err) => {
+          console.log(err);
+          done(err, null);
+        });
+    })
+  );
+
+  // GitHub Strategy
+  const githubClientID = process.env.github_clientID;
+  const githubClientSecret = process.env.github_client_secret;
+  const githubOpts = {
+    callbackURL: '/api/auth/github/redirect',
+    clientID: githubClientID,
+    clientSecret: githubClientSecret
+  };
+  passport.use(
+    new GitHubStrategy(githubOpts, (accessToken, refreshToken, profile, done) => {
+      User.findOne({ githubId: profile.id })
+        .then((currentUser) => {
+          if (currentUser) {
+            done(null, currentUser);
+          } else {
+            // Sometimes, the user has their email access set to private
+            // In that case, we save their id instead
+            const emailData = profile._json.email === null ? profile.id : profile._json.email;
+            const data = {
+              githubId: profile.id,
+              email: emailData,
+              firstName: profile.displayName.split(' ')[0],
+              lastName: profile.displayName.split(' ')[1],
+              verified: true
+            };
+            User.mergeAccounts(profile, data, 'githubId', (err, user) => {
+              done(err, user);
+            });
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          done(err, null);
+        });
+    })
+  );
+  // Facebook Strategy
+  const facebookClientID = process.env.facebook_clientID;
+  const facebookClientSecret = process.env.facebook_client_secret;
+  const facebookOpts = {
+    callbackURL: '/api/auth/facebook/redirect',
+    clientID: facebookClientID,
+    clientSecret: facebookClientSecret,
+    profileFields: ['id', 'emails', 'name']
+  };
+  passport.use(
+    new FacebookStrategy(facebookOpts, (accessToken, refreshToken, profile, done) => {
+      User.findOne({ facebookId: profile.id })
+        .then((currentUser) => {
+          if (currentUser) {
+            done(null, currentUser);
+          } else {
+            // Sometimes, the user has their email access set to private
+            // In that case, we save their id instead
+            const emailData = profile._json.email === null ? profile.id : profile._json.email;
+            const data = {
+              facebookId: profile.id,
+              email: emailData,
+              firstName: profile._json.first_name,
+              lastName: profile._json.last_name,
+              verified: true
+            };
+            User.mergeAccounts(profile, data, 'facebookId', (err, user) => {
+              done(err, user);
+            });
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          done(err, null);
+        });
+    })
+  );
+};

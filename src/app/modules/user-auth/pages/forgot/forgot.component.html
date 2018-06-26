@@ -1,0 +1,18 @@
+<main>
+  <header class="forgot-header">
+    Forgot Your Password?
+  </header>
+
+  <form class="forgot-container" [formGroup]="forgotForm" (ngSubmit)="attemptForget(forgotForm.value)">
+    <mat-form-field>
+      <input formControlName="email" matInput placeholder="Email">
+      <mat-error>Invalid Email</mat-error>
+    </mat-form-field>
+    <button class="submit-buttons" mat-raised-button type="submit" id="btn-forgot" [disabled]="!forgotForm.valid">
+      <ng-container *ngIf="!loading">
+        Send Email
+      </ng-container>
+      <mat-spinner [diameter]="20" *ngIf="loading"></mat-spinner>
+    </button>
+  </form>
+</main>
