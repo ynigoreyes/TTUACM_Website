@@ -64,7 +64,7 @@ typings/
 .yarn-integrity
 
 # environment variables file
-src/environments/
+src/environments/environment.prod.ts
 .env
 .prod.env
 
