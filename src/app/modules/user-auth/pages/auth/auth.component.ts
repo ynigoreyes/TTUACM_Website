@@ -10,13 +10,13 @@ import { MatSnackBar } from '@angular/material';
 export class AuthComponent {
   public isSmallDevice: boolean;
   constructor(public route: ActivatedRoute, public snackbar: MatSnackBar) {
-    this.isSmallDevice = window.innerWidth <= 556;
+    this.isSmallDevice = window.innerWidth < 768;
     this.checkValidatedUser();
   }
 
   @HostListener('window:resize', ['$event'])
   checkScreen(event): void {
-    this.isSmallDevice = event.target.innerWidth <= 556;
+    this.isSmallDevice = event.target.innerWidth < 768;
   }
 
   checkValidatedUser(): void {

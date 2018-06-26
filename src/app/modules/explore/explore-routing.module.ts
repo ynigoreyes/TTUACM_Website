@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { FeedComponent } from './pages/feed/feed.component';
 import { ProjectsComponent } from './pages/projects/projects.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { AuthGuard } from '@acm-shared/guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -14,8 +15,10 @@ const routes: Routes = [
     component: ProjectsComponent
   },
   {
+    // {{host}}/explore/user
     path: 'user',
-    component: ProfileComponent
+    component: ProfileComponent,
+    canActivate: [AuthGuard]
   }
 ];
 
