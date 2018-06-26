@@ -27,7 +27,7 @@ before-script:
 script:
   - npm run client-test
   - npm run api-test
-  - npm run build
+  - npm run build:dev
 
 after_success:
   - npm run docs

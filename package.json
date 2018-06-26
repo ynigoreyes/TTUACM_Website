@@ -11,7 +11,8 @@
     "client": "ng serve --aot",
     "client-test": "ng test",
     "start": "NODE_ENV=dev CLIENT=http://localhost:4200 node ./bin/www",
-    "build": "ng build --prod --aot",
+    "build:prod": "ng build --prod --aot",
+    "build:dev": "ng build --aot",
     "test": "./node_modules/.bin/mocha --recursive ./test --reporter spec --timeout 120000000 --exit",
     "docs": "./node_modules/.bin/esdoc"
   },
