@@ -178,13 +178,35 @@ describe('User Controller Suite', () => {
   });
   describe('#updateResume(id, path)', () => {
     let user;
-    const path = 'resume/update-path.jpg'
+    const path = 'resume/update-path.jpg';
     before(async () => {
       user = await db.saveVerifiedTestUser();
     });
     it('Should find the user and update their resume', () => {
       return controller.updateResume(user._id, path).then(user => {
         expect(user.resume).to.equal(path);
+      });
+    });
+    after(async () => {
+      await db.reset();
+    });
+  });
+  describe('#updateUser(user)', () => {
+    let user;
+    let originalId;
+    let newEmail = 'AnotherEmail@gmail.com';
+    let newClassification = 'AnotherClassification';
+    before(async () => {
+      user = await db.saveVerifiedTestUser();
+      originalId = user._id;
+      user.email = newEmail;
+      user.classification = newClassification;
+    });
+    it('Should find the user and update their object completely', () => {
+      return controller.updateUser(user).then(updatedUser => {
+        expect(updatedUser.email).to.equal(newEmail);
+        expect(updatedUser.classification).to.equal(newClassification);
+        expect(updatedUser._id.toString()).to.equal(originalId.toString());
       });
     });
     after(async () => {

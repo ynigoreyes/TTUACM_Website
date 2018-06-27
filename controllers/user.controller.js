@@ -348,6 +348,8 @@ function getProfile(email) {
 /**
  * Fetches the user's profile
  *
+ * @deprecated - start using updateUser
+ *
  * @param {string} path - user's unique path to resume on Firebase
  * @param {string} id - user's id
  * @returns {Promise.<object, Error>} Resolves: a user object; Rejects: Error
@@ -355,6 +357,25 @@ function getProfile(email) {
 function updateResume(id, path) {
   return new Promise((resolve, reject) => {
     User.findByIdAndUpdate(id, {resume: path}, {new: true})
+      .then((user) => {
+        if (!user) reject(new Error('User Not Found'));
+        resolve(user);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
+/**
+ * Updates the complete user object
+ *
+ * @param {object} user new user object
+ * @returns {Promise.<object, Error>} Resolves: a new user object; Rejects: Error
+ */
+function updateUser(user) {
+  return new Promise((resolve, reject) => {
+    User.findByIdAndUpdate(user._id, user, { new: true })
       .then((user) => {
         if (!user) reject(new Error('User Not Found'));
         resolve(user);
@@ -419,5 +440,6 @@ module.exports = {
   sendChangedPasswordEmail,
   sendResetEmail,
   verifyUser,
-  updateResume
+  updateResume,
+  updateUser
 };
