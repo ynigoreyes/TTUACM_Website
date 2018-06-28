@@ -31,13 +31,11 @@ function login(email, password) {
         reject(new Error('User Not Verified'));
         // If the user has a signed up using a local auth strategy
       } else if (foundUser !== null && foundUser.password !== null) {
-        bcrypt.compare(password, foundUser.password, (err, response) => {
+        bcrypt.compare(password, foundUser.password, async (err, response) => {
           if (err) {
             reject(err);
           } else if (response) {
-            const token = jwt.sign({ data: foundUser }, process.env.session_secret, {
-              expiresIn: 604800 // 1 week
-            });
+            const token = await generateJWTToken(foundUser);
             resolve({ token, foundUser });
           } else {
             reject(new Error('Invalid Login'));
@@ -370,19 +368,20 @@ function updateResume(id, path) {
 /**
  * Updates the complete user object
  *
- * @param {object} user new user object
- * @returns {Promise.<object, Error>} Resolves: a new user object; Rejects: Error
+ * @param {object} newUser new user object
+ * @returns {Promise.<object, Error>} Resolves: a new user object and token; Rejects: Error
  */
-function updateUser(user) {
-  return new Promise((resolve, reject) => {
-    User.findByIdAndUpdate(user._id, user, { new: true })
-      .then((user) => {
-        if (!user) reject(new Error('User Not Found'));
-        resolve(user);
-      })
-      .catch((err) => {
-        reject(err);
-      });
+function updateUser(newUser) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const user = await User.findByIdAndUpdate(newUser._id, newUser, { new: true }).exec();
+      if (!user) reject(new Error('User Not Found'));
+      const token = await generateJWTToken(user);
+      const response = { user, token };
+      resolve(response);
+    } catch (err) {
+      reject(err);
+    }
   });
 }
 
@@ -425,6 +424,24 @@ function contactUs(options) {
 function generateHexToken() {
   const token = crypto.randomBytes(20);
   return token.toString('hex');
+}
+
+/**
+ * Generates a JWT
+ *
+ * @param {object} payload all the data that will be stored into the token
+ */
+function generateJWTToken(payload) {
+  return new Promise((resolve, reject) => {
+    const token = jwt.sign({ data: payload },
+      process.env.session_secret, {
+        expiresIn: 604800 // 1 week
+      });
+    if (token === '') {
+      reject(new Error('Empty payload'));
+    }
+    resolve(token);
+  });
 }
 
 module.exports = {

@@ -261,12 +261,24 @@ router.put('/update-resume', membersOnlyRoute, (req, res) => {
  */
 router.put('/update-user', membersOnlyRoute, (req, res) => {
   controller.updateUser(req.body.user)
-    .then((user) => {
-      res.status(200).json({ user, err: null });
+    .then((payload) => {
+      res.status(200).json(
+        {
+          user: payload.user,
+          token: payload.token,
+          err: null
+        }
+      );
     })
     .catch((err) => {
       console.error(err);
-      res.status(404).json({ user: null, err });
+      res.status(404).json(
+        {
+          user: null,
+          token: null,
+          err
+        }
+      );
     });
 });
 

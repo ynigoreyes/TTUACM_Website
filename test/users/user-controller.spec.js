@@ -203,10 +203,11 @@ describe('User Controller Suite', () => {
       user.classification = newClassification;
     });
     it('Should find the user and update their object completely', () => {
-      return controller.updateUser(user).then(updatedUser => {
-        expect(updatedUser.email).to.equal(newEmail);
-        expect(updatedUser.classification).to.equal(newClassification);
-        expect(updatedUser._id.toString()).to.equal(originalId.toString());
+      return controller.updateUser(user).then(payload => {
+        expect(payload.token).to.not.be.null;
+        expect(payload.user.email).to.equal(newEmail);
+        expect(payload.user.classification).to.equal(newClassification);
+        expect(payload.user._id.toString()).to.equal(originalId.toString());
       });
     });
     after(async () => {

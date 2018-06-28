@@ -338,6 +338,7 @@ describe('User Router Suite', () => {
         .end((err, res) => {
           expect(res.body.err).to.be.null;
           expect(res.status).to.equal(200);
+          expect(res.body.token).to.not.be.null;
           expect(res.body.user).to.not.be.null;
           expect(res.body.user.firstName).to.equal(firstName);
           expect(res.body.user.lastName).to.equal(lastName);
