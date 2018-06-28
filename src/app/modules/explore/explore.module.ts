@@ -9,10 +9,27 @@ import { ComingSoonComponent } from '../../components/coming-soon/coming-soon.co
 import { ProfileComponent } from './pages/profile/profile.component';
 import { MaterialModule } from '@acm-shared/material.module';
 import { ProfileService } from './services/profile.service';
+import { EditModalComponent } from './pages/profile/components/edit-modal/edit-modal.component';
+import { MatDialog, MatDialogModule } from '@angular/material';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  imports: [CommonModule, ExploreRoutingModule, AngularFireStorageModule, MaterialModule],
-  declarations: [FeedComponent, ProjectsComponent, ComingSoonComponent, ProfileComponent],
-  providers: [ProfileService]
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ExploreRoutingModule,
+    AngularFireStorageModule,
+    MaterialModule,
+    MatDialogModule
+  ],
+  declarations: [
+    FeedComponent,
+    ProjectsComponent,
+    ComingSoonComponent,
+    ProfileComponent,
+    EditModalComponent
+  ],
+  providers: [ProfileService, MatDialog],
+  entryComponents: [EditModalComponent]
 })
 export class ExploreModule {}

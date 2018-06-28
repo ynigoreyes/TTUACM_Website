@@ -79,3 +79,9 @@ body {
 .mat-tab-label {
   flex: auto;
 }
+
+// Modal OverRide
+.mat-dialog-container {
+  max-height: 90vh !important;
+  background: mat-color($acm-primary, darker);
+}

@@ -5,8 +5,9 @@ import {
   AngularFireStorageReference,
   AngularFireUploadTask
 } from 'angularfire2/storage';
-import { ProfileService } from '../../services/profile.service';
-import { MatSnackBar } from '@angular/material';
+import { ProfileService, UpdateUserPayload } from '../../services/profile.service';
+import { MatSnackBar, MatDialog } from '@angular/material';
+import { EditModalComponent } from './components/edit-modal/edit-modal.component';
 
 export interface Profile {
   resume: string;
@@ -38,7 +39,8 @@ export class ProfileComponent implements OnInit {
     public state: UserStateService,
     public storage: AngularFireStorage,
     public profileService: ProfileService,
-    public sb: MatSnackBar
+    public sb: MatSnackBar,
+    public dialog: MatDialog
   ) {}
 
   async ngOnInit() {
@@ -65,6 +67,7 @@ export class ProfileComponent implements OnInit {
           );
         this.profilePicture = await imageRef.getDownloadURL().toPromise();
         this.profilePath = this.profile.profileImage;
+        console.log(this.profilePath);
         }
         resolve();
       } catch (err) {
@@ -157,6 +160,62 @@ export class ProfileComponent implements OnInit {
         resolve();
       } catch (err) {
         reject(err);
+      }
+    });
+  }
+
+  /**
+   * Edits the current user's information
+   * Will open a modal to edit the current user's information
+   * After closeEditModal is called, the component will send the
+   * new user model back to this component and overwrite the previous user
+   */
+  public editProfileInfo(): void {
+    let dialogRef = this.dialog.open(EditModalComponent, {
+      width: '80%',
+      data: {
+        profile: this.profile,
+        profilePath: this.profile.profileImage,
+        profilePicture: this.profilePicture
+      },
+      autoFocus: false
+    });
+
+    // Will only read data if the user clicked save
+    dialogRef.afterClosed().subscribe(async (data: Profile) => {
+      if (data) { // If the user actually clicked the sve button
+        this.profile = data;
+
+        // Replace current picture if it was changed
+        try {
+          const imageRef = this.storage.ref(this.profile.profileImage);
+          this.profilePicture = await imageRef.getDownloadURL().toPromise();
+        } catch (err) {
+          console.error(err); // Usually throws an error when the picture was not changed
+        }
+
+        //
+        try {
+          const payload: UpdateUserPayload = await this.profileService
+                                                .updateUser(this.profile)
+                                                .toPromise();
+          console.log(payload);
+          if (payload.err) {
+            throw payload.err;
+          }
+
+          this.profile = payload.user;
+          await this.state.setUser();
+          this.sb.open('Successfully updated profile', 'Close', {
+            duration: 2000
+          });
+
+        } catch (err) {
+          console.error(err);
+          this.sb.open('Error saving new profile information. Please try again later', 'Close', {
+            duration: 2000
+          });
+        }
       }
     });
   }

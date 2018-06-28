@@ -1,0 +1,38 @@
+<main>
+  <h1 mat-dialog-title>Edit Profile <span class="reminder">Remember to save your changes!</span> </h1>
+  <mat-dialog-content>
+    <form [formGroup]="EditProfileForm">
+      <mat-form-field>
+        <input matInput formControlName="email" placeholder="Email">
+        <mat-error>This doesn't look like an email</mat-error>
+        <mat-hint align="end">Required</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput formControlName="firstName" placeholder="First Name">
+        <mat-hint align="end">Required</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput formControlName="lastName" placeholder="Last Name">
+        <mat-hint align="end">Required</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select formControlName="classification" placeholder="Classification">
+          <mat-option *ngFor="let class of studentClassification" value={{class}}>{{class}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+  <hr>
+  <div class="profile-section">
+    <header class="section-header">Profile Picture:</header>
+    <input style='display: none;' mat-raised-button type="file" #DownloadButton (change)="updateCurrentProfilePicture($event)">
+    <button (click)="DownloadButton.click()" mat-raised-button>Update Profile Picture</button>
+    <header class="preview-header">Preview</header>
+    <img [src]="profilePicture" alt="User Profile Picture">
+    <caption class="hints">Can only be PNG or JPEG, for best results, use a square photo</caption>
+  </div>
+  <hr>
+  <mat-dialog-actions>
+    <button [disabled]="EditProfileForm.invalid" (click)="closeModal(EditProfileForm.value)" #SaveButton mat-raised-button>Save</button>
+  </mat-dialog-actions>
+</main>

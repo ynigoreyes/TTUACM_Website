@@ -48,13 +48,20 @@ export class UserStateService {
     return user;
   }
 
-  public setUser(): Promise<any> {
+  /**
+   * Sets the global user object
+   * @param profile a user profile object
+   */
+  public setUser(profile?: Profile): Promise<any> {
+    let user;
     return new Promise((resolve, reject) => {
       try {
-        let token = localStorage.getItem('id_token');
-        let user = jwt_decode(token);
-        localStorage.setItem('user', JSON.stringify(user.data));
-        resolve(user.data);
+        if (!profile) {
+          let token = localStorage.getItem('id_token');
+          user = jwt_decode(token);
+        }
+        localStorage.setItem('user', JSON.stringify(user.data || profile));
+        resolve(user.data || profile);
       } catch (err) {
         reject(err);
       }
