@@ -33,12 +33,8 @@ export class UserStateService {
    * @param token The token given by the API which decodes to the user object
    */
   public setToken(token: string): void {
-    if (localStorage.getItem('id_token')) {
-      throw new Error('Token already defined');
-    } else {
-      localStorage.setItem('id_token', token);
-      this.userToken.next(token);
-    }
+    localStorage.setItem('id_token', token);
+    this.userToken.next(token);
   }
 
   /**

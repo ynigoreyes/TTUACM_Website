@@ -47,7 +47,6 @@ export class ProfileComponent implements OnInit {
     try {
       await this.loadProfile();
       await this.loadResume();
-      console.log(this.resumeFile);
     } catch (err) {
       console.error(err);
     } finally {
@@ -139,7 +138,6 @@ export class ProfileComponent implements OnInit {
    */
   private uploadCurrentResume(file: File, name: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      console.log(file, name);
       let ref = this.storage.ref(name);
       let task: AngularFireUploadTask = ref.put(file);
       task
