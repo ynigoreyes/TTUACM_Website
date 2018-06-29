@@ -17,27 +17,28 @@ before-install:
 - openssl aes-256-cbc -K $encrypted_74b81b802040_key -iv $encrypted_74b81b802040_iv
   -in environment.prod.ts.enc -out src/environments/environment.prod.ts -d
 - openssl aes-256-cbc -K $encrypted_74b81b802040_key -iv $encrypted_74b81b802040_iv
-  -in .env.enc -out ./.env -d
+  -in .env.enc -out .env -d
 - sleep 3
 
-install:
-- npm install
+# install:
+# - npm install
 
 script:
 - ls -a
-- npm run client-test
-- npm run api-test
-- npm run build:dev
-after_success:
-- npm run docs
-- rm -rf .env
+- printenv
+# - npm run client-test
+# - npm run api-test
+# - npm run build:dev
+# after_success:
+# - npm run docs
+# - rm -rf .env
 
-deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: "$GITHUB_TOKEN"
-  local_dir: docs/
-  on:
-    branch: master
-notifications:
-  email: false
+# deploy:
+#   provider: pages
+#   skip_cleanup: true
+#   github_token: "$GITHUB_TOKEN"
+#   local_dir: docs/
+#   on:
+#     branch: master
+# notifications:
+#   email: false
