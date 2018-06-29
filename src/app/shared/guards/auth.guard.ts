@@ -11,8 +11,12 @@ export class AuthGuard implements CanActivate, CanLoad {
     private userStateService: UserStateService
   ) {}
 
-  // Checks to see if the user is logged in. If not, it will redirect to Login
-  canActivate() {
+  /**
+   * Checks if the user is logged in
+   *
+   * @returns {boolean} checkLoggedIn() - references the user state and checks status
+   */
+  canActivate(): boolean {
     return this.checkLoggedIn();
   }
 

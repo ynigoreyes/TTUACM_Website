@@ -19,6 +19,9 @@
   <span class="nav-buttons" *ngIf="!state.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
     <a [routerLink]="['/auth']">Login/Sign up</a>
   </span>
+  <span class="nav-buttons" *ngIf="state.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+    <a [routerLink]="['/explore/user']">Profile</a>
+  </span>
   <span class="nav-buttons" *ngIf="state.loggedIn()">
     <a [routerLink]="['/auth']" (click)="logout()">LogOut</a>
   </span>

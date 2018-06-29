@@ -1,0 +1,34 @@
+<header>
+  <section *ngIf="!loading">
+    <img class="profile-picture" [src]="profilePicture" alt="Profile Picture">
+  </section>
+  <section>
+    {{profile.firstName + " " + profile.lastName}}
+  </section>
+  <section>
+    <small class="edit-profile-prompt" (click)="editProfileInfo()">Edit Profile</small>
+  </section>
+</header>
+
+<main>
+  <section>
+    <mat-card>
+      <mat-card-title>Email</mat-card-title>
+      {{profile.email}}
+    </mat-card>
+    <mat-card>
+      <mat-card-title>Classification</mat-card-title>
+      {{profile.classification}}
+    </mat-card>
+    <mat-card *ngIf="!loading">
+      <mat-card-title>Resume</mat-card-title>
+      <button *ngIf="resumeFile !== null" mat-raised-button>
+        <a target="_blank" [href]="resumeFile">
+          Download/View
+        </a>
+      </button>
+      <input mat-raised-button type="file" #DownloadButton (change)="updateCurrentResume($event)">
+      <button (click)="DownloadButton.click()" mat-raised-button>Update Resume</button>
+    </mat-card>
+  </section>
+</main>

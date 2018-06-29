@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { FeedComponent } from './pages/feed/feed.component';
-import { FeaturedComponent } from './pages/featured/featured.component';
+import { ProjectsComponent } from './pages/projects/projects.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { AuthGuard } from '@acm-shared/guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -9,8 +11,14 @@ const routes: Routes = [
     component: FeedComponent,
   },
   {
-    path: 'featured',
-    component: FeaturedComponent
+    path: 'projects',
+    component: ProjectsComponent
+  },
+  {
+    // {{host}}/explore/user
+    path: 'user',
+    component: ProfileComponent,
+    canActivate: [AuthGuard]
   }
 ];
 

@@ -1,3 +1,5 @@
+// TODO: Refactor. Move all login and sign authentication to the auth controller.
+// Leave all profile manipulation in here
 const User = require('../models/user.model');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
@@ -29,13 +31,11 @@ function login(email, password) {
         reject(new Error('User Not Verified'));
         // If the user has a signed up using a local auth strategy
       } else if (foundUser !== null && foundUser.password !== null) {
-        bcrypt.compare(password, foundUser.password, (err, response) => {
+        bcrypt.compare(password, foundUser.password, async (err, response) => {
           if (err) {
             reject(err);
           } else if (response) {
-            const token = jwt.sign({ data: foundUser }, process.env.session_secret, {
-              expiresIn: 604800 // 1 week
-            });
+            const token = await generateJWTToken(foundUser);
             resolve({ token, foundUser });
           } else {
             reject(new Error('Invalid Login'));
@@ -328,10 +328,61 @@ function sendConfirmationEmail(email, token, req) {
  * Fetches the user's profile
  *
  * @param {string} email - user's unique email
- * @todo Impliment a profile page with resumes and other things
+ * @returns {Promise.<object, Error>} Resolves: a user object; Rejects: Error
  */
-function getProfile(req, res) {
-  res.json({ user: req.user });
+function getProfile(email) {
+  return new Promise((resolve, reject) => {
+    User.findOne({ email })
+      .then((user) => {
+        if (!user) reject(new Error('Email Not Found'));
+        resolve(user);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
+/**
+ * Fetches the user's profile
+ *
+ * @deprecated - start using updateUser
+ *
+ * @param {string} path - user's unique path to resume on Firebase
+ * @param {string} id - user's id
+ * @returns {Promise.<object, Error>} Resolves: a user object; Rejects: Error
+ */
+function updateResume(id, path) {
+  return new Promise((resolve, reject) => {
+    User.findByIdAndUpdate(id, {resume: path}, {new: true})
+      .then((user) => {
+        if (!user) reject(new Error('User Not Found'));
+        resolve(user);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
+/**
+ * Updates the complete user object
+ *
+ * @param {object} newUser new user object
+ * @returns {Promise.<object, Error>} Resolves: a new user object and token; Rejects: Error
+ */
+function updateUser(newUser) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const user = await User.findByIdAndUpdate(newUser._id, newUser, { new: true }).exec();
+      if (!user) reject(new Error('User Not Found'));
+      const token = await generateJWTToken(user);
+      const response = { user, token };
+      resolve(response);
+    } catch (err) {
+      reject(err);
+    }
+  });
 }
 
 /**
@@ -375,6 +426,24 @@ function generateHexToken() {
   return token.toString('hex');
 }
 
+/**
+ * Generates a JWT
+ *
+ * @param {object} payload all the data that will be stored into the token
+ */
+function generateJWTToken(payload) {
+  return new Promise((resolve, reject) => {
+    const token = jwt.sign({ data: payload },
+      process.env.session_secret, {
+        expiresIn: 604800 // 1 week
+      });
+    if (token === '') {
+      reject(new Error('Empty payload'));
+    }
+    resolve(token);
+  });
+}
+
 module.exports = {
   login,
   register,
@@ -387,5 +456,7 @@ module.exports = {
   sendConfirmationEmail,
   sendChangedPasswordEmail,
   sendResetEmail,
-  verifyUser
+  verifyUser,
+  updateResume,
+  updateUser
 };

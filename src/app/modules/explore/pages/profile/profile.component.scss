@@ -1,0 +1,61 @@
+@import '~@angular/material/theming';
+@import 'styles';
+header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 250px;
+  background-color: #c7342a;
+  box-shadow: 3px 3px 6px black;
+  .profile-picture {
+    height: 100px;
+    width: auto;
+    display: block;
+    border: 2px solid;
+    border-radius: 12px;
+  }
+  .edit-profile-prompt {
+    cursor: pointer;
+  }
+}
+
+// Desktop and Tablets
+@media(min-width: 768px) {
+  header {
+    .profile-picture {
+      height: 175px;
+    }
+  }
+}
+
+// Content
+main {
+  margin: 16px;
+  mat-card {
+    mat-card-title {
+      font-size: small;
+    }
+    margin: 8px 0px;
+    input {
+      display: none;
+    }
+    button {
+      background-color: mat-color($acm-primary, lighter);
+      margin: 10px;
+    }
+  }
+}
+
+// Mobile
+@media(max-width: 425px) {
+  main {
+    mat-card {
+      display: flex;
+      flex-direction: column;
+      mat-card-title {}
+      input {}
+      button {}
+    }
+  }
+}

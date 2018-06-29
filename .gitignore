@@ -63,7 +63,8 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
+# environment variables file
+src/environments/environment.prod.ts
 .env
 .prod.env
 

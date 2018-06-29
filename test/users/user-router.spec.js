@@ -13,7 +13,7 @@ const expect = chai.expect;
 
 mongoose.Promise = global.Promise;
 
-// Bcrypt options
+// Bcrypt options\
 const bcrypt = require('bcryptjs');
 
 require('dotenv').config({ path: path.resolve('.env') });
@@ -25,6 +25,9 @@ const contactURL = '/api/users/contact-us';
 const registerURL = '/api/users/register';
 const forgotURL = '/api/users/forgot';
 const resetURL = '/api/users/reset';
+const profileURL = '/api/users/profile';
+const updateResumeURL = '/api/users/update-resume';
+const updateUserURL = '/api/users/update-user';
 
 describe('User Router Suite', () => {
   before(async () => {
@@ -63,11 +66,11 @@ describe('User Router Suite', () => {
       });
     });
     it('Should allow verified user to log in and pass a token', done => {
-      db.saveVerifiedTestUser().then((user) => {
+      db.saveVerifiedTestUser().then(user => {
         const post = {
           email: 'testUser3Email@gmail.com',
           password: 'testUser3Password'
-        }
+        };
         request(app)
           .post(loginURL)
           .send(post)
@@ -194,6 +197,151 @@ describe('User Router Suite', () => {
         .send(post)
         .end((err, res) => {
           expect(res.status).to.equal(200);
+          done();
+        });
+    });
+  });
+  describe('Get User Profile Functionality', () => {
+    let authToken;
+    let email;
+    before('Create and get their token', async () => {
+      await db.reset();
+      expect(mockgoose.helper.isMocked()).to.be.true;
+
+      await db.saveVerifiedTestUser().then(user => {
+        request(app)
+          .post(loginURL)
+          .send({ email: user.email, password: 'testUser3Password' })
+          .end((err, res) => {
+            expect(err).to.be.null;
+            expect(res.body.token).to.not.be.undefined;
+            expect(res.body.token).to.not.be.null;
+
+            authToken = res.body.token;
+            email = res.body.user.email;
+          });
+      });
+    });
+    it('Should reject access without JWT', done => {
+      request(app)
+        .get(profileURL)
+        .end((err, res) => {
+          expect(res.status).to.equal(401);
+          done();
+        });
+    });
+    it('Should reject access with invalid JWT', done => {
+      request(app)
+        .get(profileURL)
+        .set('Authorization', 'jflkdjsfkljdslafjlkdsjflkd')
+        .end((err, res) => {
+          expect(res.status).to.equal(401);
+          done();
+        });
+    });
+    it('Should allow access with JWT and valid email', done => {
+      request(app)
+        .get(profileURL)
+        .set('Authorization', authToken)
+        .send({ email })
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          expect(res.body.user).to.not.be.null;
+          done();
+        });
+    });
+  });
+  describe('Update User Resume Functionality', () => {
+    let authToken;
+    let id;
+    before('Create and get their token', done => {
+      db.reset()
+        .then(() => {
+          expect(mockgoose.helper.isMocked()).to.be.true;
+          db.saveVerifiedTestUser()
+            .then(user => {
+              request(app)
+                .post(loginURL)
+                .send({ email: user.email, password: 'testUser3Password' })
+                .end((err, res) => {
+                  expect(err).to.be.null;
+                  expect(res.body.token).to.not.be.undefined;
+                  expect(res.body.token).to.not.be.null;
+                  authToken = res.body.token;
+                  id = res.body.user._id;
+                  done();
+                });
+            })
+            .catch(err => {
+              console.log(err);
+              process.exit(1);
+            });
+        })
+        .catch(err => {
+          console.log(err);
+          process.exit(1);
+        });
+    });
+    it(`Should update the user's resume path given a JWT and a new path `, done => {
+      const path = 'resume/path-to-resume.jpg';
+      request(app)
+        .put(updateResumeURL)
+        .set('Authorization', authToken)
+        .send({ id, path })
+        .end((err, res) => {
+          expect(res.body.err).to.be.null;
+          expect(res.status).to.equal(200);
+          expect(res.body.user).to.not.be.null;
+          expect(res.body.user.resume).to.equal(path);
+          done();
+        });
+    });
+  });
+  describe('Update User Functionality', () => {
+    let authToken;
+    let user;
+    before('Create and get their token', done => {
+      db.reset().then(() => {
+        expect(mockgoose.helper.isMocked()).to.be.true;
+          db.saveVerifiedTestUser().then(originalUser => {
+            request(app)
+              .post(loginURL)
+              .send({ email: originalUser.email, password: 'testUser3Password' })
+              .end((err, res) => {
+                expect(err).to.be.null;
+                expect(res.body.token).to.not.be.undefined;
+                expect(res.body.token).to.not.be.null;
+                authToken = res.body.token;
+                user = res.body.user;
+                done();
+              });
+            })
+          .catch(err => {
+            console.log(err);
+            process.exit(1);
+          });
+        })
+        .catch(err => {
+          console.log(err);
+          process.exit(1);
+        });
+    });
+    it(`Should update the user object given a JWT and new attributes `, done => {
+      const firstName = 'A New First Name';
+      const lastName = 'A New Last Name';
+      user.firstName = firstName;
+      user.lastName = lastName;
+      request(app)
+        .put(updateUserURL)
+        .set('Authorization', authToken)
+        .send({ user })
+        .end((err, res) => {
+          expect(res.body.err).to.be.null;
+          expect(res.status).to.equal(200);
+          expect(res.body.token).to.not.be.null;
+          expect(res.body.user).to.not.be.null;
+          expect(res.body.user.firstName).to.equal(firstName);
+          expect(res.body.user.lastName).to.equal(lastName);
           done();
         });
     });

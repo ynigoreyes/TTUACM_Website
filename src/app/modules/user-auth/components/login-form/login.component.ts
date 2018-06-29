@@ -55,9 +55,10 @@ export class LoginComponent {
 
         // Stores the user's information into the local storage
         this.userStateService.setToken(data.token);
-        this.userStateService.setUser(data.user);
-
-        this.router.navigate(['/events/all-events']);
+        this.userStateService.setUser()
+          .then(() => {
+            this.router.navigate(['/events/all-events']);
+          });
       },
       (err) => {
         this.snackBar.open(err['error'].msg, 'Close', {

@@ -27,11 +27,6 @@ describe('UserStateService', () => {
     expect(service.userEmail.getValue()).toEqual(validUser.email, 'Email was not set correctly');
   }));
 
-  it('should update current user', inject([UserStateService], (service: UserStateService) => {
-    service.setUser(validUser);
-    expect(service.userObject.getValue()).toEqual(validUser, 'User was not set correctly');
-  }));
-
   it('should update valid token', inject([UserStateService], (service: UserStateService) => {
     const secret = 'HelloWorldThisIsMySecret';
     service.setToken(
@@ -46,6 +41,5 @@ describe('UserStateService', () => {
   afterEach(inject([UserStateService], (service: UserStateService) => {
     service.setEmail('No Email');
     service.setToken('No Token');
-    service.setUser({});
   }));
 });
