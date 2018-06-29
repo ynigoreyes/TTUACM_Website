@@ -28,11 +28,17 @@ export class UserStateService {
 
   /**
    * Set the globally available token string
+   *
+   * WARNING: CALLING THIS FUNCTION WILL CAUSE ERRORS IN SENDING AUTHENTICATED REQUESTS TO BACKEND
    * @param token The token given by the API which decodes to the user object
    */
   public setToken(token: string): void {
-    localStorage.setItem('id_token', token);
-    this.userToken.next(token);
+    if (localStorage.getItem('id_token')) {
+      throw new Error('Token already defined');
+    } else {
+      localStorage.setItem('id_token', token);
+      this.userToken.next(token);
+    }
   }
 
   /**

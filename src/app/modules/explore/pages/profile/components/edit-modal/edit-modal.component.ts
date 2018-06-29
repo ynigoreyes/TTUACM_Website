@@ -49,6 +49,8 @@ export class EditModalComponent implements OnInit {
 
   studentClassification = ['Freshman', 'Sophomore', 'Junior', 'Senior', 'Graduate', 'PhD'];
 
+  waiting: boolean = false;
+
   ngOnInit() { }
 
   /**
@@ -95,11 +97,13 @@ export class EditModalComponent implements OnInit {
    */
   private uploadCurrentProfilePicture(file: File, name: string): Promise<any> {
     return new Promise((resolve, reject) => {
+      this.waiting = true;
       let ref = this.storage.ref(name);
       let task: AngularFireUploadTask = ref.put(file);
       task
         .then(async () => {
           this.profilePicture = await ref.getDownloadURL().toPromise();
+          this.waiting = false;
           resolve();
         })
         .catch(err => {

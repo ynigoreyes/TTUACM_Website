@@ -6,7 +6,7 @@
     {{profile.firstName + " " + profile.lastName}}
   </section>
   <section>
-    <small (click)="editProfileInfo()" >Edit Profile</small>
+    <small class="edit-profile-prompt" (click)="editProfileInfo()">Edit Profile</small>
   </section>
 </header>
 
@@ -22,11 +22,11 @@
     </mat-card>
     <mat-card *ngIf="!loading">
       <mat-card-title>Resume</mat-card-title>
-      <button mat-raised-button>
+      <button *ngIf="resumeFile !== null" mat-raised-button>
         <a target="_self" [href]="resumeFile">
           Download/View
         </a>
-        </button>
+      </button>
       <input mat-raised-button type="file" #DownloadButton (change)="updateCurrentResume($event)">
       <button (click)="DownloadButton.click()" mat-raised-button>Update Resume</button>
     </mat-card>

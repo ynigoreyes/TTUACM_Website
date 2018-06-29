@@ -47,6 +47,7 @@ export class ProfileComponent implements OnInit {
     try {
       await this.loadProfile();
       await this.loadResume();
+      console.log(this.resumeFile);
     } catch (err) {
       console.error(err);
     } finally {
@@ -67,7 +68,6 @@ export class ProfileComponent implements OnInit {
           );
         this.profilePicture = await imageRef.getDownloadURL().toPromise();
         this.profilePath = this.profile.profileImage;
-        console.log(this.profilePath);
         }
         resolve();
       } catch (err) {
@@ -88,6 +88,8 @@ export class ProfileComponent implements OnInit {
           const resumeRef: AngularFireStorageReference = this.storage.ref(this.profile.resume);
           this.resumeFile = await resumeRef.getDownloadURL().toPromise();
           this.resumePath = this.profile.resume;
+        } else {
+          this.resumeFile = null;
         }
         resolve();
       } catch (err) {
@@ -109,7 +111,7 @@ export class ProfileComponent implements OnInit {
     let file: File = event.target.files[0];
 
     try {
-      if (this.resumeFile !== undefined) {
+      if (this.resumeFile) {
         await this.deleteCurrentResume();
       }
       this.resumePath = `resumes/${Date.now()}_${file.name}`;
@@ -137,6 +139,7 @@ export class ProfileComponent implements OnInit {
    */
   private uploadCurrentResume(file: File, name: string): Promise<any> {
     return new Promise((resolve, reject) => {
+      console.log(file, name);
       let ref = this.storage.ref(name);
       let task: AngularFireUploadTask = ref.put(file);
       task
@@ -194,12 +197,11 @@ export class ProfileComponent implements OnInit {
           console.error(err); // Usually throws an error when the picture was not changed
         }
 
-        //
+        // Updates the users's global object
         try {
           const payload: UpdateUserPayload = await this.profileService
                                                 .updateUser(this.profile)
                                                 .toPromise();
-          console.log(payload);
           if (payload.err) {
             throw payload.err;
           }

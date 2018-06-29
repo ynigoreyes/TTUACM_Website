@@ -40,7 +40,6 @@ export class ProfileService {
       'Content-type': 'application/json',
       Authorization: localStorage.getItem('id_token')
     });
-    console.log(localStorage.getItem('id_token'));
     const post = this.http.put(this.updateUserEP, { user }, { headers });
 
     return post;

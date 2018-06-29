@@ -33,6 +33,6 @@
   </div>
   <hr>
   <mat-dialog-actions>
-    <button [disabled]="EditProfileForm.invalid" (click)="closeModal(EditProfileForm.value)" #SaveButton mat-raised-button>Save</button>
+    <button [disabled]="EditProfileForm.invalid || waiting" (click)="closeModal(EditProfileForm.value)" #SaveButton mat-raised-button>Save</button>
   </mat-dialog-actions>
 </main>
