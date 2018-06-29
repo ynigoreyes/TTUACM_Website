@@ -19,6 +19,8 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
 require('dotenv').config({ path: path.join(__dirname, '/.env') });
 
+console.log(process.env); // Just to check if the encryption of env works
+
 // Production/Development Set up
 if (process.env.NODE_ENV === 'prod') {
   console.log('Running in production');
