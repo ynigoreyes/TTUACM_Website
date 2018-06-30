@@ -1,4 +1,5 @@
 docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+docker build -t acmtexastech/acmttu-web:${TRAVIS_BRANCH} .
 docker push acmtexastech/acmttu-web:${TRAVIS_BRANCH}
 
 # Deploy if on master branch
