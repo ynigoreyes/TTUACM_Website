@@ -8,11 +8,11 @@ const controller = require('../../controllers/user.controller');
 chai.use(sinonChai);
 const expect = chai.expect;
 
-describe.only('User Controller Suite', () => {
+describe('User Controller Suite', () => {
   before(async () => {
     await db.createTestConnection();
   });
-  xdescribe('#login(email, password)', () => {
+  describe('#login(email, password)', () => {
     before(async () => {
       // Save a user into the mockgoose database
       await db.saveTestUser();
@@ -52,7 +52,7 @@ describe.only('User Controller Suite', () => {
       await db.reset();
     });
   });
-  xdescribe('#register(user)', () => {
+  describe('#register(user)', () => {
     before(async () => {
       await db.reset();
     });
@@ -70,7 +70,7 @@ describe.only('User Controller Suite', () => {
       await db.reset();
     });
   });
-  xdescribe('#forgotLogin(email)', () => {
+  describe('#forgotLogin(email)', () => {
     before(async () => {
       await db.saveTestUser();
     });
@@ -109,9 +109,7 @@ describe.only('User Controller Suite', () => {
     });
     it('Should send an email without errors, even to a fake email', () => {
       expect(process.env.NODE_ENV).to.not.equal('test');
-      console.log('Waiting for response');
       return controller.sendResetEmail(token, email, req).then(() => {
-        console.log('Got a response');
         expect(true).to.be.true;
       });
     });
