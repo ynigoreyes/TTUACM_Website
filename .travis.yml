@@ -8,6 +8,7 @@ addons:
 
 services:
   - mongodb
+  - docker
 
 cache:
   directories:
@@ -27,7 +28,6 @@ before-script:
 script:
   - npm run client-test
   - npm run api-test
-  - npm run build:dev
 
 after_success:
   - npm run docs
