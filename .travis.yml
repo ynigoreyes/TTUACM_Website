@@ -1,3 +1,5 @@
+sudo: required
+
 dist: trusty
 language: node_js
 node_js:
@@ -28,6 +30,7 @@ before-script:
 script:
   - npm run client-test
   - npm run api-test
+  - npm run build:dev
 
 after_success:
   - npm run docs
