@@ -37,8 +37,11 @@ jobs:
     - npm install esdoc esdoc-node
     script:
     - npm run docs
+
+    # Deploy to EC2
     - bash deploy.sh
 
+    # Deploy documentation to pages
     deploy:
       provider: pages
       skip_cleanup: true
