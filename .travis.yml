@@ -1,61 +1,52 @@
 dist: trusty
 language: node_js
 node_js:
-  - 9.11.1
+- 9.11.1
 jobs:
   include:
-    - stage: test
-      addons:
-        chrome: stable
-
-      services:
-        - mongodb
-
-      cache:
-        directories:
-          - "node_modules"
-
-      before-install:
-        - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
-
-      install:
-        - npm install
-
-      before-script:
-        - "export DISPLAY=:99.0"
-        - "sh -e /etc/init.d/xvfb start"
-        - sleep 3 # give xvfb some time to start
-
-      script:
-        - npm run client-test
-        - npm run api-test
-        - npm run build:dev
-
-    - stage: deploy
-      sudo: required
-
-      services:
-        - docker
-
-      install:
-        - npm install
-
-      before-script:
-        - "export DISPLAY=:99.0"
-        - "sh -e /etc/init.d/xvfb start"
-        - sleep 3 # give xvfb some time to start
-
-      script:
-        - npm run docs
-        - bash deploy.sh
-
-      deploy:
-        provider: pages
-        skip_cleanup: true
-        github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
-        local_dir: docs/
-        on:
-          branch: master
-
+  - stage: test
+    addons:
+      chrome: stable
+    services:
+    - mongodb
+    cache:
+      directories:
+      - node_modules
+    before-install:
+    - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost
+      &
+    install:
+    - npm install
+    before-script:
+    - export DISPLAY=:99.0
+    - sh -e /etc/init.d/xvfb start
+    - sleep 3
+    script:
+    - npm run client-test
+    - npm run api-test
+    - npm run build:dev
+  - stage: deploy
+    sudo: required
+    services:
+    - docker
+    install:
+    - npm install esdoc esdoc-node
+    script:
+    - npm run docs
+    - bash deploy.sh
+    deploy:
+      provider: pages
+      skip_cleanup: true
+      github_token: "$GITHUB_TOKEN"
+      local_dir: docs/
+      on:
+        branch: master
 notifications:
   email: false
+before_install:
+- openssl aes-256-cbc -K $encrypted_74b81b802040_key -iv $encrypted_74b81b802040_iv
+  -in credentials.json.enc -out config/credentials.json -d
+- openssl aes-256-cbc -K $encrypted_74b81b802040_key -iv $encrypted_74b81b802040_iv
+  -in client_secret.json.enc -out config/client_secret.json -d
+- openssl aes-256-cbc -K $encrypted_74b81b802040_key -iv $encrypted_74b81b802040_iv
+  -in environment.prod.ts.enc -out src/environments/environment.prod.ts -d
