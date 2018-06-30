@@ -123,3 +123,4 @@ src/firebase_media
 Thumbs.db
 launch.json
 .vscode
+secret_configs.tar
