@@ -1,47 +1,61 @@
-sudo: required
-
 dist: trusty
 language: node_js
 node_js:
   - 9.11.1
+jobs:
+  include:
+    - stage: test
+      addons:
+        chrome: stable
 
-addons:
-  chrome: stable
+      services:
+        - mongodb
 
-services:
-  - mongodb
-  - docker
+      cache:
+        directories:
+          - "node_modules"
 
-cache:
-  directories:
-    - "node_modules"
+      before-install:
+        - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 
-before-install:
-  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+      install:
+        - npm install
 
-install:
-  - npm install
+      before-script:
+        - "export DISPLAY=:99.0"
+        - "sh -e /etc/init.d/xvfb start"
+        - sleep 3 # give xvfb some time to start
 
-before-script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 3 # give xvfb some time to start
+      script:
+        - npm run client-test
+        - npm run api-test
+        - npm run build:dev
 
-script:
-  - npm run client-test
-  - npm run api-test
-  - npm run build:dev
+    - stage: deploy
+      sudo: required
 
-after_success:
-  - npm run docs
+      services:
+        - docker
+
+      install:
+        - npm install
+
+      before-script:
+        - "export DISPLAY=:99.0"
+        - "sh -e /etc/init.d/xvfb start"
+        - sleep 3 # give xvfb some time to start
+
+      script:
+        - npm run docs
+        - bash deploy.sh
+
+      deploy:
+        provider: pages
+        skip_cleanup: true
+        github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
+        local_dir: docs/
+        on:
+          branch: master
 
 notifications:
   email: false
-
-deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
-  local_dir: docs/
-  on:
-    branch: master
