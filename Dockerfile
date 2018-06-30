@@ -21,7 +21,7 @@ ARG facebook_client_secret
 RUN npm install --prod --silent
 RUN npm install @angular/cli@1.7.4 --silent
 RUN npm rebuild node-sass
-RUN npm run build
+RUN npm run build:dev
 
 EXPOSE 80
 
