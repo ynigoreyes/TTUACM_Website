@@ -37,13 +37,18 @@ jobs:
     - npm install esdoc esdoc-node
     script:
     - npm run docs
-    - bash deploy.sh
+
     deploy:
-      provider: pages
-      skip_cleanup: true
-      github_token: "$GITHUB_TOKEN"
-      local_dir: docs/
-      on:
-        branch: master
+      - provider: script
+        script: bash deploy.sh ${TRAVIS_BRANCH}
+        on:
+          all-branches: true
+
+      - provider: pages
+        skip_cleanup: true
+        github_token: "$GITHUB_TOKEN"
+        local_dir: docs/
+        on:
+          branch: master
 notifications:
   email: false
