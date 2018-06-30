@@ -1,5 +1,5 @@
 docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-
+echo $TRAVIS_BRANCH
 # Deploy if on master branch
 if [${TRAVIS_BRANCH} = "master"]
 then
