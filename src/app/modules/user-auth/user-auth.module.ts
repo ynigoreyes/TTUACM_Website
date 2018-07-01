@@ -7,13 +7,13 @@ import { ForgotRedirectComponent } from './pages/forgot-redirect/forgot-redirect
 import { ConfirmPasswordComponent } from './pages/confirm-password/confirm-password.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ProfileEditComponent } from './pages/profile-edit/profile-edit.component';
-import { AuthMethodsComponent } from './components/auth-methods/auth-methods.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MaterialModule } from '../../shared/material.module';
 import { UserStateService } from '../../shared/services/user-state.service';
-import { RegistrationComponent } from './components/registration-form/registration.component';
 import { AuthComponent } from './pages/auth/auth.component';
-import { LoginComponent } from './components/login-form/login.component';
+import { RegistrationComponent } from './pages/auth/components/registration-form/registration.component';
+import { LoginComponent } from './pages/auth/components/login-form/login.component';
+import { AuthMethodsComponent } from './pages/auth/components/auth-methods/auth-methods.component';
 
 @NgModule({
   imports: [CommonModule, UserAuthRoutingModule, ReactiveFormsModule, FormsModule, MaterialModule],

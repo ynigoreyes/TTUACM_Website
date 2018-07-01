@@ -43,9 +43,8 @@ router.post('/register', async (req, res) => {
     res.status(201).json({ user });
   } catch (err) {
     if (err.message === 'unavailable') {
-      res.status(404).json({ emailAvailable: false });
+      res.status(401).json({ emailAvailable: false });
     } else {
-      console.log(err);
       res.status(404).json({ err });
     }
   }

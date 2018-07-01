@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import { environment } from '@acm-environments/environment';
+import { User } from '../models/Users.model';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +16,7 @@ export class AuthService {
   private resendEP: string = `${environment.host}/api/users/confirm`;
   constructor(private http: HttpClient) {}
 
-  public registerUser(newUser) {
+  public registerUser(newUser: User) {
     const headers = new HttpHeaders();
     headers.append('Content-type', 'application/json');
 

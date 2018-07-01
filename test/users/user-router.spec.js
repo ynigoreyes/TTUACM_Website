@@ -110,7 +110,7 @@ describe('User Router Suite', () => {
           .send(test.user001)
           .end(async (err, res) => {
             const payload = res.body;
-            expect(res.status).to.equal(404);
+            expect(res.status).to.equal(401);
             expect(payload.emailAvailable).to.equal(false);
             done();
           });

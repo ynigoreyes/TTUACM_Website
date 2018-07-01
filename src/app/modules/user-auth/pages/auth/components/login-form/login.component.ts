@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
 import { MatSnackBar } from '@angular/material';
 import { FormControl, Validators } from '@angular/forms';
-import { UserPost, User } from '../../models/Users.model';
-import { UserStateService } from '../../../../shared/services/user-state.service';
+import { UserStateService } from '@acm-shared/services/user-state.service';
+import { AuthService } from '../../../../services/auth.service';
+import { UserPost, User } from '../../../../models/Users.model';
 export interface LoginResponse {
   user?: {
     firstName: string;
@@ -61,6 +61,7 @@ export class LoginComponent {
           });
       },
       (err) => {
+        console.log(err);
         this.snackBar.open(err['error'].msg, 'Close', {
           duration: 2000
         });
