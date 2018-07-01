@@ -2,10 +2,18 @@
 client_secret.json
 credentials.json
 
-# Docker Stuff
-docker-compose-prod.yml
-docker-compose-dev.yml
-docker-deploy/
+# environment variables file
+src/environments/environment.prod.ts
+secret_configs.tar
+.env
+.prod.env
+
+# Mongo Login
+mongo.txt
+connect-db.sh
+credentials.csv
+
+###### Angular Defaults ######
 
 # Logs
 logs
@@ -63,16 +71,6 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
-# environment variables file
-src/environments/environment.prod.ts
-.env
-.prod.env
-
-# Mongo Login
-mongo.txt
-connect-db.sh
-credentials.csv
-
 # FrontEnd Ignores
 
 # compiled output
@@ -123,4 +121,3 @@ src/firebase_media
 Thumbs.db
 launch.json
 .vscode
-secret_configs.tar
