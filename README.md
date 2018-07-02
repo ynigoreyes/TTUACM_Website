@@ -22,8 +22,9 @@ Other technologies that are included in this project are...
   <li>EsDoc</li>
 </ul>
 
-Documentation can be found at <https://ynigoreyes.github.io/TTUACM_Website/>
 
-Contributing:
+### Contributing:
+
+  Documentation can be found at <https://ynigoreyes.github.io/TTUACM_Website/>
 
   Please contact us at [acmtexastech@gmail.com](mailto:acmtexastech@gmail.com) for more information on how to contribute to this project.
