@@ -12,6 +12,7 @@ import { ProfileService } from './services/profile.service';
 import { EditModalComponent } from './pages/profile/components/edit-modal/edit-modal.component';
 import { MatDialog, MatDialogModule } from '@angular/material';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PreviewModalComponent } from './pages/profile/components/preview-modal/preview-modal.component';
 
 @NgModule({
   imports: [
@@ -27,9 +28,10 @@ import { ReactiveFormsModule } from '@angular/forms';
     ProjectsComponent,
     ComingSoonComponent,
     ProfileComponent,
-    EditModalComponent
+    EditModalComponent,
+    PreviewModalComponent
   ],
   providers: [ProfileService, MatDialog],
-  entryComponents: [EditModalComponent]
+  entryComponents: [EditModalComponent, PreviewModalComponent]
 })
 export class ExploreModule {}

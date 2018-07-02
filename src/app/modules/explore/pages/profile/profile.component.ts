@@ -8,6 +8,7 @@ import {
 import { ProfileService, UpdateUserPayload } from '../../services/profile.service';
 import { MatSnackBar, MatDialog } from '@angular/material';
 import { EditModalComponent } from './components/edit-modal/edit-modal.component';
+import { PreviewModalComponent } from './components/preview-modal/preview-modal.component';
 
 export interface Profile {
   resume: string;
@@ -62,11 +63,9 @@ export class ProfileComponent implements OnInit {
       this.profile = this.state.getUser();
       try {
         if (this.profile.profileImage !== '') {
-          const imageRef: AngularFireStorageReference = this.storage.ref(
-            this.profile.profileImage
-          );
-        this.profilePicture = await imageRef.getDownloadURL().toPromise();
-        this.profilePath = this.profile.profileImage;
+          const imageRef: AngularFireStorageReference = this.storage.ref(this.profile.profileImage);
+          this.profilePicture = await imageRef.getDownloadURL().toPromise();
+          this.profilePath = this.profile.profileImage;
         }
         resolve();
       } catch (err) {
@@ -108,28 +107,35 @@ export class ProfileComponent implements OnInit {
    */
   async updateCurrentResume(event: any) {
     let file: File = event.target.files[0];
+    if (!file) { return; }
 
     try {
       if (this.resumeFile) {
         await this.deleteCurrentResume();
       }
+      if (file.type !== 'application/pdf') {
+        throw new Error('Invalid File Type');
+      }
       this.resumePath = `resumes/${Date.now()}_${file.name}`;
       this.profile.resume = this.resumePath;
 
       this.uploadCurrentResume(file, this.resumePath).then(() => {
-        this.profileService.uploadResume(this.resumePath).subscribe(
-          data => {
-            this.state.updateUser(this.profile);
-            this.sb.open('Successfully updated resume', 'Close', {
-              duration: 2000
-            });
+        this.profileService.uploadResume(this.resumePath).subscribe(data => {
+          this.state.updateUser(this.profile);
+          this.sb.open('Successfully updated resume', 'Close', {
+            duration: 2000
           });
+        });
       });
     } catch (err) {
       console.error(err);
-      this.sb.open('Cannot connect to servers at the moment, please try again later.', 'Close', {
-        duration: 2000
-      });
+      if (err.message === 'Invalid File Type') {
+        this.sb.open(err.message, 'Close', { duration: 2000 });
+      } else {
+        this.sb.open('Cannot connect to servers at the moment, please try again later.', 'Close', {
+          duration: 2000
+        });
+      }
     }
   }
 
@@ -173,6 +179,7 @@ export class ProfileComponent implements OnInit {
    */
   public editProfileInfo(): void {
     let dialogRef = this.dialog.open(EditModalComponent, {
+      height: '80%',
       width: '80%',
       data: {
         profile: this.profile,
@@ -184,7 +191,8 @@ export class ProfileComponent implements OnInit {
 
     // Will only read data if the user clicked save
     dialogRef.afterClosed().subscribe(async (data: Profile) => {
-      if (data) { // If the user actually clicked the sve button
+      if (data) {
+        // If the user actually clicked the sve button
         this.profile = data;
 
         // Replace current picture if it was changed
@@ -198,8 +206,8 @@ export class ProfileComponent implements OnInit {
         // Updates the users's global object
         try {
           const payload: UpdateUserPayload = await this.profileService
-                                                .updateUser(this.profile)
-                                                .toPromise();
+            .updateUser(this.profile)
+            .toPromise();
           if (payload.err) {
             throw payload.err;
           }
@@ -209,7 +217,6 @@ export class ProfileComponent implements OnInit {
           this.sb.open('Successfully updated profile', 'Close', {
             duration: 2000
           });
-
         } catch (err) {
           console.error(err);
           this.sb.open('Error saving new profile information. Please try again later', 'Close', {
@@ -217,6 +224,17 @@ export class ProfileComponent implements OnInit {
           });
         }
       }
+    });
+  }
+
+  public displayResume(): void {
+    this.dialog.open(PreviewModalComponent, {
+      height: '80%',
+      width: '80%',
+      data: {
+        sourceFile: this.resumePath
+      },
+      autoFocus: false
     });
   }
 }
