@@ -1,29 +1,29 @@
 # TTUACM Website
 
-Setting up the environment:
+### Tech Stack
+This is source code for the ACM: Texas Tech University website
 
-  1)  Download nodejs from <https://nodejs.org/en/>
 
-  2)  Clone repo
+It is built off of the MEAN stack technologies which include but are not limited to
 
-  3) MongoDB is also a requirement to work on this website
-      - Request access for the Mongo Atlas from either Miggy Reyes or Joshua Johnson
-      - Testing database is "ttuweb-test" and the production database is "test"
-      - <b>DO NOT RUN TEST ON "test" DB AS IT THE TEST WILL CLEAR THE DATABASE</b>
+1) MongoDB (A NoSQL database)
 
-  3)  To start the website in a browser cd into the directory and type "npm run client" without quotes then type in your browser "localhost:{development port chosen}"
+2) Express (A middleware framework for Nodejs)
 
-  4)  To test the server, type "npm run api-test"
+3) Angular 5 (A framework for component-based front-end development)
 
-  5)  To test the client (ChromeHeadless), type "npm run client-test"
+4) Nodejs (A JavaScript runtime on the server that lets JavaScript to be run on a server)
 
-  6)  To view documentation, type "npm run docs"
+Other technologies that are included in this project are...
 
-  7)  To run app, build Angular using npm run build and then run npm run app(-prod) and navigate to port 8080
+<ul>
+  <li>Docker, Compose and Docker Hub Webhooks</li>
+  <li>Travis CI</li>
+  <li>EsDoc</li>
+</ul>
+
+Documentation can be found at <https://ynigoreyes.github.io/TTUACM_Website/>
 
 Contributing:
 
-  You can find all controllers and routes in their respective directories.
-  <br>
-  <br>
-  The frontend framework of choice is Angular which can be found in the /src directory
+  Please contact us at [acmtexastech@gmail.com](mailto:acmtexastech@gmail.com) for more information on how to contribute to this project.
