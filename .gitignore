@@ -9,7 +9,6 @@ secret_configs.tar
 .prod.env
 
 # Mongo Login
-mongo.txt
 connect-db.sh
 credentials.csv
 
