@@ -1,4 +1,5 @@
-import { Component, Input, HostListener } from '@angular/core';
+import { Component, Input, HostListener, OnInit } from '@angular/core';
+import { UserStateService } from '@acm-shared/services/user-state.service';
 
 export interface IEvent {
   attendees: Array<Object>;
@@ -18,12 +19,22 @@ export interface IEvent {
   templateUrl: './event-cards.component.html',
   styleUrls: ['./event-cards.component.scss']
 })
-export class EventCardsComponent {
-  @Input() event: IEvent;
+export class EventCardsComponent implements OnInit {
+  @Input() ACMevent: IEvent;
   public isSmallScreen: boolean;
+  public attending: boolean = false;
 
-  constructor() {
+  constructor(public state: UserStateService) {
     this.isSmallScreen = window.innerWidth < 426;
+    this.checkAttendance();
+  }
+
+  ngOnInit(): void {
+    console.log(this.ACMevent);
+  }
+
+  public checkAttendance() {
+
   }
 
   // Converts the date from the API into something readable
@@ -46,6 +57,11 @@ export class EventCardsComponent {
     let day = newDate.getDate();
     let year = newDate.getFullYear();
     return `${month}-${day}-${year}`;
+  }
+
+  // Toggles Attendance
+  toggleAttendance() {
+    this.attending = !this.attending;
   }
 
   @HostListener('window:resize', ['$event'])

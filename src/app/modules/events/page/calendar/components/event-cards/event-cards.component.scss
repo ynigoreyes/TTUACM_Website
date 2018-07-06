@@ -26,6 +26,11 @@ mat-card {
     flex-grow: 1;
     width: 70%;
     align-self: center;
+    .attendance {
+      div {
+        margin: 12px 0px;
+      }
+    }
   }
   mat-card-footer {
     margin: 0px;
