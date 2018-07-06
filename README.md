@@ -1,4 +1,4 @@
-# TTUACM Website
+# TTUACM Website [![Travis-CI Status](https://travis-ci.com/ynigoreyes/TTUACM_Website.svg?branch=master)](https://circleci.com/gh/facebook/react)
 
 ### Tech Stack
 This is source code for the ACM: Texas Tech University website

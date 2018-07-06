@@ -13,7 +13,7 @@
     "start": "NODE_ENV=dev CLIENT=http://localhost:4200 node ./bin/www",
     "build:prod": "ng build --prod --aot",
     "build:dev": "ng build --aot",
-    "docs": "./node_modules/.bin/esdoc"
+    "docs": "./node_modules/.bin/esdoc -c esdoc.json"
   },
   "private": true,
   "dependencies": {
