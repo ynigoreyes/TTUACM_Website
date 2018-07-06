@@ -1,6 +1,5 @@
 const express = require('express');
 const passport = require('passport');
-const querystring = require('querystring');
 
 const controller = require('../controllers/event.controller');
 
@@ -13,12 +12,12 @@ const router = express.Router();
 const membersOnlyRoute = passport.authenticate('jwt', { session: false });
 
 /**
- * Gets all the events in ACM Google Calendar using an OAuth2 Object
+ * Gets all the events (formatted) in ACM Google Calendar using an OAuth2 Object
  *
  * - Endpoint: `/api/events`
  * - GET
  *
- * @typedef {function} EventsRouter-getEvents
+ * @typedef {function} EventsRouter-listEvents
  */
 router.get('/', (req, res) => {
   controller
@@ -63,36 +62,35 @@ router.get('/attendee/:id', (req, res) => {
  */
 router.patch('/attendee/:id', membersOnlyRoute, async (req, res) => {
   try {
+    const eventId = req.params.id;
     const currentAttendees = await controller.getAttendees();
-    if (currentAttendees[0].email === null) {
-      currentAttendees.pop();
-    }
     const updatedAttendeeList = await controller.addAttendee(currentAttendees, req.body.email);
-    const updatedEvent = await controller.updateAttendee(req.params.id, updatedAttendeeList);
+    const updatedEvent = await controller.updateAttendee(eventId, updatedAttendeeList);
     res.status(200).json({err: null, updatedEvent });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(404).json({ err, updatedEvent: null });
   }
 });
 
 /**
- * Adds an attendee to the event
+ * Deletes an attendee for an event
  *
  * - Endpoint `/api/events/attendee`
  * - Verb: DELETE
  *
+ * @param {string} req.params.id event ID
  * @typedef {function} EventsRouter-removeAttendee
  */
 router.delete('/attendee/:id', async (req, res) => {
   try {
+    const eventId = req.params.id;
     const currentAttendees = await controller.getAttendees();
-    if (currentAttendees.length === 0) throw new Error('No attendees found');
     const updatedAttendeeList = await controller.removeAttendee(currentAttendees, req.body.email);
-    const updatedEvent = await controller.updateAttendee(req.params.id, updatedAttendeeList);
+    const updatedEvent = await controller.updateAttendee(eventId, updatedAttendeeList);
     res.status(200).json({ err: null, updatedEvent });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(404).json({ err, updatedEvent: null });
   }
 });

@@ -1,5 +1,4 @@
 const { google } = require('googleapis');
-const axios = require('axios');
 
 let calendar;
 const calendarId = 'primary';
@@ -23,9 +22,10 @@ function createCalendar() {
 
 /**
  * Gets the raw events object
+ *
+ * Rejects with an Error
+ * Resolves with a list of (raw) events (an empty array if nore are found[])
  * @returns { Promise.<Array, Error> } a Promise
- * @reject Error (if no events are found)
- * @resolve A list of events
  */
 function getRawEvents() {
   return new Promise((resolve, reject) => {
@@ -39,10 +39,8 @@ function getRawEvents() {
       (err, { data }) => {
         if (err) {
           reject(err);
-        } else if (!data.items.length) {
-          reject(new Error('No Events Found'));
         } else {
-          resolve(data.items);
+          resolve(data.items || []);
         }
       }
     );
@@ -51,6 +49,11 @@ function getRawEvents() {
 
 /**
  * Lists the next 10 events on the user's primary calendar.
+ *
+ * Rejects with an Error
+ *
+ * Resolves with a list(10) events
+ *
  * @requires oAuth2Client - Configurations can be found in oauth2.config
  */
 function listEvents() {
@@ -96,7 +99,9 @@ function listEvents() {
 
 /**
  * Lists all attendees for an event
+ *
  * Rejects with an error
+ *
  * Resolves with an array with a null email if empty or the list of attendees
  *
  * @param {string} eventId Event ID
@@ -143,7 +148,6 @@ function addAttendee(currentAttendees, email) {
 /**
  * Removes the attendee by their email
  *
- * @requires currentAttendees to not by empty
  * @param {Array} currentAttendees the attendees list to remove from
  * @param {string} email the user's email
  * @returns {Array<Object>} updated attendee list
