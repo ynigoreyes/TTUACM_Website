@@ -13,23 +13,17 @@ let lengthOfStub = 2;
 // We are not going to test against our real Google Calendar because that is just way too risky
 describe('Events Controller Suite', () => {
   before('Get creds to access the calendar and create the calendar', done => {
-    if (!process.env.TRAVIS) {
-      auth.loadCredentials().then(() => done());
-    }
-    done();
+    auth.loadCredentials().then(() => done());
   });
   beforeEach('Reset the value for stub', () => {
     fakeAttendees = [{ email: 'lpage@example.com' }, { email: 'sbrin@example.com' }];
   });
   describe('#listEvents()', () => {
-    if (!process.env.TRAVIS) {
-      it('Should return a list of events', () => {
-        return controller.listEvents().then(listOfEvents => {
-          expect(listOfEvents).to.be.an('array');
-        });
+    it('Should return a list of events', () => {
+      return controller.listEvents().then(listOfEvents => {
+        expect(listOfEvents).to.be.an('array');
       });
-    }
-    return
+    });
   });
   describe('Update Attendees', () => {
     describe('#addAttendee(currentAttendees, email)', () => {
