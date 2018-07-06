@@ -139,7 +139,7 @@ function getAttendees(eventId) {
 function addAttendee(currentAttendees, email) {
   return new Promise(async (resolve, reject) => {
     try {
-      currentAttendees.push({ email });
+      currentAttendees.push({ email, responseStatus: 'accepted' });
       resolve(currentAttendees);
     } catch (err) {
       reject(err);
