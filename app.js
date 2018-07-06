@@ -39,9 +39,9 @@ if (process.env.NODE_ENV === 'prod') {
 // If we are in testing, keep the logger
 if (process.env.NODE_ENV === 'dev') {
   app.use(logger('dev'));
-  require('./config/oauth2.config');
+  require('./config/oauth2.config').loadCredentials();
 } else if (process.env.NODE_ENV !== 'test') {
-  require('./config/oauth2.config');
+  require('./config/oauth2.config').loadCredentials();
 }
 
 /**
