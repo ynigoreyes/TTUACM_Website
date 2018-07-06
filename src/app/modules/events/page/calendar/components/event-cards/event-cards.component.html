@@ -16,10 +16,10 @@
     <section *ngIf="state.loggedIn()" class="attendance">
       <small>{{attending ? "You are attending this event!" : "You are not attending this event..."}}</small>
       <div>
-        <button (click)="toggleAttendance()" *ngIf="!attending" mat-raised-button color="accent">
+        <button [disabled]="waiting" (click)="toggleAttendance()" *ngIf="!attending" mat-raised-button color="accent">
           Going ( {{ACMevent.attendees.length}} )
         </button>
-        <button (click)="toggleAttendance()" *ngIf="attending" mat-raised-button color="primary">
+        <button [disabled]="waiting" style="color: gray" (click)="toggleAttendance()" *ngIf="attending" mat-raised-button color="primary">
           Not Going
         </button>
       </div>

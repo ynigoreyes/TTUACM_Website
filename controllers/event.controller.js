@@ -111,6 +111,7 @@ function listEvents() {
  */
 function getAttendees(eventId) {
   return new Promise((resolve, reject) => {
+    console.log(eventId);
     calendar.events.get(
       {
         calendarId,
