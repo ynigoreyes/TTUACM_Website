@@ -86,6 +86,7 @@ function listEvents() {
             location: event.location || 'N/A',
             creator: event.creator.displayName || 'N/A',
             description: event.description || 'N/A',
+            attendees: event.attendees || [],
             eventId: event.id // Event ID according to Google
           });
           return resolve(eventsList);

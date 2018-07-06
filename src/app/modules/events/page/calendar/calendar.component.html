@@ -18,7 +18,8 @@
         >
       </button>
     </section>
-    <mat-card *ngFor="let event of displayedEvents">
+    <app-event-cards *ngFor="let event of displayedEvents" [event]=event></app-event-cards>
+    <!-- <mat-card *ngFor="let event of displayedEvents">
       <section>
         <small>
           <em id="event-id">{{event.id}}</em>
@@ -45,13 +46,6 @@
           Starting at {{getTime(event.startTime)}} and ending at {{getTime(event.endTime)}}
         </span>
       </mat-card-footer>
-    </mat-card>
+    </mat-card> -->
   </section>
 </main>
-
-<!-- <button (click)=getPrevEvents() mat-raised-button class="nav-buttons left-button">
-  Prev 10
-</button> -->
-<!-- <button (click)=getNextEvents() mat-raised-button class="nav-buttons right-button">
-  Next 10
-</button> -->

@@ -11,7 +11,6 @@ import { MatSnackBar } from '@angular/material';
 export class CalendarComponent implements OnDestroy {
   public allEvents: Array<Events>;
   public displayedEvents: Array<Events>;
-  public isSmallScreen: boolean;
   public loading: boolean = true;
   public error: boolean = false;
 
@@ -21,7 +20,6 @@ export class CalendarComponent implements OnDestroy {
   public changeAmount = 10;
 
   constructor(private snackbar: MatSnackBar, private eventService: EventsService) {
-    this.isSmallScreen = window.innerWidth < 426;
     this.loadAllEvents();
   }
   public loadAllEvents(): void {
@@ -71,33 +69,6 @@ export class CalendarComponent implements OnDestroy {
       this.maxNumberEvent = this.lengthOfEvents;
     }
     this.displayedEvents = this.allEvents.slice(this.minNumberEvent, this.maxNumberEvent);
-  }
-
-  // Converts the date from the API into something readable
-  public getTime(date) {
-    let newDate = new Date(date);
-    let hours = newDate.getHours();
-    let minutes: any = newDate.getMinutes();
-    let ampm = hours >= 12 ? 'pm' : 'am';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    let strTime = hours + ':' + minutes + ' ' + ampm;
-    return strTime;
-  }
-
-  // Converts the date into mm-dd-yyyy
-  public getDate(date) {
-    let newDate = new Date(date);
-    let month = newDate.getMonth() + 1;
-    let day = newDate.getDate();
-    let year = newDate.getFullYear();
-    return `${month}-${day}-${year}`;
-  }
-
-  @HostListener('window:resize', ['$event'])
-  checkScreen(event) {
-    this.isSmallScreen = event.target.innerWidth < 426;
   }
 
   ngOnDestroy(): void {

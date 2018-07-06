@@ -1,0 +1,33 @@
+@import '~@angular/material/theming';
+@import 'styles';
+
+// Event Content
+mat-card {
+  display: flex;
+  flex-direction: column;
+  margin: 30px auto;
+  justify-content: center;
+  text-align: center;
+  #event-id {
+    float: right;
+  }
+  #date {
+    float: left;
+  }
+  .google-header {
+    color: white;
+    font-size: 25px;
+  }
+  mat-card-title {
+    font-size: $lg-text;
+  }
+  mat-card-content {
+    font-size: $sm-text;
+    flex-grow: 1;
+    width: 70%;
+    align-self: center;
+  }
+  mat-card-footer {
+    margin: 0px;
+  }
+}

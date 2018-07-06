@@ -1,0 +1,28 @@
+<mat-card>
+  <section>
+    <small>
+      <em id="event-id">{{event.id}}</em>
+    </small>
+    <small>
+      <em id="date">{{getDate(event.startTime)}}</em>
+    </small>
+  </section>
+  <br>
+  <mat-card-title>{{event.title}}</mat-card-title>
+  <mat-card-content>
+    <section class="description">
+      {{event.description}}
+    </section>
+    <hr>
+  </mat-card-content>
+  <mat-card-footer>
+    <span class="location">
+      Meetings will be held at: {{event.location}} on {{event.day}}s
+    </span>
+    <span *ngIf="!isSmallScreen"> | </span>
+    <section *ngIf="isSmallScreen"></section>
+    <span class="time">
+      Starting at {{getTime(event.startTime)}} and ending at {{getTime(event.endTime)}}
+    </span>
+  </mat-card-footer>
+</mat-card>
