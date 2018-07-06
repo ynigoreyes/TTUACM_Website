@@ -13,6 +13,11 @@ jobs:
       directories:
       - node_modules
     before-install:
+    - openssl aes-256-cbc -K $encrypted_74b81b802040_key -iv $encrypted_74b81b802040_iv
+      -in secret_configs.tar.enc -out secret_configs.tar -d
+    - tar xvf secret_configs.tar
+    - ls config/
+    - ls src/environments
     - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost
       &
     install:

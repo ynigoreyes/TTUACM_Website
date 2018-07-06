@@ -16,6 +16,7 @@ describe('Events Controller Suite', () => {
     if (!process.env.TRAVIS) {
       auth.loadCredentials().then(() => done());
     }
+    done();
   });
   beforeEach('Reset the value for stub', () => {
     fakeAttendees = [{ email: 'lpage@example.com' }, { email: 'sbrin@example.com' }];
@@ -28,6 +29,7 @@ describe('Events Controller Suite', () => {
         });
       });
     }
+    return
   });
   describe('Update Attendees', () => {
     describe('#addAttendee(currentAttendees, email)', () => {
