@@ -13,6 +13,10 @@ exports.generateTestTransporter = () => {
       auth: {
         user: 'blyosbbrqw3dio2v@ethereal.email',
         pass: 'UxphynyVHJ6TEWX6JC'
+      },
+      tls: {
+        // do not fail on invalid certs
+        rejectUnauthorized: false
       }
     });
     global.smtpTransporter = smtpTransporter;
@@ -25,6 +29,10 @@ exports.generateProdTransporter = () => {
     auth: {
       user: process.env.email_username,
       pass: process.env.email_password
+    },
+    tls: {
+      // do not fail on invalid certs
+      rejectUnauthorized: false
     }
   });
   global.smtpTransporter = smtpTransporter;
