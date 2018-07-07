@@ -82,12 +82,13 @@ function listEvents() {
             day: `${weekday[new Date(start).getDay()]}`,
             startTime: start,
             endTime: end,
-            title: event.summary || 'N/A',
-            location: event.location || 'N/A',
-            creator: event.creator.displayName || 'N/A',
-            description: event.description || 'N/A',
+            title: event.summary || '',
+            location: event.location || 'TBA',
+            creator: event.creator.displayName || 'TTU ACM',
+            description: event.description || '',
             attendees: event.attendees || [],
-            eventId: event.id // Event ID according to Google
+            eventId: event.id, // Event ID according to Google
+            allDayEvent: event.start.date !== undefined
           });
           return resolve(eventsList);
         });

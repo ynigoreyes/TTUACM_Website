@@ -11,10 +11,10 @@ export interface IEvent {
   description: string;
   endTime: string;
   eventId: string;
-  id: number;
   location: string;
   startTime: string;
   title: string;
+  allDayEvent: boolean;
 }
 
 @Component({
@@ -40,6 +40,7 @@ export class EventCardsComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.state.loggedIn()) {
+      console.log(this.ACMevent);
       this.attendeeEmails =
         this.ACMevent.attendees.map(el => {
           return el['email'];
@@ -72,6 +73,27 @@ export class EventCardsComponent implements OnInit {
     let day = newDate.getDate();
     let year = newDate.getFullYear();
     return `${month}-${day}-${year}`;
+  }
+
+  public getLongDate(date) {
+    let months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+    let newDate = new Date(date);
+    let month = months[newDate.getMonth()];
+    let day = newDate.getDate();
+    return `${month} ${day}`;
   }
 
   // Toggles Attendance

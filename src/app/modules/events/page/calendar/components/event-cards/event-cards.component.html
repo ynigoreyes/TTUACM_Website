@@ -1,9 +1,6 @@
 <mat-card>
   <section>
     <small>
-      <em id="event-id">{{ACMevent.id}}</em>
-    </small>
-    <small>
       <em id="date">{{getDate(ACMevent.startTime)}}</em>
     </small>
   </section>
@@ -17,7 +14,7 @@
       <small>{{attending ? "You are attending this event!" : "You are not attending this event..."}}</small>
       <div>
         <button [disabled]="waiting" (click)="toggleAttendance()" *ngIf="!attending" mat-raised-button color="accent">
-          Going ( {{ACMevent.attendees.length}} )
+          Going
         </button>
         <button [disabled]="waiting" style="color: gray" (click)="toggleAttendance()" *ngIf="attending" mat-raised-button color="primary">
           Not Going
@@ -26,7 +23,7 @@
     </section>
     <hr>
   </mat-card-content>
-  <mat-card-footer>
+  <mat-card-footer *ngIf="!ACMevent.allDayEvent">
     <span class="location">
       Meetings will be held at: {{ACMevent.location}} on {{ACMevent.day}}s
     </span>
@@ -34,6 +31,11 @@
     <section *ngIf="isSmallScreen"></section>
     <span class="time">
       Starting at {{getTime(ACMevent.startTime)}} and ending at {{getTime(ACMevent.endTime)}}
+    </span>
+  </mat-card-footer>
+  <mat-card-footer *ngIf="ACMevent.allDayEvent">
+    <span class="location">
+      Taking place at {{ACMevent.location}} on {{getLongDate(ACMevent.startTime)}}
     </span>
   </mat-card-footer>
 </mat-card>
