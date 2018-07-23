@@ -4,8 +4,7 @@ WORKDIR /app
 
 COPY . /app
 
-
-# ENV Vars to be passed in by compose
+# ENV Vars to be passed in by compose: This is mainly used by Travis CI
 ARG db
 ARG session_secret
 ARG email_username
@@ -17,6 +16,7 @@ ARG github_clientID
 ARG github_client_secret
 ARG facebook_clientID
 ARG facebook_client_secret
+ARG sslPath
 
 RUN npm install --prod --silent
 RUN npm install @angular/cli@1.7.4 --silent

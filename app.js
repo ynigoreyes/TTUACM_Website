@@ -24,11 +24,6 @@ if (process.env.NODE_ENV === 'prod') {
   console.log('Running in production');
   console.log(`Mongo DB Connected using:\n${process.env.db}`);
   // dotenv file placed in root directory during development
-  for (const property in process.env) {
-    if (process.env.hasOwnProperty(property)) {
-      console.log(`${property}: ${process.env[property]}\n`);
-    }
-  }
   connectDB();
   nmconfig.generateProdTransporter();
 } else {

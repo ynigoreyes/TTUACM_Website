@@ -12,10 +12,10 @@ const app = require('../app');
 if (process.env.NODE_ENV === 'prod') {
   http = require('https');
   port = 443;
-  const sslPath = '/app/creds/';
+  const sslPath = process.env.sslPath;
   const options = {
-    key: fs.readFileSync(`${sslPath}server.key`),
-    cert: fs.readFileSync(`${sslPath}server.crt`)
+    key: fs.readFileSync(`${sslPath}privkey.pem`),
+    cert: fs.readFileSync(`${sslPath}fullchain.pem`)
   };
   server = http.createServer(options, app);
 } else {
