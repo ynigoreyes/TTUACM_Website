@@ -12,10 +12,10 @@ const app = require('../app');
 if (process.env.NODE_ENV === 'prod') {
   http = require('https');
   port = 443;
-  const sslPath = '/etc/letsencrypt/live/acmttu.org/';
+  const sslPath = '/app/creds/';
   const options = {
-    key: fs.readFileSync(`${sslPath}privkey.pem`),
-    cert: fs.readFileSync(`${sslPath}fullchain.pem`)
+    key: fs.readFileSync(`${sslPath}server.key`),
+    cert: fs.readFileSync(`${sslPath}server.crt`)
   };
   server = http.createServer(options, app);
 } else {
