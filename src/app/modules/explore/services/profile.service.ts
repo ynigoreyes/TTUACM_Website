@@ -10,6 +10,7 @@ export class ProfileService {
 
   private updateResumeEP = `${environment.host}/api/users/update-resume`;
   private updateUserEP = `${environment.host}/api/users/update-user`;
+  private saveUserToGoogleGroupEP = `${environment.host}/api/users/add-to-gooogle-group`;
 
   /**
    * Updates the user's resume
@@ -41,6 +42,20 @@ export class ProfileService {
       Authorization: localStorage.getItem('id_token')
     });
     const post = this.http.put(this.updateUserEP, { user }, { headers });
+
+    return post;
+  }
+
+  /**
+   * Adds the user to a Google Group, this is for handling a user
+   * choice in SDC
+   */
+  public saveUserToGoogleGroup(user: object): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-type': 'application/json',
+      Authorization: localStorage.getItem('id_token')
+    });
+    const post = this.http.put(this.saveUserToGoogleGroupEP, { user }, { headers });
 
     return post;
   }

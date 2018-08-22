@@ -12,7 +12,9 @@ const routes: Routes = [
   },
   {
     path: 'projects',
-    component: ProjectsComponent
+    component: ProjectsComponent,
+    // Uncomment in production
+    // canActivate: [AuthGuard]
   },
   {
     // {{host}}/explore/user

@@ -33,7 +33,7 @@ export class HomeComponent {
     },
     {
       icon: 'computer',
-      header: 'Development',
+      header: 'Software Development Club',
       reroute: `/explore/projects`,
       description:
         'We support software and hardware projects and provide knowledge from individuals who are passionate about teaching others.',
