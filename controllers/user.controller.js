@@ -4,9 +4,29 @@ const User = require('../models/user.model');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const { google } = require('googleapis');
 
 // Bcrypt options
 const saltRounds = 10;
+
+let Contacts;
+
+/**
+ * Create the Contacts Object for the rest of the functions to use
+ * @requires oAuth2Client to be defined and valid. This can be acheived by running
+ * ```
+ require('</path/to/>oauth2.config.js').loadCredentials().```
+ */
+function createContacts() {
+  return new Promise(async (resolve, reject) => {
+    try {
+      Contacts = google.people({ version: 'v1', auth: global.oAuth2Client });
+      resolve();
+    } catch (err) {
+      reject(err);
+    }
+  });
+}
 
 /**
  * Checks to see if there is a valid username and password combination
@@ -420,6 +440,15 @@ function contactUs(options) {
   });
 }
 
+/**
+ * Adds the user to the ACM Contacts
+ */
+function updateACMContactsGroup(user) {
+  return new Promise((resolve, reject) => {
+    resolve();
+  });
+}
+
 // Generates a HexToken, usually for quick random tokens; does not require string
 function generateHexToken() {
   const token = crypto.randomBytes(20);
@@ -458,5 +487,7 @@ module.exports = {
   sendResetEmail,
   verifyUser,
   updateResume,
-  updateUser
+  updateUser,
+  updateACMContactsGroup,
+  createContacts
 };

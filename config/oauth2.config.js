@@ -19,8 +19,9 @@ function loadCredentials() {
       console.log('Grabbing Google API credentials...');
       const content = fs.readFileSync(path.resolve(__dirname, 'client_secret.json'));
       await authorize(JSON.parse(content));
-      // Creates a calendar to be used in the controller
+      // Create all the Google API Objects
       await require('../controllers/event.controller').createCalendar();
+      await require('../controllers/user.controller').createContacts();
       resolve()
     } catch (err) {
       console.log('Error loading client secret file:', err);

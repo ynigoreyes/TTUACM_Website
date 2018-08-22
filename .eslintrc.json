@@ -20,7 +20,7 @@
     "no-restricted-syntax": "off",
     "no-prototype-builtins":"off",
     "no-param-reassign": "off",
-    "no-unused-expressions":"off"
-
+    "no-unused-expressions":"off",
+    "semi": "off"
   }
 }
