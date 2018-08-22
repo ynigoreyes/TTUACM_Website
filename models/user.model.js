@@ -17,6 +17,7 @@ const userSchema = mongoose.Schema({
   hasPaidDues: { type: String, default: false },
   verified: { type: Boolean },
   blocked: { type: Boolean, default: false },
+  sdcTeam: { type: String, default: 'None' }
 });
 
 // Moved the Hashing to the controller

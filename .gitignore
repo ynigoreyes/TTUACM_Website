@@ -92,6 +92,7 @@ site/node_modules/
 *.launch
 .settings/
 *.sublime-workspace
+.tern-port
 
 # IDE - VSCode
 .vscode/*
@@ -120,3 +121,5 @@ src/firebase_media
 Thumbs.db
 launch.json
 .vscode
+*.swp
+data/
