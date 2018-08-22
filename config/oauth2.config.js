@@ -6,7 +6,10 @@ const { google } = require('googleapis');
 const path = require('path');
 
 // If modifying these scopes, delete credentials.json.
-const SCOPES = ['https://www.googleapis.com/auth/calendar'];
+const SCOPES = [
+  'https://www.googleapis.com/auth/calendar',
+  'https://www.google.com/m8/feeds/'
+];
 const TOKEN_PATH = path.resolve(__dirname, 'credentials.json');
 
 function loadCredentials() {
