@@ -301,4 +301,9 @@ router.post('/contact-us', (req, res) => {
     .catch(err => res.status(404).json());
 });
 
+router.put('/add-to-google-group', (req, res) => {
+  console.log(req.body);
+  res.json({msg: 'nice'});
+});
+
 module.exports = router;

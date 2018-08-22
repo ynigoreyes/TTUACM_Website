@@ -10,7 +10,7 @@ export class ProfileService {
 
   private updateResumeEP = `${environment.host}/api/users/update-resume`;
   private updateUserEP = `${environment.host}/api/users/update-user`;
-  private saveUserToGoogleGroupEP = `${environment.host}/api/users/add-to-gooogle-group`;
+  private saveUserToGoogleGroupEP = `${environment.host}/api/users/add-to-google-group`;
 
   /**
    * Updates the user's resume
