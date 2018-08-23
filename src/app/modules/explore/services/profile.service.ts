@@ -50,12 +50,12 @@ export class ProfileService {
    * Adds the user to a Google Group, this is for handling a user
    * choice in SDC
    */
-  public saveUserToGoogleGroup(user: object): Observable<any> {
+  public saveUserToGoogleGroup(data: object): Observable<any> {
     const headers = new HttpHeaders({
       'Content-type': 'application/json',
       Authorization: localStorage.getItem('id_token')
     });
-    const post = this.http.put(this.saveUserToGoogleGroupEP, { user }, { headers });
+    const post = this.http.put(this.saveUserToGoogleGroupEP, data, { headers });
 
     return post;
   }

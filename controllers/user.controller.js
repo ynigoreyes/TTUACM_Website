@@ -442,8 +442,22 @@ function contactUs(options) {
 
 /**
  * Adds the user to the ACM Contacts
+ *
+ * @param {object} data.user - user object
+ * @param {string} data.user.email - user's email
+ * @param {string} data.topic - user's interest
+ * @param {string} data.otherTopic - user's other interests
  */
-function updateACMContactsGroup(user) {
+function updateACMContactsGroup(data) {
+  return new Promise((resolve, reject) => {
+    resolve();
+  });
+}
+
+/**
+ * Adds the user to a SDC Group
+ */
+function addUserToInterestGroup(data) {
   return new Promise((resolve, reject) => {
     resolve();
   });
@@ -474,20 +488,21 @@ function generateJWTToken(payload) {
 }
 
 module.exports = {
-  login,
-  register,
-  resetToken,
+  addUserToInterestGroup,
+  createContacts,
   confirmToken,
   contactUs,
   forgotLogin,
-  resetPassword,
   getProfile,
+  login,
+  register,
+  resetToken,
+  resetPassword,
   sendConfirmationEmail,
   sendChangedPasswordEmail,
   sendResetEmail,
-  verifyUser,
   updateResume,
   updateUser,
   updateACMContactsGroup,
-  createContacts
+  verifyUser
 };

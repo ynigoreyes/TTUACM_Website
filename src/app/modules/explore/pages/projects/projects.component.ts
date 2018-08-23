@@ -33,12 +33,12 @@ export class ProjectsComponent {
   );
 
   public onSubmit(post: FormGroup) {
-    console.log(this.ClubForm)
+    console.log(this.state.getUser());
     const data = {
-      email: this.state.getUser().email,
+      user: this.state.getUser(),
       topic: post['topic'].trim(),
       otherTopic: post['otherTopic'].trim()
-    }
+    };
 
     this.profileService.saveUserToGoogleGroup(data).subscribe(
       status => {

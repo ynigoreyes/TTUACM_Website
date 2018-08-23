@@ -309,15 +309,16 @@ router.post('/contact-us', (req, res) => {
  *
  * @typedef {function} UserRouter-updateACMContactsGroup
  */
-router.put('/add-to-google-group', (req, res) => {
-  controller.updateACMContactsGroup(req.body)
-    .then(() => {
-      res.status(200).json({});
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(404).json({ err });
-    });
+router.put('/add-to-google-group', async (req, res) => {
+  try {
+    const data = req.body;
+    await controller.updateACMContactsGroup(data)
+    await controller.addUserToInterestGroup(data)
+    res.status(200).json({});
+  } catch (err) {
+    console.error(err)
+    res.status(404).send();
+  }
 });
 
 module.exports = router;

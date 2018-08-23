@@ -122,4 +122,5 @@ Thumbs.db
 launch.json
 .vscode
 *.swp
+*.swo
 data/
