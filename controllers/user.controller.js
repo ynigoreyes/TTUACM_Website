@@ -445,21 +445,12 @@ function addUserToInterestGroup(data) {
     try {
       const { topic, otherTopic, user } = data;
       if (topic !== 'Other') {
-        contactsManager.createNewGroupByName(topic, exact = false)
-          .then((data) => {
-            console.log('Created a new group', newGroup.data.name)
-          })
-          .catch((err) => {
-            if (err.code === 409) {
-              console.log('Group Name already taken, adding to group instead')
-              // TODO: Here it goes!
-            } else {
-              reject(err)
-            }
-          })
+        await contactsManager.createNewGroupByName(topic, exact = false)
       }
-      resolve()
     } catch (err) {
+      if (err.code === 409) {
+        console.log('Group Name already taken, adding to group instead')
+      }
       reject(err)
     }
   });

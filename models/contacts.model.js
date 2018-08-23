@@ -20,13 +20,13 @@ function createContacts() {
 }
 
 /**
- * Creates a new Google Contacts group given a name
+ * Creates a new Google Contacts group if one does not exists given a name
  *
  * @param {string} name - the name for the new group
  */
 function createNewGroupByName(name, exact = true) {
   return new Promise(async (resolve, reject) => {
-    let formatedName = name
+    let formattedName = name
 
     if (exact) {
       console.log('saving the exact name ', name)
@@ -41,17 +41,33 @@ function createNewGroupByName(name, exact = true) {
       // Gets the last two digits of the year
       const year = currentYear.toString().slice(1, 3)
 
-      formatedName = `SDC - ${name} - ${season} ${year}`
+      formattedName = `SDC - ${name} - ${season} ${year}`
     }
-    const options = { requestBody: { contactGroup: { name: formatedName } } }
-    Contacts.contactGroups.create(options)
-      .then((data) => {
-        resolve(data)
-      })
-      .catch((err) => {
-        // Group name has already been taken
-        reject(err)
-      })
+
+    // Check for existing group
+    const { data } = await Contacts.contactGroups.list()
+    // THe list of Groups
+    const { contactGroups: listOfGroups } = data
+    const matchingGroupName = listOfGroups.filter((group, i) => {
+      return group.formattedName === formattedName
+    })
+
+    const nameExists = matchingGroupName.length !== 0
+
+    if (!nameExists) {
+      const options = { requestBody: { contactGroup: { name: formattedName } } }
+      Contacts.contactGroups.create(options)
+        .then((data) => {
+          resolve(data)
+        })
+        .catch((err) => {
+          // Group name has already been taken
+          reject(err)
+        })
+    } else {
+      console.log('name exists, adding to it instead')
+      resolve()
+    }
   })
 }
 
