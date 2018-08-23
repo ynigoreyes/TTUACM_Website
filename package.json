@@ -46,7 +46,7 @@
     "express": "~4.16.3",
     "firebase": "~5.1.0",
     "google-auth-library": "~0.10.0",
-    "googleapis": "^28.1.0",
+    "googleapis": "^33.0.0",
     "intl": "~1.2.5",
     "jsonwebtoken": "~8.2.1",
     "jwt-decode": "~2.2.0",

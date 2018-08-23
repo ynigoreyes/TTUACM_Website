@@ -20,7 +20,7 @@ export class ProjectsComponent {
     'Python',
     'Machine Learning',
     'App Development',
-    'Algorithms/Problem Solving',
+    'Algorithms',
     'Other',
   ];
 

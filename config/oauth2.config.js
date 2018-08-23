@@ -21,7 +21,7 @@ function loadCredentials() {
       await authorize(JSON.parse(content));
       // Create all the Google API Objects
       await require('../controllers/event.controller').createCalendar();
-      await require('../controllers/user.controller').createContacts();
+      await require('../models/contacts.model').createContacts();
       resolve()
     } catch (err) {
       console.log('Error loading client secret file:', err);
