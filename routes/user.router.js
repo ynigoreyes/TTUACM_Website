@@ -307,12 +307,17 @@ router.post('/contact-us', (req, res) => {
  * - Endpoint: `/users/add-to-google-group`
  * - Verb: PUT
  *
+ * @param {object} req - Express Request Object
+ * @param {string} req.body.topic - topic of interest
+ * @param {string} req.body.topic - topic of interest
+ *
  * @typedef {function} UserRouter-updateACMContactsGroup
  */
 router.put('/add-to-google-group', async (req, res) => {
   try {
     const data = req.body;
-    await controller.updateACMContactsGroup(data)
+    const GoogleContactsGroup = await controller.findGroupByName(data.topic)
+    await controller.updateSDCGroup(data)
     await controller.addUserToInterestGroup(data)
     res.status(200).json({});
   } catch (err) {

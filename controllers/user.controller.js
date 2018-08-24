@@ -431,7 +431,7 @@ function contactUs(options) {
  * @param {string} data.topic - user's interest
  * @param {string} data.otherTopic - user's other interests
  */
-function updateACMContactsGroup(data) {
+function updateSDCGroup(data) {
   return new Promise((resolve, reject) => {
     resolve();
   });
@@ -439,18 +439,20 @@ function updateACMContactsGroup(data) {
 
 /**
  * Adds the user to a SDC Group
+ *
+ * @param {object} groupInfo - Google Contacts Group information
+ * @param {string} email - user email * @param {string} topic - topic of interest
+ * @param {string} otherTopic? - Other Topic of interest
+ *
+ * @return {Promise <Object, Error>} - The new group with the contact added
  */
-function addUserToInterestGroup(data) {
+function addUserToInterestGroup(groupInfo, email, topic, otherTopic) {
+  if (!otherTopic) otherTopic = ''
+
   return new Promise(async (resolve, reject) => {
     try {
-      const { topic, otherTopic, user } = data;
-      if (topic !== 'Other') {
-        await contactsManager.createNewGroupByName(topic, exact = false)
-      }
+      resolve()
     } catch (err) {
-      if (err.code === 409) {
-        console.log('Group Name already taken, adding to group instead')
-      }
       reject(err)
     }
   });
@@ -495,6 +497,6 @@ module.exports = {
   sendResetEmail,
   updateResume,
   updateUser,
-  updateACMContactsGroup,
+  updateSDCGroup,
   verifyUser
 };

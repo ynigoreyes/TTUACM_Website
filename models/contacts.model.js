@@ -24,7 +24,7 @@ function createContacts() {
  *
  * @param {string} name - the name for the new group
  */
-function createNewGroupByName(name, exact = true) {
+function addUserToGroupByName(name, exact = true) {
   return new Promise(async (resolve, reject) => {
     let formattedName = name
 
@@ -43,39 +43,33 @@ function createNewGroupByName(name, exact = true) {
 
       formattedName = `SDC - ${name} - ${season} ${year}`
     }
-
-    // Check for existing group
-    const { data } = await Contacts.contactGroups.list()
-    // THe list of Groups
-    const { contactGroups: listOfGroups } = data
-    const matchingGroupName = listOfGroups.filter((group, i) => {
-      return group.formattedName === formattedName
-    })
-
-    const nameExists = matchingGroupName.length !== 0
-
-    if (!nameExists) {
-      const options = { requestBody: { contactGroup: { name: formattedName } } }
-      Contacts.contactGroups.create(options)
-        .then((data) => {
-          resolve(data)
-        })
-        .catch((err) => {
-          // Group name has already been taken
-          reject(err)
-        })
-    } else {
-      console.log('name exists, adding to it instead')
-      resolve()
-    }
   })
 }
 
+/**
+ * Finds a group given a name, if one is not found, we will create one
+ *
+ *
+ */
 function findGroupByName(name) {
   return new Promise(async (resolve, reject) => {
     try {
-      const data = await Contacts.createContacts.list()
-      console.log(data)
+      // Check for existing group
+      const { data } = await Contacts.contactGroups.list()
+      // The list of Groups
+      const { contactGroups: listOfGroups } = data
+      // Check for existing name
+      const nameExists = listOfGroups.some((group) => {
+        return group.formattedName === formattedName
+      })
+
+      if (nameExists) {
+        resolve(data)
+      } else {
+        const options = { requestBody: { contactGroup: { name: formattedName } } }
+        const newGroup = await Contacts.contactGroups.create(options)
+        resolve()
+      }
     } catch (err) {
       reject(err)
     }
@@ -85,6 +79,6 @@ function findGroupByName(name) {
 module.exports = {
   Contacts,
   createContacts,
-  createNewGroupByName,
+  addUserToGroupByName,
   findGroupByName
 }
