@@ -47,9 +47,40 @@ function addUserToGroupByName(name, exact = true) {
 }
 
 /**
+ * Creates a new Contact that will be saved into MyContacts
+ *
+ * @param {string} name - name of contact
+ * @param {string} email - email of contact
+ *
+ * @return {Promise<object, Error} - The new contact metadata
+ */
+function createNewContact(name, email) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const options = {
+        parent: 'people/me',
+        requestBody: {
+          emailAddresses: [
+            {
+              displayName: name,
+              value: email,
+            }
+          ]
+        }
+      };
+      const newContact = await Contacts.people.createContact(options);
+      resolve(newContact);
+    } catch (err) {
+      reject(err)
+    }
+  })
+}
+
+/**
  * Finds a group given a name, if one is not found, we will create one
  *
- *
+ * @param {string} name - name of the group to find
+ * @return {Promise<Object, Error>}
  */
 function findGroupByName(name) {
   return new Promise(async (resolve, reject) => {
@@ -68,7 +99,7 @@ function findGroupByName(name) {
       } else {
         const options = { requestBody: { contactGroup: { name: formattedName } } }
         const newGroup = await Contacts.contactGroups.create(options)
-        resolve()
+        resolve(newGroup)
       }
     } catch (err) {
       reject(err)
