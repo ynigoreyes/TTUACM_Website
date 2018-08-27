@@ -2,6 +2,8 @@ const { google } = require('googleapis')
 const mongoose = require('mongoose')
 
 const contactsSchema = mongoose.Schema({
+  // User's Id in relation to the User Model
+  userId: { type: String, require: true },
   // User's email
   email: { type: String, required: true },
   // User's resource name according to Google People API
