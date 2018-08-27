@@ -46,6 +46,41 @@ function addUserToGroupByName(name, exact = true) {
   })
 }
 
+function findContactByEmail(email) {
+  return new Promise(async (resolve, reject) => {
+    const options = {}
+  })
+}
+
+/**
+ * Drops a user by their email address from all groups and overall contacts
+ * This works by searching for their email on all the email addresses.
+ *
+ * @param {string} email - the email to delete
+ * @return {Promise<null, Error}
+ */
+function removeContactFromGroupByEmail(email) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const listOptions = {
+        resourceName: 'people/me',
+      }
+      const people = await Contacts.people.list(options)
+      const founduser = people.filter((person, i) => {
+        return person.emailAddresses.contains(email)
+      })
+
+      deleteOptions = {
+        resourceName: foundUser.resourceName
+      }
+      await Contacts.people.deleteContact(options)
+      resolve()
+    } catch (err) {
+      reject(err)
+    }
+  })
+}
+
 /**
  * Creates a new Contact that will be saved into MyContacts
  *
