@@ -43,12 +43,56 @@ function addUserToGroupByName(name, exact = true) {
 
       formattedName = `SDC - ${name} - ${season} ${year}`
     }
+    reject(new Error('function unfinished'))
+    // resolve(formattedName)
+    // TODO: Add the user addition logic here.
   })
 }
 
+
+/**
+ * Deletes a contact from one group and adds them to another by email
+ *
+ * @param {string} resourceName - the resource name of the contact
+ * @param {string} oldGroup - resourceName for old Group
+ * @param {string} newGroup - resourceName for new group
+ *
+ * @return {Promise<Object, Error>} resolves with the new group instance
+ */
+function moveContactGroups(resouceName, oldGroup, newGroup) {
+  return new Promise(async (resolve, reject) => {
+    resolve()
+  })
+}
+
+/**
+ * Finds a contact given their email address
+ */
 function findContactByEmail(email) {
   return new Promise(async (resolve, reject) => {
-    const options = {}
+    const connectionOptions = {
+      resourceName: 'people/me',
+      personFields: 'names',
+    }
+    const { connections } = Contacts.people.connections.list(options)
+    const user = connections.filter((each, i) => {
+      let exists = false
+      for (let i = 0; i < each.emailAddresses.length; i += 1) {
+        if (email === each.emailAddresses[i]) {
+          exists = true
+          break;
+        }
+      }
+      return exists
+    })
+
+    if (user.length !== 0) {
+      resolve(user[0].resourceName)
+    } else {
+      const err = new Error('No User with given email found')
+      err.code = 404
+      reject(err)
+    }
   })
 }
 
@@ -65,7 +109,7 @@ function removeContactFromGroupByEmail(email) {
       const listOptions = {
         resourceName: 'people/me',
       }
-      const people = await Contacts.people.list(options)
+      const people = await Contacts.people.connections.list(options)
       const founduser = people.filter((person, i) => {
         return person.emailAddresses.contains(email)
       })

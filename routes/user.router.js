@@ -1,3 +1,5 @@
+// TODO: Move emailing to cloud functions
+// TODO: Split upall registration and validation into /api/auth
 const express = require('express');
 const passport = require('passport');
 const querystring = require('querystring');
@@ -301,29 +303,5 @@ router.post('/contact-us', (req, res) => {
     .catch(err => res.status(404).json());
 });
 
-/**
- * Adds the given email to the SDC Group with their interests as a label
- *
- * - Endpoint: `/users/add-to-google-group`
- * - Verb: PUT
- *
- * @param {object} req - Express Request Object
- * @param {string} req.body.topic - topic of interest
- * @param {string} req.body.topic - topic of interest
- *
- * @typedef {function} UserRouter-updateACMContactsGroup
- */
-router.put('/add-to-google-group', async (req, res) => {
-  try {
-    const data = req.body;
-    const GoogleContactsGroup = await controller.findGroupByName(data.topic)
-    await controller.updateSDCGroup(data)
-    await controller.addUserToInterestGroup(data)
-    res.status(200).json({});
-  } catch (err) {
-    console.error(err)
-    res.status(404).send();
-  }
-});
 
 module.exports = router;

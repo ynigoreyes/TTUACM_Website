@@ -58,6 +58,7 @@ function connectDB() {
   });
 }
 
+// Passport config
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 require('./config/passport')(passport);
@@ -72,10 +73,12 @@ app.use(cors({ origin: true }));
 const usersRoute = require('./routes/user.router');
 const eventsRoute = require('./routes/event.router');
 const authRoute = require('./routes/auth.router');
+const contactsRoute = require('./routes/contacts.router');
 
 app.use('/api/users', usersRoute);
 app.use('/api/events', eventsRoute);
 app.use('/api/auth', authRoute);
+app.use('/api/contacts', contactsRoute);
 
 /**
  * During production, this should redirect everyone that puts
@@ -93,7 +96,6 @@ app.use((req, res, next) => {
 });
 
 // Error Handler
-
 app.use((err, req, res) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
