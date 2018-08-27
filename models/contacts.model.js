@@ -1,6 +1,21 @@
-const { google } = require('googleapis');
+const { google } = require('googleapis')
+const mongoose = require('mongoose')
 
-let Contacts;
+const contactsSchema = mongoose.Schema({
+  // User's email
+  email: { type: String, required: true },
+  // User's resource name according to Google People API
+  userResourceName: { type: String, default: '' },
+  // User's associated group
+  sdcGroup: { type: String, required: true },
+  // User's group resourceName
+  sdcGroupResourceName: { type: String, default: ''}
+})
+
+const Contacts = module.exports = mongoose.model('Contacts', contactsSchema)
+
+// Google People API manager
+let ContactsAPI;
 
 /**
  * Create the Contacts Object for the rest of the functions to use
@@ -8,10 +23,10 @@ let Contacts;
  * ```
  require('</path/to/>oauth2.config.js').loadCredentials().```
  */
-function createContacts() {
+Contacts.createContacts = () => {
   return new Promise(async (resolve, reject) => {
     try {
-      Contacts = google.people({ version: 'v1', auth: global.oAuth2Client });
+      ContactsAPI = google.people({ version: 'v1', auth: global.oAuth2Client });
       resolve();
     } catch (err) {
       reject(err);
@@ -24,7 +39,7 @@ function createContacts() {
  *
  * @param {string} name - the name for the new group
  */
-function addUserToGroupByName(name, exact = true) {
+Contacts.updateUsersInterestGroup = (name, exact = true) => {
   return new Promise(async (resolve, reject) => {
     let formattedName = name
 
@@ -59,7 +74,7 @@ function addUserToGroupByName(name, exact = true) {
  *
  * @return {Promise<Object, Error>} resolves with the new group instance
  */
-function moveContactGroups(resouceName, oldGroup, newGroup) {
+Contacts.moveContactGroups = (resouceName, oldGroup, newGroup) => {
   return new Promise(async (resolve, reject) => {
     resolve()
   })
@@ -68,13 +83,13 @@ function moveContactGroups(resouceName, oldGroup, newGroup) {
 /**
  * Finds a contact given their email address
  */
-function findContactByEmail(email) {
+Contacts.findContactByEmail = (email) => {
   return new Promise(async (resolve, reject) => {
     const connectionOptions = {
       resourceName: 'people/me',
       personFields: 'names',
     }
-    const { connections } = Contacts.people.connections.list(options)
+    const { connections } = ContactsAPI.people.connections.list(options)
     const user = connections.filter((each, i) => {
       let exists = false
       for (let i = 0; i < each.emailAddresses.length; i += 1) {
@@ -103,13 +118,13 @@ function findContactByEmail(email) {
  * @param {string} email - the email to delete
  * @return {Promise<null, Error}
  */
-function removeContactFromGroupByEmail(email) {
+Contacts.removeContactFromGroupByEmail = (email) => {
   return new Promise(async (resolve, reject) => {
     try {
       const listOptions = {
         resourceName: 'people/me',
       }
-      const people = await Contacts.people.connections.list(options)
+      const people = await ContactsAPI.people.connections.list(options)
       const founduser = people.filter((person, i) => {
         return person.emailAddresses.contains(email)
       })
@@ -117,7 +132,7 @@ function removeContactFromGroupByEmail(email) {
       deleteOptions = {
         resourceName: foundUser.resourceName
       }
-      await Contacts.people.deleteContact(options)
+      await ContactsAPI.people.deleteContact(options)
       resolve()
     } catch (err) {
       reject(err)
@@ -133,7 +148,7 @@ function removeContactFromGroupByEmail(email) {
  *
  * @return {Promise<object, Error} - The new contact metadata
  */
-function createNewContact(name, email) {
+Contacts.createNewContact = (name, email) => {
   return new Promise(async (resolve, reject) => {
     try {
       const options = {
@@ -147,7 +162,7 @@ function createNewContact(name, email) {
           ]
         }
       };
-      const newContact = await Contacts.people.createContact(options);
+      const newContact = await ContactsAPI.people.createContact(options);
       resolve(newContact);
     } catch (err) {
       reject(err)
@@ -161,11 +176,11 @@ function createNewContact(name, email) {
  * @param {string} name - name of the group to find
  * @return {Promise<Object, Error>}
  */
-function findGroupByName(name) {
+Contacts.findGroupByName = (name) => {
   return new Promise(async (resolve, reject) => {
     try {
       // Check for existing group
-      const { data } = await Contacts.contactGroups.list()
+      const { data } = await ContactsAPI.contactGroups.list()
       // The list of Groups
       const { contactGroups: listOfGroups } = data
       // Check for existing name
@@ -177,7 +192,7 @@ function findGroupByName(name) {
         resolve(data)
       } else {
         const options = { requestBody: { contactGroup: { name: formattedName } } }
-        const newGroup = await Contacts.contactGroups.create(options)
+        const newGroup = await ContactsAPI.contactGroups.create(options)
         resolve(newGroup)
       }
     } catch (err) {
@@ -186,9 +201,3 @@ function findGroupByName(name) {
   })
 }
 
-module.exports = {
-  Contacts,
-  createContacts,
-  addUserToGroupByName,
-  findGroupByName
-}
