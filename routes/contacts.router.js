@@ -1,37 +1,58 @@
 const express = require('express')
+const { membersOnlyRoute } = require('./utils')
 
 // Controller
-const controller = require('../controllers/contacts.controller')
+const ctrl = require('../controllers/contacts.controller')
 
 const router = express.Router()
+
+router.get('/hello-world', (req, res) => {
+  console.log('hello world')
+  res.json({ msg: 'Hello World!' })
+})
 
 /**
  * Single Endpoint for front end
  * Adds the given email to the SDC Group with their interests as a label
  *
+ * - Restricted
  * - Endpoint: `/contacts/add-to-google-group`
  * - Verb: PUT
  *
+ * @requires Authentication - JWT
  * @param {object} req - Express Request Object
  * @param {string} req.body.email - user's email
- * @param {string} req.body.topic - topic of interest
+ * @param {string} req.body.topics - array of topic of interests
+ * @param {string} req.body.otherTopic - user's request for a topic
  *
- * @typedef {function} ContactsRouter-updateSDCGroup
- * @typedef {function} ContactsRouter-updateUsersInterestGroup
  */
-router.put('/add-to-google-group', async (req, res) => {
+router.put('/add-to-google-group', membersOnlyRoute, async (req, res) => {
+  let initalGroups; // Array of group resource names
+  const finalGroups = []
   try {
-    const data = req.body;
-    const GoogleContactsGroup = await controller.findGroupByName(data.topic)
-    const user = await controller.findContactByEmail(req.body.email)
-    // Add to SDC group if not there yet
-    await controller.updateSDCGroup(user)
-    // Update the user's interestGroup association
-    await controller.updateUsersInterestGroup(data)
-    res.status(200).json({});
+    // Find user from database
+    const { email, topics, otherTopic } = req.body
+    const user = await ctrl.findOrCreateContactByEmail(email)
+    initalGroups = user.sdcGroupResourceNames // Save for error handling
+
+    // Delete user's previous group associations
+    user.sdcGroupResourceNames.forEach(async (groupName) => {
+      await ctrl.deleteContactfromGroup(user.userResourceName, groupName)
+    })
+
+    // Add all the new group associations
+    topics.forEach(async (topic) => {
+      finalGroups.push(await ctrl.addContactToGroup(user.userResourceName, topic, otherTopic))
+    })
+
+    // update Contacts Model
+    await ctrl.updateContactTopics(topics)
+
+    res.status(200).end()
   } catch (err) {
     console.error(err)
-    res.status(404).send();
+    ctrl.updateContactTopics(initalGroups) // Reset contact's topics
+    res.status(404).json({ err })
   }
 });
 

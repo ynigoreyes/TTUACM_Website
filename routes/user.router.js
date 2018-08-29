@@ -4,17 +4,12 @@ const express = require('express');
 const passport = require('passport');
 const querystring = require('querystring');
 
+const { membersOnlyRoute } = require('./utils')
+
 // Controller
 const controller = require('../controllers/user.controller');
 
 const router = express.Router();
-
-/**
- * Middleware for route guarding
- * If errors occur, it is probably because front-end is not sending
- * JWT along with their requests
- */
-const membersOnlyRoute = passport.authenticate('jwt', { session: false });
 
 // Routes pertaining to the user's account
 

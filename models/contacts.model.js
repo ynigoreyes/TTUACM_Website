@@ -2,16 +2,12 @@ const { google } = require('googleapis')
 const mongoose = require('mongoose')
 
 const contactsSchema = mongoose.Schema({
-  // User's Id in relation to the User Model
-  userId: { type: String, require: true },
   // User's email
   email: { type: String, required: true },
   // User's resource name according to Google People API
   userResourceName: { type: String, default: '' },
-  // User's associated group
-  sdcGroup: { type: String, required: true },
   // User's group resourceName
-  sdcGroupResourceName: { type: String, default: ''}
+  sdcGroupResourceNames: { type: [String], default: []}
 })
 
 const Contacts = module.exports = mongoose.model('Contacts', contactsSchema)
@@ -76,7 +72,7 @@ Contacts.updateUsersInterestGroup = (name, exact = true) => {
  *
  * @return {Promise<Object, Error>} resolves with the new group instance
  */
-Contacts.moveContactGroups = (resouceName, oldGroup, newGroup) => {
+Contacts.deteleUserContactGroups = (resouceName, oldGroup, newGroup) => {
   return new Promise(async (resolve, reject) => {
     resolve()
   })
@@ -84,6 +80,8 @@ Contacts.moveContactGroups = (resouceName, oldGroup, newGroup) => {
 
 /**
  * Finds a contact given their email address
+ *
+ * @param {string} email - user's email
  */
 Contacts.findContactByEmail = (email) => {
   return new Promise(async (resolve, reject) => {
@@ -108,6 +106,33 @@ Contacts.findContactByEmail = (email) => {
     } else {
       const err = new Error('No User with given email found')
       err.code = 404
+      reject(err)
+    }
+  })
+}
+
+/**
+ * Finds a Contact given a resource Name
+ *
+ * Values of interest:
+ * response.resourceName
+ * response.names[0].displayName
+ * response.emailAddresses[0].value
+ * responses.memberships[all of them].contactGroupMembership.contactGroupId
+ *
+ * @param {string} resourceName - contact's resource name
+ * @return {Promise<Object, Error} - Resolves with the name, groups and emails of the user
+ */
+Contacts.findContactsByResourceName = (resourceName) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const options = {
+        resourceName,
+        personFields: 'names,emailAddresses,memberships'
+      }
+      const data = await ContactsAPI.people.get(options)
+      resolve(data)
+    } catch (err) {
       reject(err)
     }
   })
