@@ -6,7 +6,7 @@ const mongoose = require('mongoose')
 
 const contactsSchema = mongoose.Schema({
   // User's email
-  email: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
   // User's resource name according to Google People API
   userResourceName: { type: String, default: '' },
   // User's etag which is used for changing data
@@ -137,7 +137,6 @@ Contacts.findOrCreateGroupByName = (name) => {
 Contacts.addContactToGroup = (userResourceName, groupResourceName) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (['Other', 'other', ''].includes(topic)) reject(new Error(`Topic cannot be ${topic}`))
       const options = {
         resourceName: groupResourceName,
         resourceNamesToAdd: [userResourceName]
@@ -199,6 +198,21 @@ Contacts.findGroupByName = (name) => {
     } catch (err) {
       reject(err)
     }
+  })
+}
+
+/**
+ * Replace the contact's interest groups in database based on their email
+ *
+ * @param {string} email - user's email
+ * @param {Array<string>} groups - resource names for the groups
+ *
+ * @return {Promise<never>}
+ */
+Contacts.updateContactTopics = (email, groups) => {
+  return new Promise(async (resolve, reject) => {
+    await Contacts.findOneAndUpdate({ email }, { sdcGroupResourceNames: groups })
+    resolve()
   })
 }
 
