@@ -10,6 +10,7 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const nmconfig = require('./config/nodemailer-transporter');
 
+// Allows us to use the global promises insteam of mpromise and exec
 mongoose.Promise = global.Promise;
 
 // Express Routing and App setup

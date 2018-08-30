@@ -1,39 +1,32 @@
-/**
- * Adds the user to the ACM Contacts
- *
- * @param {object} data.user - user object
- * @param {string} data.user.email - user's email
- * @param {string} data.topic - user's interest
- * @param {string} data.otherTopic - user's other interests
- */
-function updateSDCGroup(data) {
-  return new Promise((resolve, reject) => {
-    resolve();
-  });
-}
+const Contacts = require('../models/contacts.model')
 
-/**
- * Adds the user to a SDC Group
- *
- * @param {object} groupInfo - Google Contacts Group information
- * @param {string} email - user email * @param {string} topic - topic of interest
- * @param {string} otherTopic? - Other Topic of interest
- *
- * @return {Promise <Object, Error>} - The new group with the contact added
- */
-function addUserToInterestGroup(groupInfo, email, topic, otherTopic) {
-  if (!otherTopic) otherTopic = ''
+async function addUserToGoogleContacts(email, topics, otherTopic) {
+  try {
+    // Find user from database
+    const user = await Contacts.findOrCreateContactByEmail(email)
 
-  return new Promise(async (resolve, reject) => {
-    try {
-      resolve()
-    } catch (err) {
-      reject(err)
-    }
-  });
+    // Delete user's previous group associations
+    user.sdcGroupResourceNames.forEach(async (groupName) => {
+      // TODO: deleteContactfromGroup
+      await Contacts.deleteContactfromGroup(user.userResourceName, groupName)
+    })
+
+    // Add all the new group associations
+    topics.forEach(async (topic) => {
+      // TODO: addContactToGroup
+      finalGroups.push(await Contacts.addContactToGroup(user.userResourceName, topic, otherTopic))
+    })
+
+    // update Contacts Model
+    // TODO: updateContactTopics
+    await Contacts.updateContactTopics(topics)
+
+    resolve('Contact has been saved and editted successfully')
+  } catch (err) {
+    reject(err)
+  }
 }
 
 module.exports = {
-  addUserToInterestGroup,
-  updateSDCGroup,
+  addUserToGoogleContacts,
 }

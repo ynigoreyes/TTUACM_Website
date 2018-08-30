@@ -1,3 +1,6 @@
+// people/c903523785491539444
+// %EgUBAj03LhoMAQIDBAUGBwgJCgsMIgwxQWFIZDJ3WHpDMD0=
+// contactGroups/7fa6f8e0efef20d
 const { google } = require('googleapis')
 const mongoose = require('mongoose')
 
@@ -6,6 +9,8 @@ const contactsSchema = mongoose.Schema({
   email: { type: String, required: true },
   // User's resource name according to Google People API
   userResourceName: { type: String, default: '' },
+  // User's etag which is used for changing data
+  etag: { type: String, default: ''},
   // User's group resourceName
   sdcGroupResourceNames: { type: [String], default: []}
 })
@@ -33,177 +38,78 @@ Contacts.createContacts = () => {
 }
 
 /**
- * Creates a new Google Contacts group if one does not exists given a name
+ * Finds or creates a contact by email
+ * If a user is not found in the database, we will check Google Contacts
+ * If no contact is found in Google Contacts, we will create one and save
+ * the data from the created contact into the database
  *
- * @param {string} name - the name for the new group
+ * The important data to save is the etag, so that we can modify it later
+ *
+ * @param {string} email - email to add
+ *
+ * @return {Promise<Object, Error>} - a user object from the database, not from Contacts
  */
-Contacts.updateUsersInterestGroup = (name, exact = true) => {
-  return new Promise(async (resolve, reject) => {
-    let formattedName = name
+Contacts.findOrCreateContactByEmail = async (email) => {
+  try {
+    const user = await Contacts.findOne({ email })
 
-    if (exact) {
-      console.log('saving the exact name ', name)
-    } else {
-      const currentDate = new Date()
-      const currentMonth = currentDate.getMonth()
-      const currentYear = currentDate.getYear()
-
-      // May - December is considered Fall, everything else is Spring
-      const season = currentMonth > 4 && currentMonth <= 11 ? 'Fall' : 'Spring'
-
-      // Gets the last two digits of the year
-      const year = currentYear.toString().slice(1, 3)
-
-      formattedName = `SDC - ${name} - ${season} ${year}`
-    }
-    reject(new Error('function unfinished'))
-    // resolve(formattedName)
-    // TODO: Add the user addition logic here.
-  })
-}
-
-
-/**
- * Deletes a contact from one group and adds them to another by email
- *
- * @param {string} resourceName - the resource name of the contact
- * @param {string} oldGroup - resourceName for old Group
- * @param {string} newGroup - resourceName for new group
- *
- * @return {Promise<Object, Error>} resolves with the new group instance
- */
-Contacts.deteleUserContactGroups = (resouceName, oldGroup, newGroup) => {
-  return new Promise(async (resolve, reject) => {
-    resolve()
-  })
-}
-
-/**
- * Finds a contact given their email address
- *
- * @param {string} email - user's email
- */
-Contacts.findContactByEmail = (email) => {
-  return new Promise(async (resolve, reject) => {
-    const connectionOptions = {
-      resourceName: 'people/me',
-      personFields: 'names',
-    }
-    const { connections } = ContactsAPI.people.connections.list(options)
-    const user = connections.filter((each, i) => {
-      let exists = false
-      for (let i = 0; i < each.emailAddresses.length; i += 1) {
-        if (email === each.emailAddresses[i]) {
-          exists = true
-          break;
-        }
-      }
-      return exists
-    })
-
-    if (user.length !== 0) {
-      resolve(user[0].resourceName)
-    } else {
-      const err = new Error('No User with given email found')
-      err.code = 404
-      reject(err)
-    }
-  })
-}
-
-/**
- * Finds a Contact given a resource Name
- *
- * Values of interest:
- * response.resourceName
- * response.names[0].displayName
- * response.emailAddresses[0].value
- * responses.memberships[all of them].contactGroupMembership.contactGroupId
- *
- * @param {string} resourceName - contact's resource name
- * @return {Promise<Object, Error} - Resolves with the name, groups and emails of the user
- */
-Contacts.findContactsByResourceName = (resourceName) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const options = {
-        resourceName,
-        personFields: 'names,emailAddresses,memberships'
-      }
-      const data = await ContactsAPI.people.get(options)
-      resolve(data)
-    } catch (err) {
-      reject(err)
-    }
-  })
-}
-
-/**
- * Drops a user by their email address from all groups and overall contacts
- * This works by searching for their email on all the email addresses.
- *
- * @param {string} email - the email to delete
- * @return {Promise<null, Error}
- */
-Contacts.removeContactFromGroupByEmail = (email) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const listOptions = {
+    // If no user was found in the database
+    if (!user) {
+      const connectionOptions = {
         resourceName: 'people/me',
+        personFields: 'emailAddresses,memberships',
       }
-      const people = await ContactsAPI.people.connections.list(options)
-      const founduser = people.filter((person, i) => {
-        return person.emailAddresses.contains(email)
+      const { connections } = ContactsAPI.people.connections.list(options)
+      const matchingUser = connections.filter((each, i) => {
+        let exists = false
+        for (let i = 0; i < each.emailAddresses.length; i += 1) {
+          if (email === each.emailAddresses[i]) {
+            exists = true
+            break;
+          }
+        }
+        return exists
       })
 
-      deleteOptions = {
-        resourceName: foundUser.resourceName
-      }
-      await ContactsAPI.people.deleteContact(options)
-      resolve()
-    } catch (err) {
-      reject(err)
-    }
-  })
-}
-
-/**
- * Creates a new Contact that will be saved into MyContacts
- *
- * @param {string} name - name of contact
- * @param {string} email - email of contact
- *
- * @return {Promise<object, Error} - The new contact metadata
- */
-Contacts.createNewContact = (name, email) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const options = {
-        parent: 'people/me',
-        requestBody: {
-          emailAddresses: [
-            {
-              displayName: name,
-              value: email,
-            }
-          ]
+      // If a user was found in Google Contacts
+      if (matchingUser.length !== 0) {
+        const sdcGroupResourceNames = matchingUser.memberships.map((each, i) => {
+          return each.contactGroupMembership.contactGroupId
+        })
+        const options = {
+          email,
+          userResourceName: matchingUser.resourceName,
+          etag: matchingUser.etag,
+          sdcGroupResourceNames,
         }
-      };
-      const newContact = await ContactsAPI.people.createContact(options);
-      resolve(newContact);
-    } catch (err) {
-      reject(err)
+        const newUser = await (new Contacts(options)).save()
+        resolve(newUser)
+      // Create a new contact and save the returned user into the database
+      } else {
+        const optionsForContacts = {
+          emailAddresses: [{ value: email }],
+        }
+        const { resourceName, etag } = await ContactsAPI.people.createContact(optionsForContacts)
+        const optionsForDb = { email, resourceName, etag }
+        const newUser = await (new Contacts(optionsForDb)).save()
+        resolve(newUser)
+      }
+    } else {
+      resolve(user)
     }
-  })
+  } catch (err) {
+    reject(err)
+  }
 }
 
 /**
  * Finds a group given a name, if one is not found, we will create one
  *
  * @param {string} name - name of the group to find
- * @return {Promise<Object, Error>}
+ * @return {Promise<Object, Error>} returns the resourceName for the group
  */
 Contacts.findGroupByName = (name) => {
+  const formattedName = formattedName(name)
   return new Promise(async (resolve, reject) => {
     try {
       // Check for existing group
@@ -211,16 +117,16 @@ Contacts.findGroupByName = (name) => {
       // The list of Groups
       const { contactGroups: listOfGroups } = data
       // Check for existing name
-      const nameExists = listOfGroups.some((group) => {
+      const matchingGroups = listOfGroups.filter((group) => {
         return group.formattedName === formattedName
       })
 
-      if (nameExists) {
-        resolve(data)
+      if (matchingGroups.length !== 0) {
+        resolve(matchingGroups[0].resourceName)
       } else {
         const options = { requestBody: { contactGroup: { name: formattedName } } }
         const newGroup = await ContactsAPI.contactGroups.create(options)
-        resolve(newGroup)
+        resolve(newGroup.resourceName)
       }
     } catch (err) {
       reject(err)
@@ -228,3 +134,30 @@ Contacts.findGroupByName = (name) => {
   })
 }
 
+/**
+ * Formats the group name given to match the semester and year
+ *
+ * @param {string} groupName - the name for the group
+ * @param {boolean} exact - whether or not to save the exact name of the group name
+ */
+const formatGroupName = (groupName, exact = true) => {
+  let formattedName = groupName
+
+  if (exact) {
+    console.log('saving the exact name ', groupName)
+  } else {
+    const currentDate = new Date()
+    const currentMonth = currentDate.getMonth()
+    const currentYear = currentDate.getYear()
+
+    // May - December is considered Fall, everything else is Spring
+    const season = currentMonth > 4 && currentMonth <= 11 ? 'Fall' : 'Spring'
+
+    // Gets the last two digits of the year
+    const year = currentYear.toString().slice(1, 3)
+
+    formattedName = `SDC - ${groupName} - ${season} ${year}`
+  }
+
+  return formattedName
+}

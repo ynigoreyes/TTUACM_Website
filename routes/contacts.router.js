@@ -4,6 +4,8 @@ const { membersOnlyRoute } = require('./utils')
 // Controller
 const ctrl = require('../controllers/contacts.controller')
 
+const Contacts = require('../models/contacts.model')
+
 const router = express.Router()
 
 router.get('/hello-world', (req, res) => {
@@ -30,28 +32,11 @@ router.put('/add-to-google-group', membersOnlyRoute, async (req, res) => {
   let initalGroups; // Array of group resource names
   const finalGroups = []
   try {
-    // Find user from database
     const { email, topics, otherTopic } = req.body
-    const user = await ctrl.findOrCreateContactByEmail(email)
-    initalGroups = user.sdcGroupResourceNames // Save for error handling
-
-    // Delete user's previous group associations
-    user.sdcGroupResourceNames.forEach(async (groupName) => {
-      await ctrl.deleteContactfromGroup(user.userResourceName, groupName)
-    })
-
-    // Add all the new group associations
-    topics.forEach(async (topic) => {
-      finalGroups.push(await ctrl.addContactToGroup(user.userResourceName, topic, otherTopic))
-    })
-
-    // update Contacts Model
-    await ctrl.updateContactTopics(topics)
-
+    await ctrl.addUserToGoogleContacts(email, topics, otherTopic)
     res.status(200).end()
   } catch (err) {
     console.error(err)
-    ctrl.updateContactTopics(initalGroups) // Reset contact's topics
     res.status(404).json({ err })
   }
 });
