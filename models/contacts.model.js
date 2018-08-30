@@ -103,6 +103,74 @@ Contacts.findOrCreateContactByEmail = async (email) => {
 }
 
 /**
+ * Finds a group by a given name
+ *
+ * @param {string} name - unformatted name of the group
+ * @return {Promise<Object, Error>} - resolves with the complete Contact Group Object
+ */
+Contacts.findOrCreateGroupByName = (name) => {
+  return new Promise(async (resolve, reject) => {
+    const formattedName = formatGroupName(name)
+    const { contactGroups } = await ContactsAPI.contactGroups.list()
+    const matchingGroups = contactGroups.filter((group) => {
+      return group.formattedName === formattedName
+    })
+
+    if (matchingGroups.length !== 0) {
+      resolve(matchingGroups[0])
+    } else {
+      const options = { contactGroup: { name: formattedName } }
+      resolve(await ContactsAPI.contactGroups.create(options))
+    }
+  })
+}
+
+/**
+ * Adds a user to the Contact Group - Cannot be Other - Other handled differently
+ *
+ * @param {string} userResourceName - the user's resourceName
+ * @param {string} groupResourceName - the topic of interest
+ * @param {string} otherTopic - given when the user wants a different topic
+ *
+ * @return {Promise<Object, Error>} - resolves with the complete Contact Group Object
+ */
+Contacts.addContactToGroup = (userResourceName, groupResourceName) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (['Other', 'other', ''].includes(topic)) reject(new Error(`Topic cannot be ${topic}`))
+      const options = {
+        resourceName: groupResourceName,
+        resourceNamesToAdd: [userResourceName]
+      }
+      await ContactsAPI.contactGroups.members.modify(options)
+    } catch (err) {
+      rejet(err)
+    }
+  })
+}
+
+/**
+ * Deletes the user from the groups given
+ *
+ * @param {string} userResourceName - the user's resourceName
+ * @param {string} groupResourceNames - the group to delete from
+ */
+Contacts.deleteContactfromGroup = (userResourceName, groupResourceName) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const options = {
+        resourceName: groupResourceName,
+        resourceNamesToRemoves: [userResourceName]
+      }
+      await ContactsAPI.contactGroups.members.modify(options)
+      resolve()
+    } catch (err) {
+      reject(err)
+    }
+  })
+}
+
+/**
  * Finds a group given a name, if one is not found, we will create one
  *
  * @param {string} name - name of the group to find

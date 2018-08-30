@@ -7,14 +7,18 @@ async function addUserToGoogleContacts(email, topics, otherTopic) {
 
     // Delete user's previous group associations
     user.sdcGroupResourceNames.forEach(async (groupName) => {
-      // TODO: deleteContactfromGroup
       await Contacts.deleteContactfromGroup(user.userResourceName, groupName)
     })
 
     // Add all the new group associations
     topics.forEach(async (topic) => {
-      // TODO: addContactToGroup
-      finalGroups.push(await Contacts.addContactToGroup(user.userResourceName, topic, otherTopic))
+      if (['other', 'Other'].includes(topic)) {
+      // TODO: addContactToOtherGroup
+        finalGroups.push(await Contacts.addContactToOtherGroup(user.userResourceName, otherTopic))
+      } else {
+        const { resourceName: groupResourceName } = await Contacts.findOrCreateGroupByName(topic)
+        finalGroups.push(await Contacts.addContactToGroup(user.userResourceName, groupResourceName))
+      }
     })
 
     // update Contacts Model

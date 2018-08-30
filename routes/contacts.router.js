@@ -4,7 +4,6 @@ const { membersOnlyRoute } = require('./utils')
 // Controller
 const ctrl = require('../controllers/contacts.controller')
 
-const Contacts = require('../models/contacts.model')
 
 const router = express.Router()
 
