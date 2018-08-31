@@ -26,9 +26,8 @@ router.get('/hello-world', (req, res) => {
  * @param {string} req.body.topics - array of topic of interests
  * @param {string} req.body.otherTopic - user's request for a topic
  *
- * TODO: Add route guarding after dev
  */
-router.put('/', async (req, res) => {
+router.put('/', membersOnlyRoute, async (req, res) => {
   try {
     const { email, topics, otherTopic } = req.body
     // if (!email || !topics || !otherTopic) throw new Error('Missing required variable')
