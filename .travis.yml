@@ -37,9 +37,8 @@ jobs:
     - docker
     before_install:
     # Unpack all encrypted files
-    - openssl aes-256-cbc -K $encrypted_74b81b802040_key -iv $encrypted_74b81b802040_iv
-      -in secret_configs.tar.enc -out secret_configs.tar -d
-    - tar xvf secret_configs.tar
+    - openssl aes-256-cbc -K $encrypted_58daab9c74ba_key -iv $encrypted_58daab9c74ba_iv -in secret_files.tar.enc -out secret_files.tar -d
+    - tar xvf secret_files.tar
     - ls config/
     - ls src/environments
     install:
