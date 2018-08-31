@@ -33,10 +33,9 @@ export class ProjectsComponent implements OnInit {
   }
 
   public onChange(topic: string, isChecked: boolean) {
-    console.log(this.ClubForm)
-    const topicsFormArray = <FormArray>this.ClubForm.controls.topic
+    const topicsFormArray = <FormArray>this.ClubForm.controls.topic;
     if (isChecked) {
-      topicsFormArray.push(new FormControl(topic))
+      topicsFormArray.push(new FormControl(topic));
     } else {
       let index = topicsFormArray.controls.findIndex(x => x.value === topic);
       topicsFormArray.removeAt(index);
@@ -44,7 +43,6 @@ export class ProjectsComponent implements OnInit {
   }
 
   public onSubmit(post: FormGroup) {
-    console.log(this.state.getUser());
     const data = {
       email: this.state.getUser().email,
       topics: post['topic'],
@@ -66,6 +64,6 @@ export class ProjectsComponent implements OnInit {
           duration: 2000
         });
       }
-    )
+    );
   }
 }

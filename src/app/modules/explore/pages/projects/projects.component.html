@@ -5,9 +5,11 @@
       <input type="checkbox" (change)="onChange(topic, $event.target.checked)">
       <span>Interested</span>
     </mat-card>
-    <mat-form-field *ngIf="ClubForm.value.topic.includes('Other')">
-      <input formControlName="otherTopic" type="text" matInput placeholder="What are you interested in?">
-    </mat-form-field>
+    <mat-card *ngIf="ClubForm.value.topic.includes('Other')">
+      <mat-form-field>
+        <input formControlName="otherTopic" type="text" matInput placeholder="What are you interested in?">
+      </mat-form-field>
+    </mat-card>
     <button mat-raised-button type="submit" [disabled]="!ClubForm.valid">
       Submit
     </button>
