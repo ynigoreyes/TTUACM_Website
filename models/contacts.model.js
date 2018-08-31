@@ -66,7 +66,6 @@ Contacts.findOrCreateContactByEmail = async (email) => {
         pageSize: 2000
       }
       const { data } = await ContactsAPI.people.connections.list(connectionOptions)
-      console.log(data.connections.length)
       const matchingUser = data.connections.filter((each, i) => {
         let exists = false
         for (let i = 0; i < each.emailAddresses.length; i += 1) {
@@ -78,7 +77,6 @@ Contacts.findOrCreateContactByEmail = async (email) => {
         }
         return exists
       })
-      console.log(matchingUser)
       if (matchingUser.length > 0) userExistContacts = true
 
       let targetUser

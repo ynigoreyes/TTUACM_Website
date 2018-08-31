@@ -12,7 +12,9 @@ import {
   MatTabsModule,
   MatIconModule,
   MatSnackBarModule,
+  MatRadioModule,
   MatProgressSpinnerModule,
+  MatCheckboxModule,
   MatGridListModule
 } from '@angular/material';
 
@@ -22,8 +24,10 @@ import {
     MatButtonModule,
     MatInputModule,
     MatSelectModule,
+    MatCheckboxModule,
     MatFormFieldModule,
     MatCardModule,
+    MatRadioModule,
     MatMenuModule,
     MatToolbarModule,
     MatTabsModule,
@@ -39,12 +43,14 @@ import {
     MatInputModule,
     MatSelectModule,
     MatFormFieldModule,
+    MatRadioModule,
     MatCardModule,
     MatMenuModule,
     MatToolbarModule,
     MatTabsModule,
     MatIconModule,
     MatSnackBarModule,
+    MatCheckboxModule,
     MatProgressSpinnerModule,
     MatGridListModule,
     LayoutModule

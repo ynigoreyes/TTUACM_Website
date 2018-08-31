@@ -1,13 +1,11 @@
 <main>
-  <form class="contact-container" [formGroup]="ClubForm" (ngSubmit)="onSubmit(ClubForm.value)">
-    <mat-form-field>
-      <mat-select formControlName="topic" placeholder="Topic">
-        <mat-option *ngFor="let topic of topics" value={{topic}}>
-          {{topic}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field *ngIf="ClubForm.value.topic === 'Other'">
+  <form *ngIf="!loading" class="contact-container" [formGroup]="ClubForm" (ngSubmit)="onSubmit(ClubForm.value)">
+    <mat-card *ngFor="let topic of topics" class='topic-card'>
+      <h3>{{topic}}</h3>
+      <input type="checkbox" (change)="onChange(topic, $event.target.checked)">
+      <span>Interested</span>
+    </mat-card>
+    <mat-form-field *ngIf="ClubForm.value.topic.includes('Other')">
       <input formControlName="otherTopic" type="text" matInput placeholder="What are you interested in?">
     </mat-form-field>
     <button mat-raised-button type="submit" [disabled]="!ClubForm.valid">
