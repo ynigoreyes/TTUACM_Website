@@ -1,5 +1,5 @@
 <main>
-  <form *ngIf="!loading" class="contact-container" [formGroup]="ClubForm" (ngSubmit)="onSubmit(ClubForm.value)">
+  <form class="contact-container" [formGroup]="ClubForm" (ngSubmit)="onSubmit(ClubForm.value)">
     <mat-card *ngFor="let topic of topics" class='topic-card'>
       <h3>{{topic}}</h3>
       <input type="checkbox" (change)="onChange(topic, $event.target.checked)">
