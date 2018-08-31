@@ -4,7 +4,7 @@ credentials.json
 
 # environment variables file
 src/environments/environment.prod.ts
-secret_configs.tar
+secret_files.tar
 .env
 .prod.env
 

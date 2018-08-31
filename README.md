@@ -1,5 +1,4 @@
-# TTUACM Website ![Travis-CI Status](https://travis-ci.com/ynigoreyes/TTUACM_Website.svg?branch=master)
-
+# TTUACM Website [![Build Status](https://travis-ci.org/ynigoreyes/TTUACM_Website.svg?branch=master)](https://travis-ci.org/ynigoreyes/TTUACM_Website)
 ### Tech Stack
 This is source code for the ACM: Texas Tech University website
 
