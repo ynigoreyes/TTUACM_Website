@@ -50,56 +50,105 @@ Contacts.createContacts = () => {
  * @return {Promise<Object, Error>} - a user object from the database, not from Contacts
  */
 Contacts.findOrCreateContactByEmail = async (email) => {
-  try {
-    const user = await Contacts.findOne({ email })
+  return new Promise(async (resolve, reject) => {
+    try {
+      let userExistDb = false
+      let userExistContacts = false
 
-    // If no user was found in the database
-    if (!user) {
+      // Check for existance of user in DB
+      const user = await Contacts.findOne({ email })
+      if (user) userExistDb = true
+
+      // Check for existance of user in Contacts
       const connectionOptions = {
         resourceName: 'people/me',
         personFields: 'emailAddresses,memberships',
+        pageSize: 2000
       }
-      const { connections } = ContactsAPI.people.connections.list(options)
-      const matchingUser = connections.filter((each, i) => {
+      const { data } = await ContactsAPI.people.connections.list(connectionOptions)
+      console.log(data.connections.length)
+      const matchingUser = data.connections.filter((each, i) => {
         let exists = false
         for (let i = 0; i < each.emailAddresses.length; i += 1) {
-          if (email === each.emailAddresses[i]) {
+          if (email === each.emailAddresses[i].value) {
             exists = true
+            console.log('equal')
             break;
           }
         }
         return exists
       })
+      console.log(matchingUser)
+      if (matchingUser.length > 0) userExistContacts = true
 
-      // If a user was found in Google Contacts
-      if (matchingUser.length !== 0) {
-        const sdcGroupResourceNames = matchingUser.memberships.map((each, i) => {
+      let targetUser
+      // Add the Contact to the db
+      if (!userExistDb && userExistContacts) {
+        if (matchingUser.length > 1) console.warn(`Warning, there are duplicate emails: ${email}`)
+        console.log('cannot find user in db')
+        const { resourceName, email, etag } = matchingUser[0]
+        const sdcGroupResourceNames = matchingUser[0].memberships.map((each, i) => {
           return each.contactGroupMembership.contactGroupId
         })
         const options = {
           email,
-          userResourceName: matchingUser.resourceName,
-          etag: matchingUser.etag,
+          userResourceName: resourceName,
+          etag,
           sdcGroupResourceNames,
         }
         const newUser = await (new Contacts(options)).save()
-        resolve(newUser)
-      // Create a new contact and save the returned user into the database
-      } else {
-        const optionsForContacts = {
-          emailAddresses: [{ value: email }],
+        targetUser = newUser.toObject()
+      // Add the db user to Contacts and overwrite
+      } else if (userExistDb && !userExistContacts) {
+        console.log('cannot find user in Contacts')
+        const { email: userEmail } = user
+        const createContactOptions = {
+          requestBody: {
+            emailAddresses: [
+              {
+                value: userEmail
+              }
+            ]
+          }
         }
-        const { resourceName, etag } = await ContactsAPI.people.createContact(optionsForContacts)
-        const optionsForDb = { email, resourceName, etag }
-        const newUser = await (new Contacts(optionsForDb)).save()
-        resolve(newUser)
+        const { data } = await ContactsAPI.people.createContact(createContactOptions)
+        const query = { email: userEmail }
+        const update = {
+          etag: data.etag,
+          userResourceName: data.resourceName
+        }
+        const options = { new: true }
+        const newUser = await Contacts.findOneAndUpdate(query, update, options)
+        targetUser = newUser.toObject()
+      // Create a contact and save to database
+      } else if (!userExistDb && !userExistContacts) {
+        console.log('cannot find user anywhere')
+        const createContactOptions = {
+          requestBody: {
+            emailAddresses: [
+              {
+                value: email
+              }
+            ]
+          }
+        }
+        const { data } = await ContactsAPI.people.createContact(createContactOptions)
+        const options = {
+          email,
+          etag: data.etag,
+          userResourceName: data.resourceName
+        }
+        const newUser = await (new Contacts(options)).save()
+        targetUser = newUser.toObject()
+      } else {
+        console.log('user is everywhere!')
+        targetUser = user
       }
-    } else {
-      resolve(user)
+      resolve(targetUser)
+    } catch (err) {
+      reject(err)
     }
-  } catch (err) {
-    reject(err)
-  }
+  })
 }
 
 /**
@@ -111,16 +160,23 @@ Contacts.findOrCreateContactByEmail = async (email) => {
 Contacts.findOrCreateGroupByName = (name) => {
   return new Promise(async (resolve, reject) => {
     const formattedName = formatGroupName(name)
-    const { contactGroups } = await ContactsAPI.contactGroups.list()
-    const matchingGroups = contactGroups.filter((group) => {
+    const { data } = await ContactsAPI.contactGroups.list()
+    const matchingGroups = data.contactGroups.filter((group) => {
       return group.formattedName === formattedName
     })
 
     if (matchingGroups.length !== 0) {
       resolve(matchingGroups[0])
     } else {
-      const options = { contactGroup: { name: formattedName } }
-      resolve(await ContactsAPI.contactGroups.create(options))
+      const options = {
+        requestBody: {
+          contactGroup: {
+            name: formattedName
+          }
+        }
+      }
+      const { data: group } = await ContactsAPI.contactGroups.create(options)
+      resolve(group)
     }
   })
 }
@@ -139,11 +195,15 @@ Contacts.addContactToGroup = (userResourceName, groupResourceName) => {
     try {
       const options = {
         resourceName: groupResourceName,
-        resourceNamesToAdd: [userResourceName]
+        requestBody: {
+          resourceNamesToAdd: [userResourceName]
+        }
       }
       await ContactsAPI.contactGroups.members.modify(options)
+      console.log(`Added ${userResourceName} to ${groupResourceName}`)
+      resolve()
     } catch (err) {
-      rejet(err)
+      reject(err)
     }
   })
 }
@@ -159,7 +219,9 @@ Contacts.deleteContactfromGroup = (userResourceName, groupResourceName) => {
     try {
       const options = {
         resourceName: groupResourceName,
-        resourceNamesToRemoves: [userResourceName]
+        requestBody: {
+          resourceNamesToRemove: [userResourceName]
+        }
       }
       await ContactsAPI.contactGroups.members.modify(options)
       resolve()
@@ -191,7 +253,13 @@ Contacts.findGroupByName = (name) => {
       if (matchingGroups.length !== 0) {
         resolve(matchingGroups[0].resourceName)
       } else {
-        const options = { requestBody: { contactGroup: { name: formattedName } } }
+        const options = {
+          requestBody: {
+            contactGroup: {
+              name: formattedName
+            }
+          }
+        }
         const newGroup = await ContactsAPI.contactGroups.create(options)
         resolve(newGroup.resourceName)
       }
@@ -211,8 +279,17 @@ Contacts.findGroupByName = (name) => {
  */
 Contacts.updateContactTopics = (email, groups) => {
   return new Promise(async (resolve, reject) => {
-    await Contacts.findOneAndUpdate({ email }, { sdcGroupResourceNames: groups })
-    resolve()
+    console.log('updating db...')
+    // TODO: not updating groups
+    try {
+      const query = { email }
+      const update = { sdcGroupResourceNames: groups }
+      const options = { new: true }
+      const updatedUser = await Contacts.findOneAndUpdate(query, update, options)
+      resolve()
+    } catch (err) {
+      reject(err)
+    }
   })
 }
 
@@ -222,7 +299,7 @@ Contacts.updateContactTopics = (email, groups) => {
  * @param {string} groupName - the name for the group
  * @param {boolean} exact - whether or not to save the exact name of the group name
  */
-const formatGroupName = (groupName, exact = true) => {
+const formatGroupName = (groupName, exact = false) => {
   let formattedName = groupName
 
   if (exact) {

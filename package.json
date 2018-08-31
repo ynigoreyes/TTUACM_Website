@@ -7,6 +7,7 @@
     "app": "NODE_ENV=dev CLIENT='' node ./bin/www",
     "app-prod": "NODE_ENV=prod CLIENT='' node ./bin/www",
     "api": "nodemon",
+    "api-debug": "nodemon --inspect NODE_ENV=dev ./bin/www",
     "api-test": "cross-env NODE_ENV=test ./node_modules/.bin/mocha --recursive ./test --reporter spec --timeout 120000000 --exit",
     "client": "ng serve --aot --hmr",
     "client-test": "ng test",

@@ -26,17 +26,17 @@ router.get('/hello-world', (req, res) => {
  * @param {string} req.body.topics - array of topic of interests
  * @param {string} req.body.otherTopic - user's request for a topic
  *
+ * TODO: Add route guarding after dev
  */
-router.put('/add-to-google-group', membersOnlyRoute, async (req, res) => {
-  let initalGroups; // Array of group resource names
-  const finalGroups = []
+router.put('/', async (req, res) => {
   try {
     const { email, topics, otherTopic } = req.body
+    // if (!email || !topics || !otherTopic) throw new Error('Missing required variable')
     await ctrl.addUserToGoogleContacts(email, topics, otherTopic)
     res.status(200).end()
   } catch (err) {
-    console.error(err)
-    res.status(404).json({ err })
+    console.error(err.errors[0].message)
+    res.status(err.code || 404).json({ err: err.message })
   }
 });
 
