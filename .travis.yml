@@ -42,7 +42,7 @@ jobs:
     - ls config/
     - ls src/environments
     install:
-    - npm install esdoc esdoc-node
+    - npm install esdoc@0.5.1 esdoc-node@1.0.2
     script:
     - npm run docs
 
