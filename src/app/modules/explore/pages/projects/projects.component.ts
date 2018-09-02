@@ -17,6 +17,8 @@ export class ProjectsComponent implements OnInit {
     private profileService: ProfileService
   ) { }
 
+  public loading: boolean = false;
+
   public topics: Array<string> = [
     'Machine Learning',
     'NodeJS',
@@ -53,6 +55,8 @@ export class ProjectsComponent implements OnInit {
       data.otherTopic = '';
     }
 
+    this.loading = true;
+
     this.snackbar.open('Registering... This may take a moment', 'Close', { duration: 8000 });
 
     this.profileService.saveUserToGoogleGroup(data).subscribe(
@@ -63,6 +67,9 @@ export class ProjectsComponent implements OnInit {
         this.snackbar.open('Error sending message, please try again later...', 'Close', {
           duration: 2000
         });
+      },
+      () => {
+        this.loading = false;
       }
     );
   }
