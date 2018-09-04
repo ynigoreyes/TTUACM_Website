@@ -40,7 +40,6 @@ export class EventCardsComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.state.loggedIn()) {
-      console.log(this.ACMevent);
       this.attendeeEmails =
         this.ACMevent.attendees.map(el => {
           return el['email'];
@@ -68,9 +67,10 @@ export class EventCardsComponent implements OnInit {
 
   // Converts the date into mm-dd-yyyy
   public getDate(date) {
+    console.log(this.ACMevent, date)
     let newDate = new Date(date);
     let month = newDate.getMonth() + 1;
-    let day = newDate.getDate();
+    let day = this.ACMevent.allDayEvent ? newDate.getDate() + 1 : newDate.getDate();
     let year = newDate.getFullYear();
     return `${month}-${day}-${year}`;
   }
@@ -92,7 +92,7 @@ export class EventCardsComponent implements OnInit {
     ];
     let newDate = new Date(date);
     let month = months[newDate.getMonth()];
-    let day = newDate.getDate();
+    let day = this.ACMevent.allDayEvent ? newDate.getDate() + 1 : newDate.getDate();
     return `${month} ${day}`;
   }
 
