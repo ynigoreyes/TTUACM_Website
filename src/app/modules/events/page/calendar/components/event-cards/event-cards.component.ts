@@ -67,7 +67,6 @@ export class EventCardsComponent implements OnInit {
 
   // Converts the date into mm-dd-yyyy
   public getDate(date) {
-    console.log(this.ACMevent, date)
     let newDate = new Date(date);
     let month = newDate.getMonth() + 1;
     let day = this.ACMevent.allDayEvent ? newDate.getDate() + 1 : newDate.getDate();
