@@ -9,7 +9,7 @@ const userSchema = mongoose.Schema({
   email: { type: String, required: true },
   password: { type: String, required: false, default: null },
   firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
+  lastName: { type: String, required: false },
   classification: { type: String, required: true, default: 'Other' },
   confirmEmailToken: { type: String, default: '' },
   resetPasswordToken: { type: String, default: '' },
