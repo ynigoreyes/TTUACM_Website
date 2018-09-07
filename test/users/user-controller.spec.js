@@ -91,56 +91,6 @@ describe('User Controller Suite', () => {
       await db.reset();
     });
   });
-  describe('#sendResetEmail and sendConfirmationEmail(token, email, req)', () => {
-    let token;
-    let email;
-    let req;
-    before(done => {
-      process.env.NODE_ENV = 'Whatever';
-      done();
-      token = '5743290574902750';
-      email = 'fakeEmail@gmail.com';
-      req = {
-        headers: {
-          host: 'SomeHostName'
-        },
-        protocol: 'SomeProtocol'
-      };
-    });
-    it('Should send an email without errors, even to a fake email', () => {
-      expect(process.env.NODE_ENV).to.not.equal('test');
-      return controller.sendResetEmail(token, email, req).then(() => {
-        expect(true).to.be.true;
-      });
-    });
-    it('Should send an email using sendConfirmationEmail without errors, even to a fake email', () => {
-      expect(process.env.NODE_ENV).to.not.equal('test');
-      return controller.sendChangedPasswordEmail(email, token, req).then(() => {
-        expect(true).to.be.true;
-      });
-    });
-    after(done => {
-      process.env.NODE_ENV = 'test';
-      done();
-    });
-  });
-  describe('#sendChangedPasswordEmail(email)', () => {
-    before(done => {
-      process.env.NODE_ENV = 'Whatever';
-      done();
-    });
-    it('Should send an email without error', () => {
-      expect(process.env.NODE_ENV).to.not.equal('test');
-      const email = 'fakeEmail@gmail.com';
-      return controller.sendChangedPasswordEmail(email).then(() => {
-        expect(true).to.be.true;
-      });
-    });
-    after(done => {
-      process.env.NODE_ENV = 'test';
-      done();
-    });
-  });
   describe('Reset Password Sequence (#resetPassword)', () => {
     let payload;
     let password;
