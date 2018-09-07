@@ -23,6 +23,7 @@ export class ProjectsComponent implements OnInit {
     'Machine Learning',
     'NodeJS',
     'Algorithms',
+    'iOS',
     'Other',
   ];
   public ClubForm: FormGroup;
