@@ -14,7 +14,7 @@ const userSchema = mongoose.Schema({
   confirmEmailToken: { type: String, default: '' },
   resetPasswordToken: { type: String, default: '' },
   resetPasswordExpires: { type: Date, default: null },
-  hasPaidDues: { type: String, default: false },
+  hasPaidDues: { type: Boolean, default: false },
   verified: { type: Boolean },
   blocked: { type: Boolean, default: false },
 });
