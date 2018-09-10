@@ -20,6 +20,7 @@ export class ProjectsComponent implements OnInit {
   public loading: boolean = false;
 
   public topics: Array<string> = [
+    'Practical Python',
     'Machine Learning',
     'NodeJS',
     'Algorithms',
