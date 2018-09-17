@@ -68,7 +68,7 @@ export class ProjectsComponent implements OnInit {
         this.snackbar.open('Thank you for telling us about your interests!', 'Close', { duration: 3000});
       },
       err => {
-        this.snackbar.open('Error sending message, please try again later...', 'Close', {
+        this.snackbar.open('Error signing up for groups. Please try again later...', 'Close', {
           duration: 2000
         });
         this.router.navigate(['/auth']);
