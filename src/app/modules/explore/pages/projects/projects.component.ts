@@ -3,6 +3,7 @@ import { FormGroup, FormArray, FormControl, FormBuilder, Validators } from '@ang
 import { MatSnackBar } from '@angular/material';
 import { ProfileService } from '../../services/profile.service';
 import { UserStateService } from '@acm-shared/services/user-state.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-projects',
@@ -14,7 +15,8 @@ export class ProjectsComponent implements OnInit {
     public state: UserStateService,
     public fb: FormBuilder,
     private snackbar: MatSnackBar,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private router: Router
   ) { }
 
   public loading: boolean = false;
@@ -69,6 +71,7 @@ export class ProjectsComponent implements OnInit {
         this.snackbar.open('Error sending message, please try again later...', 'Close', {
           duration: 2000
         });
+        this.router.navigate(['/auth']);
       },
       () => {
         this.loading = false;
