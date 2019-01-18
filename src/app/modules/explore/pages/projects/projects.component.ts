@@ -22,11 +22,9 @@ export class ProjectsComponent implements OnInit {
   public loading: boolean = false;
 
   public topics: Array<string> = [
-    'Practical Python',
-    'Machine Learning',
-    'NodeJS',
+    'Intro to Python',
     'Algorithms',
-    'iOS',
+    'Eye for Design',
     'Other',
   ];
   public ClubForm: FormGroup;
