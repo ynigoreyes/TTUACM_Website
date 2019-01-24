@@ -1,6 +1,3 @@
-// people/c903523785491539444
-// %EgUBAj03LhoMAQIDBAUGBwgJCgsMIgwxQWFIZDJ3WHpDMD0=
-// contactGroups/7fa6f8e0efef20d
 const { google } = require('googleapis')
 const mongoose = require('mongoose')
 
