@@ -34,7 +34,7 @@ router.put('/', membersOnlyRoute, async (req, res) => {
     await ctrl.addUserToGoogleContacts(email, topics, otherTopic)
     res.status(200).end()
   } catch (err) {
-    console.error(err.errors[0].message)
+    console.error(err)
     res.status(err.code || 404).json({ err: err.message })
   }
 });
