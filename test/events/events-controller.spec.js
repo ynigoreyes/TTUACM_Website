@@ -27,7 +27,6 @@ describe('Events Controller Suite', () => {
           let test = listOfEvents[0];
           expect(test).to.not.be.undefined;
           expect(test.id).to.be.a('number');
-          expect(test.day).to.be.a('string');
           expect(test.startTime).to.not.be.undefined;
           expect(test.title).to.not.be.undefined;
           expect(test.location).to.not.be.undefined;

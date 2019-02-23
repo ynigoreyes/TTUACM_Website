@@ -65,17 +65,14 @@ function listEvents() {
         eventsList = [];
         // Maps all of the numbers to days
         events.map((event, i) => {
-          let start = event.start.dateTime || event.start.date;
-          let end = event.end.dateTime || event.end.date;
-
-          start = start.toLocaleString('en-US', { timeZone: 'Chicago' })
-          end = end.toLocaleString('en-US', { timeZone: 'Chicago' })
+          const start = event.start.dateTime || event.start.date;
+          const end = event.end.dateTime || event.end.date;
 
           // Event Object
           eventsList.push({
             id: i + 1,
-            startTime: start,
-            endTime: end,
+            startTime: start.toLocaleString(),
+            endTime: end.toLocaleString(),
             title: event.summary || '',
             location: event.location || 'TBA',
             creator: event.creator.displayName || 'TTU ACM',
