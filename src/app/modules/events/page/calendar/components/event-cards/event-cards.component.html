@@ -25,7 +25,7 @@
   </mat-card-content>
   <mat-card-footer *ngIf="!ACMevent.allDayEvent">
     <span class="location">
-      Meeting will be held at: {{ACMevent.location}} on {{ACMevent.day}}
+      Meeting will be held at: {{ACMevent.location}} on {{getDay(ACMevent.startTime)}}
     </span>
     <span *ngIf="!isSmallScreen"> | </span>
     <section *ngIf="isSmallScreen"></section>

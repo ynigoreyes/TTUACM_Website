@@ -64,22 +64,16 @@ function listEvents() {
         // Will store all of the events and return
         eventsList = [];
         // Maps all of the numbers to days
-        const weekday = [
-          'Sunday',
-          'Monday',
-          'Tuesday',
-          'Wednesday',
-          'Thursday',
-          'Friday',
-          'Saturday'
-        ];
         events.map((event, i) => {
-          const start = event.start.dateTime || event.start.date;
-          const end = event.end.dateTime || event.end.date;
+          let start = event.start.dateTime || event.start.date;
+          let end = event.end.dateTime || event.end.date;
+
+          start = start.toLocaleString('en-US', { timeZone: 'Chicago' })
+          end = end.toLocaleString('en-US', { timeZone: 'Chicago' })
+
           // Event Object
           eventsList.push({
             id: i + 1,
-            day: `${weekday[new Date(start).getDay()]}`,
             startTime: start,
             endTime: end,
             title: event.summary || '',
