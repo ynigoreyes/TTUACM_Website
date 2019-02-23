@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">TTUACM_Website/controllers/event.controller.js | TTU Website API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">controllers</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-oauth2">oauth2</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-addAttendee">addAttendee</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createCalendar">createCalendar</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getAttendees">getAttendees</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRawEvents">getRawEvents</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-listEvents">listEvents</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-removeAttendee">removeAttendee</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-updateAttendee">updateAttendee</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-confirmToken">confirmToken</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-contactUs">contactUs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-forgotLogin">forgotLogin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-generateJWTToken">generateJWTToken</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getProfile">getProfile</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-login">login</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-register">register</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-resetPassword">resetPassword</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-resetToken">resetToken</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-sendChangedPasswordEmail">sendChangedPasswordEmail</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-sendConfirmationEmail">sendConfirmationEmail</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-sendResetEmail">sendResetEmail</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-updateResume">updateResume</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-updateUser">updateUser</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-verifyUser">verifyUser</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">routes</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-membersOnlyRoute">membersOnlyRoute</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-membersOnlyRoute">membersOnlyRoute</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-EventsRouter-addAttendee">EventsRouter-addAttendee</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-EventsRouter-getAttendees">EventsRouter-getAttendees</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-EventsRouter-getRawEvents">EventsRouter-getRawEvents</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-EventsRouter-listEvents">EventsRouter-listEvents</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-EventsRouter-removeAttendee">EventsRouter-removeAttendee</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-UserRouter-confirmToken">UserRouter-confirmToken</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-UserRouter-contactUs">UserRouter-contactUs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-UserRouter-forgotLogin">UserRouter-forgotLogin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-UserRouter-getProfile">UserRouter-getProfile</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-UserRouter-login">UserRouter-login</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-UserRouter-register">UserRouter-register</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-UserRouter-register">UserRouter-register</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-UserRouter-resetPassword">UserRouter-resetPassword</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-UserRouter-resetToken">UserRouter-resetToken</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-UserRouter-sendConfirmationEmail">UserRouter-sendConfirmationEmail</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-UserRouter-updateResume">UserRouter-updateResume</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-UserRouter-updateUser">UserRouter-updateUser</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">TTUACM_Website/controllers/event.controller.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">const { google } = require(&apos;googleapis&apos;);
+
+let calendar;
+const calendarId = &apos;primary&apos;;
+
+/**
+ * Create the Calendar Object for the rest of the functions to use
+ * @requires oAuth2Client to be defined and valid. This can be acheived by running
+ * ```
+ require(&apos;&lt;/path/to/&gt;oauth2.config.js&apos;).loadCredentials().```
+ */
+function createCalendar() {
+  return new Promise(async (resolve, reject) =&gt; {
+    try {
+      calendar = google.calendar({ version: &apos;v3&apos;, auth: global.oAuth2Client });
+      resolve(calendar);
+    } catch (err) {
+      reject(err);
+    }
+  });
+}
+
+/**
+ * Gets the raw events object
+ *
+ * Rejects with an Error
+ * Resolves with a list of (raw) events (an empty array if nore are found[])
+ * @returns { Promise.&lt;Array, Error&gt; } a Promise
+ */
+function getRawEvents() {
+  return new Promise((resolve, reject) =&gt; {
+    calendar.events.list(
+      {
+        calendarId,
+        timeMin: new Date().toISOString(),
+        singleEvents: true,
+        orderBy: &apos;startTime&apos;
+      },
+      (err, { data }) =&gt; {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data.items || []);
+        }
+      }
+    );
+  });
+}
+
+/**
+ * Lists the next 10 events on the user&apos;s primary calendar.
+ *
+ * Rejects with an Error
+ *
+ * Resolves with a list(10) events
+ *
+ * @requires oAuth2Client - Configurations can be found in oauth2.config
+ */
+function listEvents() {
+  return new Promise(async (resolve, reject) =&gt; {
+    getRawEvents()
+      .then((events) =&gt; {
+        // console.log(events);
+        // Will store all of the events and return
+        eventsList = [];
+        // Maps all of the numbers to days
+        events.map((event, i) =&gt; {
+          const start = event.start.dateTime || event.start.date;
+          const end = event.end.dateTime || event.end.date;
+
+          // Event Object
+          eventsList.push({
+            id: i + 1,
+            startTime: start.toLocaleString(),
+            endTime: end.toLocaleString(),
+            title: event.summary || &apos;&apos;,
+            location: event.location || &apos;TBA&apos;,
+            creator: event.creator.displayName || &apos;TTU ACM&apos;,
+            description: event.description || &apos;&apos;,
+            attendees: event.attendees || [],
+            eventId: event.id, // Event ID according to Google
+            allDayEvent: event.start.date !== undefined
+          });
+          return resolve(eventsList);
+        });
+      })
+      .catch((err) =&gt; {
+        reject(err);
+      });
+  });
+}
+
+/**
+ * Lists all attendees for an event
+ *
+ * Rejects with an error
+ *
+ * Resolves with an array with a null email if empty or the list of attendees
+ *
+ * @param {string} eventId Event ID
+ * @requires oAuth2Client - Configurations can be found in oauth2.config
+ * @returns {Promise.&lt;Array&lt;Object&gt;&gt;} A Promise
+ */
+function getAttendees(eventId) {
+  return new Promise((resolve, reject) =&gt; {
+    console.log(eventId);
+    calendar.events.get(
+      {
+        calendarId,
+        eventId
+      },
+      (err, { data }) =&gt; {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data.attendees || []);
+        }
+      }
+    );
+  });
+}
+
+/**
+ * Adds an attendee to an event
+ *
+ * @param {string} eventId the event ID
+ * @param {Array} currentAttendees the current attendees for the event
+ * @param {string} email the user&apos;s email
+ * @returns {Array&lt;Object&gt;} updated attendee list
+ */
+function addAttendee(currentAttendees, email) {
+  return new Promise(async (resolve, reject) =&gt; {
+    try {
+      currentAttendees.push({ email, responseStatus: &apos;accepted&apos; });
+      resolve(currentAttendees);
+    } catch (err) {
+      reject(err);
+    }
+  });
+}
+
+/**
+ * Removes the attendee by their email
+ *
+ * @param {Array} currentAttendees the attendees list to remove from
+ * @param {string} email the user&apos;s email
+ * @returns {Array&lt;Object&gt;} updated attendee list
+ */
+function removeAttendee(currentAttendees, email) {
+  return new Promise(async (resolve, reject) =&gt; {
+    try {
+      if (currentAttendees.length === 0) throw new Error(&apos;No attendees found&apos;);
+      const originalAttendees = currentAttendees;
+      currentAttendees = currentAttendees.filter((each) =&gt; {
+        return each.email !== email.toLowerCase();
+      });
+      if (originalAttendees.length === currentAttendees.length) {
+        throw new Error(&apos;No user found&apos;);
+      }
+      resolve(currentAttendees);
+    } catch (err) {
+      reject(err);
+    }
+  });
+}
+
+/**
+ * Replaces the event&apos;s attendees with the attendees list
+ * Rejects with an Error
+ * Resolves with the new event object
+ *
+ * Fun Fact: Google&apos;s API deletes duplicates by default
+ *
+ * This functionality is already tested by Google.
+ * DO NOT test this function as it interacts with real google calendars
+ *
+ * @requires oAuth2Client - Configurations can be found in oauth2.config
+ * @param {string} eventId user&apos;s event ID
+ * @param {Array&lt;Object&gt;} attendees array of attendees
+ * @returns {Promise&lt;Array&lt;Object&gt;&gt;} A Promise
+ */
+function updateAttendee(eventId, attendees) {
+  return new Promise(async (resolve, reject) =&gt; {
+    calendar.events.patch(
+      {
+        calendarId,
+        eventId,
+        resource: {
+          attendees
+        }
+      },
+      (err, { data }) =&gt; {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      }
+    );
+  });
+}
+
+module.exports = {
+  createCalendar,
+  getRawEvents,
+  listEvents,
+  getAttendees,
+  addAttendee,
+  removeAttendee,
+  updateAttendee
+};
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.5.1)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+{
+  "coverage": "100%",
+  "expectCount": 25,
+  "actualCount": 25,
+  "files": {
+    "TTUACM_Website/controllers/event.controller.js": {
+      "expectCount": 7,
+      "actualCount": 7,
+      "undocumentLines": []
+    },
+    "TTUACM_Website/controllers/user.controller.js": {
+      "expectCount": 15,
+      "actualCount": 15,
+      "undocumentLines": []
+    },
+    "TTUACM_Website/routes/utils.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "TTUACM_Website/routes/event.router.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "TTUACM_Website/controllers/auth.controller.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    }
+  }
+}

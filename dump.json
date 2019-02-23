@@ -1,0 +1,3190 @@
+[
+  {
+    "__docId__": 0,
+    "kind": "file",
+    "name": "TTUACM_Website/controllers/auth.controller.js",
+    "content": "const jwt = require('jsonwebtoken');\nconst querystring = require('querystring');\n\n/**\n * Redirects user to homepage after logging in with OAuth2\n *\n * @param {object} req request object\n * @param {object} res response object\n */\nfunction oauth2(req, res) {\n  const token = jwt.sign({ data: req.user }, process.env.session_secret, {\n    expiresIn: 604800, // 1 week\n  });\n\n  const qs = querystring.stringify({\n    token: `JWT ${token}`\n  });\n\n  // The port should change depending on the environment\n  res.redirect(`${process.env.CLIENT || ''}/?${qs}`);\n}\n\nmodule.exports = {\n  oauth2\n};\n",
+    "static": true,
+    "longname": "TTUACM_Website/controllers/auth.controller.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 1,
+    "kind": "variable",
+    "name": "jwt",
+    "memberof": "TTUACM_Website/controllers/auth.controller.js",
+    "static": true,
+    "longname": "TTUACM_Website/controllers/auth.controller.js~jwt",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/auth.controller.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 1,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 2,
+    "kind": "variable",
+    "name": "querystring",
+    "memberof": "TTUACM_Website/controllers/auth.controller.js",
+    "static": true,
+    "longname": "TTUACM_Website/controllers/auth.controller.js~querystring",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/auth.controller.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 2,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 3,
+    "kind": "function",
+    "name": "oauth2",
+    "memberof": "TTUACM_Website/controllers/auth.controller.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "TTUACM_Website/controllers/auth.controller.js~oauth2",
+    "access": null,
+    "export": true,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/auth.controller.js",
+    "importStyle": "{oauth2}",
+    "description": "Redirects user to homepage after logging in with OAuth2",
+    "lineNumber": 10,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "req",
+        "description": "request object"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "res",
+        "description": "response object"
+      }
+    ]
+  },
+  {
+    "__docId__": 4,
+    "kind": "file",
+    "name": "TTUACM_Website/controllers/contacts.controller.js",
+    "content": "const Contacts = require('../models/contacts.model')\n\nfunction sleep(ms) {\n  return new Promise(resolve => setTimeout(resolve, ms))\n}\n\nasync function addUserToGoogleContacts(email, topics, otherTopic) {\n  return new Promise(async (resolve, reject) => {\n    try {\n      const finalGroups = [] // Will hold all of the resource names for requested topics\n      // Find user from database\n      const user = await Contacts.findOrCreateContactByEmail(email)\n\n      // Delete user's previous group associations\n      for (const groupName of user.sdcGroupResourceNames) {\n        const missing = await Contacts.deleteContactfromGroup(user.userResourceName, groupName)\n        if (missing) console.error(`Cannot find contact ${missing[0]}`)\n      }\n\n      // Add all the new group associations\n      for (const topic of topics) {\n        let groupResourceName\n\n        if (['other', 'Other'].includes(topic)) {\n          const { resourceName } = await Contacts.findOrCreateGroupByName('Other', exact = true)\n          // TODO: Send ACM emails of topic requests\n          // await Contacts.sendGroupRequest(otherTopic, email)\n          groupResourceName = resourceName\n        } else {\n          const { resourceName } = await Contacts.findOrCreateGroupByName(topic)\n          groupResourceName = resourceName\n        }\n        console.log('found/created group:', groupResourceName)\n\n        await sleep(5000)\n\n        const missing = await Contacts.addContactToGroup(user.userResourceName, groupResourceName)\n        if (missing) console.error(missing)\n        console.log(`pushing ${groupResourceName} to array`)\n        finalGroups.push(groupResourceName)\n      }\n\n      // update Contacts Model\n      await Contacts.updateContactTopics(email, finalGroups)\n\n      resolve('Contact has been saved and editted successfully')\n    } catch (err) {\n      reject(err)\n    }\n  })\n}\n\nmodule.exports = {\n  addUserToGoogleContacts,\n}\n",
+    "static": true,
+    "longname": "TTUACM_Website/controllers/contacts.controller.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 5,
+    "kind": "variable",
+    "name": "Contacts",
+    "memberof": "TTUACM_Website/controllers/contacts.controller.js",
+    "static": true,
+    "longname": "TTUACM_Website/controllers/contacts.controller.js~Contacts",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/contacts.controller.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 1,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 6,
+    "kind": "function",
+    "name": "sleep",
+    "memberof": "TTUACM_Website/controllers/contacts.controller.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "TTUACM_Website/controllers/contacts.controller.js~sleep",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/contacts.controller.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 3,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "params": [
+      {
+        "name": "ms",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 7,
+    "kind": "function",
+    "name": "addUserToGoogleContacts",
+    "memberof": "TTUACM_Website/controllers/contacts.controller.js",
+    "generator": false,
+    "async": true,
+    "static": true,
+    "longname": "TTUACM_Website/controllers/contacts.controller.js~addUserToGoogleContacts",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/contacts.controller.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 7,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "params": [
+      {
+        "name": "email",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "topics",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "otherTopic",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 8,
+    "kind": "file",
+    "name": "TTUACM_Website/controllers/event.controller.js",
+    "content": "const { google } = require('googleapis');\r\n\r\nlet calendar;\r\nconst calendarId = 'primary';\r\n\r\n/**\r\n * Create the Calendar Object for the rest of the functions to use\r\n * @requires oAuth2Client to be defined and valid. This can be acheived by running\r\n * ```\r\n require('</path/to/>oauth2.config.js').loadCredentials().```\r\n */\r\nfunction createCalendar() {\r\n  return new Promise(async (resolve, reject) => {\r\n    try {\r\n      calendar = google.calendar({ version: 'v3', auth: global.oAuth2Client });\r\n      resolve(calendar);\r\n    } catch (err) {\r\n      reject(err);\r\n    }\r\n  });\r\n}\r\n\r\n/**\r\n * Gets the raw events object\r\n *\r\n * Rejects with an Error\r\n * Resolves with a list of (raw) events (an empty array if nore are found[])\r\n * @returns { Promise.<Array, Error> } a Promise\r\n */\r\nfunction getRawEvents() {\r\n  return new Promise((resolve, reject) => {\r\n    calendar.events.list(\r\n      {\r\n        calendarId,\r\n        timeMin: new Date().toISOString(),\r\n        singleEvents: true,\r\n        orderBy: 'startTime'\r\n      },\r\n      (err, { data }) => {\r\n        if (err) {\r\n          reject(err);\r\n        } else {\r\n          resolve(data.items || []);\r\n        }\r\n      }\r\n    );\r\n  });\r\n}\r\n\r\n/**\r\n * Lists the next 10 events on the user's primary calendar.\r\n *\r\n * Rejects with an Error\r\n *\r\n * Resolves with a list(10) events\r\n *\r\n * @requires oAuth2Client - Configurations can be found in oauth2.config\r\n */\r\nfunction listEvents() {\r\n  return new Promise(async (resolve, reject) => {\r\n    getRawEvents()\r\n      .then((events) => {\r\n        // console.log(events);\r\n        // Will store all of the events and return\r\n        eventsList = [];\r\n        // Maps all of the numbers to days\r\n        events.map((event, i) => {\r\n          const start = event.start.dateTime || event.start.date;\r\n          const end = event.end.dateTime || event.end.date;\r\n\r\n          // Event Object\r\n          eventsList.push({\r\n            id: i + 1,\r\n            startTime: start.toLocaleString(),\r\n            endTime: end.toLocaleString(),\r\n            title: event.summary || '',\r\n            location: event.location || 'TBA',\r\n            creator: event.creator.displayName || 'TTU ACM',\r\n            description: event.description || '',\r\n            attendees: event.attendees || [],\r\n            eventId: event.id, // Event ID according to Google\r\n            allDayEvent: event.start.date !== undefined\r\n          });\r\n          return resolve(eventsList);\r\n        });\r\n      })\r\n      .catch((err) => {\r\n        reject(err);\r\n      });\r\n  });\r\n}\r\n\r\n/**\r\n * Lists all attendees for an event\r\n *\r\n * Rejects with an error\r\n *\r\n * Resolves with an array with a null email if empty or the list of attendees\r\n *\r\n * @param {string} eventId Event ID\r\n * @requires oAuth2Client - Configurations can be found in oauth2.config\r\n * @returns {Promise.<Array<Object>>} A Promise\r\n */\r\nfunction getAttendees(eventId) {\r\n  return new Promise((resolve, reject) => {\r\n    console.log(eventId);\r\n    calendar.events.get(\r\n      {\r\n        calendarId,\r\n        eventId\r\n      },\r\n      (err, { data }) => {\r\n        if (err) {\r\n          reject(err);\r\n        } else {\r\n          resolve(data.attendees || []);\r\n        }\r\n      }\r\n    );\r\n  });\r\n}\r\n\r\n/**\r\n * Adds an attendee to an event\r\n *\r\n * @param {string} eventId the event ID\r\n * @param {Array} currentAttendees the current attendees for the event\r\n * @param {string} email the user's email\r\n * @returns {Array<Object>} updated attendee list\r\n */\r\nfunction addAttendee(currentAttendees, email) {\r\n  return new Promise(async (resolve, reject) => {\r\n    try {\r\n      currentAttendees.push({ email, responseStatus: 'accepted' });\r\n      resolve(currentAttendees);\r\n    } catch (err) {\r\n      reject(err);\r\n    }\r\n  });\r\n}\r\n\r\n/**\r\n * Removes the attendee by their email\r\n *\r\n * @param {Array} currentAttendees the attendees list to remove from\r\n * @param {string} email the user's email\r\n * @returns {Array<Object>} updated attendee list\r\n */\r\nfunction removeAttendee(currentAttendees, email) {\r\n  return new Promise(async (resolve, reject) => {\r\n    try {\r\n      if (currentAttendees.length === 0) throw new Error('No attendees found');\r\n      const originalAttendees = currentAttendees;\r\n      currentAttendees = currentAttendees.filter((each) => {\r\n        return each.email !== email.toLowerCase();\r\n      });\r\n      if (originalAttendees.length === currentAttendees.length) {\r\n        throw new Error('No user found');\r\n      }\r\n      resolve(currentAttendees);\r\n    } catch (err) {\r\n      reject(err);\r\n    }\r\n  });\r\n}\r\n\r\n/**\r\n * Replaces the event's attendees with the attendees list\r\n * Rejects with an Error\r\n * Resolves with the new event object\r\n *\r\n * Fun Fact: Google's API deletes duplicates by default\r\n *\r\n * This functionality is already tested by Google.\r\n * DO NOT test this function as it interacts with real google calendars\r\n *\r\n * @requires oAuth2Client - Configurations can be found in oauth2.config\r\n * @param {string} eventId user's event ID\r\n * @param {Array<Object>} attendees array of attendees\r\n * @returns {Promise<Array<Object>>} A Promise\r\n */\r\nfunction updateAttendee(eventId, attendees) {\r\n  return new Promise(async (resolve, reject) => {\r\n    calendar.events.patch(\r\n      {\r\n        calendarId,\r\n        eventId,\r\n        resource: {\r\n          attendees\r\n        }\r\n      },\r\n      (err, { data }) => {\r\n        if (err) {\r\n          reject(err);\r\n        } else {\r\n          resolve(data);\r\n        }\r\n      }\r\n    );\r\n  });\r\n}\r\n\r\nmodule.exports = {\r\n  createCalendar,\r\n  getRawEvents,\r\n  listEvents,\r\n  getAttendees,\r\n  addAttendee,\r\n  removeAttendee,\r\n  updateAttendee\r\n};\r\n",
+    "static": true,
+    "longname": "TTUACM_Website/controllers/event.controller.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 9,
+    "kind": "variable",
+    "name": "google",
+    "memberof": "TTUACM_Website/controllers/event.controller.js",
+    "static": true,
+    "longname": "TTUACM_Website/controllers/event.controller.js~google",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/event.controller.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 1,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 10,
+    "kind": "variable",
+    "name": "calendarId",
+    "memberof": "TTUACM_Website/controllers/event.controller.js",
+    "static": true,
+    "longname": "TTUACM_Website/controllers/event.controller.js~calendarId",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/event.controller.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 4,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "string"
+      ]
+    }
+  },
+  {
+    "__docId__": 11,
+    "kind": "function",
+    "name": "createCalendar",
+    "memberof": "TTUACM_Website/controllers/event.controller.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "TTUACM_Website/controllers/event.controller.js~createCalendar",
+    "access": null,
+    "export": true,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/event.controller.js",
+    "importStyle": "{createCalendar}",
+    "description": "Create the Calendar Object for the rest of the functions to use",
+    "lineNumber": 12,
+    "unknown": [
+      {
+        "tagName": "@requires",
+        "tagValue": "oAuth2Client to be defined and valid. This can be acheived by running\n```\nrequire('</path/to/>oauth2.config.js').loadCredentials().```"
+      }
+    ],
+    "params": [],
+    "return": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 12,
+    "kind": "function",
+    "name": "getRawEvents",
+    "memberof": "TTUACM_Website/controllers/event.controller.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "TTUACM_Website/controllers/event.controller.js~getRawEvents",
+    "access": null,
+    "export": true,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/event.controller.js",
+    "importStyle": "{getRawEvents}",
+    "description": "Gets the raw events object\n\nRejects with an Error\nResolves with a list of (raw) events (an empty array if nore are found[])",
+    "lineNumber": 30,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{ Promise.<Array, Error> } a Promise"
+      }
+    ],
+    "params": [],
+    "return": {
+      "nullable": null,
+      "types": [
+        " Promise.<Array, Error> "
+      ],
+      "spread": false,
+      "description": "a Promise"
+    }
+  },
+  {
+    "__docId__": 13,
+    "kind": "function",
+    "name": "listEvents",
+    "memberof": "TTUACM_Website/controllers/event.controller.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "TTUACM_Website/controllers/event.controller.js~listEvents",
+    "access": null,
+    "export": true,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/event.controller.js",
+    "importStyle": "{listEvents}",
+    "description": "Lists the next 10 events on the user's primary calendar.\n\nRejects with an Error\n\nResolves with a list(10) events",
+    "lineNumber": 59,
+    "unknown": [
+      {
+        "tagName": "@requires",
+        "tagValue": "oAuth2Client - Configurations can be found in oauth2.config"
+      }
+    ],
+    "params": [],
+    "return": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 14,
+    "kind": "function",
+    "name": "getAttendees",
+    "memberof": "TTUACM_Website/controllers/event.controller.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "TTUACM_Website/controllers/event.controller.js~getAttendees",
+    "access": null,
+    "export": true,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/event.controller.js",
+    "importStyle": "{getAttendees}",
+    "description": "Lists all attendees for an event\n\nRejects with an error\n\nResolves with an array with a null email if empty or the list of attendees",
+    "lineNumber": 104,
+    "unknown": [
+      {
+        "tagName": "@requires",
+        "tagValue": "oAuth2Client - Configurations can be found in oauth2.config"
+      },
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise.<Array<Object>>} A Promise"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "eventId",
+        "description": "Event ID"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise.<Array<Object>>"
+      ],
+      "spread": false,
+      "description": "A Promise"
+    }
+  },
+  {
+    "__docId__": 15,
+    "kind": "function",
+    "name": "addAttendee",
+    "memberof": "TTUACM_Website/controllers/event.controller.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "TTUACM_Website/controllers/event.controller.js~addAttendee",
+    "access": null,
+    "export": true,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/event.controller.js",
+    "importStyle": "{addAttendee}",
+    "description": "Adds an attendee to an event",
+    "lineNumber": 131,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Array<Object>} updated attendee list"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "eventId",
+        "description": "the event ID"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Array"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "currentAttendees",
+        "description": "the current attendees for the event"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "email",
+        "description": "the user's email"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Array<Object>"
+      ],
+      "spread": false,
+      "description": "updated attendee list"
+    }
+  },
+  {
+    "__docId__": 16,
+    "kind": "function",
+    "name": "removeAttendee",
+    "memberof": "TTUACM_Website/controllers/event.controller.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "TTUACM_Website/controllers/event.controller.js~removeAttendee",
+    "access": null,
+    "export": true,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/event.controller.js",
+    "importStyle": "{removeAttendee}",
+    "description": "Removes the attendee by their email",
+    "lineNumber": 149,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Array<Object>} updated attendee list"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Array"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "currentAttendees",
+        "description": "the attendees list to remove from"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "email",
+        "description": "the user's email"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Array<Object>"
+      ],
+      "spread": false,
+      "description": "updated attendee list"
+    }
+  },
+  {
+    "__docId__": 17,
+    "kind": "function",
+    "name": "updateAttendee",
+    "memberof": "TTUACM_Website/controllers/event.controller.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "TTUACM_Website/controllers/event.controller.js~updateAttendee",
+    "access": null,
+    "export": true,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/event.controller.js",
+    "importStyle": "{updateAttendee}",
+    "description": "Replaces the event's attendees with the attendees list\nRejects with an Error\nResolves with the new event object\n\nFun Fact: Google's API deletes duplicates by default\n\nThis functionality is already tested by Google.\nDO NOT test this function as it interacts with real google calendars",
+    "lineNumber": 182,
+    "unknown": [
+      {
+        "tagName": "@requires",
+        "tagValue": "oAuth2Client - Configurations can be found in oauth2.config"
+      },
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise<Array<Object>>} A Promise"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "eventId",
+        "description": "user's event ID"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Array<Object>"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "attendees",
+        "description": "array of attendees"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise<Array<Object>>"
+      ],
+      "spread": false,
+      "description": "A Promise"
+    }
+  },
+  {
+    "__docId__": 18,
+    "kind": "file",
+    "name": "TTUACM_Website/controllers/user.controller.js",
+    "content": "// TODO: Refactor. Move all login and sign authentication to the auth controller.\r\n// Leave all profile manipulation in here\r\nconst User = require('../models/user.model');\r\nconst crypto = require('crypto');\r\nconst jwt = require('jsonwebtoken');\r\nconst bcrypt = require('bcryptjs');\r\nconst { google } = require('googleapis');\r\n\r\nconst contactsManager = require('../models/contacts.model')\r\n\r\n// Bcrypt options\r\nconst saltRounds = 10;\r\n\r\n/**\r\n * Checks to see if there is a valid username and password combination\r\n * that also has verified their email\r\n *\r\n * @param {string} email - user email\r\n * @param {string} password - user password\r\n *\r\n * @todo What if the user somehow didn't get the verification email. How do we handle that?\r\n * @returns {Promise.<token, Error>} Resolves with a JWT and rejects with an error\r\n */\r\nfunction login(email, password) {\r\n  return new Promise((resolve, reject) => {\r\n    User.getUserByEmail(email, (err, foundUser) => {\r\n      // Internal Server Error\r\n      if (err) {\r\n        reject(err);\r\n        // If the user has not been verified\r\n      } else if (!foundUser) {\r\n        reject(new Error('User Not Found'));\r\n      } else if (!foundUser.verified) {\r\n        reject(new Error('User Not Verified'));\r\n        // If the user has a signed up using a local auth strategy\r\n      } else if (foundUser !== null && foundUser.password !== null) {\r\n        bcrypt.compare(password, foundUser.password, async (err, response) => {\r\n          if (err) {\r\n            reject(err);\r\n          } else if (response) {\r\n            const token = await generateJWTToken(foundUser);\r\n            resolve({ token, foundUser });\r\n          } else {\r\n            reject(new Error('Invalid Login'));\r\n          }\r\n        });\r\n      } else {\r\n        // If the was no user found with that user name\r\n        reject(new Error('Internal Server Error'));\r\n      }\r\n    });\r\n  });\r\n}\r\n\r\n/**\r\n * Starts the process of reseting a lost password for an existing user\r\n *\r\n * @param {string} email - user email\r\n * @returns {Promise.<null, Object>} Resolves: object containg a HEX and a user, Rejects: error\r\n */\r\nfunction forgotLogin(email) {\r\n  return new Promise((resolve, reject) => {\r\n    User.findOne({ email }, (err, user) => {\r\n      if (user === null) {\r\n        reject(new Error('User not found'));\r\n      } else if (err) {\r\n        reject(err);\r\n      } else {\r\n        user.resetPasswordToken = token = generateHexToken();\r\n        user.resetPasswordExpires = Date.now() + 3 * 60 * 60 * 1000; // 3 Hours\r\n        user.save((err) => {\r\n          if (err) reject(err);\r\n          resolve({ token, user });\r\n        });\r\n      }\r\n    });\r\n  });\r\n}\r\n\r\n/**\r\n * Send the reset email to the user\r\n *\r\n * @param {string} email - users email\r\n * @param {string} token - HEX token/reset token\r\n * @param {Object} req - Express Request Object\r\n * @returns {Promise.<null, Error>} Rejects with an error if there is something wrong with the email\r\n * @todo Make this look cleaner\r\n */\r\nfunction sendResetEmail(token, email, req) {\r\n  return new Promise((resolve, reject) => {\r\n    if (process.env.NODE_ENV !== 'test') {\r\n      const mailOptions = {\r\n        to: email,\r\n        from: 'Texas Tech ACM',\r\n        subject: 'TTU ACM Password Reset',\r\n        html: `<p>You are receiving this because you (or someone else) have requested the reset of the password for your account.\\n\\nPlease click on the following link, or paste this into your browser to complete the process:\\n\\n</p>\\n\\n<a>${\r\n          req.protocol\r\n        }://${\r\n          req.headers.host\r\n        }/api/users/reset/${token}</a>\\n\\n<p>If you did not request this, please ignore this email and your password will remain unchanged.</p>\\n`\r\n      };\r\n      global.smtpTransporter.sendMail(mailOptions, (err) => {\r\n        if (err) reject(err);\r\n        resolve();\r\n      });\r\n    } else {\r\n      resolve();\r\n    }\r\n  });\r\n}\r\n\r\n/**\r\n * Hits when the user clicks the link that is sent to their email\r\n *\r\n * Will check whether or not the token passed in the URL is valid\r\n * @param {string} token - HEX token associated with an account (resetPasswordToken)\r\n * @returns {Promise.<token, Error>} Resolves: HEX Token, Rejects: an error\r\n */\r\nfunction resetToken(token) {\r\n  return new Promise((resolve, reject) => {\r\n    if (!token) reject(new Error('No Token Passed to Endpoint'));\r\n    User.findOne(\r\n      {\r\n        resetPasswordToken: token,\r\n        resetPasswordExpires: { $gt: Date.now() }\r\n      },\r\n      (err, user) => {\r\n        if (err) {\r\n          reject(new Error('Invalid token'));\r\n        } else if (!user) {\r\n          // User was not found or the token was expired, either way...\r\n          // Signals the front end to tell the user that their token was invalid\r\n          // and that they may need to send another email\r\n          reject(new Error('No User found'));\r\n        } else {\r\n          // The token is valid and will signal front end to render the login page\r\n          // The token we are passing is the same token that is in the database\r\n          resolve(token);\r\n        }\r\n      }\r\n    );\r\n  });\r\n}\r\n\r\n/**\r\n * Resets the user password\r\n *\r\n * @param {string} req.params.token - HEX Token passed through the URL\r\n * @param {string} password - new password that will replace the old one\r\n *\r\n * @returns {Promise.<null, Error>} - Rejects with an error\r\n * from verifyUser or sendChangedPasswordEmail\r\n */\r\nfunction resetPassword(token, password) {\r\n  return new Promise(async (resolve, reject) => {\r\n    try {\r\n      const user = await verifyUser(token, password);\r\n      await sendChangedPasswordEmail(user.email);\r\n      resolve(user);\r\n    } catch (err) {\r\n      console.log(err);\r\n      reject(err);\r\n    }\r\n  });\r\n}\r\n\r\n/**\r\n * Verifies the user based on whether or not they pass a valid JWT Token\r\n * and checks to see if the user actually exists\r\n *\r\n * @param {string} token - JWT Token\r\n * @param {string} passwordAttempt - Attempted password from user\r\n * @returns {Promise.<object, Error>} - Resolves with user or rejects with\r\n * an error from bcrypt or finding a document in Mongo\r\n */\r\nfunction verifyUser(token, passwordAttempt) {\r\n  return new Promise((resolve, reject) => {\r\n    bcrypt.hash(passwordAttempt, saltRounds, (err, hash) => {\r\n      if (err) reject(err);\r\n      User.findOneAndUpdate(\r\n        {\r\n          resetPasswordToken: token,\r\n          resetPasswordExpires: { $gt: Date.now() }\r\n        },\r\n        {\r\n          // Need to encrypt the password first\r\n          password: hash,\r\n          resetPasswordToken: undefined,\r\n          resetPasswordExpires: undefined\r\n        },\r\n        { new: true },\r\n        (err, user) => {\r\n          if (err) reject(err);\r\n          if (!user) reject(new Error('No User Found'));\r\n          resolve(user);\r\n        }\r\n      );\r\n    });\r\n  });\r\n}\r\n\r\n/**\r\n * Send the notification to the user that informtion in their account has changed\r\n *\r\n * @param {string} email User's email\r\n * @returns {Promise.<null, Error>} Rejects with an error if there is something wrong with the email\r\n */\r\nfunction sendChangedPasswordEmail(email) {\r\n  return new Promise((resolve, reject) => {\r\n    if (process.env.NODE_ENV !== 'test') {\r\n      const mailOptions = {\r\n        to: email,\r\n        from: process.env.email_username,\r\n        subject: 'Your password has been changed',\r\n        text:\r\n          'Hello,\\n\\n' +\r\n          'This is a confirmation that the password for your account has been changed.\\n'\r\n      };\r\n      global.smtpTransporter.sendMail(mailOptions, (err) => {\r\n        if (err) reject(err);\r\n        resolve();\r\n      });\r\n    } else {\r\n      resolve();\r\n    }\r\n  });\r\n}\r\n\r\n/**\r\n * Endpoint hit when a user clicks on their confirmation link\r\n *\r\n * Compares the url token with the token saved in the database.\r\n * If thre is a match, the user is verified and redirected to log in\r\n * @param {string} token - HEX Token\r\n * @returns {Promise.<null, Error>} Rejects: an error\r\n */\r\nfunction confirmToken(token) {\r\n  return new Promise((resolve, reject) => {\r\n    const query = {\r\n      confirmEmailToken: token\r\n    };\r\n    const update = {\r\n      confirmEmailToken: '',\r\n      verified: true\r\n    };\r\n    User.findOneAndUpdate(query, update, { new: true }, (err, user) => {\r\n      if (err || user === null) reject(err);\r\n      resolve(user);\r\n    });\r\n  });\r\n}\r\n\r\n/**\r\n * Register a new User\r\n *\r\n * @example\r\n * <caption>\r\n * firstName: 'Miggy',\r\n * lastName: 'Reyes',\r\n * username: 'miggylol',\r\n * email: 'email@gmail.com',\r\n * classification: 'Freshman',\r\n * password: 'password'\r\n * </caption>\r\n * @param {Object} user - user object\r\n * @param {string} user.password - user password\r\n *\r\n * @returns {Promise.<Object, Error>} Resolves with a user objectand rejects with an error\r\n */\r\nfunction register(user) {\r\n  return new Promise((resolve, reject) => {\r\n    // If the email is available, continue with the proccess\r\n    // Generates the salt used for hashing\r\n    User.findOne({ email: user.email }, (err, user) => {\r\n      if (err) reject(err);\r\n      if (user) reject(new Error('unavailable'));\r\n    });\r\n    bcrypt.hash(user.password, saltRounds, async (err, hash) => {\r\n      if (err) reject(err);\r\n      const token = await generateHexToken();\r\n\r\n      user.password = hash;\r\n      user.confirmEmailToken = token;\r\n      user.verified = false;\r\n\r\n      // New User Object from the mongoose User Schema\r\n      const newUser = new User(user);\r\n\r\n      // Saves the new user\r\n      newUser.save((err, user) => {\r\n        if (err) reject(err);\r\n        resolve(user);\r\n      });\r\n    });\r\n  });\r\n}\r\n\r\n/**\r\n * Sends a confirmation email to the user with a link/endpoint\r\n * to verify their email\r\n *\r\n * @param {Object} email - User's Email\r\n * @param {Object} req - Express Request Object\r\n * @returns {Promise.<null, Error>}\r\n */\r\nfunction sendConfirmationEmail(email, token, req) {\r\n  return new Promise((resolve, reject) => {\r\n    if (process.env.NODE_ENV !== 'test') {\r\n      const mailOptions = {\r\n        to: email,\r\n        from: 'Texas Tech ACM',\r\n        subject: 'Welcome to ACM: TTU',\r\n        html: `<p>Please click on the following link, or paste this into your browser to verify your account:</p>\\n\\n<a>${\r\n          req.protocol\r\n        }://${\r\n          req.headers.host\r\n        }/api/users/confirm/${token}</a>\\n\\n<p>If you did not sign up for an account, please ignore this email.</p>\\n`\r\n      };\r\n      global.smtpTransporter.sendMail(mailOptions, (err) => {\r\n        if (err) reject(err);\r\n        resolve();\r\n        console.log(`Email send to ${email}`);\r\n      });\r\n    } else {\r\n      resolve();\r\n    }\r\n  });\r\n}\r\n\r\n/**\r\n * Fetches the user's profile\r\n *\r\n * @param {string} email - user's unique email\r\n * @returns {Promise.<object, Error>} Resolves: a user object; Rejects: Error\r\n */\r\nfunction getProfile(email) {\r\n  return new Promise((resolve, reject) => {\r\n    User.findOne({ email })\r\n      .then((user) => {\r\n        if (!user) reject(new Error('Email Not Found'));\r\n        resolve(user);\r\n      })\r\n      .catch((err) => {\r\n        reject(err);\r\n      });\r\n  });\r\n}\r\n\r\n/**\r\n * Fetches the user's profile\r\n *\r\n * @deprecated - start using updateUser\r\n *\r\n * @param {string} path - user's unique path to resume on Firebase\r\n * @param {string} id - user's id\r\n * @returns {Promise.<object, Error>} Resolves: a user object; Rejects: Error\r\n */\r\nfunction updateResume(id, path) {\r\n  return new Promise((resolve, reject) => {\r\n    User.findByIdAndUpdate(id, {resume: path}, {new: true})\r\n      .then((user) => {\r\n        if (!user) reject(new Error('User Not Found'));\r\n        resolve(user);\r\n      })\r\n      .catch((err) => {\r\n        reject(err);\r\n      });\r\n  });\r\n}\r\n\r\n/**\r\n * Updates the complete user object\r\n *\r\n * @param {object} newUser new user object\r\n * @returns {Promise.<object, Error>} Resolves: a new user object and token; Rejects: Error\r\n */\r\nfunction updateUser(newUser) {\r\n  return new Promise(async (resolve, reject) => {\r\n    try {\r\n      const user = await User.findByIdAndUpdate(newUser._id, newUser, { new: true }).exec();\r\n      if (!user) reject(new Error('User Not Found'));\r\n      const token = await generateJWTToken(user);\r\n      const response = { user, token };\r\n      resolve(response);\r\n    } catch (err) {\r\n      reject(err);\r\n    }\r\n  });\r\n}\r\n\r\n/**\r\n * Sends email to us from who ever's email was given\r\n *\r\n * @param {Object} options - options object\r\n * @param {string} options.name - student name\r\n * @param {string} options.email - student email\r\n * @param {string} options.topic - student topic\r\n * @param {string} options.message - student message\r\n *\r\n * @returns {Promise.<null, Error>}\r\n */\r\nfunction contactUs(options) {\r\n  return new Promise((resolve, reject) => {\r\n    if (process.env.NODE_ENV !== 'test') {\r\n      const mailOptions = {\r\n        from: options.email,\r\n        to: process.env.email_username,\r\n        subject: 'ACM Question',\r\n        text: `You got a message!\\n\\nSender: ${options.name}\\n\\nEmail: ${options.email}\\n\\nTopic: ${\r\n          options.topic\r\n        }\\n\\nMessage: ${options.message}\\n`\r\n      };\r\n      global.smtpTransporter.sendMail(mailOptions, (err) => {\r\n        if (err) {\r\n          console.log(err);\r\n          reject(err);\r\n        }\r\n        resolve();\r\n      });\r\n    } else {\r\n      resolve();\r\n    }\r\n  });\r\n}\r\n\r\n// Generates a HexToken, usually for quick random tokens; does not require string\r\nfunction generateHexToken() {\r\n  const token = crypto.randomBytes(20);\r\n  return token.toString('hex');\r\n}\r\n\r\n/**\r\n * Generates a JWT\r\n *\r\n * @param {object} payload all the data that will be stored into the token\r\n */\r\nfunction generateJWTToken(payload) {\r\n  return new Promise((resolve, reject) => {\r\n    const token = jwt.sign({ data: payload },\r\n      process.env.session_secret, {\r\n        expiresIn: 604800 // 1 week\r\n      });\r\n    if (token === '') {\r\n      reject(new Error('Empty payload'));\r\n    }\r\n    resolve(token);\r\n  });\r\n}\r\n\r\nmodule.exports = {\r\n  confirmToken,\r\n  contactUs,\r\n  forgotLogin,\r\n  getProfile,\r\n  login,\r\n  register,\r\n  resetToken,\r\n  resetPassword,\r\n  sendConfirmationEmail,\r\n  sendChangedPasswordEmail,\r\n  sendResetEmail,\r\n  updateResume,\r\n  updateUser,\r\n  verifyUser\r\n};\r\n",
+    "static": true,
+    "longname": "TTUACM_Website/controllers/user.controller.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 19,
+    "kind": "variable",
+    "name": "User",
+    "memberof": "TTUACM_Website/controllers/user.controller.js",
+    "static": true,
+    "longname": "TTUACM_Website/controllers/user.controller.js~User",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/user.controller.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 3,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 20,
+    "kind": "variable",
+    "name": "crypto",
+    "memberof": "TTUACM_Website/controllers/user.controller.js",
+    "static": true,
+    "longname": "TTUACM_Website/controllers/user.controller.js~crypto",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/user.controller.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 4,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 21,
+    "kind": "variable",
+    "name": "jwt",
+    "memberof": "TTUACM_Website/controllers/user.controller.js",
+    "static": true,
+    "longname": "TTUACM_Website/controllers/user.controller.js~jwt",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/user.controller.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 5,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 22,
+    "kind": "variable",
+    "name": "bcrypt",
+    "memberof": "TTUACM_Website/controllers/user.controller.js",
+    "static": true,
+    "longname": "TTUACM_Website/controllers/user.controller.js~bcrypt",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/user.controller.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 6,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 23,
+    "kind": "variable",
+    "name": "google",
+    "memberof": "TTUACM_Website/controllers/user.controller.js",
+    "static": true,
+    "longname": "TTUACM_Website/controllers/user.controller.js~google",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/user.controller.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 7,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 24,
+    "kind": "variable",
+    "name": "contactsManager",
+    "memberof": "TTUACM_Website/controllers/user.controller.js",
+    "static": true,
+    "longname": "TTUACM_Website/controllers/user.controller.js~contactsManager",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/user.controller.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 9,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 25,
+    "kind": "variable",
+    "name": "saltRounds",
+    "memberof": "TTUACM_Website/controllers/user.controller.js",
+    "static": true,
+    "longname": "TTUACM_Website/controllers/user.controller.js~saltRounds",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/user.controller.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 12,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "number"
+      ]
+    }
+  },
+  {
+    "__docId__": 26,
+    "kind": "function",
+    "name": "generateHexToken",
+    "memberof": "TTUACM_Website/controllers/user.controller.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "TTUACM_Website/controllers/user.controller.js~generateHexToken",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/user.controller.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 427,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "params": [],
+    "return": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 27,
+    "kind": "function",
+    "name": "generateJWTToken",
+    "memberof": "TTUACM_Website/controllers/user.controller.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "TTUACM_Website/controllers/user.controller.js~generateJWTToken",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/user.controller.js",
+    "importStyle": null,
+    "description": "Generates a JWT",
+    "lineNumber": 437,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "payload",
+        "description": "all the data that will be stored into the token"
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 28,
+    "kind": "function",
+    "name": "confirmToken",
+    "memberof": "TTUACM_Website/controllers/user.controller.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "TTUACM_Website/controllers/user.controller.js~confirmToken",
+    "access": null,
+    "export": true,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/user.controller.js",
+    "importStyle": "{confirmToken}",
+    "description": "Endpoint hit when a user clicks on their confirmation link\n\nCompares the url token with the token saved in the database.\nIf thre is a match, the user is verified and redirected to log in",
+    "lineNumber": 237,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise.<null, Error>} Rejects: an error"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "token",
+        "description": "HEX Token"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise.<null, Error>"
+      ],
+      "spread": false,
+      "description": "Rejects: an error"
+    }
+  },
+  {
+    "__docId__": 29,
+    "kind": "function",
+    "name": "contactUs",
+    "memberof": "TTUACM_Website/controllers/user.controller.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "TTUACM_Website/controllers/user.controller.js~contactUs",
+    "access": null,
+    "export": true,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/user.controller.js",
+    "importStyle": "{contactUs}",
+    "description": "Sends email to us from who ever's email was given",
+    "lineNumber": 402,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise.<null, Error>}"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "options",
+        "description": "options object"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "options.name",
+        "description": "student name"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "options.email",
+        "description": "student email"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "options.topic",
+        "description": "student topic"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "options.message",
+        "description": "student message"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise.<null, Error>"
+      ],
+      "spread": false,
+      "description": ""
+    }
+  },
+  {
+    "__docId__": 30,
+    "kind": "function",
+    "name": "forgotLogin",
+    "memberof": "TTUACM_Website/controllers/user.controller.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "TTUACM_Website/controllers/user.controller.js~forgotLogin",
+    "access": null,
+    "export": true,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/user.controller.js",
+    "importStyle": "{forgotLogin}",
+    "description": "Starts the process of reseting a lost password for an existing user",
+    "lineNumber": 61,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise.<null, Object>} Resolves: object containg a HEX and a user, Rejects: error"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "email",
+        "description": "user email"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise.<null, Object>"
+      ],
+      "spread": false,
+      "description": "Resolves: object containg a HEX and a user, Rejects: error"
+    }
+  },
+  {
+    "__docId__": 31,
+    "kind": "function",
+    "name": "getProfile",
+    "memberof": "TTUACM_Website/controllers/user.controller.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "TTUACM_Website/controllers/user.controller.js~getProfile",
+    "access": null,
+    "export": true,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/user.controller.js",
+    "importStyle": "{getProfile}",
+    "description": "Fetches the user's profile",
+    "lineNumber": 336,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise.<object, Error>} Resolves: a user object; Rejects: Error"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "email",
+        "description": "user's unique email"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise.<object, Error>"
+      ],
+      "spread": false,
+      "description": "Resolves: a user object; Rejects: Error"
+    }
+  },
+  {
+    "__docId__": 32,
+    "kind": "function",
+    "name": "login",
+    "memberof": "TTUACM_Website/controllers/user.controller.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "TTUACM_Website/controllers/user.controller.js~login",
+    "access": null,
+    "export": true,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/user.controller.js",
+    "importStyle": "{login}",
+    "description": "Checks to see if there is a valid username and password combination\nthat also has verified their email",
+    "lineNumber": 24,
+    "todo": [
+      "What if the user somehow didn't get the verification email. How do we handle that?"
+    ],
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise.<token, Error>} Resolves with a JWT and rejects with an error"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "email",
+        "description": "user email"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "password",
+        "description": "user password"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise.<token, Error>"
+      ],
+      "spread": false,
+      "description": "Resolves with a JWT and rejects with an error"
+    }
+  },
+  {
+    "__docId__": 33,
+    "kind": "function",
+    "name": "register",
+    "memberof": "TTUACM_Website/controllers/user.controller.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "TTUACM_Website/controllers/user.controller.js~register",
+    "access": null,
+    "export": true,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/user.controller.js",
+    "importStyle": "{register}",
+    "description": "Register a new User",
+    "examples": [
+      "<caption>\nfirstName: 'Miggy',\nlastName: 'Reyes',\nusername: 'miggylol',\nemail: 'email@gmail.com',\nclassification: 'Freshman',\npassword: 'password'\n</caption>"
+    ],
+    "lineNumber": 270,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise.<Object, Error>} Resolves with a user objectand rejects with an error"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "user",
+        "description": "user object"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "user.password",
+        "description": "user password"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise.<Object, Error>"
+      ],
+      "spread": false,
+      "description": "Resolves with a user objectand rejects with an error"
+    }
+  },
+  {
+    "__docId__": 34,
+    "kind": "function",
+    "name": "resetToken",
+    "memberof": "TTUACM_Website/controllers/user.controller.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "TTUACM_Website/controllers/user.controller.js~resetToken",
+    "access": null,
+    "export": true,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/user.controller.js",
+    "importStyle": "{resetToken}",
+    "description": "Hits when the user clicks the link that is sent to their email\n\nWill check whether or not the token passed in the URL is valid",
+    "lineNumber": 119,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise.<token, Error>} Resolves: HEX Token, Rejects: an error"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "token",
+        "description": "HEX token associated with an account (resetPasswordToken)"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise.<token, Error>"
+      ],
+      "spread": false,
+      "description": "Resolves: HEX Token, Rejects: an error"
+    }
+  },
+  {
+    "__docId__": 35,
+    "kind": "function",
+    "name": "resetPassword",
+    "memberof": "TTUACM_Website/controllers/user.controller.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "TTUACM_Website/controllers/user.controller.js~resetPassword",
+    "access": null,
+    "export": true,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/user.controller.js",
+    "importStyle": "{resetPassword}",
+    "description": "Resets the user password",
+    "lineNumber": 154,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise.<null, Error>} - Rejects with an error\nfrom verifyUser or sendChangedPasswordEmail"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "req.params.token",
+        "description": "HEX Token passed through the URL"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "password",
+        "description": "new password that will replace the old one"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise.<null, Error>"
+      ],
+      "spread": false,
+      "description": "Rejects with an error\nfrom verifyUser or sendChangedPasswordEmail"
+    }
+  },
+  {
+    "__docId__": 36,
+    "kind": "function",
+    "name": "sendConfirmationEmail",
+    "memberof": "TTUACM_Website/controllers/user.controller.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "TTUACM_Website/controllers/user.controller.js~sendConfirmationEmail",
+    "access": null,
+    "export": true,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/user.controller.js",
+    "importStyle": "{sendConfirmationEmail}",
+    "description": "Sends a confirmation email to the user with a link/endpoint\nto verify their email",
+    "lineNumber": 306,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise.<null, Error>}"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "email",
+        "description": "User's Email"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "req",
+        "description": "Express Request Object"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise.<null, Error>"
+      ],
+      "spread": false,
+      "description": ""
+    }
+  },
+  {
+    "__docId__": 37,
+    "kind": "function",
+    "name": "sendChangedPasswordEmail",
+    "memberof": "TTUACM_Website/controllers/user.controller.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "TTUACM_Website/controllers/user.controller.js~sendChangedPasswordEmail",
+    "access": null,
+    "export": true,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/user.controller.js",
+    "importStyle": "{sendChangedPasswordEmail}",
+    "description": "Send the notification to the user that informtion in their account has changed",
+    "lineNumber": 208,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise.<null, Error>} Rejects with an error if there is something wrong with the email"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "email",
+        "description": "User's email"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise.<null, Error>"
+      ],
+      "spread": false,
+      "description": "Rejects with an error if there is something wrong with the email"
+    }
+  },
+  {
+    "__docId__": 38,
+    "kind": "function",
+    "name": "sendResetEmail",
+    "memberof": "TTUACM_Website/controllers/user.controller.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "TTUACM_Website/controllers/user.controller.js~sendResetEmail",
+    "access": null,
+    "export": true,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/user.controller.js",
+    "importStyle": "{sendResetEmail}",
+    "description": "Send the reset email to the user",
+    "lineNumber": 89,
+    "todo": [
+      "Make this look cleaner"
+    ],
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise.<null, Error>} Rejects with an error if there is something wrong with the email"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "email",
+        "description": "users email"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "token",
+        "description": "HEX token/reset token"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "req",
+        "description": "Express Request Object"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise.<null, Error>"
+      ],
+      "spread": false,
+      "description": "Rejects with an error if there is something wrong with the email"
+    }
+  },
+  {
+    "__docId__": 39,
+    "kind": "function",
+    "name": "updateResume",
+    "memberof": "TTUACM_Website/controllers/user.controller.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "TTUACM_Website/controllers/user.controller.js~updateResume",
+    "access": null,
+    "export": true,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/user.controller.js",
+    "importStyle": "{updateResume}",
+    "description": "Fetches the user's profile",
+    "lineNumber": 358,
+    "deprecated": "- start using updateUser",
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise.<object, Error>} Resolves: a user object; Rejects: Error"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "path",
+        "description": "user's unique path to resume on Firebase"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "id",
+        "description": "user's id"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise.<object, Error>"
+      ],
+      "spread": false,
+      "description": "Resolves: a user object; Rejects: Error"
+    }
+  },
+  {
+    "__docId__": 40,
+    "kind": "function",
+    "name": "updateUser",
+    "memberof": "TTUACM_Website/controllers/user.controller.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "TTUACM_Website/controllers/user.controller.js~updateUser",
+    "access": null,
+    "export": true,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/user.controller.js",
+    "importStyle": "{updateUser}",
+    "description": "Updates the complete user object",
+    "lineNumber": 377,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise.<object, Error>} Resolves: a new user object and token; Rejects: Error"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "newUser",
+        "description": "new user object"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise.<object, Error>"
+      ],
+      "spread": false,
+      "description": "Resolves: a new user object and token; Rejects: Error"
+    }
+  },
+  {
+    "__docId__": 41,
+    "kind": "function",
+    "name": "verifyUser",
+    "memberof": "TTUACM_Website/controllers/user.controller.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "TTUACM_Website/controllers/user.controller.js~verifyUser",
+    "access": null,
+    "export": true,
+    "importPath": "ttuacm-website/TTUACM_Website/controllers/user.controller.js",
+    "importStyle": "{verifyUser}",
+    "description": "Verifies the user based on whether or not they pass a valid JWT Token\nand checks to see if the user actually exists",
+    "lineNumber": 176,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise.<object, Error>} - Resolves with user or rejects with\nan error from bcrypt or finding a document in Mongo"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "token",
+        "description": "JWT Token"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "passwordAttempt",
+        "description": "Attempted password from user"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise.<object, Error>"
+      ],
+      "spread": false,
+      "description": "Resolves with user or rejects with\nan error from bcrypt or finding a document in Mongo"
+    }
+  },
+  {
+    "__docId__": 42,
+    "kind": "file",
+    "name": "TTUACM_Website/routes/auth.router.js",
+    "content": "const express = require('express');\r\nconst passport = require('passport');\r\n\r\nconst authRouter = express.Router();\r\nconst AuthCtrl = require('../controllers/auth.controller');\r\n\r\n/* GETS the Google Login Screen */\r\nauthRouter.get(\r\n  '/google',\r\n  passport.authenticate('google', {\r\n    scope: [\r\n      'https://www.googleapis.com/auth/userinfo.profile',\r\n      'https://www.googleapis.com/auth/userinfo.email'\r\n    ]\r\n  })\r\n);\r\n\r\n/* Callback URL for Google */\r\nauthRouter.get('/google/redirect', passport.authenticate('google'), AuthCtrl.oauth2);\r\n\r\n/* GETS the GitHub Login Screen */\r\nauthRouter.get(\r\n  '/github',\r\n  passport.authenticate('github', {\r\n    scope: ['user']\r\n  })\r\n);\r\n\r\n/* Callback URL for GitHub */\r\nauthRouter.get('/github/redirect', passport.authenticate('github'), AuthCtrl.oauth2);\r\n\r\n/* GETS the Facebook Login Screen */\r\nauthRouter.get(\r\n  '/facebook',\r\n  passport.authenticate('facebook', {\r\n    scope: ['public_profile', 'email']\r\n  })\r\n);\r\n\r\n/* Callback URL for Facebook */\r\nauthRouter.get(\r\n  '/facebook/redirect',\r\n  passport.authenticate('facebook', {\r\n    failureRedirect: '/login'\r\n  }),\r\n  AuthCtrl.oauth2\r\n);\r\n\r\nmodule.exports = authRouter;\r\n",
+    "static": true,
+    "longname": "TTUACM_Website/routes/auth.router.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 43,
+    "kind": "variable",
+    "name": "express",
+    "memberof": "TTUACM_Website/routes/auth.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/auth.router.js~express",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/routes/auth.router.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 1,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 44,
+    "kind": "variable",
+    "name": "passport",
+    "memberof": "TTUACM_Website/routes/auth.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/auth.router.js~passport",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/routes/auth.router.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 2,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 45,
+    "kind": "variable",
+    "name": "AuthCtrl",
+    "memberof": "TTUACM_Website/routes/auth.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/auth.router.js~AuthCtrl",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/routes/auth.router.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 5,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 46,
+    "kind": "variable",
+    "name": "authRouter",
+    "memberof": "TTUACM_Website/routes/auth.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/auth.router.js~authRouter",
+    "access": null,
+    "export": true,
+    "importPath": "ttuacm-website/TTUACM_Website/routes/auth.router.js",
+    "importStyle": "authRouter",
+    "description": null,
+    "lineNumber": 4,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 47,
+    "kind": "file",
+    "name": "TTUACM_Website/routes/contacts.router.js",
+    "content": "const express = require('express')\nconst { membersOnlyRoute } = require('./utils')\n\n// Controller\nconst ctrl = require('../controllers/contacts.controller')\n\n\nconst router = express.Router()\n\nrouter.get('/hello-world', (req, res) => {\n  console.log('hello world')\n  res.json({ msg: 'Hello World!' })\n})\n\n/**\n * Single Endpoint for front end\n * Adds the given email to the SDC Group with their interests as a label\n *\n * - Restricted\n * - Endpoint: `/contacts/add-to-google-group`\n * - Verb: PUT\n *\n * @requires Authentication - JWT\n * @param {object} req - Express Request Object\n * @param {string} req.body.email - user's email\n * @param {string} req.body.topics - array of topic of interests\n * @param {string} req.body.otherTopic - user's request for a topic\n *\n */\nrouter.put('/', membersOnlyRoute, async (req, res) => {\n  try {\n    const { email, topics, otherTopic } = req.body\n    // if (!email || !topics || !otherTopic) throw new Error('Missing required variable')\n    await ctrl.addUserToGoogleContacts(email, topics, otherTopic)\n    res.status(200).end()\n  } catch (err) {\n    console.error(err)\n    res.status(err.code || 404).json({ err: err.message })\n  }\n});\n\nmodule.exports = router;\n",
+    "static": true,
+    "longname": "TTUACM_Website/routes/contacts.router.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 48,
+    "kind": "variable",
+    "name": "express",
+    "memberof": "TTUACM_Website/routes/contacts.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/contacts.router.js~express",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/routes/contacts.router.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 1,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 49,
+    "kind": "variable",
+    "name": "membersOnlyRoute",
+    "memberof": "TTUACM_Website/routes/contacts.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/contacts.router.js~membersOnlyRoute",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/routes/contacts.router.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 2,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 50,
+    "kind": "variable",
+    "name": "ctrl",
+    "memberof": "TTUACM_Website/routes/contacts.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/contacts.router.js~ctrl",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/routes/contacts.router.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 5,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 51,
+    "kind": "variable",
+    "name": "router",
+    "memberof": "TTUACM_Website/routes/contacts.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/contacts.router.js~router",
+    "access": null,
+    "export": true,
+    "importPath": "ttuacm-website/TTUACM_Website/routes/contacts.router.js",
+    "importStyle": "router",
+    "description": null,
+    "lineNumber": 8,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 52,
+    "kind": "file",
+    "name": "TTUACM_Website/routes/event.router.js",
+    "content": "const express = require('express');\r\nconst passport = require('passport');\r\n\r\nconst controller = require('../controllers/event.controller');\r\n\r\nconst router = express.Router();\r\n/**\r\n * Middleware for route guarding\r\n * If errors occur, it is probably because front-end is not sending\r\n * JWT along with their requests\r\n */\r\nconst membersOnlyRoute = passport.authenticate('jwt', { session: false });\r\n\r\n/**\r\n * Gets all the events (formatted) in ACM Google Calendar using an OAuth2 Object\r\n *\r\n * - Endpoint: `/api/events`\r\n * - GET\r\n *\r\n * @typedef {function} EventsRouter-listEvents\r\n */\r\nrouter.get('/', (req, res) => {\r\n  controller\r\n    .listEvents()\r\n    .then((events) => {\r\n      res.status(200).json({ events });\r\n    })\r\n    .catch((err) => {\r\n      if (err) console.log(err);\r\n      res.status(404).json({ events: [], err });\r\n    });\r\n});\r\n\r\n/**\r\n * Gets all attendees for an event\r\n *\r\n * - Endpoint `/api/events/attendee`\r\n * - Verb: GET\r\n *\r\n * @typedef {function} EventsRouter-getAttendees\r\n */\r\nrouter.get('/attendee/:id', (req, res) => {\r\n  controller\r\n    .getAttendees(req.params.id)\r\n    .then((attendees) => {\r\n      res.status(200).json({ err: null, attendees });\r\n    })\r\n    .catch((err) => {\r\n      console.error(err.errors);\r\n      res.status(404).json({});\r\n    });\r\n});\r\n\r\n/**\r\n * Adds an attendee to the event\r\n *\r\n * - Endpoint `/api/events/attendee`\r\n * - Verb: PATCH\r\n *\r\n * @param {string} req.body.email - user's email\r\n * @typedef {function} EventsRouter-addAttendee\r\n */\r\nrouter.patch('/attendee/:id', membersOnlyRoute, async (req, res) => {\r\n  console.log('Add Route');\r\n  try {\r\n    const eventId = req.params.id;\r\n    const currentAttendees = await controller.getAttendees(eventId);\r\n    const updatedAttendeeList = await controller.addAttendee(currentAttendees, req.body.email);\r\n    const updatedEvent = await controller.updateAttendee(eventId, updatedAttendeeList);\r\n    res.status(200).json({ err: null, updatedEvent });\r\n  } catch (err) {\r\n    console.error(err);\r\n    res.status(404).json({ err, updatedEvent: null });\r\n  }\r\n});\r\n\r\n/**\r\n * Deletes an attendee for an event\r\n *\r\n * - Endpoint `/api/events/remove-attendee`\r\n * - Verb: patch\r\n *\r\n * @param {string} req.params.id event ID\r\n * @typedef {function} EventsRouter-removeAttendee\r\n */\r\nrouter.patch('/remove-attendee/:id', async (req, res) => {\r\n  console.log('Remove Route');\r\n  try {\r\n    const eventId = req.params.id;\r\n    const currentAttendees = await controller.getAttendees(eventId);\r\n    const updatedAttendeeList = await controller.removeAttendee(currentAttendees, req.body.email);\r\n    const updatedEvent = await controller.updateAttendee(eventId, updatedAttendeeList);\r\n    res.status(200).json({ err: null, updatedEvent });\r\n  } catch (err) {\r\n    console.error(err);\r\n    res.status(404).json({ err, updatedEvent: null });\r\n  }\r\n});\r\n\r\n/**\r\n * Gets all raw event objects: Mainly used for testing\r\n *\r\n * - Endpoint `/api/events/raw`\r\n * - Verb: GET\r\n *\r\n * @typedef {function} EventsRouter-getRawEvents\r\n */\r\nrouter.get('/raw', (req, res) => {\r\n  controller\r\n    .getRawEvents()\r\n    .then((events) => {\r\n      res.status(200).json({ err: null, events });\r\n    })\r\n    .catch((err) => {\r\n      res.status(404).json({ err, events: null });\r\n    });\r\n});\r\n\r\nmodule.exports = router;\r\n",
+    "static": true,
+    "longname": "TTUACM_Website/routes/event.router.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 53,
+    "kind": "variable",
+    "name": "express",
+    "memberof": "TTUACM_Website/routes/event.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/event.router.js~express",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/routes/event.router.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 1,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 54,
+    "kind": "variable",
+    "name": "passport",
+    "memberof": "TTUACM_Website/routes/event.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/event.router.js~passport",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/routes/event.router.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 2,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 55,
+    "kind": "variable",
+    "name": "controller",
+    "memberof": "TTUACM_Website/routes/event.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/event.router.js~controller",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/routes/event.router.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 4,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 56,
+    "kind": "variable",
+    "name": "membersOnlyRoute",
+    "memberof": "TTUACM_Website/routes/event.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/event.router.js~membersOnlyRoute",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/routes/event.router.js",
+    "importStyle": null,
+    "description": "Middleware for route guarding\nIf errors occur, it is probably because front-end is not sending\nJWT along with their requests",
+    "lineNumber": 12,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 57,
+    "kind": "typedef",
+    "name": "EventsRouter-listEvents",
+    "memberof": "TTUACM_Website/routes/event.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/event.router.js~EventsRouter-listEvents",
+    "access": null,
+    "description": "Gets all the events (formatted) in ACM Google Calendar using an OAuth2 Object\n\n- Endpoint: `/api/events`\n- GET",
+    "lineNumber": 22,
+    "type": {
+      "types": [
+        "function"
+      ],
+      "optional": false,
+      "name": "EventsRouter-listEvents"
+    }
+  },
+  {
+    "__docId__": 58,
+    "kind": "typedef",
+    "name": "EventsRouter-getAttendees",
+    "memberof": "TTUACM_Website/routes/event.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/event.router.js~EventsRouter-getAttendees",
+    "access": null,
+    "description": "Gets all attendees for an event\n\n- Endpoint `/api/events/attendee`\n- Verb: GET",
+    "lineNumber": 42,
+    "type": {
+      "types": [
+        "function"
+      ],
+      "optional": false,
+      "name": "EventsRouter-getAttendees"
+    }
+  },
+  {
+    "__docId__": 59,
+    "kind": "typedef",
+    "name": "EventsRouter-addAttendee",
+    "memberof": "TTUACM_Website/routes/event.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/event.router.js~EventsRouter-addAttendee",
+    "access": null,
+    "description": "Adds an attendee to the event\n\n- Endpoint `/api/events/attendee`\n- Verb: PATCH",
+    "lineNumber": 63,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "req.body.email",
+        "description": "user's email"
+      }
+    ],
+    "type": {
+      "types": [
+        "function"
+      ],
+      "optional": false,
+      "name": "EventsRouter-addAttendee"
+    }
+  },
+  {
+    "__docId__": 60,
+    "kind": "typedef",
+    "name": "EventsRouter-removeAttendee",
+    "memberof": "TTUACM_Website/routes/event.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/event.router.js~EventsRouter-removeAttendee",
+    "access": null,
+    "description": "Deletes an attendee for an event\n\n- Endpoint `/api/events/remove-attendee`\n- Verb: patch",
+    "lineNumber": 86,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "req.params.id",
+        "description": "event ID"
+      }
+    ],
+    "type": {
+      "types": [
+        "function"
+      ],
+      "optional": false,
+      "name": "EventsRouter-removeAttendee"
+    }
+  },
+  {
+    "__docId__": 61,
+    "kind": "typedef",
+    "name": "EventsRouter-getRawEvents",
+    "memberof": "TTUACM_Website/routes/event.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/event.router.js~EventsRouter-getRawEvents",
+    "access": null,
+    "description": "Gets all raw event objects: Mainly used for testing\n\n- Endpoint `/api/events/raw`\n- Verb: GET",
+    "lineNumber": 108,
+    "type": {
+      "types": [
+        "function"
+      ],
+      "optional": false,
+      "name": "EventsRouter-getRawEvents"
+    }
+  },
+  {
+    "__docId__": 62,
+    "kind": "variable",
+    "name": "router",
+    "memberof": "TTUACM_Website/routes/event.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/event.router.js~router",
+    "access": null,
+    "export": true,
+    "importPath": "ttuacm-website/TTUACM_Website/routes/event.router.js",
+    "importStyle": "router",
+    "description": null,
+    "lineNumber": 6,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 63,
+    "kind": "file",
+    "name": "TTUACM_Website/routes/user.router.js",
+    "content": "// TODO: Move emailing to cloud functions\r\n// TODO: Split upall registration and validation into /api/auth\r\nconst express = require('express');\r\nconst passport = require('passport');\r\nconst querystring = require('querystring');\r\n\r\nconst { membersOnlyRoute } = require('./utils')\r\n\r\n// Controller\r\nconst controller = require('../controllers/user.controller');\r\n\r\nconst router = express.Router();\r\n\r\n// Routes pertaining to the user's account\r\n\r\n/**\r\n * Registers the user and saved them as a unverified user\r\n *\r\n * - endpoint: `/users/register`\r\n * - Verb: POST\r\n *\r\n * OnFailure: Sends an error message\r\n * OnSuccess: Sends the user back as JSON\r\n *\r\n * @typedef {function} UserRouter-register\r\n *\r\n */\r\nrouter.post('/register', async (req, res) => {\r\n  const user = {\r\n    email: req.body.email,\r\n    password: req.body.password,\r\n    firstName: req.body.firstName,\r\n    lastName: req.body.lastName,\r\n    classification: req.body.classification,\r\n    confirmEmailToken: null\r\n  };\r\n  try {\r\n    const createdUser = await controller.register(user);\r\n    await controller.sendConfirmationEmail(createdUser.email, createdUser.confirmEmailToken, req);\r\n    res.status(201).json({ user });\r\n  } catch (err) {\r\n    if (err.message === 'unavailable') {\r\n      res.status(401).json({ emailAvailable: false });\r\n    } else {\r\n      res.status(404).json({ err });\r\n    }\r\n  }\r\n});\r\n\r\n/**\r\n * JWT Login/Authentication\r\n * User must not have signed up using OAuth2\r\n *\r\n * - endpoint: `/users/login`\r\n * - Verb: POST\r\n *\r\n * OnFailure: Sends an error message\r\n * OnSuccess: Sends the JWT Token of the user\r\n *\r\n * @typedef {function} UserRouter-login\r\n */\r\nrouter.post('/login', (req, res) => {\r\n  const email = req.body.email;\r\n  const inputPassword = req.body.password;\r\n  controller.login(email, inputPassword)\r\n    .then((response) => {\r\n      const token = response.token;\r\n      const user = response.foundUser;\r\n      res.status(200).json({ token: `JWT ${token}`, user, msg: null });\r\n    })\r\n    .catch((err) => {\r\n      const errors = ['Invalid Login', 'User Not Verified', 'User Not Found'];\r\n      if (errors.indexOf(err.message) === -1) {\r\n        console.log(err.message);\r\n      }\r\n      res.status(404).json({ token: null, user: null, msg: err.message });\r\n    });\r\n});\r\n\r\n/**\r\n * Confirms the user has a valid email account\r\n *\r\n * - endpoint: `users/confirm/:token`\r\n * - VERB: GET\r\n *\r\n * OnFailure: Redirects to error page\r\n * OnSuccess: Redirects to the login page with querystring to signal a notification\r\n *\r\n * @typedef {function} UserRouter-confirmToken\r\n * @param {querystring} token - HEX token saved in confirmEmailToken\r\n */\r\nrouter.get('/confirm/:token', (req, res) => {\r\n  controller.confirmToken(req.params.token)\r\n    .then(() => {\r\n      const qs = querystring.stringify({ verify: 'success' });\r\n      res.redirect(`${process.env.CLIENT}/auth/?${qs}`);\r\n    })\r\n    .catch((err) => {\r\n      console.log('Error Occured');\r\n      console.log(err);\r\n      const qs = querystring.stringify({ err: 'Error Validating Email' });\r\n      res.redirect(`${process.env.CLIENT}/?${qs}`);\r\n    });\r\n});\r\n\r\n/**\r\n * Resends the confirmation email to the requested user\r\n *\r\n * - endpoint: `/users/confirm`\r\n * - VERB: POST\r\n *\r\n * OnFailure: Tells the user that the email has failed to send\r\n * OnSuccess: Sends a successful status code\r\n *\r\n * @typedef {function} UserRouter-sendConfirmationEmail\r\n */\r\nrouter.post('/confirm', (req, res) => {\r\n  controller.sendConfirmationEmail(req.body.email, req.body.token, req)\r\n    .then(() => {\r\n      res.status(200).json({});\r\n    })\r\n    .catch((err) => {\r\n      console.log(err);\r\n      res.status(404).json({});\r\n    });\r\n});\r\n\r\n/**\r\n * Verifies that the user is resetting the password of an account they own\r\n *\r\n * - endpoint: `/users/forgot`\r\n * - Verb: POST\r\n *\r\n * OnFailure: Sends an internal server error message\r\n * OnSuccess: Sends the user that the email was sent to\r\n *\r\n * @typedef {function} UserRouter-forgotLogin\r\n * @param {string} req.body.email - Email for the account that needs to change passwords\r\n */\r\nrouter.post('/forgot', async (req, res) => {\r\n  try {\r\n    const email = req.body.email;\r\n    const payload = await controller.forgotLogin(email);\r\n    await controller.sendResetEmail(payload.token, payload.user.email, req);\r\n    res.status(200).json({ recipient: payload.user, msg: null });\r\n  } catch (err) {\r\n    console.log(err);\r\n    res.status(404).json({ recipient: null, msg: err.message });\r\n  }\r\n});\r\n\r\n/**\r\n * This endpoint is hit by an email to reset a user password\r\n * This endpoint is hit first in the sequence\r\n *\r\n * - endpoint: `/users/reset/:token`\r\n * - Verb: GET\r\n *\r\n * OnFailure: Redirects to the login screen with an error in query string\r\n * OnSuccess: Redirects to the forgot-redirect page to change password\r\n *\r\n * @typedef {function} UserRouter-resetToken\r\n * @param {string} token - A string that contains the HEX code/Reset token of a lost account\r\n */\r\nrouter.get('/reset/:token', (req, res) => {\r\n  controller.resetToken(req.params.token)\r\n    .then((token) => {\r\n      const qs = querystring.stringify({ token });\r\n      res.redirect(`${process.env.CLIENT}/auth/forgot/redirect/?${qs}`);\r\n    })\r\n    .catch((err) => {\r\n      const qs = querystring.stringify({ err });\r\n      res.redirect(`${process.env.CLIENT}/auth/?${qs}`);\r\n      console.log(err);\r\n    });\r\n});\r\n\r\n/**\r\n * Angular hits this endpoint with a token and a new password to update the account with\r\n *\r\n * - Endpoint: `/users/reset/:token`\r\n * - Verb: POST\r\n *\r\n * OnFailure: Sends a success status code\r\n * OnSuccess: Sends a error status code\r\n *\r\n * @typedef {function} UserRouter-resetPassword\r\n */\r\nrouter.post('/reset/:token', (req, res) => {\r\n  controller.resetPassword(req.params.token, req.body.password)\r\n    .then((user) => {\r\n      res.status(200).json({user});\r\n    })\r\n    .catch((err) => {\r\n      res.status(404).json({user: null});\r\n    });\r\n});\r\n\r\n/**\r\n * Gets the user's profile to fill in a profile page\r\n * This route requires authentication\r\n *\r\n * - endpoint: `/users/profile`\r\n * - Verb: GET\r\n *\r\n * OnFailure: Sends an error statuscode\r\n * OnSuccess: Sends a success statuscode with an user Object\r\n *\r\n * @typedef {function} UserRouter-getProfile\r\n */\r\nrouter.get('/profile', membersOnlyRoute, (req, res) => {\r\n  controller.getProfile(req.user.email)\r\n    .then((user) => {\r\n      res.status(200).json({ user, err: null });\r\n    })\r\n    .catch((err) => {\r\n      console.error(err);\r\n      res.status(404).json({ user: null, err });\r\n    });\r\n});\r\n\r\n/**\r\n * Updates the user's resume\r\n * This route requires authentication\r\n *\r\n * - endpoint: `/users/update-resume`\r\n * - Verb: PUT\r\n *\r\n * OnFailure: Sends an error statuscode\r\n * OnSuccess: Sends a success statuscode with an user Object\r\n * @deprecated - Use `/users/update-user`\r\n * @typedef {function} UserRouter-updateResume\r\n */\r\nrouter.put('/update-resume', membersOnlyRoute, (req, res) => {\r\n  controller.updateResume(req.user._id, req.body.path)\r\n    .then((user) => {\r\n      res.status(200).json({ user, err: null });\r\n    })\r\n    .catch((err) => {\r\n      console.error(err);\r\n      res.status(404).json({ user: null, err });\r\n    });\r\n});\r\n\r\n/**\r\n * Updates the user's information completely\r\n * This route requires authentication\r\n *\r\n * - endpoint: `/users/update-user`\r\n * - Verb: PUT\r\n *\r\n * OnFailure: Sends an error statuscode\r\n * OnSuccess: Sends a success statuscode with an user Object\r\n *\r\n * @typedef {function} UserRouter-updateUser\r\n * @param {object} req.body.user A New User object with a ObjectID\r\n */\r\nrouter.put('/update-user', membersOnlyRoute, (req, res) => {\r\n  controller.updateUser(req.body.user)\r\n    .then((payload) => {\r\n      res.status(200).json(\r\n        {\r\n          user: payload.user,\r\n          token: payload.token,\r\n          err: null\r\n        }\r\n      );\r\n    })\r\n    .catch((err) => {\r\n      console.error(err);\r\n      res.status(404).json(\r\n        {\r\n          user: null,\r\n          token: null,\r\n          err\r\n        }\r\n      );\r\n    });\r\n});\r\n\r\n/**\r\n * Sends and question to ACM Email\r\n *\r\n * - Endpoint: `/users/contact-us`\r\n * - Verb: POST\r\n *\r\n * @typedef {function} UserRouter-contactUs\r\n */\r\nrouter.post('/contact-us', (req, res) => {\r\n  const emailInfo = {\r\n    name: req.body.name,\r\n    email: req.body.email,\r\n    topic: req.body.topic,\r\n    message: req.body.message\r\n  };\r\n  controller.contactUs(emailInfo)\r\n    .then(() => res.status(200).json())\r\n    .catch(err => res.status(404).json());\r\n});\r\n\r\n\r\nmodule.exports = router;\r\n",
+    "static": true,
+    "longname": "TTUACM_Website/routes/user.router.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 64,
+    "kind": "variable",
+    "name": "express",
+    "memberof": "TTUACM_Website/routes/user.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/user.router.js~express",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/routes/user.router.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 3,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 65,
+    "kind": "variable",
+    "name": "passport",
+    "memberof": "TTUACM_Website/routes/user.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/user.router.js~passport",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/routes/user.router.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 4,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 66,
+    "kind": "variable",
+    "name": "querystring",
+    "memberof": "TTUACM_Website/routes/user.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/user.router.js~querystring",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/routes/user.router.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 5,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 67,
+    "kind": "variable",
+    "name": "membersOnlyRoute",
+    "memberof": "TTUACM_Website/routes/user.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/user.router.js~membersOnlyRoute",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/routes/user.router.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 7,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 68,
+    "kind": "variable",
+    "name": "controller",
+    "memberof": "TTUACM_Website/routes/user.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/user.router.js~controller",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/routes/user.router.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 10,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 69,
+    "kind": "typedef",
+    "name": "UserRouter-register",
+    "memberof": "TTUACM_Website/routes/user.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/user.router.js~UserRouter-register",
+    "access": null,
+    "description": "Registers the user and saved them as a unverified user\n\n- endpoint: `/users/register`\n- Verb: POST\n\nOnFailure: Sends an error message\nOnSuccess: Sends the user back as JSON",
+    "lineNumber": 28,
+    "type": {
+      "types": [
+        "function"
+      ],
+      "optional": false,
+      "name": "UserRouter-register"
+    }
+  },
+  {
+    "__docId__": 70,
+    "kind": "typedef",
+    "name": "UserRouter-login",
+    "memberof": "TTUACM_Website/routes/user.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/user.router.js~UserRouter-login",
+    "access": null,
+    "description": "JWT Login/Authentication\nUser must not have signed up using OAuth2\n\n- endpoint: `/users/login`\n- Verb: POST\n\nOnFailure: Sends an error message\nOnSuccess: Sends the JWT Token of the user",
+    "lineNumber": 62,
+    "type": {
+      "types": [
+        "function"
+      ],
+      "optional": false,
+      "name": "UserRouter-login"
+    }
+  },
+  {
+    "__docId__": 71,
+    "kind": "typedef",
+    "name": "UserRouter-confirmToken",
+    "memberof": "TTUACM_Website/routes/user.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/user.router.js~UserRouter-confirmToken",
+    "access": null,
+    "description": "Confirms the user has a valid email account\n\n- endpoint: `users/confirm/:token`\n- VERB: GET\n\nOnFailure: Redirects to error page\nOnSuccess: Redirects to the login page with querystring to signal a notification",
+    "lineNumber": 92,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "querystring"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "token",
+        "description": "HEX token saved in confirmEmailToken"
+      }
+    ],
+    "type": {
+      "types": [
+        "function"
+      ],
+      "optional": false,
+      "name": "UserRouter-confirmToken"
+    }
+  },
+  {
+    "__docId__": 72,
+    "kind": "typedef",
+    "name": "UserRouter-sendConfirmationEmail",
+    "memberof": "TTUACM_Website/routes/user.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/user.router.js~UserRouter-sendConfirmationEmail",
+    "access": null,
+    "description": "Resends the confirmation email to the requested user\n\n- endpoint: `/users/confirm`\n- VERB: POST\n\nOnFailure: Tells the user that the email has failed to send\nOnSuccess: Sends a successful status code",
+    "lineNumber": 117,
+    "type": {
+      "types": [
+        "function"
+      ],
+      "optional": false,
+      "name": "UserRouter-sendConfirmationEmail"
+    }
+  },
+  {
+    "__docId__": 73,
+    "kind": "typedef",
+    "name": "UserRouter-forgotLogin",
+    "memberof": "TTUACM_Website/routes/user.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/user.router.js~UserRouter-forgotLogin",
+    "access": null,
+    "description": "Verifies that the user is resetting the password of an account they own\n\n- endpoint: `/users/forgot`\n- Verb: POST\n\nOnFailure: Sends an internal server error message\nOnSuccess: Sends the user that the email was sent to",
+    "lineNumber": 140,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "req.body.email",
+        "description": "Email for the account that needs to change passwords"
+      }
+    ],
+    "type": {
+      "types": [
+        "function"
+      ],
+      "optional": false,
+      "name": "UserRouter-forgotLogin"
+    }
+  },
+  {
+    "__docId__": 74,
+    "kind": "typedef",
+    "name": "UserRouter-resetToken",
+    "memberof": "TTUACM_Website/routes/user.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/user.router.js~UserRouter-resetToken",
+    "access": null,
+    "description": "This endpoint is hit by an email to reset a user password\nThis endpoint is hit first in the sequence\n\n- endpoint: `/users/reset/:token`\n- Verb: GET\n\nOnFailure: Redirects to the login screen with an error in query string\nOnSuccess: Redirects to the forgot-redirect page to change password",
+    "lineNumber": 165,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "token",
+        "description": "A string that contains the HEX code/Reset token of a lost account"
+      }
+    ],
+    "type": {
+      "types": [
+        "function"
+      ],
+      "optional": false,
+      "name": "UserRouter-resetToken"
+    }
+  },
+  {
+    "__docId__": 75,
+    "kind": "typedef",
+    "name": "UserRouter-resetPassword",
+    "memberof": "TTUACM_Website/routes/user.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/user.router.js~UserRouter-resetPassword",
+    "access": null,
+    "description": "Angular hits this endpoint with a token and a new password to update the account with\n\n- Endpoint: `/users/reset/:token`\n- Verb: POST\n\nOnFailure: Sends a success status code\nOnSuccess: Sends a error status code",
+    "lineNumber": 189,
+    "type": {
+      "types": [
+        "function"
+      ],
+      "optional": false,
+      "name": "UserRouter-resetPassword"
+    }
+  },
+  {
+    "__docId__": 76,
+    "kind": "typedef",
+    "name": "UserRouter-getProfile",
+    "memberof": "TTUACM_Website/routes/user.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/user.router.js~UserRouter-getProfile",
+    "access": null,
+    "description": "Gets the user's profile to fill in a profile page\nThis route requires authentication\n\n- endpoint: `/users/profile`\n- Verb: GET\n\nOnFailure: Sends an error statuscode\nOnSuccess: Sends a success statuscode with an user Object",
+    "lineNumber": 211,
+    "type": {
+      "types": [
+        "function"
+      ],
+      "optional": false,
+      "name": "UserRouter-getProfile"
+    }
+  },
+  {
+    "__docId__": 77,
+    "kind": "typedef",
+    "name": "UserRouter-updateResume",
+    "memberof": "TTUACM_Website/routes/user.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/user.router.js~UserRouter-updateResume",
+    "access": null,
+    "description": "Updates the user's resume\nThis route requires authentication\n\n- endpoint: `/users/update-resume`\n- Verb: PUT\n\nOnFailure: Sends an error statuscode\nOnSuccess: Sends a success statuscode with an user Object",
+    "lineNumber": 234,
+    "deprecated": "- Use `/users/update-user`",
+    "type": {
+      "types": [
+        "function"
+      ],
+      "optional": false,
+      "name": "UserRouter-updateResume"
+    }
+  },
+  {
+    "__docId__": 78,
+    "kind": "typedef",
+    "name": "UserRouter-updateUser",
+    "memberof": "TTUACM_Website/routes/user.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/user.router.js~UserRouter-updateUser",
+    "access": null,
+    "description": "Updates the user's information completely\nThis route requires authentication\n\n- endpoint: `/users/update-user`\n- Verb: PUT\n\nOnFailure: Sends an error statuscode\nOnSuccess: Sends a success statuscode with an user Object",
+    "lineNumber": 258,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "req.body.user",
+        "description": "A New User object with a ObjectID"
+      }
+    ],
+    "type": {
+      "types": [
+        "function"
+      ],
+      "optional": false,
+      "name": "UserRouter-updateUser"
+    }
+  },
+  {
+    "__docId__": 79,
+    "kind": "typedef",
+    "name": "UserRouter-contactUs",
+    "memberof": "TTUACM_Website/routes/user.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/user.router.js~UserRouter-contactUs",
+    "access": null,
+    "description": "Sends and question to ACM Email\n\n- Endpoint: `/users/contact-us`\n- Verb: POST",
+    "lineNumber": 289,
+    "type": {
+      "types": [
+        "function"
+      ],
+      "optional": false,
+      "name": "UserRouter-contactUs"
+    }
+  },
+  {
+    "__docId__": 80,
+    "kind": "variable",
+    "name": "router",
+    "memberof": "TTUACM_Website/routes/user.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/user.router.js~router",
+    "access": null,
+    "export": true,
+    "importPath": "ttuacm-website/TTUACM_Website/routes/user.router.js",
+    "importStyle": "router",
+    "description": null,
+    "lineNumber": 12,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 81,
+    "kind": "typedef",
+    "name": "UserRouter-register",
+    "memberof": "TTUACM_Website/routes/user.router.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/user.router.js~UserRouter-register",
+    "access": null,
+    "description": "Registers the user and saved them as a unverified user\n\n- endpoint: `/users/register`\n- Verb: POST\n\nOnFailure: Sends an error message\nOnSuccess: Sends the user back as JSON",
+    "type": {
+      "types": [
+        "function"
+      ],
+      "optional": false,
+      "name": "UserRouter-register"
+    }
+  },
+  {
+    "__docId__": 82,
+    "kind": "file",
+    "name": "TTUACM_Website/routes/utils.js",
+    "content": "const passport = require('passport');\n\n/**\n * Middleware for route guarding\n * If errors occur, it is probably because front-end is not sending\n * JWT along with their requests\n */\nconst membersOnlyRoute = passport.authenticate('jwt', { session: false })\n\nmodule.exports = {\n  membersOnlyRoute\n}\n",
+    "static": true,
+    "longname": "TTUACM_Website/routes/utils.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 83,
+    "kind": "variable",
+    "name": "passport",
+    "memberof": "TTUACM_Website/routes/utils.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/utils.js~passport",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/routes/utils.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 1,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 84,
+    "kind": "variable",
+    "name": "membersOnlyRoute",
+    "memberof": "TTUACM_Website/routes/utils.js",
+    "static": true,
+    "longname": "TTUACM_Website/routes/utils.js~membersOnlyRoute",
+    "access": null,
+    "export": false,
+    "importPath": "ttuacm-website/TTUACM_Website/routes/utils.js",
+    "importStyle": null,
+    "description": "Middleware for route guarding\nIf errors occur, it is probably because front-end is not sending\nJWT along with their requests",
+    "lineNumber": 8,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 86,
+    "kind": "external",
+    "name": "Infinity",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Infinity",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 87,
+    "kind": "external",
+    "name": "NaN",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~NaN",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 88,
+    "kind": "external",
+    "name": "undefined",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~undefined",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 89,
+    "kind": "external",
+    "name": "null",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~null",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 90,
+    "kind": "external",
+    "name": "Object",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Object",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 91,
+    "kind": "external",
+    "name": "object",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~object",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 92,
+    "kind": "external",
+    "name": "Function",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Function",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 93,
+    "kind": "external",
+    "name": "function",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~function",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 94,
+    "kind": "external",
+    "name": "Boolean",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Boolean",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 95,
+    "kind": "external",
+    "name": "boolean",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~boolean",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 96,
+    "kind": "external",
+    "name": "Symbol",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Symbol",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 97,
+    "kind": "external",
+    "name": "Error",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Error",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 98,
+    "kind": "external",
+    "name": "EvalError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/EvalError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~EvalError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 99,
+    "kind": "external",
+    "name": "InternalError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/InternalError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~InternalError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 100,
+    "kind": "external",
+    "name": "RangeError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~RangeError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 101,
+    "kind": "external",
+    "name": "ReferenceError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~ReferenceError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 102,
+    "kind": "external",
+    "name": "SyntaxError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~SyntaxError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 103,
+    "kind": "external",
+    "name": "TypeError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~TypeError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 104,
+    "kind": "external",
+    "name": "URIError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/URIError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~URIError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 105,
+    "kind": "external",
+    "name": "Number",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Number",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 106,
+    "kind": "external",
+    "name": "number",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~number",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 107,
+    "kind": "external",
+    "name": "Date",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Date",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 108,
+    "kind": "external",
+    "name": "String",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~String",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 109,
+    "kind": "external",
+    "name": "string",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~string",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 110,
+    "kind": "external",
+    "name": "RegExp",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~RegExp",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 111,
+    "kind": "external",
+    "name": "Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 112,
+    "kind": "external",
+    "name": "Int8Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Int8Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 113,
+    "kind": "external",
+    "name": "Uint8Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint8Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 114,
+    "kind": "external",
+    "name": "Uint8ClampedArray",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint8ClampedArray",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 115,
+    "kind": "external",
+    "name": "Int16Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Int16Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 116,
+    "kind": "external",
+    "name": "Uint16Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint16Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 117,
+    "kind": "external",
+    "name": "Int32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Int32Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 118,
+    "kind": "external",
+    "name": "Uint32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint32Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 119,
+    "kind": "external",
+    "name": "Float32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Float32Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 120,
+    "kind": "external",
+    "name": "Float64Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Float64Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 121,
+    "kind": "external",
+    "name": "Map",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Map",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 122,
+    "kind": "external",
+    "name": "Set",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Set",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 123,
+    "kind": "external",
+    "name": "WeakMap",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~WeakMap",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 124,
+    "kind": "external",
+    "name": "WeakSet",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~WeakSet",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 125,
+    "kind": "external",
+    "name": "ArrayBuffer",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~ArrayBuffer",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 126,
+    "kind": "external",
+    "name": "DataView",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~DataView",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 127,
+    "kind": "external",
+    "name": "JSON",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~JSON",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 128,
+    "kind": "external",
+    "name": "Promise",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Promise",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 129,
+    "kind": "external",
+    "name": "Generator",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Generator",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 130,
+    "kind": "external",
+    "name": "GeneratorFunction",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~GeneratorFunction",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 131,
+    "kind": "external",
+    "name": "Reflect",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Reflect",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 132,
+    "kind": "external",
+    "name": "Proxy",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Proxy",
+    "access": null,
+    "description": "",
+    "lineNumber": 193,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 134,
+    "kind": "external",
+    "name": "CanvasRenderingContext2D",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/WebAPIExternal.js~CanvasRenderingContext2D",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 135,
+    "kind": "external",
+    "name": "DocumentFragment",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/WebAPIExternal.js~DocumentFragment",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 136,
+    "kind": "external",
+    "name": "Element",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Element",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/WebAPIExternal.js~Element",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 137,
+    "kind": "external",
+    "name": "Event",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Event",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/WebAPIExternal.js~Event",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 138,
+    "kind": "external",
+    "name": "Node",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Node",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/WebAPIExternal.js~Node",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 139,
+    "kind": "external",
+    "name": "NodeList",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/NodeList",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/WebAPIExternal.js~NodeList",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 140,
+    "kind": "external",
+    "name": "XMLHttpRequest",
+    "externalLink": "https://developer.mozilla.org/en/docs/Web/API/XMLHttpRequest",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/WebAPIExternal.js~XMLHttpRequest",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 141,
+    "kind": "external",
+    "name": "AudioContext",
+    "externalLink": "https://developer.mozilla.org/en/docs/Web/API/AudioContext",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "static": true,
+    "longname": "BuiltinExternal/WebAPIExternal.js~AudioContext",
+    "access": null,
+    "description": "",
+    "lineNumber": 34,
+    "builtinExternal": true
+  }
+]
